@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'inference2'
 
 )
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'inference_engine2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,6 +77,10 @@ WSGI_APPLICATION = 'inference_engine2.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+CONFIG_TYPE=os.getenv('DEVELOP','')
+DB_PASSWORD = 'deductive'
+if CONFIG_TYPE:
+    DB_PASSWORD = 'root'
 
 DATABASES = {
     'default': {
@@ -83,7 +88,7 @@ DATABASES = {
         'NAME': 'inference_engine',
         'HOST': 'localhost',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': DB_PASSWORD,
     }
 }
 
