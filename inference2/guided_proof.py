@@ -21,6 +21,21 @@ equi = unichr(8660)
 #variable initiated by rajiv
 rel_conj = []
 sn=0
+sn = 1
+conditionals = []
+candd = []
+rel_conj = []
+conc = []
+prop_sent = []
+sent = []
+prop_name = []
+prop_var = []
+prop_var = [unichr(97 + t) for t in range(26)]
+prop_var2 = []
+prop_var2 = [unichr(97 + t) + "'" for t in range(26)]
+prop_var = prop_var + prop_var2
+test_sent=[]
+
 ############
 
 pp = 7
@@ -1822,7 +1837,7 @@ def modus_ponens(conditionals, candd, prop_sent):
                                     g -= 1
                             else:
                  # con indicates that the consequent of the conditional is to be detached
-                                dummy = new_prop_sent("", "con", \
+                                dummy = new_prop_sent(prop_sent,"", "con", \
                                     str13, anc1, anc2,conditionals,g)
                                 if not dummy:
                                     return False
@@ -1830,7 +1845,7 @@ def modus_ponens(conditionals, candd, prop_sent):
                                 g -= 1
                                 break
                         elif str8 != temp_nega and str12 == 'e':
-                            dummy = new_prop_sent("~", "con", \
+                            dummy = new_prop_sent(prop_sent,"~", "con", \
                                         "EN", anc1, anc2, conditionals,g)
                             if not dummy:
                                 return False
@@ -1840,7 +1855,7 @@ def modus_ponens(conditionals, candd, prop_sent):
                     elif f == 1 and temp1 == temp_con:
                         if str8 == temp_negc and str12 == 'e':
                             if cconjunction == "":
-                                dummy = new_prop_sent("", "ant", "EE", \
+                                dummy = new_prop_sent(prop_sent,"", "ant", "EE", \
                                     anc1, anc2, conditionals,g)
                                 if not dummy:
                                     return False
@@ -1859,7 +1874,7 @@ def modus_ponens(conditionals, candd, prop_sent):
                                 str13 = "MT"
                             else:
                                 str13 = "EN"
-                            dummy = new_prop_sent("~", "ant", \
+                            dummy = new_prop_sent(prop_sent,"~", "ant", \
                                         str13, anc1, anc2, conditionals,g)
                             if not dummy:
                                     return False
@@ -1874,7 +1889,7 @@ def modus_ponens(conditionals, candd, prop_sent):
                                 s += 1
                                 if temp1 == conditionals[g][0][s][0] and \
                                     str8 != conditionals[g][0][s][1]:
-                                    dummy = new_prop_sent("~", "con", \
+                                    dummy = new_prop_sent(prop_sent,"~", "con", \
                                     "EN", anc1, anc2, conditionals,g)
                                     if not dummy:
                                         return False
@@ -1893,7 +1908,7 @@ def modus_ponens(conditionals, candd, prop_sent):
                                         str13 = "EN"
                                     else:
                                         str13 = "MT"
-                                    dummy = new_prop_sent("~", "ant", \
+                                    dummy = new_prop_sent(prop_sent,"~", "ant", \
                                     str13, anc1, anc2, conditionals,g)
                                     if not dummy:
                                         return False
@@ -2637,9 +2652,9 @@ def statement_logic(prop_sent, conditionals, candd):
     return
 
 
-def new_prop_sent(ng, kind, asp, anc1, anc2, conditionals,g,list3 =[], cjct = ""):
+def new_prop_sent(prop_sent,ng, kind, asp, anc1, anc2, conditionals,g,list3 =[], cjct = ""):
 
-    global prop_sent
+
     global candd
     global sn
 
@@ -2941,21 +2956,7 @@ def get_result(post_data):
     #w4 = wb4.worksheets[0]
 
 
-    sn = 1
-    conditionals = []
-    candd = []
-    rel_conj = []
-    conc = []
-    prop_sent = []
-    sent = []
-    prop_name = []
-    prop_var = []
-    prop_var = [unichr(97 + t) for t in range(26)]
-    prop_var2 = []
-    prop_var2 = [unichr(97 + t) + "'" for t in range(26)]
-    prop_var = prop_var + prop_var2
-    test_sent=[]
-    p = 0
+
 
 
     # for row in w4.rows:
@@ -2970,6 +2971,9 @@ def get_result(post_data):
 
     ######### for rajiv - the following will have to changed
     p = 0
+    sent = []
+    test_sent = []
+    global prop_sent
     while  True:
         row = [post_data["text_"+str(p)+"_1"],post_data["text_"+str(p)+"_2"],post_data["text_"+str(p)+"_3"]]
 
@@ -2984,7 +2988,10 @@ def get_result(post_data):
             sent = []
         p += 1
 
-
+    global candd
+    global conditionals
+    global prop_name
+    global sn
 
     tot_prop_name = []
     tot_sent = []
