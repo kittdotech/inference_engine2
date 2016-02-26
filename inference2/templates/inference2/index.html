@@ -1,15 +1,99 @@
+{% load extra_tags %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+{% load staticfiles %}
+    <!--link rel="stylesheet" href="{%  static 'inference2/css/style.css' %}" /-->
+    <script src={% static 'inference2/js/jquery-1.11.3.min.js' %}> </script>
+    <style>
+      table{
+    border: solid 1px gray;
+    width: 100%;
+  }
+  input[type=text] {
+    width: 98%;
+    padding: 0px;
+    margin: 0px;
+}
+</style>
+    <script>
+
+    $(document).ready(function () {
+    var result = {{ result|safe }};
+        if (result)
+        {
+            for(var index in result) {
+                $("#"+index).val(result[index]);
+
+            }
+        }
+
+         $(document).on('click','#reset', function(e) {
+
+            for (i =0; i < 500; i++) {
+            $("#text_"+i+"_1").val('');
+            $("#text_"+i+"_2").val('');
+            $("#text_"+i+"_3").val('');
+            }
+
+        });
+           $(document).on('click','#clear', function(e) {
+            var stop_found=false;
+
+               for (i =0; i < 500; i++) {
+            if (!stop_found)
+            {
+                if ($("#text_"+i+"_2").val()=='stop')
+                {
+                stop_found = true
+                }
+            }
+                else
+            {
+                $("#text_"+i+"_1").val('');
+            $("#text_"+i+"_2").val('');
+            $("#text_"+i+"_3").val('');
+            }
+
+
+            }
+
+
+        });
+
+    });
+
+
+
+    </script>
 </head>
+
+
 <body>
-<table border="1">
-<tr><th>Type</th><th>Word</th><th>Relation</th><th>Definition</th></tr>
-{% for x in rows %}
-<tr><td>{{ x.type }}</td><td>{{ x.word }}</td><td>{{ x.rel }}</td><td>{{ x.definition }}</td></tr>
+<form  method="post">
+ {% csrf_token %}
+<input type="button" name="reset" value="Reset" id="reset"/>
+<input type="submit" name="prove" value="Prove" id="prove"/>
+<input type="button" name="clear" value="Clear Result" id="clear"/>
+<hr/>
+
+<table border="1" >
+<col width="10%">
+<col width="70%">
+<col width="20%">
+
+{% for i in 500|range %}
+    <tr>
+    <td id="table_{{i}}_1"><input type="text" name="text_{{i}}_1" id="text_{{i}}_1"/></td>
+    <td id="table_{{i}}_2"><input type="text" name="text_{{i}}_2" id="text_{{i}}_2"/></td>
+    <td id="table_{{i}}_3"><input type="text" name="text_{{i}}_3" id="text_{{i}}_3"/></td>
+    </tr>
 {% endfor %}
+
 </table>
+
+</form>
 </body>
 </html>
