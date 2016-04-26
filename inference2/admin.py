@@ -27,7 +27,7 @@ admin.site.add_action(export_as_csv_action)
 admin.site.add_action(change_text_to_symbol_action)
 admin.site.add_action(change_symbol_to_text_action)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('id','type','word', 'rel','definition')
+    list_display = ('id','extra','type','word', 'rel','definition')
     empty_value_display = ""
     ordering = ("id",)
     list_per_page = 1000
@@ -39,19 +39,19 @@ class MyAdminImporter(ModelForm):
 
     class Meta:
         model = Define3
-        fields = ('id','type', 'word', 'rel','definition')
+        fields = ('id','extra','type', 'word', 'rel','definition')
 
 
 class MyAdminForm(ModelForm):
     class Meta:
         model = Define3
-        fields = ('id','type', 'word', 'rel','definition')
+        fields = ('id','extra','type', 'word', 'rel','definition')
 
 
 class MyAdmin(ImportCSVModelAdmin):
     importer_class = MyAdminImporter
     form = MyAdminForm
-    list_display = ('id','type','word', 'rel','definition')
+    list_display = ('id','extra','type','word', 'rel','definition')
     empty_value_display = ""
     ordering = ("id",)
     list_per_page = 1000

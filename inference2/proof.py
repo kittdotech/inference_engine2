@@ -25,8 +25,8 @@ equi = unichr(8660)
 ## for rajiv - you're going to have to code for these, don't worry about l1,l2,l3,l7
 ## for output I need three buttons - one for delete everything, another for delete the previous output, a third to run
 ## the program
-"-c" = uc
-"-d" = ud
+#"-c" = uc
+#"-d" = ud
 
 
 
@@ -1411,6 +1411,7 @@ def prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,sent_type):
 
     global sn
     str2 = None
+    str1 = None #kyle Added new line here
     if sent_type == "1cj" or sent_type == None:
         if paren_conn == '&' and gparen_conn == xorr:
             str1 = "dc"
