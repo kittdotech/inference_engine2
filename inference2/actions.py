@@ -57,53 +57,58 @@ def changesymbol(queryset, mode):
         ('&&', unichr(8896)),
         ('@', unichr(8855)),
         ('if^', unichr(8660)),
-        ('ne', u"\u2260"),
-        ('l1', u"\u2081"),
-        ('l2', u"\u2082"),
-        ('l3', u"\u2083"),
-        ('l7', u"\u2087"),
-        ('l8', u"\u2088"),
-        ('ua', u"\u1d43"),
-        ('ub', u"\u1d47"),
-        ('uc', u"\u1d9c"),
-        ('ud', u"\u1d48"),
-        ('ue', u"\u1d49"),
-        ('uf', u"\u1da0"),
-        ('ug', u"\u1d4d"),
-        ('ui', u"\u2071"),
-        ('uk', u"\u1d4f"),
-        ('um', u"\u1d50"),
-        ('un', u"\u207f"),
-        ('uo', u"\u1d52"),
-        ('up', u"\u1d56"),
-        ('ut', u"\u1d57"),
-        ('uv', u"\u1d5b"),
-        ('uu', u"\u1d58"),
-        ('uw', u"\u02b7"),
-        ('uy', u"\u02b8"),
-        ('uj', u"\u02B2"),
-        ('ul', u"\u02E1"),
-        ('ur', u"\u02b3"),
-        ('us', u"\u02e2"),
-        ('uh', u"\u02b0"),
+
+        ('-a', u"\u1d43"),
+        ('-b', u"\u1d47"),
+        ('-c', u"\u1d9c"),
+        ('-d', u"\u1d48"),
+        ('-e', u"\u1d49"),
+        ('-f', u"\u1da0"),
+        ('-g', u"\u1d4d"),
+        ('-i', u"\u2071"),
+        ('-k', u"\u1d4f"),
+        ('-m', u"\u1d50"),
+        ('-n', u"\u207f"),
+        ('-o', u"\u1d52"),
+        ('-p', u"\u1d56"),
+        ('-t', u"\u1d57"),
+        ('-v', u"\u1d5b"),
+        ('-u', u"\u1d58"),
+        ('-w', u"\u02b7"),
+        ('-y', u"\u02b8"),
+        ('-j', u"\u02B2"),
+        ('-l', u"\u02E1"),
+        ('-r', u"\u02b3"),
+        ('-s', u"\u02e2"),
+        ('-h', u"\u02b0"),
         )
     if mode == 'TtoS':
         for x in queryset:
-            original_text = x.definition
-            if original_text:
+            original_text_definition = x.definition
+            original_text_word = x.word
+            if original_text_definition or original_text_word :
                 for (T,S) in symbol_map:
-                    if T in original_text:
-                        original_text = original_text.replace(T, S)
-            x.definition = original_text
+                    if T in original_text_definition:
+                        original_text_definition = original_text_definition.replace(T, S)
+                    if T in original_text_word:
+                        original_text_word = original_text_word.replace(T, S)
+
+            x.definition = original_text_definition
+            x.word = original_text_word
             x.save()
     if mode == 'StoT':
         for x in queryset:
-            original_text = x.definition
-            if original_text:
+
+            original_text_definition = x.definition
+            original_text_word = x.word
+            if original_text_definition or original_text_word :
                 for (T,S) in symbol_map:
-                    if S in original_text:
-                        original_text = original_text.replace(S, T)
-            x.definition = original_text
+                    if S in original_text_definition:
+                        original_text_definition = original_text_definition.replace(S, T)
+                    if S in original_text_word:
+                        original_text_word = original_text_word.replace(S, T)
+            x.definition = original_text_definition
+            x.word = original_text_word
             x.save()
 
 

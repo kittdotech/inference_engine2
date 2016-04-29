@@ -6,7 +6,27 @@ import time
 import operator
 from models import Define3
 
-
+prop_name = []
+prop_var = []
+tot_sent = []
+all_sent = []
+plural_c = []
+anaphora = ""
+definite = []
+idf_id = [[""]]
+used_idf = []
+ant_cond = []
+conditionals = []
+candd = []
+rel_conj = []
+irrel_conj = []
+conc = []
+prop_sent = []
+tagged_nouns = []
+tagged_nouns2 = []
+dv_nam = []
+basic_objects = []
+result_data = {}
 cond_r = unichr(8835)
 top = unichr(8868)
 bottom = unichr(8869)
@@ -22,6 +42,8 @@ idisj = unichr(8744)
 cj = unichr(8896)
 disj = unichr(8855)
 equi = unichr(8660)
+sn = 1
+id_num=0
 
 ne = u"\u2260"
 l1 = u"\u2081"
@@ -53,6 +75,28 @@ ur = u"\u02b3"
 us = u"\u02e2"
 uh = u"\u02b0"
 
+tot_prop_name = []
+tot_prop_sent = []
+prop_var4 = [unichr(97 + t) for t in range(26)]
+prop_var2 = [unichr(97 + t) + u"\u2081" for t in range(26)]
+prop_var3 = [unichr(97 + t) + u"\u2082" for t in range(26)]
+prop_var5 = [unichr(97 + t) + u"\u2083" for t in range(26)]
+prop_var6 = [unichr(97 + t) + u"\u2084" for t in range(26)]
+prop_var4 = prop_var4 + prop_var2 + prop_var3 + prop_var5 + prop_var6
+idf_var2 = [unichr(122 - t) for t in range(25)]
+idf_var3 = [unichr(122 - t) + l1 for t in range(25)]
+idf_var4 = [unichr(122 - t) + l2 for t in range(25)]
+idf_var2 = idf_var2 + idf_var3 + idf_var4
+def_var2 = [unichr(98 + t) + "'" for t in range(25)]
+def_var3 = [unichr(98 + t) + l7 for t in range(25)]
+def_var2 = def_var2 + def_var3
+#wb4 = load_workbook('logical_machine.xlsx')
+
+#w4 = wb4.worksheets[0]
+#ws = wb4.worksheets[1]
+ws = Define3.objects.all()
+p = 1
+subscripts = [l1,l2,l7]
 
 pp = 7
 #
@@ -72,49 +116,8 @@ pp = 7
 # @ 8855
 # if^ 8660
 
-subscripts = [l1,l2,l7]
-tot_prop_name = []
-tot_prop_sent = []
-prop_var4 = [unichr(97 + t) for t in range(26)]
-prop_var2 = [unichr(97 + t) + u"\u2081" for t in range(26)]
-prop_var3 = [unichr(97 + t) + u"\u2082" for t in range(26)]
-prop_var5 = [unichr(97 + t) + u"\u2083" for t in range(26)]
-prop_var6 = [unichr(97 + t) + u"\u2084" for t in range(26)]
-prop_var4 = prop_var4 + prop_var2 + prop_var3 + prop_var5 + prop_var6
-idf_var2 = [unichr(122 - t) for t in range(25)]
-idf_var3 = [unichr(122 - t) + l1 for t in range(25)]
-idf_var4 = [unichr(122 - t) + l2 for t in range(25)]
-idf_var2 = idf_var2 + idf_var3 + idf_var4
-def_var2 = [unichr(98 + t) + "'" for t in range(25)]
-def_var3 = [unichr(98 + t) + l7 for t in range(25)]
-def_var2 = def_var2 + def_var3
-ws = Define3.objects.all()
-result_data = {}
-prop_name = []
-tot_sent = []
-all_sent = []
-plural_c = []
-anaphora = ""
-definite = []
-idf_id = [[""]]
-used_idf = []
-ant_cond = []
-conditionals = []
-candd = []
-rel_conj = []
-irrel_conj = []
-conc = []
-prop_sent = []
-tagged_nouns = []
-tagged_nouns2 = []
-dv_nam = []
-basic_objects = []
-t_value = []
-prop_var = []
-idf_var = []
-def_var = []
-id_num = 1
-sn = 1
+
+
 def remove_outer_paren(str1):
 
     if str1 == "":
@@ -165,10 +168,6 @@ def remove_redundant_paren(str1):
     return str1
 
 def mainconn(str1):
-    # str_main = str_main.replace(implies,"&")
-    # str_main = str_main.replace(nonseq, "&")
-    # str_main = str_main.replace("~","")
-    # str_main = str_main.replace(" ", "")
 
     ostring = copy.copy(str1)
     if os(str1):
@@ -183,11 +182,6 @@ def mainconn(str1):
     if str1[0] == "~":
         str1 = str1[1:]
         bool1 = True
-
-    # list1 = tilde_removal2(str1)
-    # if list1[1] == "~":
-    #     str1 = str1[1:]
-    #     bool1 = True
 
     j = 0
     bool2 = False
@@ -204,9 +198,7 @@ def mainconn(str1):
             str1 = str1[1:len(str1) - 1]
             bool2 = True
 
-
     j = -1
-
     for i in range(0, len(str1)):
         str2 = str1[i:i + 1]
         if str2 == conditional:
@@ -688,7 +680,7 @@ def define(tot_sent, all_sent, def_var, idf_var, dv_nam,words):
     def_sent = []
     universal = ['all','no','any','no'+us,"a","many"+un]
     universal2 = ['no','no'+us]
-    indefinite = ['a',"many"+un]
+    indefinite = ['a',"many"+un, 'no' + us]
     universal3 = ['all','any']
 
     for i in range(len(dv_nam)):
@@ -723,7 +715,7 @@ def define(tot_sent, all_sent, def_var, idf_var, dv_nam,words):
         elif d == 4:
             num = [5,14]
         elif d == 5:
-            num = [19]
+            num = [15,49]
         elif d == 6:
             num = [9,14,48]
         m = -1
@@ -826,7 +818,8 @@ def define(tot_sent, all_sent, def_var, idf_var, dv_nam,words):
                     m -= 1
                     break
                 elif d == 5 and all_sent[m][i] != 'S' and all_sent[m][i] != None:
-                    dummy = space_division(all_sent,m)
+                    # dummy = space_division(all_sent,m)
+                    dummy = division(tot_sent,all_sent,words,1)
                 elif d == 6:
                     adverb = False
                     id = False
@@ -970,7 +963,11 @@ def name_sent(str1,bool2 = False,str4 = ""):
     if h != None:
         return ng + h
     else:
+
+        #try:
         prop_name.append([prop_var[0], no_space, str1])
+        #except IndexError:
+        #    bb = 8
         str2 = prop_var[0]
         del prop_var[0]
         return ng + str2
@@ -1416,14 +1413,15 @@ def conditions(tot_sent,all_sent,ant_cond):
     global sn
     thing_con = findinlist("thing",dv_nam,1,0)
     ax_enti = False
-    match = True
     identities = []
+    not_done = True
+    match = False
 
     for i in range(len(ant_cond)):
         used_sent = []
         appl = []
         for j in range(len(ant_cond[i])):
-            if not match:
+            if not not_done:
                 break
             o1 = ant_cond[i][j][14]
             s1 = ant_cond[i][j][5]
@@ -1446,9 +1444,10 @@ def conditions(tot_sent,all_sent,ant_cond):
                         appl.append(ant_cond[i][j][0])
                         match_var = all_sent[m][o]
                         match = True
+                        not_done = True
                         break
                 else:
-                    match = False
+                    not_done = False
                     break
         if match:
             new_var = idf_var[0]
@@ -1490,22 +1489,43 @@ def conditions(tot_sent,all_sent,ant_cond):
             tot_sent.append([sn,id_sent,idp,"","LL",sn-2,""])
             identities.append([ant_var,new_var,h])
             identities.append([match_var,new_var,sn])
+            match = False
+
+    if identities != []:
+        dummy = substitute(identities,all_sent,tot_sent)
+    return
+
+def substitute(identities,all_sent,tot_sent,kind = ""):
 
     num = [5,14]
     list2 = []
-    if identities != []:
-        for i in range(len(identities)):
-            for j in range(len(all_sent)):
-                for k in num:
-                    if identities[i][0] == all_sent[j][k]:
+    for i in range(len(identities)):
+        for j in range(len(all_sent)):
+            for k in num:
+                if identities[i][0] == all_sent[j][k]:
+                    bool1 = False
+                    if kind == 1 and k == 5:
+                        for n in range(i+1,len(identities)):
+                            if identities[n][0] == all_sent[j][14]:
+                                bool1 = True
+                                list1 = copy.deepcopy(all_sent[j])
+                                list1[5] = identities[i][1]
+                                list1[0] = None
+                                list1[14] = identities[n][1]
+                                dummy = new_sentence(tot_sent,all_sent[j],list1,"","",1,\
+                                    "sub",iff,identities[i][2],identities[n][2])
+                                break
+                    if not bool1:
                         list1 = copy.deepcopy(all_sent[j])
                         list1[k] = identities[i][1]
                         list1[0] = None
                         dummy = new_sentence(tot_sent,all_sent[j],list1,"","",1,"sub",iff,identities[i][2])
-                        list2.append(list1)
-        for i in range(len(list2)):
-            all_sent.append(list2[i])
-    return
+                    list2.append(list1)
+                    if kind == 1:
+                        break
+    for i in range(len(list2)):
+        all_sent.append(list2[i])
+
 
 def build_app(list1):
 
@@ -1514,21 +1534,25 @@ def build_app(list1):
         str1 += ", " + list1[i]
     return str1
 
-def has_uni_q(list1):
+def has_det(list1,words):
 
-    univ = ['all','any','no','no'+us]
+    det = words[2]
+    # univ = ['all','any','no','no'+us]
     num = [3,10,16,20,24,28,32]
     for i in num:
-        if list1[i] in univ:
+        if list1[i] in det:
             return True
     return False
 
 
-def division(tot_sent, all_sent):
+def division(tot_sent, all_sent,words,kind=""):
 
 
     num = [35,36,52]
     univ = ['all','any','no','no'+us]
+    if kind == 1:
+        k = 2
+
     for k in range(0,3):
         if k == 2:
             num = [49,15]
@@ -1539,8 +1563,12 @@ def division(tot_sent, all_sent):
             m += 1
             old_sent = all_sent[m][0]
             oldp = all_sent[m][42]
-            has_uniq = has_uni_q(all_sent[m])
-            all_sent[m][59] = has_uniq
+            has_determ = has_det(all_sent[m],words)
+            bool1 = False
+            if kind == "" and has_determ:
+                bool1 = False
+            elif (kind == "" and not has_determ) or kind == 1:
+                bool1 = True
             for i in num:
                 if (k == 0 and all_sent[m][i] != None)  or (k ==1 and all_sent[m][i] != None)\
                 or (k ==2 and all_sent[m][i] != None):
@@ -1585,7 +1613,7 @@ def division(tot_sent, all_sent):
                             list1[14] = all_sent[m][i]
                             all_sent[m][i] = None
                             dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule)
-                    elif k == 2 and not has_uniq:
+                    elif k == 2 and bool1:
                         rule = "RDA"
                         if i == 49:
                             d = 50
@@ -1601,6 +1629,7 @@ def division(tot_sent, all_sent):
                         # elif i == 31:
                         #     a = 30
                         #     c = 34
+                        list1[8] = all_sent[m][8]
                         list1[3] = all_sent[m][3]
                         list1[5] = all_sent[m][a]
                         list1[9] = all_sent[m][i]
@@ -1609,6 +1638,7 @@ def division(tot_sent, all_sent):
                         all_sent[m][i] = None
                         all_sent[m][c] = None
                         all_sent[m][d] = None
+                        all_sent[m][8] = None
                         dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule)
     return
 
@@ -1723,6 +1753,47 @@ def add_sent(subj,relat,obj,conn_type):
     list1[53] = conn_type
     return list1
 
+def abb_change(list5, already_checked,all_sent,def_sent,i,match_dv,rename,j):
+
+    cap = False
+    for t in range(len(all_sent)):
+        no_match = False
+        if t not in already_checked:
+            for u in list5:
+                if all_sent[t][u] == def_sent[i][u]:
+                    pass
+                elif u == 8 and all_sent[t][53] == 'cn':
+                    cap = True
+                    pass
+                else:
+                    if u == 9:
+                        already_checked.append(t)
+                    no_match = True
+                    break
+
+            if not no_match:
+                match_dv.append([def_sent[i][j],all_sent[t][j]])
+                #cap is for a denied consequent sentence
+                str2 = "(" + def_sent[i][j] + mini_c + all_sent[t][j] + ")"
+                rename.append(str2)
+                if cap:
+                    strcn = "{" + all_sent[t][0] + "}"
+                    str3 = build_sent(def_sent[i])
+                    str3 = strcn + ", " + str3
+                    rename.append(str3)
+                def_sent[i][j] = all_sent[t][j]
+                return False
+    return True
+
+def abb_change2(match_dv,def_sent,i,idf_var,rename,j):
+
+    match_dv.append([def_sent[i][j], idf_var[0]])
+    str2 = "(" + def_sent[i][j] + mini_c + idf_var[0] + ")"
+    def_sent[i][j] = idf_var[0]
+    # new_var.append(idf_var[0])
+    del idf_var[0]
+    rename.append(str2)
+
 def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
            words,all_sent,m,kind = "",k=0,circ = ""):
     # this function renames the variables in a definition
@@ -1730,13 +1801,13 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
     global sn
     global plural_c
     global definite
-
+    b = time.time()
     used_idf = []
     #this is for those determinatives which have negations in their definitions where
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","no","many"+um,"many"+un,\
         "no" + us]
-    if definiendum == 'mind':
+    if definiendum == 'OFI':
         bb = 7
     new_idf = []
     if definiendum in identical_det:
@@ -2021,7 +2092,7 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
 
     # the purpose of this is that the subject of the definiendum must match the subject
     # of the osent to be defined.  if its a relation then the object must also match
-    if kind == "" or kind == "R":
+    if (kind == "" or kind == "R"):
         mvar = []
         bool1 = mult_defnd(def_info[4],def_num)
         for i in range(len(def_sent)):
@@ -2057,11 +2128,14 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
     already_checked2 = []
     cap = False
 
-    for w in range(0,2):
-        for i in range(len(def_sent)):
-            if i not in exception:
-                for j in num:
-                    temp_str = def_sent[i][j]
+    # for w in range(0,2):
+    for i in range(len(def_sent)):
+        if i not in exception:
+            unmatched = []
+            for j in num:
+                temp_str = def_sent[i][j]
+                isvar = isvariable(temp_str)
+                if isvar:
                     if temp_str != None:
                         str3 = findinlist(temp_str,match_dv,0,1)
                         if str3 != None and temp_str != str3:
@@ -2074,96 +2148,51 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
                         elif temp_str == str3:
                             already_checked2.append([i,j])
                             pass
-        if w == 0:
-            for i in range(len(def_sent)):
-                already_checked = []
-                if i not in exception:
-                    for j in num:
-                        temp_str = def_sent[i][j]
-                        isvar = isvariable(temp_str)
-                        if isvar and [i,j] not in already_checked2:
-                        # bool2 = check_dimension(match_dv,1,temp_str)
-                        # if not bool2 and isvar:
-                            bool1 = check_dimension(new_idf,0,temp_str)
-                            if bool1:
-                                str1 = findinlist(temp_str,new_idf,0,1)
-                                def_sent[i][j] = str1
-                            if not bool1:
+                        else:
+                            # bool1 = check_dimension(new_idf,0,temp_str)
+                            # if bool1:
+                            #     str1 = findinlist(temp_str,new_idf,0,1)
+                            #     def_sent[i][j] = str1
+                            # here we check to see if it has a plural form
+                            if j == 14 and def_sent[i][9] == 'OF':
+                                g = findposinlist(def_sent[i][5],plural_c,1)
+                                if g > -1:
+                                    match_dv.append([def_sent[i][j],plural_c[g][0]])
+                                    def_sent[i][j] = plural_c[g][0]
+                            else:
+                                already_checked = []
                                 if j == 5:
                                     list5 = num3
                                 else:
                                     list5 = num4
-                                for t in range(len(all_sent)):
-                                    if t not in already_checked:
-                                        for u in list5:
-                                            if all_sent[t][u] == def_sent[i][u]:
-                                                pass
-                                            elif u == 8 and all_sent[t][53] == 'cn':
-                                                cap = True
-                                                pass
-                                            else:
-                                                if u == 9:
-                                                    already_checked.append(t)
-                                                next_t = True
-                                                no_match = True
-                                                break
-                                        else:
-                                            no_match = False
-                                            new_idf.append([def_sent[i][j],all_sent[t][j]])
-                                            if not cap:
-                                            #cap is for a denied consequent sentence
-                                                str2 = "(" + def_sent[i][j] + mini_c + all_sent[t][j] + ")"
-                                                rename.append(str2)
-                                            else:
-                                                bb = 7
-                                            def_sent[i][j] = all_sent[t][j]
-                                            break
-                                if no_match:
-                                    if temp_str in used_idf:
-                                        pass
-                                    elif temp_str not in idf_var:
-                                        k = 0
-                                        while k + 1 <= len(new_idf):
-                                            if temp_str == new_idf[k][0]:
-                                                def_sent[i][j] = new_idf[k][1]
-                                                break
-                                            k += 1
-                                        else:
-                                            telist7 = [def_sent[i][j], idf_var[0]]
-                                            new_idf.append(telist7)
-                                            str2 = "(" + def_sent[i][j] + mini_c + idf_var[0] + ")"
-                                            def_sent[i][j] = idf_var[0]
-                                            new_var.append(idf_var[0])
-                                            del idf_var[0]
-                                            rename.append(str2)
-                                            str2 = ""
-                                    elif temp_str in idf_var:
-                                        idf_var.remove(temp_str)
-                                        used_idf.append(temp_str)
-
-        if has_plural and w == 0:
-            match_dv = []
-            for i in range(len(def_sent)):
-    #When constructing definitions which have a plural, 'of' must be in the definiendum
-                if heir_num[i][:-1] in first_in_def \
-                    and def_sent[i][9] == "OF":
-                    temp_plural = [def_sent[i][5],def_sent[i][14]]
-                    str1 = temp_plural[0]
-                    new1 = findinlist(str1,plural_c,0,1)
-                    old1 = temp_plural[1]
-                    if new1 == None:
-                        bool1 = check_dimension(plural_c,0,temp_plural[0])
-                        if bool1:
-                            old1 = temp_plural[1]
-                            new1 = findinlist(temp_plural[0],plural_c,0,1)
-                    if new1 == None or old1 == None:
-                        easygui.msgbox("your plurals are not right")
-                    match_dv.append([old1,new1])
-                    exception = []
-        else:
-            break
-
-
+                                no_match = abb_change(list5, already_checked,all_sent,def_sent,i,match_dv,rename,j)
+                                if no_match and j == 14:
+                                    # if temp_str in used_idf:
+                                    #     pass
+                                    # elif temp_str not in idf_var:
+                                    #     k = 0
+                                    #     while k + 1 <= len(new_idf):
+                                    #         if temp_str == new_idf[k][0]:
+                                    #             def_sent[i][j] = new_idf[k][1]
+                                    #             break
+                                    #         k += 1
+                                    #     else:
+                                    dummy = abb_change2(match_dv,def_sent,i,idf_var,rename,j)
+                                    if unmatched != []:
+                                        dummy = abb_change2(match_dv,def_sent,i,idf_var,rename,5)
+                                    # elif temp_str in idf_var:
+                                    #     idf_var.remove(temp_str)
+                                    #     used_idf.append(temp_str)
+                                elif no_match and j == 5:
+                                    unmatched.append(j)
+                                elif not no_match and j == 14 and unmatched != []:
+                                    dummy = abb_change(num3, already_checked,all_sent,def_sent,i,match_dv,rename,j)
+            else:
+                if unmatched != []:
+                    no_match = abb_change(num3, already_checked,all_sent,def_sent,\
+                    i,match_dv,rename,5)
+                    if no_match:
+                        dummy = abb_change2(match_dv,def_sent,i,idf_var,rename,5)
 
     # definition = sdefinition
     # we now replace the skel string with the new sentences, to get the true definition
@@ -2172,9 +2201,6 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
     skel_string2 = def_info[5]
 
     for i in range(len(def_sent)):
-        if def_sent[i][9] == "OF" and has_plural:
-            plural_c.append([def_sent[i][5],def_sent[i][14]])
-
         str2 = build_sent(def_sent[i])
         def_sent[i][0] = str2
     #because the definiendum for universal quantifiers is somewhat hard to get we
@@ -2216,7 +2242,6 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
         h = skel_string2.find(conditional)
         skel_string2 = skel_string2[:g+3] + str4p + skel_string2[g+3:h-1] + ")" + skel_string2[h-1:]
 
-
     str3 = skel_string2
     if kind == "" or kind == 'R':
         sn += 1
@@ -2256,7 +2281,7 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
     list1 = []
     for i in range(len(def_sent)):
         # the indefinite articles have special negations
-        if definiendum == "no"+us or definiendum == "no":
+        if definiendum == "no"+us or definiendum == "no" or definiendum == "many" + un:
             if not def_sent[i][40] and def_sent[i][8] == "~":
                 def_sent[i] = not_a(def_sent[i],k)
 
@@ -2293,6 +2318,8 @@ def def_rn(definition, definiendum,e, tot_sent,  dv_nam, def_var, idf_var, \
     elif len(list1) == 1:
         list1[0][58] = list1[0][5]
         ant_cond.append(list1)
+    c = time.time()
+    d = c - b
     return
 
 def ant_var(list1):
@@ -2330,25 +2357,45 @@ def not_a(list1,k):
 def plurals(tot_sent, all_sent,  m, words, dv_nam, def_var, idf_var):
 
     global plural_c
+    global sn
+    c = time.time()
     all_sent = remove_duplicates(all_sent,0)
     pnouns = words[26]
-    definitions = words[16]
-    list1 = copy.deepcopy(all_sent[m][46])
-    num = [5,14,18,22,26,30,34,36]
-    bool1 = False
-    used_plural = []
-    g = len(all_sent)
-    for m in range(0,g):
-        for i in num:
-            str1 = all_sent[m][i]
-            str2 = findinlist(str1, dv_nam,0,1)
-            if check_dimension(pnouns,0,str2) and str2 not in used_plural:
-                used_plural.append(str2)
-                singular = findinlist(str2,pnouns,0,1)
-                pdef = "((b'=" + str2 + ") " + iff + " ((b'IGc') & (b'OFd'))) & (d'=" \
-                + singular + ") & (c'=plural_form)"
-                dummy = def_rn(pdef,str2,0,tot_sent,dv_nam,def_var,\
-                        idf_var,words,all_sent,m,False,"",0)
+    new_abb = idf_var[0]
+    del idf_var[0]
+    dv_nam.append([new_abb,"plural_form"])
+    for m in range(len(dv_nam)):
+        pluralf = dv_nam[m][1]
+        g = findposinlist(pluralf,pnouns,0)
+        if g > -1:
+            str1 = dv_nam[m][0]
+            singular = findinlist(pluralf,pnouns,0,1)
+            singa = findinlist(singular,dv_nam,1,0)
+            if singa == None:
+                singa = idf_var[0]
+                del idf_var[0]
+                dv_nam.append([singa,singular])
+            defndm = "(" + str1 + "=" + pluralf + ")"
+            sent1 = "(" + str1 + "OF" + singa + ")"
+            list1 = [None] * 70
+            list1[0] = sent1
+            list1[5] = str1
+            list1[9] = "OF"
+            list1[14] = singa
+            plural_c.append([singa,str1])
+            sent2 = "(" + str1 + "IG" + new_abb + ")"
+            defp = name_sent(defndm)
+            sent1p = name_sent(sent1)
+            list1[42] = sent1p
+            all_sent.append(list1)
+            sent2p = name_sent(sent2)
+            tot = defndm + " " + iff + " (" + sent1 + " & " + sent2 + ")"
+            totp = defp + " " + iff + " (" + sent1p + " & " + sent2p + ")"
+            sn += 1
+            tot_sent.append([sn,tot,totp,"","df " + pluralf,"","",""])
+    b = time.time()
+    d = b - c
+    return
 
 def categorize_words(words, str2, def_var, idf_var,all_sent,islist=False):
 
@@ -2800,36 +2847,41 @@ def det_nouns(tot_sent, all_sent, words,  m):
                 bool1 = False
 
 def print_sent_full(test_sent,p,tot_prop_name):
-    # p = 30
     global result_data
+    # p = 30
+    b = time.time()
     p += 2
     for i in range(len(test_sent)):
         # if i == 2:
         #     break
         for j in range(len(test_sent[i])):
-            if i == 0 and j == 13:
+            if len(test_sent[i][j]) == 7:
+                test_sent[i][j].append("")
+            elif len(test_sent[i][j]) == 6:
+                test_sent[i][j].append("")
+                test_sent[i][j].append("")
+            elif len(test_sent[i][j]) == 5:
+                test_sent[i][j].append("")
+                test_sent[i][j].append("")
+                test_sent[i][j].append("")
+            elif len(test_sent[i][j]) == 4:
                 bb = 7
-            if len(test_sent[i][j]) == 8 and test_sent[i][j][6] != "" and test_sent[i][j][6] != None:
+            if test_sent[i][j][7] != "" and test_sent[i][j][7] != None:
                 str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5]) + ',' +\
                        str(test_sent[i][j][6]) + ',' + str(test_sent[i][j][7])
-            elif len(test_sent[i][j]) == 7 and test_sent[i][j][6] != "" and test_sent[i][j][6] != None:
+            elif test_sent[i][j][6] != "" and test_sent[i][j][6] != None:
                 str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5]) + ',' + str(test_sent[i][j][6])
-            elif len(test_sent[i][j]) == 7 and test_sent[i][j][6] == "":
-                str1 = test_sent[i][j][4]
-            elif len(test_sent[i][j]) == 7:
+            elif test_sent[i][j][5] != None and test_sent[i][j][5] != "":
                 str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5])
-            elif len(test_sent[i][j]) == 6:
-                str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5])
-            elif len(test_sent[i][j]) == 5:
+            elif test_sent[i][j][4] != None and test_sent[i][j][4] != "":
                 str1 = test_sent[i][j][4]
             else:
                 str1 = ""
             if j == 0:
                 str1 = i
-            result_data['text_'+str(p)+'_1']=test_sent[i][j][0]
-            result_data['text_'+str(p)+'_2']=test_sent[i][j][1]
-            result_data['text_'+str(p)+'_3']= str1
-
+            result_data['text_'+str(p-1)+'_1']=test_sent[i][j][0]
+            result_data['text_'+str(p-1)+'_2']=test_sent[i][j][1]
+            result_data['text_'+str(p-1)+'_3']= str1
             #w4.cell(row=p,column=2).value = test_sent[i][j][0]
             #w4.cell(row=p,column=3).value = test_sent[i][j][1]
             #w4.cell(row=p,column=4).value = str1
@@ -2881,14 +2933,17 @@ def print_sent_full(test_sent,p,tot_prop_name):
                     str2 += "," + str(tot_prop_sent[i][j][5])
                 if tot_prop_sent[i][j][6] != "" and tot_prop_sent[i][j][6] != None:
                     str2 += "," + str(tot_prop_sent[i][j][6])
-                if tot_prop_sent[i][j][7] != "" and tot_prop_sent[i][j][7] != None:
-                    str2 += "," + str(tot_prop_sent[i][j][7])
+                if len(tot_prop_sent[i][j]) > 7:
+                    if tot_prop_sent[i][j][7] != "" and tot_prop_sent[i][j][7] != None:
+                        str2 += "," + str(tot_prop_sent[i][j][7])
                 result_data['text_'+str(p)+'_3']= str2
                 #w4.cell(row=p,column=4).value = str2
 
                 p += 1
         p += 3
-
+    c = time.time()
+    g = c - b
+    return
 
 def build_dict(str1):
 
@@ -2939,6 +2994,8 @@ def build_dict(str1):
             bb = 7
         str1 = row.type
         word = row.word
+        #str1 = row[1].value
+        #word = row[2].value
         if word == 'space':
             bb = 7
         if word == None and almost_done:
@@ -2953,6 +3010,8 @@ def build_dict(str1):
                 word = str(word)
             str3 = row.rel
             defin = row.definition
+            #str3 = row[3].value
+            #defin = row[4].value
             if defin == 'redundant':
                 redundant.append(word)
             if defin != None and defin.find("E.g.") == -1 and defin.find("EXP") == -1 \
@@ -3125,7 +3184,7 @@ def ismultidim(list1):
     else:
         return False
 
-def cat_atoms(j,i,list,members,basic_objects,str1,conc_prop,unique_var,spec_mem,bo2):
+def cat_atoms(j,i,list,members,basic_objects,str1,conc_prop,unique_var,spec_mem,bo2,non_arb):
 
     global dv_nam
     str2 = ""
@@ -3138,10 +3197,11 @@ def cat_atoms(j,i,list,members,basic_objects,str1,conc_prop,unique_var,spec_mem,
         easygui.msgbox("you didn't shift the objects into the right position")
     bool2 = False
 
-    if obj == "h" and relat == 'S' and subj == 'p':
+    if obj == "o" and j == 14:
         bb = 7
 
     fir_app = 2
+
     if list[i][8] == None:
         list[i][8] = ""
     if j == 5:
@@ -3157,19 +3217,48 @@ def cat_atoms(j,i,list,members,basic_objects,str1,conc_prop,unique_var,spec_mem,
             if key_var in list[i][55]:
                 fir_app = 1
             else:
+    # 0 means it's the second appearance of the abbreviation and hence not relevant
+    # in determining its identity
                 fir_app = 0
 
     if list[i][56] != None:
         if key_var in list[i][56]:
             fir_app = 2
 
-    if key_var not in unique_var:
-        if j == 5:
-            members.append([list[i][j],str1,list[i][0],list[i][8] + list[i][9] \
-                    + list[i][14],fir_app])
+    if str1 == 'points':
+        if relat == 'S':
+            fir_app = 1
+            if subj in non_arb:
+                non_arb.append(obj)
         else:
-            members.append([list[i][j],str1,list[i][0],list[i][5] + list[i][8] \
-                    + list[i][9],fir_app])
+            fir_app = 0
+    elif str1 == 'matter':
+        if relat == 'HW' or relat == 'S':
+            fir_app = 1
+        else:
+            fir_app = 0
+    elif str1 == 'numbers':
+        if relat == 'AF':
+            fir_app = 1
+        else:
+            fir_app = 0
+
+
+
+    if key_var in unique_var:
+        # 3 means that the abbreviation is a constant and hence nothing can be
+        # changed into it
+        str3 = findinlist(key_var,dv_nam,0,1)
+        if str3 != None:
+            d = findposinlist(key_var,members,0)
+            if d == -1:
+                members.append([list[i][j],str1,"=" + str3,"",3])
+    elif j == 5:
+        members.append([list[i][j],str1,list[i][0],list[i][8] + list[i][9] \
+                + list[i][14],fir_app])
+    else:
+        members.append([list[i][j],str1,list[i][0],list[i][5] + list[i][8] \
+                + list[i][9],fir_app])
 
         # if list[i][55] and j == 5:
         #     if list[i][9] == 'IG' and not cons:
@@ -3198,12 +3287,12 @@ def cat_atoms(j,i,list,members,basic_objects,str1,conc_prop,unique_var,spec_mem,
             bo2.append(list[i])
     return
 
-def axioms(list1,bo2):
+def axioms(list1,bo2,disjuncts):
 
     already_done = []
     global dv_nam
     global sn
-
+    added = False
     list2 = extract_list(list1,0)
     for i in range(len(list2)):
         str1 = list2[i]
@@ -3215,18 +3304,23 @@ def axioms(list1,bo2):
                 list3 = []
                 for m in range(i,len(bo2)):
                     if list1[m][0] == str1:
-                        if bo2[m][5] == str1 and (bo2[m][53] == 'cj' or bo2[m][53] == 'an'):
-                            conjuncts.append([bo2[m],5])
-                        elif bo2[m][14] == str1 and (bo2[m][53] == 'cj' or bo2[m][53] == 'an'):
-                            conjuncts.append([bo2[m],14])
-                        elif bo2[m][5] == str1 and (bo2[m][53] == 'd' or bo2[m][53] == 'cn'):
-                            list3.append([bo2[m],5])
-                        elif bo2[m][14] == str1 and (bo2[m][53] == 'd' or bo2[m][53] == 'cn'):
-                            list3.append([bo2[m],14])
+                        prop = bo2[m][42]
+                        prop = prop.replace("~","")
+                        if prop not in disjuncts:
+                            if bo2[m][5] == str1:
+                                conjuncts.append([bo2[m],5])
+                            elif bo2[m][14] == str1:
+                                conjuncts.append([bo2[m],14])
+                        else:
+                            if bo2[m][5] == str1:
+                                list3.append([bo2[m],5])
+                            elif bo2[m][14] == str1:
+                                list3.append([bo2[m],14])
 
                 if len(conjuncts) == 1 and len(list3) >= 1:
                     for k in range(len(conjuncts)):
                         for j in range(len(list3)):
+                            added = True
                             pos1 = conjuncts[k][1]
                             pos2 = list3[j][1]
                             rel1 = conjuncts[k][0][9]
@@ -3239,6 +3333,7 @@ def axioms(list1,bo2):
                             dummy = axioms2(pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent)
 
                 elif len(conjuncts) == 2:
+                    added = True
                     pos1 = conjuncts[0][1]
                     pos2 = conjuncts[1][1]
                     rel1 = conjuncts[0][0][9]
@@ -3256,6 +3351,7 @@ def axioms(list1,bo2):
                         y += 1
                         h = y
                         while h < g:
+                            added = True
                             j = h
                             h += 1
                             k = n
@@ -3269,8 +3365,7 @@ def axioms(list1,bo2):
                             obj2 = conjuncts[j][0][14]
                             osec_sent = conjuncts[j][0][0]
                             dummy = axioms2(pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent)
-
-    return
+    return added
 
 def axioms2(pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent):
 
@@ -3389,11 +3484,12 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
     # if not ismultidim(list1):
     #     list1 = ([list1,["stop","hey"]])
 
-
+    last_num = tot_sent[-1][0]
     atomic = words[29]
     members = []
     con_prop = []
     arb_var = []
+    non_arb = []
     non_id = []
     unique_var = []
     spec_mem = []
@@ -3405,6 +3501,24 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
             unique_var.append(dv_nam[i][0])
             str1 += " " + dv_nam[i][0]
     tot_sent.append(["","","","","","",""])
+
+    # moments = []
+    # relationships = []
+    # points = []
+    # numbers = []
+    # thoughts = []
+    # imaginations = []
+    # groups = []
+    # properties = []
+    # possible_worlds = []
+    # possible_relatiionships = []
+    # words = []
+    # natural_wholes = []
+    # minds = []
+    # matter = []
+    # sensoriums = []
+    # sensations = []
+
     # tot_sent.append(["",str1,"","","","",""])
 
     nw = []
@@ -3432,7 +3546,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
                     kind = 'points'
                 elif relat == 'AF' or (relat == 'AN' and p == 14):
                     kind = 'numbers'
-                elif relat == 'AI' and p == 5:
+                elif relat == 'AI' and p == 5 or (relat == 'TK' and p == 14):
                     kind = 'thoughts'
                 elif relat == 'AI' and p == 14:
                     kind = 'imaginations'
@@ -3462,7 +3576,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
                 if len(members) > 30:
                     bb = 7
                 dummy = cat_atoms(p,j,all_sent,members,basic_objects,kind,con_prop,\
-                    unique_var,spec_mem,bo2)
+                    unique_var,spec_mem,bo2,non_arb)
 
     arb_var.sort()
     arb_var2 = []
@@ -3535,11 +3649,12 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
     str4 = ""
     # skip_string = ""
     dis_con = False
+    arbitrary_var = []
 
     for i in range(len(members)):
         str1 = members[i][0]
         str3 = members[i][1]
-        if str1 == 'u':
+        if str1 == 'p':
             bb = 7
         # if str1 != skip_string:
         # skip_string = ""
@@ -3550,6 +3665,10 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
             numb = ""
             dis_con = False
             # list4 = sort_mixed_list(list4)
+
+            # if members[i][3] == 3:
+            #     member_prop.append([str2,members[i][2],members[i][3]])
+
             if list4 == [] and sec_app != []:
                 list7 = copy.deepcopy(sec_app)
                 list8 = copy.deepcopy(sec_app2)
@@ -3557,8 +3676,14 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
                 list6 = list8
                 sec_app = []
                 sec_app2 = []
-            list5.append([str2,members[i-1][1],list4,sec_app,con_prop])
-            member_prop.append([str2,members[i-1][1],list6,sec_app2,con_prop2])
+            if members[i-1][4] == 3:
+                list5.append([str2,members[i-1][1],3,members[i-1][2]])
+                member_prop.append([str2,members[i-1][1],3,members[i-1][2]])
+            else:
+                list5.append([str2,members[i-1][1],list4,sec_app,con_prop])
+                member_prop.append([str2,members[i-1][1],list6,sec_app2,con_prop2])
+                if len(list4) == 1:
+                    arbitrary_var.append(str2)
             list4 = []
             sec_app = []
             con_prop = []
@@ -3586,28 +3711,36 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
                 con_prop.append(members[i][2])
                 con_prop2.append(members[i][3])
         str2 = str1
-    list5.append([str2,members[i][1],list4,sec_app,con_prop])
-    member_prop.append([str2,members[i-1][1],list6,sec_app2,con_prop2])
+    if members[i][4] == 3:
+        list5.append([str2,members[i][1],3,members[i][2]])
+        member_prop.append([str2,members[i][1],3,members[i][2]])
+    else:
+        list5.append([str2,members[i][1],list4,sec_app,con_prop])
+        member_prop.append([str2,members[i][1],list6,sec_app2,con_prop2])
     list5 = sorted(list5, key = operator.itemgetter(1,0))
     member_prop = sorted(member_prop, key = operator.itemgetter(1,0))
     bb = 7
 
     str3 = list5[0][1]
     tot_sent.append(["",str3,"","","","",""])
+    non_id2 = copy.deepcopy(non_id)
     b = 0
     for i in range(len(list5)):
         str1 = list5[i][0]
         str4 = list5[i][1]
+
         if str1 == 'p':
             bb = 7
         for k in range(2,5):
             str2 = ""
-            if len(list5[i][k]) == 0:
+            if list5[i][k] == 3:
+                str2 = list5[i][3]
+            elif len(list5[i][k]) == 0:
                 pass
             elif len(list5[i][k]) > 1:
                 str2 = ""
-                for j in range(len(list5[i][k])):
-                    str2 += list5[i][k][j] + " & "
+                for s in range(len(list5[i][k])):
+                    str2 += list5[i][k][s] + " & "
                 str2 = str2[:-3]
             else:
                 str2 = list5[i][k][0]
@@ -3617,104 +3750,17 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
                 str2 = "[" + str2 + "]"
             if str2 != "":
                 str1 += " " + str2
+            if list5[i][k] == 3:
+                break
         if str4 != str3:
             tot_sent.append(["",str4,"","","","",""])
         str3 = str4
         b += 1
         str7 = str(b) + "a"
+        if non_id2 != []:
+            not_id = isnotid(list5[i][0],non_id2,tot_sent)
         tot_sent.append(["",str1,"","","","",""])
 
-    list1 = []
-    list2 = []
-    list3 = []
-    list4 = []
-    str1 = ""
-    list7 = []
-    k = 0
-    for i in range(1,len(list5)):
-        if list5[i][1] != list5[i-1][1]:
-            j = copy.copy(i)
-            if i - k > 1:
-                list7.append([k,i-1])
-            k = i
-    if i - k > 1:
-        list7.append([k,i])
-
-    new_id = []
-    one_way_id = []
-    list4 = []
-    str2 = ""
-    str1 = ""
-
-    #simple matrix
-    # g = 4
-    # y = 0
-    # for n in range(y,g-1):
-    #     y += 1
-    #     h = y
-    #     while h < g:
-    #         h += 1
-    #         list4.append([n,h-1])
-
-    # for i in range(len(list7)):
-    #     y = list7[i][0]
-    #     g = list7[i][1]
-    #     y -= 1
-    #     for n in range(y,g-1):
-    #         y += 1
-    #         if y == 12:
-    #             bb = 7
-    #         h = y
-    #         while h < g:
-    #             h += 1
-    #             if arentident(member_prop[h][0],member_prop[y][0],non_id):
-    #                 break
-    #             if len(member_prop[y][2]) == len(member_prop[h][2]):
-    #                 if member_prop[y][2][0] == 't':
-    #                     bb = 7
-    #                 if len(member_prop[y][2]) == 1:
-    #                     if member_prop[y][2][0] == member_prop[h][2][0]:
-    #                         new_id.append([member_prop[y][0],member_prop[h][0],"="])
-    #                         str2 = "(" + member_prop[y][0]+ "=" + member_prop[h][0] + ")"
-    #                         tot_sent.append(["",str2,"","","LL","",""])
-    #                 else:
-    #                     bool1 = True
-    #                     no_match = True
-    #                     for q in range(len(member_prop[y][2])):
-    #                         for r in range(len(member_prop[h][2])):
-    #                             if member_prop[y][2][q] == member_prop[h][2][r]:
-    #                                 break
-    #                         else:
-    #                             no_match = True
-    #                             break
-    #                     if not no_match:
-    #                         new_id.append([member[y][0],member[h][0],"="])
-    #                         # str1 = list5[y][2][q] + ", " + list5[y][2][r]
-    #                         # tot_sent.append("",str1,"","","APP")
-    #                         str2 = "(" + member_prop[y][0]+ "=" + member_prop[h][0] + ")"
-    #                         tot_sent.append(["",str2,"","","LL","",""])
-    #
-    #             elif len(member_prop[y][2]) >  len(member_prop[h][2]):
-    #                 large = y
-    #                 small = h
-    #             else:
-    #                 small = y
-    #                 large = h
-    #                 bool1 = True
-    #                 no_match = False
-    #                 for q in range(len(member_prop[small][2])):
-    #                     for r in range(len(member_prop[large][2])):
-    #                         if member_prop[y][2][q] == member_prop[h][2][r]:
-    #                             break
-    #                     else:
-    #                         no_match = True
-    #                         break
-    #                 if not no_match:
-    #                     str1 = list5[y][2][q] + ", " + list5[y][2][r]
-    #                     tot_sent.append(["",str1,"","","APP","",""])
-    #                     str2 = "(" + member_prop[small][0] + mini_c + member_prop[large][0] + ")"
-    #                     tot_sent.append(["",str2,"","","OS","",""])
-    #                     one_way_id.append([member_prop[small][0],member_prop[large][0]])
 
     #an indefinite variable cannot be equal to two nonidentical variables
     # one_way_id.sort()
@@ -3733,44 +3779,45 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
     #         # new_id.append(one_way_id[i][1],idf_var[0],"=")
     #         del idf_var[0]
     #
-    # new_sent = []
-    # for i in range(len(all_sent)):
-    #     for j in num:
-    #         for k in range(len(new_id)):
-    #             if all_sent[i][j] == new_id[k][0]:
-    #                 list2 = copy.deepcopy(all_sent[i])
-    #                 list2[j] = new_id[k][2]
-    #                 str1 = build_sent(list2)
-    #                 list2[0] = str1
-    #                 dummy = new_sentence(tot_sent,all_sent[i],list2,"","",1,"isub",conditional)
-    #                 new_sent.append(list2)
-    #                 if len(new_id[k]) == 5:
-    #                     list3 = copy.deepcopy(list2)
-    #                     list3[j] = new_id[k][1]
-    #                     str1 = build_sent(list3)
-    #                     list3[0] = str1
-    #                     dummy = new_sentence(tot_sent,list2,list3,"","",1,"isub")
-    #                     new_sent.append(list3)
-    #             elif all_sent[i][j] == new_id[k][1] and len(new_id[k]) == 5:
-    #                 list2 = copy.deepcopy(all_sent[i])
-    #                 list2[j] = new_id[k][2]
-    #                 str1 = build_sent(list2)
-    #                 list2[0] = str1
-    #                 dummy = new_sentence(tot_sent,all_sent[i],list2,"","",1,"isub")
-    #                 new_sent.append(list2)
 
     tot_sent.append(["","","","","","",""])
-    dummy = axioms(basic_objects2,bo2)
-
     list1 = id_sent(dv_nam)
     tot_sent.insert(id_num-1,[id_num,list1[0],list1[1],"",'id'])
+    list4 = []
+    negat = []
+    sent = []
+    disjuncts = []
+    for i in range(len(tot_sent)):
+        if tot_sent[i][2] != "":
+            sent.append([tot_sent[i][0],tot_sent[i][2]])
+            negat.append(tot_sent[i][3])
+    consistent = plan(sent, prop_sent, candd, conditionals, prop_name,disjuncts,1,negat)
+    tot_prop_sent.append(prop_sent)
+    g = len(tot_sent)
+    rearrange = False
+    if consistent:
+        rearrange = True
+        added = axioms(basic_objects2,bo2,disjuncts)
+        if added:
+            dummy = rearrange2(g,tot_sent,prop_sent,conditionals,candd,last_num)
+            sn = prop_sent[-1][0]
+            consistent = statement_logic(prop_sent,conditionals,candd,disjuncts,2)
+        if consistent:
+            added = identity2(member_prop,tot_sent,list5,arbitrary_var,non_arb)
+            if added:
+                # last_num = tot_sent[-1][0]
+                dummy = rearrange2(g,tot_sent,prop_sent,conditionals,candd,last_num)
+                sn = prop_sent[-1][0]
+                consistent = statement_logic(prop_sent,conditionals,candd,disjuncts,2)
+        if consistent:
+            print "False"
 
     i = -1
     list2 = []
     list1 = []
     list5 = []
     bool1 = False
-    for i in range(len(tot_sent)):
+    for i in range(0,g):
         if i == 9:
             bb = 7
         str1 = tot_sent[i][4][:3]
@@ -3783,7 +3830,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
             list5.append(list6)
             bool1 = True
         elif 'odf' == str1 or 'onc' == str1 or 'oax' == str1 \
-             or 'RN' == str2 or "CAP":
+             or 'RN' == str2:
             list4 = copy.deepcopy(tot_sent[i])
             list1.append(list4)
         elif bool1:
@@ -3807,6 +3854,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
             list1.append([tot_sent[i][0],j])
             tot_sent[i][0] = j
 
+
     for i in range(len(tot_sent)):
         for j in range(0,5):
             if len(tot_sent[i]) > 5 + j:
@@ -3816,18 +3864,177 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,prop_sent,
             else:
                 break
 
-    negat = []
-    sent = []
-    for i in range(len(tot_sent)):
-        if tot_sent[i][2] != "":
-            sent.append([tot_sent[i][0],tot_sent[i][2]])
-            negat.append(tot_sent[i][3])
-    dummy = plan(sent, prop_sent, candd, conditionals, prop_name, 1,negat)
-    tot_prop_sent.append(prop_sent)
+    if rearrange:
+        for i in range(len(prop_sent)):
+            if prop_sent[i][0] < last_num:
+                prop_sent[i][0] = findinlist(prop_sent[i][0],list1,0,1)
+            for j in range(0,5):
+                if prop_sent[i][j+4] != None and prop_sent[i][j+4] != "":
+                    g = findinlist(prop_sent[i][j+4],list1,0,1)
+                    if g != None:
+                        prop_sent[i][j+4] = g
+                else:
+                    break
 
     # end4
-
     return tot_sent
+
+def rearrange2(g,tot_sent,prop_sent,conditionals,candd,last_num):
+
+    list4 = []
+    old_num = tot_sent[g][0]
+
+    try:
+        diff = old_num - last_num - 1
+    except TypeError:
+        bb = 8
+    for i in range(g,len(tot_sent)):
+        tot_sent[i][0] = tot_sent[i][0] - diff
+        if tot_sent[i][5] != "":
+            tot_sent[i][5] = tot_sent[i][5] - diff
+        if tot_sent[i][6] != "":
+            tot_sent[i][6] = tot_sent[i][6] - diff
+        if len(tot_sent[i]) > 7:
+            tot_sent[i][7] = tot_sent[i][7] - diff
+
+        if tot_sent[i][2] != "":
+            list4.append([tot_sent[i][0],tot_sent[i][2],tot_sent[i][3],"","","",""])
+            if not os(tot_sent[i][2]):
+                list1 = mainconn(tot_sent[i][2])
+                list2 = prepare_iff_elim(tot_sent[i][2],list1[0],list1[1],tot_sent[i][0])
+                conditionals.insert(0,list2)
+            else:
+                list3 = [tot_sent[i][0],tot_sent[i][2],tot_sent[i][3]]
+                candd.insert(0,list3)
+    diff = tot_sent[-1][0] - last_num
+    for i in range(len(prop_sent)):
+        if i == 16:
+            bb = 7
+        if prop_sent[i][0] == last_num:
+            start = i
+        if prop_sent[i][0] > last_num:
+            prop_sent[i][0] = prop_sent[i][0] + diff
+        if prop_sent[i][5] != "" and prop_sent[i][5] != None:
+            prop_sent[i][5] = prop_sent[i][5] + diff
+        if prop_sent[i][6] != "" and prop_sent[i][6] != None:
+            prop_sent[i][6] = prop_sent[i][6] + diff
+        if len(prop_sent[i]) > 7 and prop_sent[i][7] != None:
+            prop_sent[i][7] = prop_sent[i][7] + diff
+    for i in range(len(list4)):
+        prop_sent.insert(start+i+1,list4[i])
+
+
+
+def isnotid(str1,non_id2,tot_sent):
+
+    for y in range(len(non_id2)):
+        if str1 in non_id2[y][0]:
+            tot_sent.append(["",non_id2[y][0],"","","","",""])
+            del non_id2[y]
+            return True
+    return False
+
+def identity2(member_prop,tot_sent,list5,arbitrary_var,non_arb):
+
+    global sn
+    list7 = []
+    identities = []
+    one_way_id = []
+    k = 0
+    for i in range(1,len(list5)):
+        if list5[i][1] != list5[i-1][1]:
+            # j = copy.copy(i)
+            if i - k > 1:
+                list7.append([k,i-1])
+            k = i
+    if i - k > 1:
+        list7.append([k,i])
+
+    # simple matrix
+    # y = 0
+    # for n in range(y,g-1):
+    #     y += 1
+    #     h = y
+    #     while h < g:
+    #         h += 1
+    #         list4.append([n,h-1])
+
+    for i in range(len(list7)):
+        y = list7[i][0]
+        g = list7[i][1]
+        y -= 1
+        for n in range(y,g-1):
+            y += 1
+            if member_prop[y][2] != 3:
+                h = y
+                while h < g:
+                    h += 1
+                    if member_prop[h][2] != 3:
+                        if member_prop[h][0] in arbitrary_var and member_prop[y][0] in arbitrary_var \
+                            and member_prop[h][0] not in non_arb and member_prop[y][0] not in non_arb:
+                            str2 = "(" + member_prop[y][0]+ "=" + member_prop[h][0] + ")"
+                            str2p = name_sent(str2)
+                            sn += 1
+                            tot_sent.append([sn,str2,str2p,"","LL","",""])
+                            identities.append([member_prop[y][0],member_prop[h][0],sn])
+
+                        elif len(member_prop[y][2]) == len(member_prop[h][2]):
+                            if member_prop[y][2][0] == 't':
+                                bb = 7
+                            if len(member_prop[y][2]) == 1:
+                                if member_prop[y][2][0] == member_prop[h][2][0]:
+                                    str2 = "(" + member_prop[y][0]+ "=" + member_prop[h][0] + ")"
+                                    str2p = name_sent(str2)
+                                    sn += 1
+                                    tot_sent.append([sn,str2,str2p,"","LL","",""])
+                                    identities.append([member_prop[y][0],member_prop[h][0],sn])
+                            else:
+                                bool1 = True
+                                no_match = True
+                                for q in range(len(member_prop[y][2])):
+                                    for r in range(len(member_prop[h][2])):
+                                        if member_prop[y][2][q] == member_prop[h][2][r]:
+                                            break
+                                    else:
+                                        no_match = True
+                                        break
+                                if not no_match:
+                                    # str1 = list5[y][2][q] + ", " + list5[y][2][r]
+                                    # tot_sent.append("",str1,"","","APP")
+                                    str2 = "(" + member_prop[y][0]+ "=" + member_prop[h][0] + ")"
+                                    str2p = name_sent(str2)
+                                    sn += 1
+                                    tot_sent.append([sn,str2,str2p,"","LL","",""])
+                                    identities.append([member[y][0],member[h][0],"="])
+
+                        elif len(member_prop[y][2]) >  len(member_prop[h][2]):
+                            large = y
+                            small = h
+                        else:
+                            small = y
+                            large = h
+                            bool1 = True
+                            no_match = False
+                            for q in range(len(member_prop[small][2])):
+                                for r in range(len(member_prop[large][2])):
+                                    if member_prop[y][2][q] == member_prop[h][2][r]:
+                                        break
+                                else:
+                                    no_match = True
+                                    break
+                            if not no_match:
+                                str1 = list5[y][2][q] + ", " + list5[h][2][r]
+                                tot_sent.append(["",str1,"","","APP","",""])
+                                str2 = "(" + member_prop[small][0] + mini_c + member_prop[large][0] + ")"
+                                str2p = name_sent(str2)
+                                tot_sent.append(["",str2,str2p,"","OS","",""])
+                                one_way_id.append([member_prop[small][0],member_prop[large][0]])
+
+    if identities != []:
+        dummy = substitute(identities,all_sent,tot_sent,1)
+        return True
+
+    return False
 
 
 def arentident(jobj, iobj,non_id):
@@ -3838,13 +4045,7 @@ def arentident(jobj, iobj,non_id):
     return False
 
 
-def group_idf(list1):
-
-    list2 = []
-    for i in range(len(list1)):
-        pass
-
-def new_sentence(tot_sent,  old_list, list1, list2, list3, quant, rule,conn = iff,anc1 = ""):
+def new_sentence(tot_sent,  old_list, list1, list2, list3, quant, rule,conn = iff,anc1 = "",anc2 = ""):
 
     global prop_name
     global sn
@@ -3882,7 +4083,7 @@ def new_sentence(tot_sent,  old_list, list1, list2, list3, quant, rule,conn = if
     g = findinlist(str1,tot_sent,2,0,True)
     if g == -1 and quant != 3:
         sn += 1
-        tot_sent.append([sn, str1, str1v, "", rule, anc1, ""])
+        tot_sent.append([sn, str1, str1v, "", rule, anc1, anc2])
 
 
 
@@ -4044,7 +4245,6 @@ def prepare_iff_elim(str2, mainc, s, num = ""):
     list7[5] = ""
     j = 0
     str2 = remove_outer_paren(str2)
-
     if mainc == iff:
         list7[3] = "e"
     else:
@@ -4217,6 +4417,8 @@ def modus_ponens(conditionals, candd, prop_sent):
             g += 1
             if g == 3 and r==1:
                 bb = 7
+            if conditionals[g][0] == "":
+                break
             str12 = conditionals[g][3]
             if str12 != 'd':
                 anc2 = conditionals[g][2]
@@ -4365,7 +4567,8 @@ def disjunction_heirarchy(conditionals, str5,d,new_disj = False):
     else:
         list2[2] = conditionals[d][2]
     list2[5] = ""
-    list2[4] = list1[0][0] # fix this
+    list2[4] = list1[0][0]# fix this
+    sentences = []
 
     for i in range(len(list1[0])):
         if os(list1[0][i]):
@@ -4407,9 +4610,15 @@ def disjunction_heirarchy(conditionals, str5,d,new_disj = False):
                     siblings.append([list1[0][j],list1[1][j]]) # fix this
             list3[4] = siblings
             list2[n] = list3
+            sentences.append(list3[0][0])
+            if list3[0][0] not in rel_conj:
+                rel_conj.append(list3[0][0])
+
     if conditionals == [] or new_disj:
+        list2[38] = sentences
         conditionals.append(list2)
     else:
+        list2[38] = sentences
         conditionals[d] = list2
 
 def proper_spacing(str1):
@@ -4422,243 +4631,244 @@ def proper_spacing(str1):
     str1 = str1.replace("&"," & ")
     return str1
 
-def iff_elim(prop_sent, conditionals):
+def iff_elim(prop_sent, conditionals,kind):
 
     new_sent = False
     no_contr = True
-
     for d in range(len(conditionals)):
-        list1 = ["",""]
-        ng = conditionals[d][5]
-        if conditionals[d][3] == "d" or conditionals[d][3] == 'n':
-            list1 = [conditionals[d][4], ""]
-        else:
-            if conditionals[d][6] == "":
-                list1[0] = conditionals[d][0][0]
+        if conditionals[d][0] != "":
+            list1 = ["",""]
+            ng = conditionals[d][5]
+            if conditionals[d][3] == "d" or conditionals[d][3] == 'n':
+                list1 = [conditionals[d][4], ""]
             else:
-                list1[0] = conditionals[d][6]
-            if conditionals[d][7] == "":
-                list1[1] = conditionals[d][1][0]
-            else:
-                list1[1] = conditionals[d][7]
-        for s in range(0,2):
-            if list1[s].find(iff) > -1:
-                new_sent = True
-                str1 = list1[s]
-                anc1 = conditionals[d][2]
-                old_str = copy.copy(str1)
-                str1 = str1.replace(" ","")
-                str1 = str1.replace("&"," & ")
-                str1 = str1.replace(iff , " " + iff + " ")
-                str1 = remove_outer_paren(str1)
-                list5 = mainconn(str1)
-                mc = list5[0]
-                bool4 = False
-                if str1[:2] == "~(":
-                    bool4 = True
-                    str1 = str1[2:len(str1) - 1]
-                r = str1.count(iff)
-                i = -1
-                for o in range(0,r):
-                    k = 0
-                    while i < len(str1) - 1:
-                        i += 1
-                        str2 = str1[i:i+1]
-                        if str2 == iff:
-                            p = copy.copy(i)
-                            t = copy.copy(i)
-                            bool5 = False
-                            while k != -1:
-                                i -= 1
-                                str3 = str1[i:i+1]
-                                if str3 == "(":
-                                    k -= 1
-                                elif str3 == ")":
-                                    k += 1
-                                    bool5 = True
-                                if k == -1:
-                                    m = i + 1
-                                elif k == 0 and bool5:
-                                    m = i
-                                    break
-                            bool3 = False
-                            k = 0
-                            while p < len(str1):
-                                p += 1
-                                str3 = str1[p:p+1]
-                                if str3 == "(":
-                                    bool3 = True
-                                    k -= 1
-                                elif str3 == ")":
-                                    k += 1
-                                if bool3 and k == 0:
-                                    p += 1
-                                    break
-                                elif k == 1:
-                                    break
-                            ant = str1[m:t]
-                            ant = ant.strip()
-                            con = str1[t+1:p]
-                            con = con.strip()
-                            new1 = "(" + ant + " " + conditional + " " + con + ")"
-                            new2 = "(" + con + " " + conditional + " " + \
-                                   ant + ")"
-                            if mc != "&":
-                                if r > 1 and o + 1 != r:
-                                    new3 = "(" + new1 + ' & ' + new2 + ")*"
-                                else:
-                                    new3 = "(" + new1 + ' & ' + new2 + ")"
-                            else:
-                                if r > 1 and o + 1 != r:
-                                    new3 = new1 + ' & ' + new2 + '*'
-                                else:
-                                    new3 = new1 + ' & ' + new2
-                            if m != 0 or p != len(str1):
-                                replacee = str1[m-1:p+1]
-                                new3 = str1.replace(replacee, new3)
-                            str1 = new3
-                            if r > 1 and o + 1 != r:
-                                i = str1.find("*")
-                                str1 = str1.replace("*","")
-                            break
-                new3 = str1
-                new3 = proper_spacing(new3)
-                if bool4:
-                    new3 = "~(" + new3 + ")"
+                if conditionals[d][6] == "":
+                    list1[0] = conditionals[d][0][0]
                 else:
-                    new3 = "(" + new3 + ")"
-                conditionals[d][4] = conditionals[d][4].replace(old_str,new3)
-                if conditionals[d][3] == 'c' or conditionals[d][3] == 'e':
-                    if s == 0:
-                        conditionals[d][0] = None
-                        conditionals[d][6] = new3
+                    list1[0] = conditionals[d][6]
+                if conditionals[d][7] == "":
+                    list1[1] = conditionals[d][1][0]
+                else:
+                    list1[1] = conditionals[d][7]
+            for s in range(0,2):
+                if list1[s].find(iff) > -1:
+                    new_sent = True
+                    str1 = list1[s]
+                    anc1 = conditionals[d][2]
+                    old_str = copy.copy(str1)
+                    str1 = str1.replace(" ","")
+                    str1 = str1.replace("&"," & ")
+                    str1 = str1.replace(iff , " " + iff + " ")
+                    str1 = remove_outer_paren(str1)
+                    list5 = mainconn(str1)
+                    mc = list5[0]
+                    bool4 = False
+                    if str1[:2] == "~(":
+                        bool4 = True
+                        str1 = str1[2:len(str1) - 1]
+                    r = str1.count(iff)
+                    i = -1
+                    for o in range(0,r):
+                        k = 0
+                        while i < len(str1) - 1:
+                            i += 1
+                            str2 = str1[i:i+1]
+                            if str2 == iff:
+                                p = copy.copy(i)
+                                t = copy.copy(i)
+                                bool5 = False
+                                while k != -1:
+                                    i -= 1
+                                    str3 = str1[i:i+1]
+                                    if str3 == "(":
+                                        k -= 1
+                                    elif str3 == ")":
+                                        k += 1
+                                        bool5 = True
+                                    if k == -1:
+                                        m = i + 1
+                                    elif k == 0 and bool5:
+                                        m = i
+                                        break
+                                bool3 = False
+                                k = 0
+                                while p < len(str1):
+                                    p += 1
+                                    str3 = str1[p:p+1]
+                                    if str3 == "(":
+                                        bool3 = True
+                                        k -= 1
+                                    elif str3 == ")":
+                                        k += 1
+                                    if bool3 and k == 0:
+                                        p += 1
+                                        break
+                                    elif k == 1:
+                                        break
+                                ant = str1[m:t]
+                                ant = ant.strip()
+                                con = str1[t+1:p]
+                                con = con.strip()
+                                new1 = "(" + ant + " " + conditional + " " + con + ")"
+                                new2 = "(" + con + " " + conditional + " " + \
+                                       ant + ")"
+                                if mc != "&":
+                                    if r > 1 and o + 1 != r:
+                                        new3 = "(" + new1 + ' & ' + new2 + ")*"
+                                    else:
+                                        new3 = "(" + new1 + ' & ' + new2 + ")"
+                                else:
+                                    if r > 1 and o + 1 != r:
+                                        new3 = new1 + ' & ' + new2 + '*'
+                                    else:
+                                        new3 = new1 + ' & ' + new2
+                                if m != 0 or p != len(str1):
+                                    replacee = str1[m-1:p+1]
+                                    new3 = str1.replace(replacee, new3)
+                                str1 = new3
+                                if r > 1 and o + 1 != r:
+                                    i = str1.find("*")
+                                    str1 = str1.replace("*","")
+                                break
+                    new3 = str1
+                    new3 = proper_spacing(new3)
+                    if bool4:
+                        new3 = "~(" + new3 + ")"
                     else:
-                        conditionals[d][1] = None
-                        conditionals[d][7] = new3
+                        new3 = "(" + new3 + ")"
+                    conditionals[d][4] = conditionals[d][4].replace(old_str,new3)
+                    if conditionals[d][3] == 'c' or conditionals[d][3] == 'e':
+                        if s == 0:
+                            conditionals[d][0] = None
+                            conditionals[d][6] = new3
+                        else:
+                            conditionals[d][1] = None
+                            conditionals[d][7] = new3
 
-        if conditionals[d][3] == "e":
-            conditionals[d][3] = "c"
-            anc1 = conditionals[d][2]
-            list1 = [""] * 39
-            list1[5] = ""
-            if conditionals[d][6] == "":
-                str1 = conditionals[d][0][0]
-                if not os(str1):
-                    str1 = "(" + str1 + ")"
-                ng1 = conditionals[d][0][1]
-            else:
-                str1 = conditionals[d][6]
-                ng1 = ""
-            if conditionals[d][7] == "":
-                str4 = conditionals[d][1][0]
-                if not os(str4):
-                    str4 = "(" + str4 + ")"
-                ng4 = conditionals[d][1][1]
-            else:
-                str4 = conditionals[d][7]
-                ng4 = ""
+            if conditionals[d][3] == "e":
+                conditionals[d][3] = "c"
+                anc1 = conditionals[d][2]
+                list1 = [""] * 39
+                list1[5] = ""
+                if conditionals[d][6] == "":
+                    str1 = conditionals[d][0][0]
+                    if not os(str1):
+                        str1 = "(" + str1 + ")"
+                    ng1 = conditionals[d][0][1]
+                else:
+                    str1 = conditionals[d][6]
+                    ng1 = ""
+                if conditionals[d][7] == "":
+                    str4 = conditionals[d][1][0]
+                    if not os(str4):
+                        str4 = "(" + str4 + ")"
+                    ng4 = conditionals[d][1][1]
+                else:
+                    str4 = conditionals[d][7]
+                    ng4 = ""
 
-            list1[0] = [str4,ng4]
-            list1[1] = [str1, ng1]
-            str5 =  ng1 + str1 + " " + conditional + " " + ng4 + str4
-            str6 = ng4 + str4 + " " + conditional + " " + ng1 + str1
-            g = copy.copy(sn+1)
-            if conditionals[d][5] == "" or conditionals[d][5] == None:
-                str3 = "(" + str5 + ") & (" + str6 + ")"
-                str7 = iff + "E"
-                no_contr = new_prop(prop_sent, str3, ng, str7, anc1, None, None, None)
+                list1[0] = [str4,ng4]
+                list1[1] = [str1, ng1]
+                str5 =  ng1 + str1 + " " + conditional + " " + ng4 + str4
+                str6 = ng4 + str4 + " " + conditional + " " + ng1 + str1
+                g = copy.copy(sn+1)
+                if conditionals[d][5] == "" or conditionals[d][5] == None:
+                    str3 = "(" + str5 + ") & (" + str6 + ")"
+                    str7 = iff + "E"
+                    no_contr = new_prop(prop_sent, str3, ng, str7, anc1, None, None, None)
 
+                    if not no_contr:
+                        return False
+                    conditionals[d][2] = sn+1
+                    conditionals[d][0] = [str1, ng1]
+                    conditionals[d][1] = [str4, ng4]
+                    no_contr = new_prop(prop_sent,str5,"","&E",g,"")
+                    if not no_contr:
+                        return False
+                    list1[2] = sn + 1
+                    no_contr = new_prop(prop_sent,str6,"","&E",g,"")
+                    if not no_contr:
+                        return False
+                    conditionals[d][4] = str5
+                    list1[4] = str6
+                    conditionals.append(list1)
+                else:
+                    str3 = "(" + str5 + ") & (" + str6 + ")"
+                    no_contr = new_prop(prop_sent,str3,"~",iff + "E",g,"")
+                    if not no_contr:
+                        return False
+                    conditionals[d][3] = 'd'
+                    conditionals[d][4] = str3
+            elif new_sent:
+                no_contr = new_prop(prop_sent,conditionals[d][4],"",iff + "E",anc1,"")
                 if not no_contr:
                     return False
-                conditionals[d][2] = sn+1
-                conditionals[d][0] = [str1, ng1]
-                conditionals[d][1] = [str4, ng4]
-                no_contr = new_prop(prop_sent,str5,"","&E",g,"")
-                if not no_contr:
-                    return False
-                list1[2] = sn + 1
-                no_contr = new_prop(prop_sent,str6,"","&E",g,"")
-                if not no_contr:
-                    return False
-                conditionals[d][4] = str5
-                list1[4] = str6
-                conditionals.append(list1)
-            else:
-                str3 = "(" + str5 + ") & (" + str6 + ")"
-                no_contr = new_prop(prop_sent,str3,"~",iff + "E",g,"")
-                if not no_contr:
-                    return False
-                conditionals[d][3] = 'd'
-                conditionals[d][4] = str3
-        elif new_sent:
-            no_contr = new_prop(prop_sent,conditionals[d][4],"",iff + "E",anc1,"")
-            if not no_contr:
-                return False
     return True
 
-def material_implication(prop_sent, conditionals):
+def material_implication(prop_sent, conditionals,kind):
 
     for d in range(len(conditionals)):
-        str1 = conditionals[d][4]
-        ng = conditionals[d][5]
-        if str1.find(conditional) > -1:
-            anc1 = conditionals[d][2]
-            i = -1
-            q = -1
-            s = 0
-            r = str1.count(conditional)
-            while s < r:
-                i += 1
-                q += 1
-                str2 = str1[i:i+1]
-                if str2 == conditional:
-                    s += 1
-                    j = i
-                    k = 0
-                    m = 0
-                    bool1 = False
-                    while j != 0:
-                        j -= 1
-                        m += 1
-                        if m > 200:
-                            easygui.msgbox("in the material implication function \
-                            you are caught in an infinite loop")
-                            return
-                        str3= str1[j:j+1]
-                        if str3.islower() and k == 0:
-                            bool1 = True
-                        elif str3 == ")":
-                            bool1 = True
-                            k += 1
-                        elif j == 0 and str3 != "(":
-                            k = 0
-                            bool1 = True
-                        elif str3 == "(":
-                            bool1 = True
-                            k -= 1
+        if conditionals[d][0] != "":
+            str1 = conditionals[d][4]
+            ng = conditionals[d][5]
+            if str1.find(conditional) > -1:
+                anc1 = conditionals[d][2]
+                i = -1
+                q = -1
+                s = 0
+                r = str1.count(conditional)
+                while s < r:
+                    i += 1
+                    q += 1
+                    str2 = str1[i:i+1]
+                    if str2 == conditional:
+                        s += 1
+                        j = i
+                        k = 0
+                        m = 0
+                        bool1 = False
+                        while j != 0:
+                            j -= 1
+                            m += 1
+                            if m > 200:
+                                easygui.msgbox("in the material implication function \
+                                you are caught in an infinite loop")
+                                return
+                            str3= str1[j:j+1]
+                            if str3.islower() and k == 0:
+                                bool1 = True
+                            elif str3 == ")":
+                                bool1 = True
+                                k += 1
+                            elif j == 0 and str3 != "(":
+                                k = 0
+                                bool1 = True
+                            elif str3 == "(":
+                                bool1 = True
+                                k -= 1
 
-                        if bool1 and k == 0:
-                            str4 = str1[0:j]
-                            str5 = str1[i+2:]
-                            str7 = str1[j:i]
-                            str1 = str4 + "~" + str7 + idisj + " " + str5
-                            i += 1
-                            break
+                            if bool1 and k == 0:
+                                str4 = str1[0:j]
+                                str5 = str1[i+2:]
+                                str7 = str1[j:i]
+                                str1 = str4 + "~" + str7 + idisj + " " + str5
+                                i += 1
+                                break
 
-            str1 = bad_paren(str1)
-            no_contr = new_prop(prop_sent, str1, ng, conditional + "E", anc1,"")
-            if not no_contr:
-                return False
-            if str1.find("~~") > -1:
-                str1 = str1.replace("~~","")
-                g = copy.copy(sn)
-                no_contr = new_prop(prop_sent,str1, ng, "~~E", g,"")
+                str1 = bad_paren(str1)
+                no_contr = new_prop(prop_sent, str1, ng, conditional + "E", anc1,"")
                 if not no_contr:
                     return False
-            conditionals[d][2] = sn
-            conditionals[d][4] = str1
-            conditionals[d][3] = "d"
-            conditionals[d][5] = ng
+                if str1.find("~~") > -1:
+                    str1 = str1.replace("~~","")
+                    g = copy.copy(sn)
+                    no_contr = new_prop(prop_sent,str1, ng, "~~E", g,"")
+                    if not no_contr:
+                        return False
+                conditionals[d][2] = sn
+                conditionals[d][4] = str1
+                conditionals[d][3] = "d"
+                conditionals[d][5] = ng
 
     return True
 
@@ -4700,7 +4910,7 @@ def bad_paren(str1):
                 mstr = mstr.replace(ostr, nstr)
     return mstr
 
-def demorgan(prop_sent, conditionals, candd,one_sent = False, str8 = "",anc1a = "",rule = ""):
+def demorgan(prop_sent, conditionals, candd,kind,one_sent = False, str8 = "",anc1a = "",rule = ""):
 
     d = -1
     temp_bool = True
@@ -5014,7 +5224,7 @@ def xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,prop_sent,anc1,a
                 dummy = disjunction_heirarchy(conditionals, str9,n, True)
                 del conditionals[n]
             if de_mor:
-                consistent = demorgan(prop_sent,conditionals,candd,True,str9,sn,xorr +"E")
+                consistent = demorgan(prop_sent,conditionals,candd,"",True,str9,sn,xorr +"E")
                 if consistent == False:
                     return consistent
             else:
@@ -5051,7 +5261,7 @@ def xorr_elim2(str9,prop_sent,conditionals,candd,anc1,anc2):
         if not os(list3[b]):
             if list4[1] == "~":
                 consistent = demorgan(prop_sent,conditionals,\
-                candd,True,list3[b],sn,"&E")
+                candd,"",True,list3[b],sn,"&E")
                 if consistent == False:
                     return False
             else:
@@ -5060,31 +5270,37 @@ def xorr_elim2(str9,prop_sent,conditionals,candd,anc1,anc2):
             candd.append([sn,list4[0],list4[1]])
     return True
 
-
-def disjunction_elimination(prop_sent, conditionals, candd):
+def disjunction_elimination(prop_sent, conditionals, candd, kind = ""):
 
     bool1 = False
     bool2 = False
     global sn
+    global rel_conj
 
     for i in range(len(conditionals)):
-        dummy = disjunction_heirarchy(conditionals, conditionals[i][4],i)
+        if conditionals[i][8] == "":
+            dummy = disjunction_heirarchy(conditionals, conditionals[i][4],i)
     i = -1
-    while i < len(candd) -1:
+    conjt = copy.deepcopy(candd)
+    if kind == 2:
+        list1 = []
+        rel_conj = finddisj(conditionals,list1,1)
+
+    while i < len(conjt) -1:
         i += 1
-        if not os(candd[i][1]):
-            del candd[i]
+        if conjt[i][1] not in rel_conj:
+            del conjt[i]
             i -= 1
     d = -1
-    while d < len(candd) -1:
+    while d < len(conjt) -1:
         d += 1
-        str2 = candd[d][2]
-        conj = candd[d][1]
+        str2 = conjt[d][2]
+        conj = conjt[d][1]
         if conj == 'q':
             bb = 7
         if d == 9:
             bb = 7
-        anc1 = candd[d][0]
+        anc1 = conjt[d][0]
         n = -1
         while n < len(conditionals) -1:
             if bool1:
@@ -5098,197 +5314,199 @@ def disjunction_elimination(prop_sent, conditionals, candd):
                     bool2 = False
                     break
                 i += 1
-                if conditionals[n][i] == "":
+                if conj not in conditionals[n][38]:
                     break
-
-                whole_d = conditionals[n][4]
-                anc2 = conditionals[n][2]
-                str3 = conditionals[n][i][0][0]
-                # 'pos or neg'
-                str4 = conditionals[n][i][0][1]
-                # 'disjunct or conjunct
-                str5 = conditionals[n][i][2]
-                # 'disjunct number
-                str6 = conditionals[n][i][1]
-
-                if conj == str3:
-                    grandparent = conditionals[n][i][6]
-                    parent = conditionals[n][i][5]
-                    parent2 = copy.copy(parent)
-                    parent3 = copy.copy(parent)
-                    str7 = " " + idisj + " "
-                    str7a = " " + xorr + " "
-                    if str2 == str4 and str5 == "d":
-                        # 'if the disjuncts are not embedded within a conjunct then the disjunction
-                        # is simply deleted
-
-                        del conditionals[n]
-                        if parent != grandparent:
-                            conj = str2 + conj
-                            str8 = whole_d.replace(parent, conj)
-                            dummy = disjunction_heirarchy(conditionals, str8,n)
-                        bool1 = True
-                        n = -1
+                else:
+                    if conditionals[n][i] == "":
                         break
+                    whole_d = conditionals[n][4]
+                    anc2 = conditionals[n][2]
+                    str3 = conditionals[n][i][0][0]
+                    # 'pos or neg'
+                    str4 = conditionals[n][i][0][1]
+                    # 'disjunct or conjunct
+                    str5 = conditionals[n][i][2]
+                    # 'disjunct number
+                    str6 = conditionals[n][i][1]
 
-                    elif str2 == str4 and str5 == "x":
+                    if conj == str3:
+                        grandparent = conditionals[n][i][6]
+                        parent = conditionals[n][i][5]
+                        parent2 = copy.copy(parent)
+                        parent3 = copy.copy(parent)
+                        str7 = " " + idisj + " "
+                        str7a = " " + xorr + " "
+                        if str2 == str4 and str5 == "d":
+                            # 'if the disjuncts are not embedded within a conjunct then the disjunction
+                            # is simply deleted
 
-                        consistent = xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,prop_sent,anc1,anc2)
-                        if consistent == False:
-                            return False
-                        del conditionals[n]
-                        bool2 = True
-                        bool1 = True
-                        d = -1
-                    elif str2 == str4 and str5 == "c":
-                        list2 = []
-                        list2.append([conj,str2])
-                        anc3 = ""
-                        anc4 = ""
-                        list1 = conditionals[n][i][4]
-                        f = -1
-                        while f < len(list1) -1:
-                            mc = mainconn(grandparent)
-                            f += 1
-                            for e in range(len(candd)):
-                                anc5 = candd[e][0]
-        # since it's too hard to program, if the sibling is a disjunct then we just
-        # ignore this
-                                if list1[f][0].find(idisj) > -1 or list1[f][0].find(xorr) > -1:
-                                    break
-                                else:
-                                    if candd[e][1] == list1[f][0]:
-                                        if candd[e][2] == list1[f][1]:
-                                            list2.append([list1[f][0],list1[f][1]])
-                                            if len(list2) == 2:
-                                                anc3 = anc5
-                                            elif len(list2) == 3:
-                                                anc4 = anc5
-                                            del list1[f]
-                                            if list1 == []:
-                                                str3 = build_sent_list2(list2)
-                                                if mc[0] == xorr:
-                                                    new_prop(prop_sent,str3,"","&I",anc1,anc3,anc4)
-                                                    consistent = xorr_elim(conditionals,n,i,parent,\
-                                                    grandparent,whole_d,candd,prop_sent,sn,anc2,1)
-                                                    if consistent == False:
-                                                        return False
-                                                else:
-                                        # if the conjunct is not embedded within another conjunct
-                                        # then the disjunct is simply deleted
-                                                    if whole_d == grandparent:
-                                                        dummy = new_disjunct(str3,"",n, prop_sent,\
-                                                        conditionals,candd, anc1, anc3, anc4, anc5, 1)
-                                                    else:
-                                                        str8 = whole_d.replace(grandparent, parent2)
-                                                        if str8.find("(") > -1 and str8.find(idisj) > -1:
-                                                            str8 = bad_paren(str8)
-                                                        dummy = new_disjunct(str3,"",n, prop_sent,\
-                                                        conditionals,candd, anc1, "", anc3, anc4, 2)
-                                                        dummy = new_disjunct(str8,"",n, prop_sent,\
-                                                        conditionals,candd, sn-1, anc2)
-                                                        if dummy == False:
+                            del conditionals[n]
+                            if parent != grandparent:
+                                conj = str2 + conj
+                                str8 = whole_d.replace(parent, conj)
+                                dummy = disjunction_heirarchy(conditionals, str8,n)
+                            bool1 = True
+                            n = -1
+                            break
+
+                        elif str2 == str4 and str5 == "x":
+
+                            consistent = xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,prop_sent,anc1,anc2)
+                            if consistent == False:
+                                return False
+                            del conditionals[n]
+                            bool2 = True
+                            bool1 = True
+                            d = -1
+                        elif str2 == str4 and str5 == "c":
+                            list2 = []
+                            list2.append([conj,str2])
+                            anc3 = ""
+                            anc4 = ""
+                            list1 = conditionals[n][i][4]
+                            f = -1
+                            while f < len(list1) -1:
+                                mc = mainconn(grandparent)
+                                f += 1
+                                for e in range(len(candd)):
+                                    anc5 = candd[e][0]
+            # since it's too hard to program, if the sibling is a disjunct then we just
+            # ignore this
+                                    if list1[f][0].find(idisj) > -1 or list1[f][0].find(xorr) > -1:
+                                        break
+                                    else:
+                                        if candd[e][1] == list1[f][0]:
+                                            if candd[e][2] == list1[f][1]:
+                                                list2.append([list1[f][0],list1[f][1]])
+                                                if len(list2) == 2:
+                                                    anc3 = anc5
+                                                elif len(list2) == 3:
+                                                    anc4 = anc5
+                                                del list1[f]
+                                                if list1 == []:
+                                                    str3 = build_sent_list2(list2)
+                                                    if mc[0] == xorr:
+                                                        new_prop(prop_sent,str3,"","&I",anc1,anc3,anc4)
+                                                        consistent = xorr_elim(conditionals,n,i,parent,\
+                                                        grandparent,whole_d,candd,prop_sent,sn,anc2,1)
+                                                        if consistent == False:
                                                             return False
-                                                bool1 = True
-                                                bool2 = True
-                                                n = 0
-                                                d = -1
-                                                break
-                                            else:
-                                                f -= 1
-                                                break
+                                                    else:
+                                            # if the conjunct is not embedded within another conjunct
+                                            # then the disjunct is simply deleted
+                                                        if whole_d == grandparent:
+                                                            dummy = new_disjunct(str3,"",n, prop_sent,\
+                                                            conditionals,candd, anc1, anc3, anc4, anc5, 1)
+                                                        else:
+                                                            str8 = whole_d.replace(grandparent, parent2)
+                                                            if str8.find("(") > -1 and str8.find(idisj) > -1:
+                                                                str8 = bad_paren(str8)
+                                                            dummy = new_disjunct(str3,"",n, prop_sent,\
+                                                            conditionals,candd, anc1, "", anc3, anc4, 2)
+                                                            dummy = new_disjunct(str8,"",n, prop_sent,\
+                                                            conditionals,candd, sn-1, anc2)
+                                                            if dummy == False:
+                                                                return False
+                                                    bool1 = True
+                                                    bool2 = True
+                                                    n = 0
+                                                    d = -1
+                                                    break
+                                                else:
+                                                    f -= 1
+                                                    break
 
-                                        elif candd[e][2] != list1[f][1]:
-                                            mc = mainconn(grandparent)
-                                            if mc[0] == idisj:
-                                                rule = idisj
-                                                str7 = " " + idisj + " "
-                                            else:
-                                                str7 = " " + xorr + " "
-                                                rule = xorr
-                                            r = grandparent.find(parent)
-                                            if r > 1:
-                                                parent = str7 + parent
-                                            else:
-                                                parent = parent + str7
-                                            anc1 = candd[e][0]
-                                            str9 = grandparent.replace(parent, "")
-                                            str8 = whole_d.replace(grandparent, str9)
-                                            if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
-                                                str8 = bad_paren(str8)
-                                            dummy = new_disjunct(str8,"",n, prop_sent,\
-                                                    conditionals,candd, anc1, anc2,None,None,0,rule)
-                                            if dummy == False:
-                                                return False
-                                            else:
-                                                list1 = []
-                                                bool1 = True
-                                                bool2 = True
-                                                n = 0
-                                                d = -1
-                                                break
+                                            elif candd[e][2] != list1[f][1]:
+                                                mc = mainconn(grandparent)
+                                                if mc[0] == idisj:
+                                                    rule = idisj
+                                                    str7 = " " + idisj + " "
+                                                else:
+                                                    str7 = " " + xorr + " "
+                                                    rule = xorr
+                                                r = grandparent.find(parent)
+                                                if r > 1:
+                                                    parent = str7 + parent
+                                                else:
+                                                    parent = parent + str7
+                                                anc1 = candd[e][0]
+                                                str9 = grandparent.replace(parent, "")
+                                                str8 = whole_d.replace(grandparent, str9)
+                                                if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
+                                                    str8 = bad_paren(str8)
+                                                dummy = new_disjunct(str8,"",n, prop_sent,\
+                                                        conditionals,candd, anc1, anc2,None,None,0,rule)
+                                                if dummy == False:
+                                                    return False
+                                                else:
+                                                    list1 = []
+                                                    bool1 = True
+                                                    bool2 = True
+                                                    n = 0
+                                                    d = -1
+                                                    break
 
-                    elif str2 != str4 and str5 == "c":
-                        mc = mainconn(conditionals[n][i][6])
-                        if mc[0] == idisj:
-                            str6 = str7 + parent
-                            rule = idisj
-                        else:
-                            rule = xorr
-                            str6 = str7a + parent
-                        if grandparent.find(str6) > -1:
-                            parent = str6
-                        else:
-                            parent = parent + str7
-                        str9 = grandparent.replace(parent, "")
-                        str8 = whole_d.replace(grandparent, str9)
-                        if str8.find("(") > -1 and str8.find(idisj) > -1:
-                            str8 = bad_paren(str8)
-                        dummy = new_disjunct(str8,"",n,prop_sent, conditionals, candd,anc1, anc2, None, None,0,rule)
-                        if dummy == False:
-                            return False
-                        bool1 = True
-                        n = -1
-                        break
-
-                    elif str2 != str4 and (str5 == "d" or str5 == 'x'):
-                        # if the disjunct is a triple disjunct then enter below
-                        if str5 == 'd':
-                            rule = idisj
-                        else:
-                            rule = xorr
-                        if conditionals[n][i][7] > 1:
-                            str6 = str4 + str3 + " " + rule + " "
-                            if parent.find(str6) > -1:
-                                str5 = str6
+                        elif str2 != str4 and str5 == "c":
+                            mc = mainconn(conditionals[n][i][6])
+                            if mc[0] == idisj:
+                                str6 = str7 + parent
+                                rule = idisj
                             else:
-                                str5 = " " + rule + " " + str4 + str3
-                            str9 = parent.replace(str5, "")
-                            str8 = whole_d.replace(parent, str9)
-                            if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
+                                rule = xorr
+                                str6 = str7a + parent
+                            if grandparent.find(str6) > -1:
+                                parent = str6
+                            else:
+                                parent = parent + str7
+                            str9 = grandparent.replace(parent, "")
+                            str8 = whole_d.replace(grandparent, str9)
+                            if str8.find("(") > -1 and str8.find(idisj) > -1:
                                 str8 = bad_paren(str8)
-                            dummy = new_disjunct(str8,"",n,prop_sent,conditionals,\
-                                candd, anc1,anc2,None,None,0,rule)
+                            dummy = new_disjunct(str8,"",n,prop_sent, conditionals, candd,anc1, anc2, None, None,0,rule)
                             if dummy == False:
                                 return False
                             bool1 = True
                             n = -1
                             break
 
-                        else:
-                            str3 = conditionals[n][i][4][0][0]
-                            str4 = conditionals[n][i][4][0][1]
-                            str5 = str4 + str3
-                            str8 = whole_d.replace(parent, str5)
-                            if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
-                                str8 = bad_paren(str8)
-                            dummy = new_disjunct(str8,"",n,prop_sent,conditionals,\
-                                candd, anc1,anc2,None,None,0,rule)
-                            if dummy == False:
-                                return False
-                            bool1 = True
-                            n = -1
-                            break
+                        elif str2 != str4 and (str5 == "d" or str5 == 'x'):
+                            # if the disjunct is a triple disjunct then enter below
+                            if str5 == 'd':
+                                rule = idisj
+                            else:
+                                rule = xorr
+                            if conditionals[n][i][7] > 1:
+                                str6 = str4 + str3 + " " + rule + " "
+                                if parent.find(str6) > -1:
+                                    str5 = str6
+                                else:
+                                    str5 = " " + rule + " " + str4 + str3
+                                str9 = parent.replace(str5, "")
+                                str8 = whole_d.replace(parent, str9)
+                                if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
+                                    str8 = bad_paren(str8)
+                                dummy = new_disjunct(str8,"",n,prop_sent,conditionals,\
+                                    candd, anc1,anc2,None,None,0,rule)
+                                if dummy == False:
+                                    return False
+                                bool1 = True
+                                n = -1
+                                break
+
+                            else:
+                                str3 = conditionals[n][i][4][0][0]
+                                str4 = conditionals[n][i][4][0][1]
+                                str5 = str4 + str3
+                                str8 = whole_d.replace(parent, str5)
+                                if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
+                                    str8 = bad_paren(str8)
+                                dummy = new_disjunct(str8,"",n,prop_sent,conditionals,\
+                                    candd, anc1,anc2,None,None,0,rule)
+                                if dummy == False:
+                                    return False
+                                bool1 = True
+                                n = -1
+                                break
     return True
 
 def extract_list(list1,d):
@@ -5379,29 +5597,49 @@ def implication_elimination(prop_sent, conc, impl, conditionals):
         dummy = impl_elim3(conditionals,prop_sent, impl, conc)
         dummy = new_prop(prop_sent,top,"",top + "I",sn,"")
 
-def statement_logic(prop_sent, conditionals, candd, conc="", impl=""):
+def statement_logic(prop_sent, conditionals, candd, disjuncts,kind="", conc="", impl=""):
 
     global sn
+    b = time.time()
     consistent = modus_ponens(conditionals, candd, prop_sent)
     if consistent == False:
         return False
-    consistent = iff_elim(prop_sent,conditionals)
+    consistent = iff_elim(prop_sent,conditionals,kind)
     if consistent == False:
         return False
-    consistent = material_implication(prop_sent, conditionals)
+    consistent = material_implication(prop_sent, conditionals,kind)
     if consistent == False:
         return False
-    consistent = demorgan(prop_sent, conditionals, candd)
+    consistent = demorgan(prop_sent, conditionals, candd,kind)
     if consistent == False:
         return False
-    consistent = disjunction_elimination(prop_sent,conditionals,candd)
+    consistent = disjunction_elimination(prop_sent,conditionals,candd,kind)
     if consistent == False:
         return False
     if conc != "":
         consistent = implication_elimination(prop_sent,conc,impl, conditionals)
         if consistent == False:
             return False
+    if kind == 1:
+        dummy = finddisj(conditionals,disjuncts)
+    c = time.time()
+    d = c - b
     return True
+
+def finddisj(conditionals,disjuncts, cate=""):
+
+    if cate == 1:
+        disjuncts = []
+
+    for i in range(len(conditionals)):
+        for j in range(8,36):
+            if type(conditionals[i][j]) is list:
+                if conditionals[i][j][0][0] not in disjuncts:
+                    disjuncts.append(conditionals[i][j][0][0])
+            else:
+                break
+    if cate == 1:
+        return disjuncts
 
 def add_outer_paren(str1):
 
@@ -5529,13 +5767,12 @@ def oc(str1):
     else:
         return False
 
-def plan(sent, prop_sent, candd, conditionals, prop_name, kind = '',negat=[]):
+def plan(sent, prop_sent, candd, conditionals, prop_name, disjuncts, kind = '',negat=[]):
 
     global conc
     global sn
     global rel_conj
     global irrel_conj
-    global failure
     conj_elim = []
     temp_conditionals = []
     list4 = []
@@ -5633,7 +5870,7 @@ def plan(sent, prop_sent, candd, conditionals, prop_name, kind = '',negat=[]):
                 if list2[0] == idisj or list2[0] == xorr:
                     if oc(str2):
                         candd.append([nstring, str2,ng])
-                        rel_conj = rel_conj + list6[1]
+                        # rel_conj = rel_conj + list6[1]
                     list5 = [""] * 39
                     list5[2] = sent[i][0]
                     list5[3] = 'd'
@@ -5642,7 +5879,7 @@ def plan(sent, prop_sent, candd, conditionals, prop_name, kind = '',negat=[]):
                     conditionals.append(list5)
                 elif list1[4][0][1] != "&":
                     str3 = ""
-                    rel_conj = rel_conj + list6[1]
+                    # rel_conj = rel_conj + list6[1]
                     if list1[4][0][1] != idisj and ng == "" and list1[4][0][1] != xorr:
                         list7 = prepare_iff_elim(str2, list2[0], list2[1],sent[i][0])
                     else:
@@ -5695,7 +5932,7 @@ def plan(sent, prop_sent, candd, conditionals, prop_name, kind = '',negat=[]):
                 list7[3] = 'd'
             if ng == "~":
                 list7[5] = "~"
-            rel_conj = rel_conj + list6[1]
+            # rel_conj = rel_conj + list6[1]
             conditionals.append(list7)
             if oc(str2):
                 candd.append([sn+1, str2,ng])
@@ -5703,21 +5940,7 @@ def plan(sent, prop_sent, candd, conditionals, prop_name, kind = '',negat=[]):
             if not no_contr:
                 return False
 
-
-    # we now weed out the irrelevant conjuncts from the relevant
-    # fix this later
-    # i = -1
-    # if len(candd) > 0:
-    #     while i < len(candd) -1:
-    #         i += 1
-    #         if candd[i][1] not in rel_conj and os(candd[i][1]):
-    #             irrel_conj.append(candd[i][1])
-    #             d = findinlist(candd[i][1],prop_sent,1,True)
-    #             del candd[i]
-    #             i -= 1
-
-    consistent = statement_logic(prop_sent, conditionals, candd,conc,impl)
-
+    consistent = statement_logic(prop_sent, conditionals, candd,disjuncts,1,conc,impl)
     return consistent
 
 def populate_sentences(p):
@@ -5731,7 +5954,7 @@ def populate_sentences(p):
     for row in w4:
         p += 1
 
-        if row[1] == None and bool2 == True:
+        if row[1] == '' and bool2 == True:
             break
         elif row[1] == 'stop':
             break
@@ -5758,58 +5981,54 @@ def populate_sentences(p):
             else:
                 tv = ""
             str2.strip()
-            sent.append([g, str2,"",tv])
+            sent.append([g, str2,'',tv])
             if not first_sent:
-                 result_data['text_'+str(p-1)+'_2']=len(test_sent)
+                 result_data['text_'+str(p-2)+'_1']=len(test_sent)
                  #w4.cell(row=p-1,column=2).value = len(test_sent)
             first_sent = True
             bool2 = False
-    if test_sent[-1] == []:
-        del test_sent[-1]
     return [test_sent,p]
 
 
 
+## rajiv change this function
+
+
 def get_result(post_data):
-    global list1,words,test_sent, w4, result_data
+    global list1,words,test_sent, w4, result_data,p
     result_data = dict(post_data.iterlists())
-    #wb4 = load_workbook('test9.xlsx')
-    #w4 = wb4.worksheets[0]
     w4=[]
     index=0
     while  True:
         row = (post_data["text_"+str(index)+"_1"],post_data["text_"+str(index)+"_2"],post_data["text_"+str(index)+"_3"])
 
+
+        w4.append(row)
         if row[1] == "stop":
             break
-        w4.append(row)
         index+=1
 
     w4=tuple(w4)
-    ## rajiv put this in mysql
-    #wb = load_workbook('define2.xlsx')
-    #ws = wb.worksheets[1]
-
-    # wb2.get_sheet_names()
-    # ws = wb2.get_sheet_by_name('words')
-    p = 1
-
-    ## rajiv change this function
     list1 = populate_sentences(p)
     test_sent = list1[0]
     p = list1[1]
+
     words = build_dict('hey')
     # #begin2
     st = time.time()
+
+
 
     for k in range(len(test_sent)):
     # for k in range(0,2):
         print k
         if k == 2:
             bb = 7
-        global prop_name, tot_sent,all_sent,plural_c,anaphora,definite,idf_id,used_idf,ant_cond,conditionals
-        global candd, rel_coni,conc,prop_sent,tagged_nouns,irrel_conj,tagged_nouns2,dv_nam,basic_objects
-        global t_value,prop_var,idf_var,def_var,id_num,sn
+        global prop_name,tot_sent,all_sent,plural_c,anaphora,definite,idf_id,used_idf, prop_var
+        global ant_cond,conditionals,candd,rel_conj,irrel_conj,conc,prop_sent
+        global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,def_var
+
+        prop_name = []
         tot_sent = []
         all_sent = []
         plural_c = []
@@ -5828,7 +6047,7 @@ def get_result(post_data):
         tagged_nouns2 = []
         dv_nam = []
         basic_objects = []
-        #t_value = test_sent[k][0][3]
+        # t_value = test_sent[k][0][3]
         prop_var = copy.deepcopy(prop_var4)
         idf_var = copy.deepcopy(idf_var2)
         def_var = copy.deepcopy(def_var2)
@@ -5838,7 +6057,7 @@ def get_result(post_data):
         dummy = det_nouns(tot_sent, all_sent,words,0)
         dummy = syn(tot_sent, all_sent, words,0)
         dummy = word_sub(def_var, dv_nam, tot_sent, all_sent,words,id_num)
-        dummy = division(tot_sent, all_sent)
+        dummy = division(tot_sent, all_sent,words)
         dummy = plurals(tot_sent,all_sent,0,words,dv_nam,def_var, idf_var)
         dummy = define(tot_sent, all_sent, def_var,idf_var, dv_nam, words)
         dummy = conditions(tot_sent,all_sent,ant_cond)
@@ -5846,114 +6065,11 @@ def get_result(post_data):
                 conditionals,prop_sent,prop_name)
         test_sent[k] = tot_sent
         tot_prop_name.append(prop_name)
-    #en = time.time()
-    #g = (en-st)/(k+1)
-    #print g
-
-
-
+    en = time.time()
+    g = (en-st)/(k+1)
+    print g
     ## rajiv change this function
     dummy = print_sent_full(test_sent,p,tot_prop_name)
-    #wb4.save('test9.xlsx')
     return result_data
-
-# end1
-
-# #
-# tv = "co"
-# #begin
-# output = []
-# for i in range(len(test_sent)):
-# #for i in range(0, len(sent)):
-#     if test_sent[i][0][1].find(top) > -1:
-#         tv = "ta"
-#     # if test_sent[i][0][1].find("!!") > -1:
-#     print i
-#     if i == 10:
-#         bb = 7
-#     # test_sent[i][0][1] = test_sent[i][0][1].replace("!!","")
-#     sn = test_sent[i][0][0]
-#     consistent = plan(test_sent[i], prop_sent, candd, conditionals, prop_name)
-#     if (consistent == True and tv == 'co') or (consistent == False and tv == 'ta'):
-#         bb = 7
-# # tot_sent.append(prop_sent)
-# # tot_prop_name.append(prop_name)
-#     output.append(prop_sent)
-#     # output.append([test_sent[i],prop_name, prop_sent])
-#     prop_sent = []
-#     candd = []
-#     conc = []
-#     conditionals = []
-#     prop_name = []
-#     prop_var = []
-#     rel_conj = []
-#     irrel_conj = []
-#     prop_var = [unichr(97 + t) for t in range(26)]
-#     prop_var2 = []
-#     prop_var2 = [unichr(97 + t) + u"\u2081" for t in range(26)]
-#     prop_var3 = []
-#     prop_var3 = [unichr(97 + t) + u"\u2082" for t in range(26)]
-#     prop_var = prop_var + prop_var2 + prop_var3
-#
-
-#
-# for i in range(len(output)):
-#     for j in range(len(output[i][0])):
-#         w4.cell(row=p,column=2).value = output[i][0][j][0]
-#         w4.cell(row=p,column=3).value = output[i][0][j][1]
-#         p += 1
-#     p += 1
-#     list1 = build_sent_name(output[i][1])
-#
-#     for j in range(len(list1)):
-#         w4.cell(row=p,column=3).value = list1[j]
-#         p += 1
-#     p += 1
-#
-#     for j in range(len(output[i][2])):
-#         w4.cell(row=p,column=2).value = output[i][2][j][0]
-#         w4.cell(row=p,column=3).value = output[i][2][j][2] + output[i][2][j][1]
-#         if len(output[i][2][j]) > 4:
-#             if output[i][2][j][4] == None:
-#                 output[i][2][j][4] = ""
-#             if output[i][2][j][5] == None:
-#                 output[i][2][j][5] = ""
-#             w4.cell(row=p,column=4).value = output[i][2][j][3] + " " + str(output[i][2][j][4]) \
-#         + "," + str(output[i][2][j][5])
-#         p += 1
-#     p += 2
-#
-# print 'hey'
-# wb4.save('test8.xlsx')
-
-
-
-#
-#
-# p = 93
-#
-# # the following outputs the values for just a statement logic calculator
-# for i in range(len(output)):
-#     for j in range(len(output[i])):
-#         if output[i][j][2] == None:
-#             output[i][j][2] = ""
-#
-#         w4.cell(row=p,column=2).value = output[i][j][0]
-#         if not os(output[i][j][1]) and output[i][j][2] == "~":
-#             str1 = output[i][j][2] + "(" + output[i][j][1] + ")"
-#         else:
-#             str1 = output[i][j][2] + output[i][j][1]
-#         w4.cell(row=p,column=3).value = str1
-#         if output[i][j][3] != None and output[i][j][3] != "":
-#             if output[i][j][5] != None:
-#                 str2 = output[i][j][3] + " " + str(output[i][j][4]) + "," + \
-#                     str(output[i][j][5])
-#             else:
-#                 str2 = output[i][j][3] + " " + str(output[i][j][4])
-#             w4.cell(row=p,column=4).value = str2
-#         p += 1
-#     p += 2
-#
-# wb4.save('test9.xlsx')
-
-
+    #end2
+    #wb4.save('logical_machine.xlsx')
