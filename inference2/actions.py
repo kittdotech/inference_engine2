@@ -81,34 +81,44 @@ def changesymbol(queryset, mode):
         ('-r', u"\u02b3"),
         ('-s', u"\u02e2"),
         ('-h', u"\u02b0"),
+        ('zzz', u"\u2260"),
         )
     if mode == 'TtoS':
         for x in queryset:
             original_text_definition = x.definition
             original_text_word = x.word
-            if original_text_definition or original_text_word :
+            original_text_rel = x.rel
+            if original_text_definition or original_text_word or original_text_rel:
                 for (T,S) in symbol_map:
                     if T in original_text_definition:
                         original_text_definition = original_text_definition.replace(T, S)
                     if T in original_text_word:
                         original_text_word = original_text_word.replace(T, S)
+                    if T in original_text_rel:
+                        original_text_rel = original_text_rel.replace(T, S)
+
 
             x.definition = original_text_definition
             x.word = original_text_word
+            x.rel = original_text_rel
             x.save()
     if mode == 'StoT':
         for x in queryset:
 
             original_text_definition = x.definition
             original_text_word = x.word
-            if original_text_definition or original_text_word :
+            original_text_rel = x.rel
+            if original_text_definition or original_text_word or original_text_rel:
                 for (T,S) in symbol_map:
                     if S in original_text_definition:
                         original_text_definition = original_text_definition.replace(S, T)
                     if S in original_text_word:
                         original_text_word = original_text_word.replace(S, T)
+                    if S in original_text_rel:
+                        original_text_rel = original_text_rel.replace(S, T)
             x.definition = original_text_definition
             x.word = original_text_word
+            x.rel = original_text_rel
             x.save()
 
 

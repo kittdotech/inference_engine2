@@ -9,5 +9,5 @@ class Define3(models.Model):
     definition = models.CharField(max_length=470, blank=True, null=True)
 
     class Meta:
-        managed = False
+
         db_table = 'define3'
