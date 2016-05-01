@@ -7,7 +7,6 @@ dj-static==0.0.6
 django-admin-exporter==0.2.1
 django-apptemplates==1.0
 django-import-export==0.4.2
-django-importcsvadmin==0.0.1pre
 easygui==0.97.4
 et-xmlfile==1.0.1
 gunicorn==19.4.5
