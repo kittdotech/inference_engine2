@@ -78,18 +78,24 @@ WSGI_APPLICATION = 'inference_engine2.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 CONFIG_TYPE=os.getenv('DEVELOP','')
-DB_PASSWORD = 'deductive'
+DICT = {
+        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dau16ghbe7t32f',
+        'HOST': 'ec2-50-16-229-45.compute-1.amazonaws.com',
+        'USER': 'utclejmzjtnclm',
+        'PASSWORD': 'H0t6M03Du4lzzbeITpZwYxu0px',
+    }
 if CONFIG_TYPE:
-    DB_PASSWORD = 'root'
-
-DATABASES = {
-    'default': {
+    DICT = {
         'ENGINE':'django.db.backends.mysql',
         'NAME': 'inference_engine',
         'HOST': 'localhost',
         'USER': 'root',
-        'PASSWORD': DB_PASSWORD,
+        'PASSWORD': 'root',
     }
+
+DATABASES = {
+    'default': DICT
 }
 
 # Internationalization
