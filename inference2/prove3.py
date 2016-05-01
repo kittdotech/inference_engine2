@@ -1,15 +1,16 @@
 
 from openpyxl import load_workbook
-import easygui
+
 import timeit
 import copy
 import time
 import operator
 excel = False
-
+debug = False
 if not excel:
     from models import Define3
-
+if debug:
+    import easygui
 
 anaphoric_relations = []
 prop_name = []
@@ -256,7 +257,8 @@ def isvariable(str3,kind=""):
             else:
                 bool2 = False
     except AttributeError:
-        easygui.msgbox('error in isvariable function')
+        if debug:
+            easygui.msgbox('error in isvariable function')
     if kind == "":
         return bool2
     else:
@@ -304,7 +306,8 @@ def find_sentences(instring, cut_skel = False):
     g = instring.count('(')
     h = instring.count(')')
     if g != h:
-        easygui.msgbox('wrong number of parentheses in sentence:' + instring)
+        if debug:
+            easygui.msgbox('wrong number of parentheses in sentence:' + instring)
         return "stop"
     marker = False
     il = -1
@@ -598,7 +601,8 @@ def word_sub(idf_var, dv_nam, tot_sent, all_sent, words,id_num):
                     dv_nam.append([str2,str5])
                     all_sent[m][k] = str5
                 else:
-                    easygui.msgbox('you did not code your relations properly')
+                    if debug:
+                        easygui.msgbox('you did not code your relations properly')
 
         if bool1:
             new_sent = build_sent(all_sent[m])
@@ -710,7 +714,8 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words):
             if m == 13 and d == 2:
                 bb = 7
             if m > 100:
-                easygui.msgbox('in the define function you are caught in an infinite loop')
+                if debug:
+                    easygui.msgbox('in the define function you are caught in an infinite loop')
             for i in num:
                 if d == 0 and m == 1 and i == 5:
                     bb = 7
@@ -893,7 +898,8 @@ def concept(all_sent,tot_sent,dv_nam,definitions,posp):
                                 list2.append(str2)
                                 b += 1
                         if b > 1:
-                            easygui.msgbox('you have not coded for multiple concepts')
+                            if debug:
+                                easygui.msgbox('you have not coded for multiple concepts')
                         olda = "(" + "b" + ' = ' + con + ")"
                         oldc = "(" + "c " +str4 + " b" + ")"
                         rn1 = ""
@@ -1726,7 +1732,8 @@ def prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num):
     elif paren_conn == "&" and gparen_conn == iff:
         str1 = 'cj'
     elif paren_conn == xorr and gparen_conn == conditional:
-        easygui.msgbox("you have not coded for this sentence type yet")
+        if debug:
+            easygui.msgbox("you have not coded for this sentence type yet")
 
     return str1
 
@@ -2327,8 +2334,8 @@ def ant_var(list1):
         g = list2.count(list2[i])
         if g > 1:
             return list2[i]
-
-    easygui.msgbox('your method for finding the antecedent variable is not working')
+    if debug:
+        easygui.msgbox('your method for finding the antecedent variable is not working')
 
 def not_a(list1,k):
 
@@ -2478,13 +2485,15 @@ def categorize_words(words, str2, idf_var,all_sent,islist=False):
                         elif str8 in trelat:
                             word_types.append([str9, 't'])
                         else:
-                            easygui.msgbox('you did not code your relations properly')
+                            if debug:
+                                easygui.msgbox('you did not code your relations properly')
                     elif j == 24:
                         word_types.append([str9, 'p'])
                     elif j == 25:
                         word_types.append([str9, 'q'])
             else:
-                easygui.msgbox(str9 + ' is not in your dictionary')
+                if debug:
+                    easygui.msgbox(str9 + ' is not in your dictionary')
 
     # a, c, d, e, l, n, r, s, t, u, b, m, q
     list1_cat = [None] * 70
@@ -2643,7 +2652,8 @@ def categorize_words(words, str2, idf_var,all_sent,islist=False):
                 list1_cat[13] = word
                 list2.append(13)
         else:
-            easygui.msgbox('you did not categorize the word ' + word)
+            if debug:
+                easygui.msgbox('you did not categorize the word ' + word)
 
     list2.sort()
     list1_cat[46] = list2
@@ -3123,7 +3133,8 @@ def build_dict(str1):
                 if str3 != None:
                     str3 = str3.strip()
                 if str1 == None:
-                    easygui.msgbox("you did not state the part of speech for " + word)
+                    if debug:
+                        easygui.msgbox("you did not state the part of speech for " + word)
                 atom = copy.copy(str1)
                 str5 = str1[0:1]
                 pos.append([word,str5])
@@ -3298,7 +3309,8 @@ def cat_atoms(j,i,list,members,basic_objects,str1,conc_prop,unique_var,spec_mem,
     sent_type = list[i][53]
 
     if relat == "" or relat == None or subj == "" or subj == None or obj == "" or obj == None:
-        easygui.msgbox("you didn't shift the objects into the right position")
+        if debug:
+            easygui.msgbox("you didn't shift the objects into the right position")
     bool2 = False
 
     if obj == "o" and j == 14:
@@ -3740,7 +3752,8 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,conditionals,\
         elif members[i][1] == 'matter' and members[i][0] in nw:
             members[i][1] = 'natural wholes'
         elif members[i][1] in arb_var2 and check_dimension(basic_objects,0,members[i][0]):
-            easygui.msgbox("I forgot what this was for")
+            if debug:
+                easygui.msgbox("I forgot what this was for")
             str2 = findinlist(members[i][1],basic_objects,0,1)
             if str2 != None:
                 members[i][1] = str2
@@ -4187,7 +4200,8 @@ def new_sentence(tot_sent,  old_list, list1, list2, list3, quant, rule,conn = if
         str3 = build_sent(list3)
         str3v = name_sent(str3)
         list3[0] = str3
-        easygui.msgbox('you have not coded for three new sentences yet')
+        if debug:
+            easygui.msgbox('you have not coded for three new sentences yet')
     if quant == 1:
         str1 = old_sent + ' ' + conn + ' ' + str1
         str1v = old_prop + ' ' + conn + ' ' + str1v
@@ -4957,7 +4971,8 @@ def material_implication(prop_sent, conditionals,kind):
                             j -= 1
                             m += 1
                             if m > 200:
-                                easygui.msgbox("in the material implication function \
+                                if debug:
+                                    easygui.msgbox("in the material implication function \
                                 you are caught in an infinite loop")
                                 return
                             str3= str1[j:j+1]
@@ -5066,7 +5081,8 @@ def demorgan(prop_sent, conditionals, candd,kind,one_sent = False, str8 = "",anc
             while s < r:
                 i += 1
                 if i > 200:
-                    easygui.msgbox("you are caught in an infinite loop in the \
+                    if debug:
+                        easygui.msgbox("you are caught in an infinite loop in the \
                     demorgan function")
                     return
                 bool2 = False
@@ -5087,7 +5103,8 @@ def demorgan(prop_sent, conditionals, candd,kind,one_sent = False, str8 = "",anc
                     while j < len(str1):
                         m += 1
                         if m > 200:
-                            easygui.msgbox("you are caught in an infinite loop in the \
+                            if debug:
+                                easygui.msgbox("you are caught in an infinite loop in the \
                             demorgan function")
                             return
                         bool1 = False
@@ -5925,7 +5942,8 @@ def plan(sent, prop_sent, candd, conditionals, prop_name, disjuncts, kind = '',n
         g = sent[i].count('(')
         h = sent[i].count(')')
         if g != h:
-            easygui.msgbox('wrong number of parentheses in sentence:' + sent[i])
+            if debug:
+                easygui.msgbox('wrong number of parentheses in sentence:' + sent[i])
             return "stop"
         if nat_logic == False:
             sent[i][1] = enclose(sent[i][1])
@@ -5933,7 +5951,8 @@ def plan(sent, prop_sent, candd, conditionals, prop_name, disjuncts, kind = '',n
             qq += 1
         else:
             if sent[i][1].count("(") != sent[i][1].count(")"):
-                easygui.msgbox("line " + sent[i][0] + " does not have the right number \
+                if debug:
+                    easygui.msgbox("line " + sent[i][0] + " does not have the right number \
                                              of parentheses" )
             if nat_logic == False:
                 sent[i][1] = remove_outer_paren(sent[i][1])
