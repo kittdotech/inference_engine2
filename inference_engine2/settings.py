@@ -86,6 +86,7 @@ if CONFIG_TYPE:
         'HOST': 'us-cdbr-iron-east-03.cleardb.net',
         'USER': 'bddaf22a8f080b',
         'PASSWORD': 'c4c504bd',
+        'PORT':'80',
     }
 if not CONFIG_TYPE:
     DEVELOP = os.getenv('DEVELOP','')
