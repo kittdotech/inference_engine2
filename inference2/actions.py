@@ -48,7 +48,7 @@ def changesymbol(queryset, mode):
         (';', unichr(172)),
         ('<>', unichr(8801)),
         ('c^', unichr(8658)),
-        ('#', unichr(8703)),
+        ('b^', unichr(8703)),
         ('i^', unichr(8866)),
         ('>', unichr(8594)),
         ('nf^', unichr(8876)),
