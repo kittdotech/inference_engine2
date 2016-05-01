@@ -85,14 +85,14 @@ DICT = {
         'USER': 'utclejmzjtnclm',
         'PASSWORD': 'H0t6M03Du4lzzbeITpZwYxu0px',
     }
-if CONFIG_TYPE:
-    DICT = {
+DICT = {
         'ENGINE':'django.db.backends.mysql',
         'NAME': 'inference_engine',
         'HOST': 'localhost',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'deductive',
     }
+
 
 DATABASES = {
     'default': DICT
