@@ -20,6 +20,8 @@ from inference2 import views
 
 urlpatterns = [
     url(r'^$', views.index,name='index'),
+    url(r'^dictionary$', views.dictionary,name='result'),
+    url(r'^prove$', views.prove,name='prove'),
     url(r'^admin/', include(admin.site.urls)),
 
 ]
