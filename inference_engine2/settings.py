@@ -81,12 +81,12 @@ CONFIG_TYPE=os.getenv('CLEARDB_DATABASE_URL','')
 if CONFIG_TYPE:
 
     DICT = {
-        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'ENGINE':'django.db.backends.mysql',
         'NAME': 'heroku_e080b104b4741bc',
         'HOST': 'us-cdbr-iron-east-03.cleardb.net',
         'USER': 'bddaf22a8f080b',
         'PASSWORD': 'c4c504bd',
-        'PORT':'80',
+
     }
 if not CONFIG_TYPE:
     DEVELOP = os.getenv('DEVELOP','')
