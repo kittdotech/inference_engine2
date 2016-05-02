@@ -2384,9 +2384,6 @@ def plurals(tot_sent, all_sent, words, dv_nam, idf_var):
 
 def categorize_words(words, str2, idf_var,all_sent,islist=False):
 
-
-def categorize_words(words, str2, idf_var,all_sent,islist=False):
-
     global sn
     global anaphora
     # if isinstance(str2, (list,tuple)):
@@ -6204,7 +6201,7 @@ def populate_sentences(p):
 #     return [test_sent,p]
 
 def get_result(post_data):
-    global list1,words,test_sent, w4, result_data,p
+    global words,test_sent, w4, result_data,p
     if not excel:
         result_data = dict(post_data.iterlists())
         w4=[]
