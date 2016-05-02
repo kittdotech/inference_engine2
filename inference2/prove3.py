@@ -6225,7 +6225,9 @@ def populate_sentences(p):
 
 def get_result(post_data):
     global list1,words,test_sent, w4, result_data,p
+    p=1 #Kyle Added
     if not excel:
+        result_data = {}
         result_data = dict(post_data.iterlists())
         w4=[]
         index=0

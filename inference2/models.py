@@ -9,5 +9,14 @@ class Define3(models.Model):
     definition = models.CharField(max_length=470, blank=True, null=True)
 
     class Meta:
-
+        managed = True
         db_table = 'define3'
+
+class Input(models.Model):
+    col1 = models.CharField(max_length=5, blank=True, null=True)
+    col2 = models.CharField(max_length=500, blank=True, null=True)
+    col3 = models.CharField(max_length=300, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'input'
