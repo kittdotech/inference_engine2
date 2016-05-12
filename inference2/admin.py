@@ -13,7 +13,7 @@ except ImportError:
     pass
 else:
     add_import(admin.ModelAdmin, add_button=True)
-from inference2.models import Define3
+from inference2.models import Define3,Input
 from django.contrib import admin
 from .actions import export_as_csv_action
 from .actions import change_text_to_symbol_action
@@ -56,5 +56,27 @@ class MyAdmin(ImportCSVModelAdmin):
     ordering = ("id",)
     list_per_page = 1000
 
+class MyInputImporter(ModelForm):
+
+    class Meta:
+        model = Input
+        fields = ('col1','col2','col3')
+
+
+class MyInputForm(ModelForm):
+    class Meta:
+        model = Input
+        fields = ('col1','col2','col3')
+
+
+class MyInput(ImportCSVModelAdmin):
+    importer_class = MyInputImporter
+    form = MyInputForm
+    list_display = ('col1','col2','col3')
+    empty_value_display = ""
+    ordering = ("id",)
+    list_per_page = 1000
+
 admin.site.register(Define3, MyAdmin)
+admin.site.register(Input,MyInput)
 

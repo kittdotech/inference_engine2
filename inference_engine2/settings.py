@@ -77,27 +77,33 @@ WSGI_APPLICATION = 'inference_engine2.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-CONFIG_TYPE=os.getenv('DEVELOP','')
-DICT = {
-        'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dau16ghbe7t32f',
-        'HOST': 'ec2-50-16-229-45.compute-1.amazonaws.com',
-        'USER': 'utclejmzjtnclm',
-        'PASSWORD': 'H0t6M03Du4lzzbeITpZwYxu0px',
-    }
+CONFIG_TYPE=os.getenv('CLEARDB_DATABASE_URL','')
 if CONFIG_TYPE:
+
+    DICT = {
+        'ENGINE':'django.db.backends.mysql',
+        'NAME': 'heroku_e080b104b4741bc',
+        'HOST': 'us-cdbr-iron-east-03.cleardb.net',
+        'USER': 'bddaf22a8f080b',
+        'PASSWORD': 'c4c504bd',
+
+    }
+if not CONFIG_TYPE:
+    DEVELOP = os.getenv('DEVELOP','')
+    DB_PASSWORD = 'deductive'
+    if DEVELOP:
+        DB_PASSWORD = 'root'
     DICT = {
         'ENGINE':'django.db.backends.mysql',
         'NAME': 'inference_engine',
         'HOST': 'localhost',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': DB_PASSWORD,
     }
 
 DATABASES = {
     'default': DICT
 }
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 

@@ -1,6 +1,6 @@
 {% load extra_tags %}
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head lang="en">
     <meta charset="UTF-8">
     <title>Inference Engine</title>
@@ -12,6 +12,14 @@
     border: solid 1px gray;
     width: 100%;
   }
+textarea {
+    border: none;
+    width: 100%;
+    resize: none;
+    -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
+       -moz-box-sizing: border-box; /* FF1+ */
+            box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
+}
   input[type=text] {
     width: 98%;
     padding: 0px;
@@ -20,6 +28,11 @@
 </style>
 
     <script type="text/javascript">
+
+        function textAreaAdjust(o) {
+    o.style.height = "1px";
+    o.style.height = (25+o.scrollHeight)+"px";
+}
 	function ajaxindicatorstart(text)
 	{
 		if(jQuery('body').find('#resultLoading').attr('id') != 'resultLoading'){
@@ -135,8 +148,6 @@
             $("#text_"+i+"_2").val('');
             $("#text_"+i+"_3").val('');
             }
-
-
             }
 
 
@@ -160,8 +171,8 @@
        });
 
 
-
-          $("input[type='text']").bind("paste", function(e){
+/**
+        $(".text").bind("paste", function(e){
     // access the clipboard using the api
     var pastedData = e.originalEvent.clipboardData.getData('text');
 
@@ -180,7 +191,7 @@
 
             id_str="text_"+String(row)+"_"+String(tcol);
 
-            document.getElementById(id_str).value=pastedData_array_row[j]
+            document.getElementById(id_str).value=pastedData_array_row[j];
         tcol = tcol+1;
         }
         row = row+1;
@@ -188,8 +199,38 @@
 
     });
 
+**/
+//Making Input
+{% if input %}
+    {% for row in input %}
+                id_str = "text_" + String({{forloop.counter0}}) + "_1";
+                document.getElementById(id_str).value = "{{ row.col1}}";
 
-        });
+                //$("#" + id_str).attr("disabled", true);
+                $("#" + id_str).attr('readonly', true);
+                $("#" + id_str).css('background-color', '#DCDCDC');
+
+
+               id_str = "text_" + String({{ forloop.counter0 }}) + "_2";
+               document.getElementById(id_str).value = "{{row.col2}}";
+               //$("#" + id_str).attr("disabled", true);
+                $("#" + id_str).attr('readonly', true);
+                $("#" + id_str).css('background-color', '#DCDCDC');
+
+               id_str = "text_" + String({{ forloop.counter0 }}) + "_3";
+               document.getElementById(id_str).value = "{{  row.col3}}";
+               //$("#" + id_str).attr("disabled", true);
+                $("#" + id_str).attr('readonly', true);
+                $("#" + id_str).css('background-color', '#DCDCDC');
+    {% endfor %}
+        {% endif %}
+
+
+     $('textarea').on('change',function(){
+      console.log('hi');
+          });
+
+    });
 
 
 
@@ -214,9 +255,9 @@
 
 {% for i in 6000|range %}
     <tr>
-    <td id="table_{{i}}_1"><input type="text" name="text_{{i}}_1" id="text_{{i}}_1"/></td>
-    <td id="table_{{i}}_2"><input type="text" name="text_{{i}}_2" id="text_{{i}}_2"/></td>
-    <td id="table_{{i}}_3"><input type="text" name="text_{{i}}_3" id="text_{{i}}_3"/></td>
+    <td id="table_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_1" id="text_{{i}}_1"></textarea></td>
+    <td id="table_{{i}}_2"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_2" id="text_{{i}}_2"></textarea></td>
+    <td id="table_{{i}}_3"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_3" id="text_{{i}}_3"></textarea></td>
     </tr>
 {% endfor %}
 

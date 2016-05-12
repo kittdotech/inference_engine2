@@ -49,6 +49,7 @@ def changesymbol(queryset, mode):
         ('<>', unichr(8801)),
         ('c^', unichr(8658)),
         ('b^', unichr(8703)),
+        ('#', unichr(8703)),
         ('i^', unichr(8866)),
         ('>', unichr(8594)),
         ('nf^', unichr(8876)),
@@ -83,43 +84,66 @@ def changesymbol(queryset, mode):
         ('-h', u"\u02b0"),
         ('zzz', u"\u2260"),
         )
-    if mode == 'TtoS':
-        for x in queryset:
-            original_text_definition = x.definition
-            original_text_word = x.word
-            original_text_rel = x.rel
-            if original_text_definition or original_text_word or original_text_rel:
-                for (T,S) in symbol_map:
-                    if T in original_text_definition:
-                        original_text_definition = original_text_definition.replace(T, S)
-                    if T in original_text_word:
-                        original_text_word = original_text_word.replace(T, S)
-                    if T in original_text_rel:
-                        original_text_rel = original_text_rel.replace(T, S)
+    modelname =  queryset.model._meta.model_name
+    if modelname == 'input':
+        if mode == 'TtoS':
+            for x in queryset:
+                original_text_col2 = x.col2
+                if original_text_col2:
+                    for (T,S) in symbol_map:
+                        if T in original_text_col2:
+                            original_text_col2 = original_text_col2.replace(T, S)
+                x.col2 = original_text_col2
+                x.save()
+
+        if mode == 'StoT':
+            for x in queryset:
+                original_text_col2 = x.col2
+                if original_text_col2:
+                    for (T,S) in symbol_map:
+                        if S in original_text_col2:
+                            original_text_col2 = original_text_col2.replace(S, T)
+                x.col2 = original_text_col2
+                x.save()
+
+    if modelname == 'define3':
+        if mode == 'TtoS':
+            for x in queryset:
+                original_text_definition = x.definition
+                original_text_word = x.word
+                original_text_rel = x.rel
+                if original_text_definition or original_text_word or original_text_rel:
+                    for (T,S) in symbol_map:
+                        if T in original_text_definition:
+                            original_text_definition = original_text_definition.replace(T, S)
+                        if T in original_text_word:
+                            original_text_word = original_text_word.replace(T, S)
+                        if T in original_text_rel:
+                            original_text_rel = original_text_rel.replace(T, S)
 
 
-            x.definition = original_text_definition
-            x.word = original_text_word
-            x.rel = original_text_rel
-            x.save()
-    if mode == 'StoT':
-        for x in queryset:
+                x.definition = original_text_definition
+                x.word = original_text_word
+                x.rel = original_text_rel
+                x.save()
+        if mode == 'StoT':
+            for x in queryset:
 
-            original_text_definition = x.definition
-            original_text_word = x.word
-            original_text_rel = x.rel
-            if original_text_definition or original_text_word or original_text_rel:
-                for (T,S) in symbol_map:
-                    if S in original_text_definition:
-                        original_text_definition = original_text_definition.replace(S, T)
-                    if S in original_text_word:
-                        original_text_word = original_text_word.replace(S, T)
-                    if S in original_text_rel:
-                        original_text_rel = original_text_rel.replace(S, T)
-            x.definition = original_text_definition
-            x.word = original_text_word
-            x.rel = original_text_rel
-            x.save()
+                original_text_definition = x.definition
+                original_text_word = x.word
+                original_text_rel = x.rel
+                if original_text_definition or original_text_word or original_text_rel:
+                    for (T,S) in symbol_map:
+                        if S in original_text_definition:
+                            original_text_definition = original_text_definition.replace(S, T)
+                        if S in original_text_word:
+                            original_text_word = original_text_word.replace(S, T)
+                        if S in original_text_rel:
+                            original_text_rel = original_text_rel.replace(S, T)
+                x.definition = original_text_definition
+                x.word = original_text_word
+                x.rel = original_text_rel
+                x.save()
 
 
 def export_as_csv_action(modeladmin, request, queryset):
