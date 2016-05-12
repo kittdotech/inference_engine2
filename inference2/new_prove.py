@@ -1,5 +1,4 @@
 from openpyxl import load_workbook
-import easygui
 import timeit
 import copy
 import time
