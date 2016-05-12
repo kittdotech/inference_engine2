@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/inference2/5.7.16.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/inference2/migrations/0002_auto_20160502_0725.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/actions.py" afterPath="$PROJECT_DIR$/inference2/actions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/admin.py" afterPath="$PROJECT_DIR$/inference2/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/models.py" afterPath="$PROJECT_DIR$/inference2/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/new_prove.py" afterPath="$PROJECT_DIR$/inference2/new_prove.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/prove3.py" afterPath="$PROJECT_DIR$/inference2/prove3.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/templates/inference2/index.html" afterPath="$PROJECT_DIR$/inference2/templates/inference2/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/views.py" afterPath="$PROJECT_DIR$/inference2/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference_engine2/settings.py" afterPath="$PROJECT_DIR$/inference_engine2/settings.py" />
-    </list>
+    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="" />
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -109,8 +97,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25052193">
-              <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.1565762">
+              <caret line="5" column="40" selection-start-line="5" selection-start-column="40" selection-end-line="5" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -1001,8 +989,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25052193">
-          <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+        <state vertical-scroll-proportion="0.1565762">
+          <caret line="5" column="40" selection-start-line="5" selection-start-column="40" selection-end-line="5" selection-end-column="40" />
           <folding />
         </state>
       </provider>

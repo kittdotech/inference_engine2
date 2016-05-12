@@ -5,10 +5,12 @@ import copy
 import time
 import operator
 excel = False
+debug = False
 
 if not excel:
     from models import Define3
-
+if debug:
+    import easygui
 
 anaphoric_relations = []
 prop_name = []
