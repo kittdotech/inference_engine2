@@ -4,7 +4,7 @@ import copy
 import time
 import operator
 excel = False
-debug = True
+debug = False
 
 if not excel:
     from models import Define3
