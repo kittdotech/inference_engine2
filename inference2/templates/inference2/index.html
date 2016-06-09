@@ -110,7 +110,7 @@ textarea {
 </script>
     <script>
 
-        var ROW_LENGTH=6000;
+        var ROW_LENGTH=15000;
 
     $(document).ready(function () {
     var result = {{ result|safe }};
@@ -253,7 +253,7 @@ textarea {
 <col width="70%">
 <col width="20%">
 
-{% for i in 6000|range %}
+{% for i in 15000|range %}
     <tr>
     <td id="table_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_1" id="text_{{i}}_1"></textarea></td>
     <td id="table_{{i}}_2"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_2" id="text_{{i}}_2"></textarea></td>
