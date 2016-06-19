@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/new_prove.py" afterPath="$PROJECT_DIR$/inference2/new_prove.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/5.7.16.py" afterPath="$PROJECT_DIR$/inference2/5.7.16.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,11 +31,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="new_prove.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="new_prove.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/new_prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.12295082">
-              <caret line="7284" column="22" selection-start-line="7284" selection-start-column="22" selection-end-line="7284" selection-end-column="22" />
+            <state vertical-scroll-proportion="14.0">
+              <caret line="7254" column="7" selection-start-line="7254" selection-start-column="0" selection-end-line="7254" selection-end-column="7" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -42,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="5.7.16.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="5.7.16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/5.7.16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.074074">
-              <caret line="7311" column="21" selection-start-line="0" selection-start-column="0" selection-end-line="7433" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.78483605">
+              <caret line="7320" column="22" selection-start-line="7320" selection-start-column="22" selection-end-line="7320" selection-end-column="22" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -100,8 +101,8 @@
         <option value="$PROJECT_DIR$/inference2/actions.py" />
         <option value="$PROJECT_DIR$/inference2/models.py" />
         <option value="$PROJECT_DIR$/inference2/templates/inference2/index.html" />
-        <option value="$PROJECT_DIR$/inference2/5.7.16.py" />
         <option value="$PROJECT_DIR$/inference2/new_prove.py" />
+        <option value="$PROJECT_DIR$/inference2/5.7.16.py" />
       </list>
     </option>
   </component>
@@ -876,20 +877,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/5.7.16.py">
+    <entry file="file://$PROJECT_DIR$/inference2/new_prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.074074">
-          <caret line="7311" column="21" selection-start-line="0" selection-start-column="0" selection-end-line="7433" selection-end-column="5" />
+        <state vertical-scroll-proportion="14.0">
+          <caret line="7254" column="7" selection-start-line="7254" selection-start-column="0" selection-end-line="7254" selection-end-column="7" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/new_prove.py">
+    <entry file="file://$PROJECT_DIR$/inference2/5.7.16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12295082">
-          <caret line="7284" column="22" selection-start-line="7284" selection-start-column="22" selection-end-line="7284" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.78483605">
+          <caret line="7320" column="22" selection-start-line="7320" selection-start-column="22" selection-end-line="7320" selection-end-column="22" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
