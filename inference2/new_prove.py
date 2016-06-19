@@ -7266,22 +7266,22 @@ def populate_sentences(p):
 
         for row in w4:
             p += 1
-            if row[1].value == "" and bool2 == True and not bool3:
+            if row[1] == "" and bool2 == True and not bool3:
                 break
-            elif row[1].value == 'stop':
+            elif row[1] == 'stop':
                 break
-            elif row[1].value == "" and not bool3:
+            elif row[1] == "" and not bool3:
                 test_sent.append(sent)
                 sent = []
                 g = 0
                 bool1 = False
                 bool2 = True
                 first_sent = False
-            elif row[1].value == "":
+            elif row[1] == "":
                 pass
-            elif row[1].value[0] == "*":
+            elif row[1][0] == "*":
                 bool3 = True
-            elif row[1].value != "" and bool1 == False:
+            elif row[1] != "" and bool1 == False:
                 bool3 = False
                 str2 = row[1]
                 g += 1
