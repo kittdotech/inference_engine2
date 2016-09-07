@@ -6,11 +6,12 @@ import time
 import operator
 excel = False
 debug = False
+words_used = False
 strt = 0
 stp = 0
 
 if not excel:
-    from models import Define3
+    from inference2.models import Define3
 if debug:
     import easygui
 
@@ -28,6 +29,7 @@ ant_cond = []
 cnjts = []
 never_used = []
 conditionals = []
+def_used = []
 candd = []
 candd2 = []
 rel_conj = []
@@ -590,6 +592,9 @@ def word_sub(idf_var, dv_nam, tot_sent, all_sent, words,id_num):
             if k == 49:
                 bb = 8
             str2 = all_sent[m][k]
+            if str2 != None:
+                if str2 not in def_used and not str2.isupper():
+                    def_used.append(str2)
             if k in num3 and str2 != None:
                 bool1 = True
                 str5 = findinlist(str2,words[16],0,1)
@@ -655,12 +660,16 @@ def there(all_sent,m,tot_sent,def_sent):
 def scope_rel_pro(list,i):
 
     if i == 10 and list[59] != None:
+        #print 'rel pro'
         return False
     elif i == 16 and list[60] != None:
+        #print 'rel pro'
         return False
     elif i == 20 and list[61] != None:
+        #print 'rel pro'
         return False
     elif i == 24 and list[62] != None:
+        #print 'rel pro'
         return False
     else:
         return True
@@ -776,23 +785,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                     old_sent = all_sent[m][0]
                     oldp = all_sent[m][42]
                     if d == 0:
-
-                #this is for those sentences whose noun was once part of a relative pronoun
-                        if i == all_sent[m][45]:
-                            str3 = findinlist(all_sent[m][i],tagged_nouns2,1,0)
-                            if str3 == None:
-                                all_sent.append(all_sent[m])
-                                print "this might contain an error"
-                                break
-                            all_sent[m][i] = str3
-                            new_sent = build_sent(all_sent[m])
-                            newp = name_sent(new_sent)
-                            dummy = new_sentence2(old_sent,oldp,new_sent,newp,tot_sent,"rel pro")
-                            all_sent[m][0] = new_sent
-                            all_sent[m][42] = newp
-                            all_sent[m][45] = None
-
-                        elif (str1 in pronouns or str1 in determinative) and str1 not in universal:
+                        if (str1 in pronouns or str1 in determinative) and str1 not in universal:
                             bool1 = True
                             if str1 in pronouns:
                                 str2 = "pronoun"
@@ -800,6 +793,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                                 str2 = "determinative"
                             definition = findinlist(str1,definitions,0,1)
                             if all_sent[m][0] not in def_sent:
+                                # print "d0"
                                 list3 = copy.deepcopy(all_sent[m])
                                 dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
                                     dv_nam, idf_var,words, all_sent,m,rep_rel,str2,i)
@@ -808,11 +802,13 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                                 def_sent.append(all_sent[m][0])
                                 break
                     elif d == 1 and once:
+                        # print "d1"
                         once = False
                         dummy = division(tot_sent,all_sent,words,0,def_sent)
                         m = len(all_sent)
                         break
                     elif d == 2 and all_sent[m][i] in universal2 and scope_rel_pro(all_sent[m],i):
+                        # print 'd2'
                         definition = findinlist(str1,definitions,0,1)
                         list3 = copy.deepcopy(all_sent[m])
                         dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
@@ -823,6 +819,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                         break
 
                     elif d == 3 and (all_sent[m][i] in indefinite or (all_sent[m][i] in universal2 and scope_rel_pro(all_sent[m],i))):
+                        # print 'd3'
                         definition = findinlist(str1,definitions,0,1)
                         list3 = copy.deepcopy(all_sent[m])
                         dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
@@ -837,11 +834,13 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                                     all_sent[m][57] = None
                         break
                     elif d == 4 and once:
+                        # print 'd4'
                         once = False
                         dummy = division(tot_sent,all_sent,words,1,def_sent)
                         m = len(all_sent)
                         break
                     elif d == 5 and all_sent[m][i] in universal3:
+                        # print 'd5'
                         definition = findinlist(str1,definitions,0,1)
                         list3 = copy.deepcopy(all_sent[m])
                         dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
@@ -851,6 +850,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                         def_sent.append(all_sent[m][0])
                         break
                     elif d == 6 and all_sent[m][i] == 'it':
+                        # print 'd6'
                         list3 = copy.deepcopy(all_sent[m])
                         list2 = copy.deepcopy(all_sent[m])
                         list2[i] = anaphora
@@ -861,6 +861,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                         all_sent.append(list2)
                         break
                     elif d == 7 and once:
+                        # print 'd7'
                         once = False
                         dummy = division(tot_sent,all_sent,words,2,def_sent)
                         m = len(all_sent)
@@ -1536,7 +1537,13 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                 bool3 = check_dimension(doubles,1,str4)
                 if bool3:
                     str3 += " " + all_sent[j][i+1]
+                    if str3 not in def_used:
+                        def_used.append(str3)
+            else:
+                if str3 not in def_used:
+                    def_used.append(str3)
             str2 = findinlist(str3,relations,0,1)
+
             if str2 != None:
                 bool1 = True
                 g = findposinlist(str3,dv_nam,0)
@@ -1703,6 +1710,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                 for i in num:
                     list1 = [None] * 70
                     if k == 0 and all_sent[m][i] != None and kind == 0:
+                        # print "k0"
                         all_sent[m][66] = None
                         list1 = [None] * 70
                         list1[5] = all_sent[m][67]
@@ -1719,6 +1727,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             r = i-2
                             n = i-1
                         if scope_uni(all_sent,m,i) and (kind == 0 or kind == 3):
+                            # print "k1"
                             rule = 'ADJ E'
                             list17 = copy.deepcopy(all_sent[m])
                             if all_sent[m][8] != None or all_sent[m][12] != None:
@@ -1745,6 +1754,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             list17[46] = "x"
                             all_sent.append(list17)
                     elif k == 2 and (kind == 1 or kind == 3) and all_sent[m][i] != None:
+                        # print 'CIA'
                         rule = "CIA"
                         list17 = copy.deepcopy(all_sent[m])
                         if i == 35:
@@ -1770,6 +1780,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                         list17[46] = "x"
                         all_sent.append(list17)
                     elif k == 3 and kind == 1 and all_sent[m][i] != None and scope_uni(all_sent,m,i,1):
+                        # print 'k3'
                         rule = "DE " + all_sent[m][i]
                         list17 = copy.deepcopy(all_sent[m])
                         dummy = rel_pro(i,m,all_sent,list1)
@@ -1786,11 +1797,13 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
 
                         str2 = findinlist(all_sent[m][i],pos,0,2)
                         if (all_sent[m][i] == 'AS'):
+                            # print 'RDB'
                             rule = "RDB"
                             a = 14
                             if all_sent[m][i] == 'AS':
                                 anaphora.append(all_sent[m][5])
                         elif str2 == 'o':
+                            # print 'RDC'
                             rule = "RDC"
                             list3 = [None] * 70
                             a = 14
@@ -1809,6 +1822,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             list3[0] = str4
                             list3[42] = str4p
                         else:
+                            # print 'RDA'
                             rule = "RDA"
                             a = 5
                         if i == 15:
@@ -1846,6 +1860,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                     elif k == 5 and kind == 2:
                         str1 = all_sent[m][i]
                         if str1 == 'there':
+                            # print 'there'
                             dummy = there(all_sent,m,tot_sent,def_sent)
                             break
 
@@ -2191,7 +2206,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     # def_rn = definition rename
     # this function renames the variables in a definition
 
-    global sn, plural_c, definite2,definite,anaphora,ind_var,gen_var
+    global sn,plural_c,definite2,definite,anaphora,ind_var,gen_var,def_used
     b = time.time()
     #this is for those determinatives which have negations in their definitions where
     #the sentences has an R variable
@@ -2199,7 +2214,13 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         "no" + us]
     if definiendum == "person":
         bb = 7
-    new_idf = []
+    temp_list = ['all','any','no','no'+us]
+    #if definiendum in temp_list:
+        # print definiendum
+    #new_idf = []
+    if definiendum not in def_used and not definiendum.isupper():
+        def_used.append(definiendum)
+
     if definiendum in identical_det:
         ident_det = True
     else:
@@ -3323,7 +3344,7 @@ def build_sent_name(prop_name):
 
 def syn(tot_sent, all_sent, words):
 
-    global sn
+    global sn,def_used
     doubles = words[31]
     bool1 = False
     synon = words[14]
@@ -3352,6 +3373,8 @@ def syn(tot_sent, all_sent, words):
             if i == 9:
                 bb = 7
             if str1 in synon:
+                if str1 not in def_used:
+                    def_used.append(str1)
                 for j in range(len(syn_pairs)):
                     if str1 == syn_pairs[j][0]:
                         bool1 = True
@@ -3412,13 +3435,35 @@ def syn(tot_sent, all_sent, words):
             bool1 = False
     return
 
-def print_sent_full(test_sent,p,tot_prop_name):
+def print_sent_full(test_sent,p,tot_prop_name,words):
+
     global result_data
-    global excel,strt,stp
+    global excel,strt,stp,def_used,words_used
 
     # p = 30
+    bb = 8
     b = time.time()
     p += 2
+    definitions2 = words[33]
+
+    if excel and words_used:
+        for i in range(len(def_used)):
+            j = findinlist(def_used[i],definitions2,0,1)
+            if j != None:
+                ws.cell(row=j,column=1).value = 1
+                bool2 = True
+                while bool2:
+                    j += 1
+                    word2 = ws.cell(row=j,column=3).value
+                    if word2 == def_used[i]:
+                        ws.cell(row=j,column=1).value = 1
+                    else:
+                        bool2 = False
+                        break
+
+    c = time.time()
+    print c-b
+
 
     if stp == 0:
         stp = len(test_sent)
@@ -3556,6 +3601,7 @@ def build_dict(str1):
     relations = []
     relations2 = []
     definitions = []
+    definitions2 = []
     really_atomic = []
     pronouns = []
     poss_pronouns = []
@@ -3600,6 +3646,7 @@ def build_dict(str1):
             if isinstance(word,(int,long)):
                 word = str(word)
             word = word.strip()
+            definitions2.append([word,i])
             if excel:
                 str3 = row[3].value
                 defin = row[4].value
@@ -3717,9 +3764,11 @@ def build_dict(str1):
                 if atom != 'a' and atom != 'm' and defin != "artificial" and defin != 'redundant'\
                     and defin != "postponed" and atom != 'b':
                     if str5 in category:
-                        definitions.append([str3,defin,str5,atom,str8,str9])
+                        definitions.append([str3,defin,str5,atom,str8,str9,i])
                     else:
-                        definitions.append([word,defin,str5,atom,str8,str9])
+                        definitions.append([word,defin,str5,atom,str8,str9,i])
+
+
 
     syn_pairs.sort()
     atomic_relata.sort()
@@ -3729,7 +3778,7 @@ def build_dict(str1):
         aux, negg, dnoun,syn_pairs,synon,det, definitions, det_pairs, relations, \
              relations2, particles, redundant,atomic_relations, atomic_relata, \
              pronouns,poss_pronouns,plurals,neg_det,pos,really_atomic,\
-             anaphoric_relations,doubles,triples]
+             anaphoric_relations,doubles,triples,definitions2]
 
     return words
 
@@ -4602,6 +4651,20 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
         # end4
         if consistent:
+            # all_sent.sort()
+            # tot_sent.append(["","","","","","",""])
+            # for i in range(len(conditionals)):
+            #     if conditionals[i][37] == "":
+            #         conditionals[i][37] = make_cond(conditionals[i])
+            #     tot_sent.append(["",conditionals[i][37],"","","","",""])
+            # for i in range(len(all_sent)):
+            #     if all_sent[i][42] in cnjts:
+            #         tot_sent.append(["",all_sent[i][0],"","","","",""])
+            #
+            # tot_sent.append(["","","","","","",""])
+
+
+
             rel_sent = [] # relevant sentence
             rel_prop = [] # relevant propositions (sentence letters)
             list5 = []
@@ -5010,6 +5073,56 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     # end6
     return tot_sent
 
+
+def make_cond(list1):
+
+    more_prop = [unichr(945 + x) for x in range(24)]
+    global prop_name
+    list2 = []
+    prop = list1[4]
+    j = -1
+
+    if list1[0] == "":
+        list3 = get_prop(list1[4])
+        for i in range(len(list3)):
+            list2.append([list3[i],more_prop[i]])
+            prop = prop.replace(list3[i],more_prop[i])
+    else:
+        if list1[6] != "":
+            for i in range(len(list1[0])):
+                j += 1
+                tilde = list1[0][i][1]
+                list2.append([tilde+list1[0][i][0],more_prop[j]])
+                prop = prop.replace(tilde+list1[0][i][0],more_prop[j])
+        else:
+            j += 1
+            tilde = list1[0][1]
+            list2.append([tilde+list1[0][0],more_prop[j]])
+            prop = prop.replace(tilde+list1[0][0],more_prop[j])
+
+        if list1[7] != "":
+            for i in range(len(list1[1])):
+                j += 1
+                tilde = list1[1][i][1]
+                list2.append([tilde+list1[1][i][0],more_prop[j]])
+                prop = prop.replace(tilde+list1[1][i][0],more_prop[j])
+        else:
+            j += 1
+            tilde = list1[1][1]
+            list2.append([tilde+list1[1][0],more_prop[j]])
+            prop = prop.replace(tilde+list1[1][0],more_prop[j])
+    sent = prop
+    for i in range(len(list2)):
+        if "~" in list2[i][0]:
+            str2 = list2[i][0].replace("~","")
+            tilde = "~"
+        else:
+            str2 = list2[i][0]
+            tilde = ""
+        str1 = findinlist(str2,prop_name,0,2)
+        sent = sent.replace(list2[i][1],tilde+str1)
+
+    return sent
 
 def fix_id(pot_id,rel_sent,all_sent,linked):
 
@@ -7823,7 +7936,7 @@ def get_result(post_data):
     g = (en-st)/(k+1)
     print "final " + str("{0:.2f}".format(g))
     # print "modus ponens" + str(time1/(k+1))
-    dummy = print_sent_full(test_sent,p,tot_prop_name)
+    dummy = print_sent_full(test_sent,p,tot_prop_name,words)
     if not excel:
         return result_data
 
@@ -7831,6 +7944,7 @@ if excel:
     dummy = get_result('hey')
     # st = time.time()
     wb4.save('inference engine.xlsx')
+    # wb5.save('dictionary.xlsx')
     # en = time.time()
     # print en-st
 #end1

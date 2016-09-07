@@ -1,7 +1,9 @@
 
 from django.contrib import admin
-
-from inference2.models import Define3
+from django import forms
+import os.path, pkgutil
+from inference2 import Proofs
+from inference2.models import Define3, Archives
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
@@ -27,7 +29,7 @@ admin.site.add_action(export_as_csv_action)
 admin.site.add_action(change_text_to_symbol_action)
 admin.site.add_action(change_symbol_to_text_action)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('id','extra','type','word', 'rel','definition')
+    list_display = ('id','extra','type','word', 'rel','')
     empty_value_display = ""
     ordering = ("id",)
     list_per_page = 1000
@@ -35,22 +37,22 @@ class AuthorAdmin(admin.ModelAdmin):
 
 
 #admin.site.register(Define3, AuthorAdmin)
-class MyAdminImporter(ModelForm):
+class MyDefineImporter(ModelForm):
 
     class Meta:
         model = Define3
-        fields = ('id','extra','type', 'word', 'rel','definition')
+        fields = ('id','extra','type', 'word', 'rel','definition','archives')
 
 
-class MyAdminForm(ModelForm):
+class MyDefineForm(ModelForm):
     class Meta:
         model = Define3
-        fields = ('id','extra','type', 'word', 'rel','definition')
+        fields = ('id','extra','type', 'word', 'rel','definition', 'archives')
 
 
-class MyAdmin(ImportCSVModelAdmin):
-    importer_class = MyAdminImporter
-    form = MyAdminForm
+class MyDefine(ImportCSVModelAdmin):
+    importer_class = MyDefineImporter
+    form = MyDefineForm
     list_display = ('id','extra','type','word', 'rel','definition')
     empty_value_display = ""
     ordering = ("id",)
@@ -60,13 +62,13 @@ class MyInputImporter(ModelForm):
 
     class Meta:
         model = Input
-        fields = ('col1','col2','col3')
+        fields = ('col1','col2','col3','archives')
 
 
 class MyInputForm(ModelForm):
     class Meta:
         model = Input
-        fields = ('col1','col2','col3')
+        fields = ('col1','col2','col3','archives')
 
 
 class MyInput(ImportCSVModelAdmin):
@@ -77,6 +79,37 @@ class MyInput(ImportCSVModelAdmin):
     ordering = ("id",)
     list_per_page = 1000
 
-admin.site.register(Define3, MyAdmin)
-admin.site.register(Input,MyInput)
 
+class MyArchiveImporter(ModelForm):
+
+    class Meta:
+        model = Archives
+        fields = ('archives_date', 'algorithm')
+
+
+class MyArchiveForm(ModelForm):
+    pkgpath = os.path.dirname(Proofs.__file__)
+    MY_CHOICES = [(name,name) for _, name, _ in pkgutil.iter_modules([pkgpath])]
+    algorithm = forms.ChoiceField(choices=MY_CHOICES)
+    class Meta:
+        model = Archives
+        fields = ('archives_date', 'algorithm')
+
+
+class MyArchive(ImportCSVModelAdmin):
+    importer_class = MyArchiveImporter
+    form = MyArchiveForm
+    list_display = ('archives_date', 'algorithm')
+    ordering = ("archives_date",)
+    list_per_page = 1000
+    empty_value_display = ""
+
+"""
+class MyArchivesForm(admin.ModelAdmin):
+    list_display = ('archives_date','algorithm')
+    ordering = ("archives_date",)
+    list_per_page = 1000
+"""
+admin.site.register(Define3, MyDefine)
+admin.site.register(Input,MyInput)
+admin.site.register(Archives,MyArchive)

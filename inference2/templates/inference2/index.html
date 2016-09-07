@@ -158,7 +158,7 @@ textarea {
 
            $.ajax({
                type: "POST",
-               url: "prove",
+               url: "{{ url_path }}prove",
                data: $("#excel").serialize(),
                //async: false,
                success: function (result) {
@@ -245,7 +245,8 @@ textarea {
 <!--input type="button" name="reset" value="Reset" id="reset"/-->
 <input type="submit" name="prove" value="Prove" id="prove"/>
 <input type="button" name="clear" value="Clear Result" id="clear"/>
-<a href="/dictionary" target="_blank">Show Dictionary</a>
+<a href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a>
+<a href="/archives" target="_blank">Archives</a>
 <hr/>
 
 <table border="1" >

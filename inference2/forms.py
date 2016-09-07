@@ -5,7 +5,10 @@ from django import forms
 from django.forms.forms import NON_FIELD_ERRORS
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
+from inference2.models import Archives, Define3
 
+
+from django.forms import ModelChoiceField
 
 class CSVImportError(Exception):
     pass
@@ -17,6 +20,18 @@ class ImportCSVForm(forms.Form):
         label=_('Has headers'),
         help_text=_('Check this if your CSV file '
                     'has a row with column headers.'),
+        initial=True,
+        required=False,
+    )
+    archives = forms.ModelChoiceField(
+        queryset = Archives.objects.all(),
+        label=_('Select for Archives'),
+        help_text=_('Create Archives if it is not here.'),
+        )
+    archives_check = forms.BooleanField(
+        label=_('Check for Old Archives'),
+        help_text=_('UnCheck this if your Definition has to replace '
+                    'the old entries of same archive date.'),
         initial=True,
         required=False,
     )
@@ -46,24 +61,36 @@ class ImportCSVForm(forms.Form):
         try:
             reader = csv.DictReader(
                 self.cleaned_data['csv_file'],
-                fieldnames=self.importer_class._meta.fields,
+                fieldnames=self.importer_class.Meta.fields,
                 dialect=self.dialect,
             )
 
             reader_iter = enumerate(reader, 1)
+            archives_id = -1 #No Archives
             if self.cleaned_data['has_headers']:
                 six.advance_iterator(reader_iter)
-
-            self.process_csv(reader_iter)
+            if self.cleaned_data['archives']:
+                archives_id = self.cleaned_data['archives'].id
+            old_archives = self.importer_class.Meta.model.objects.filter(archives_id=archives_id)
+            if old_archives:
+                if self.cleaned_data['archives_check']:
+                    self.append_import_error(_("Defination already exist for this archives."))
+                    raise CSVImportError()
+                else:
+                    old_archives.delete()
+            self.process_csv(reader_iter,archives_id)
             if not self.is_valid():
                 raise CSVImportError()  # Abort the transaction
         except csv.Error:
             self.append_import_error(_("Bad CSV format"))
             raise CSVImportError()
 
-    def process_csv(self, reader):
+    def process_csv(self, reader,archives_id=-1):
         for i, row in reader:
+            if archives_id!=-1:
+                row['archives'] = archives_id
             self.process_row(i, row)
+
 
     def append_import_error(self, error, rownumber=None, column_name=None):
         if rownumber is not None:
