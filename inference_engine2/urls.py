@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^archives/(?P<num>[0-9]+)$', views.assign_archives,name='assign_archives'),
     url(r'^archives/(?P<num>[0-9]+)/(?P<type>[a-z]+)$', views.assign_archives,name='assign_archives_type'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^manual$', views.manual,name='manual'),
 
 ]

@@ -2,6 +2,11 @@ import json
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
+from django.core.servers.basehttp import FileWrapper
+from django.http import HttpResponse
+from django.conf import settings
+
+import os
 import importlib
 from inference2.Proofs import prove3
 from inference2.models import Input
@@ -19,11 +24,13 @@ def current_archive():
 
 def index(request,archive=None):
     url_path=''
+    archive_date=''
     if not archive:
         archive = current_archive()
         url_path = '/'
     else:
         url_path = '/archives/{}/'.format(archive.id)
+        archive_date = archive.archives_date
     input = Input.objects.filter(archives_id=archive.id)
     result={}
     if request.method=='POST':
@@ -34,7 +41,7 @@ def index(request,archive=None):
 
     #rows = json.dumps(rows,cls=DjangoJSONEncoder)
 
-    template_args = {'result':result,'input':input,'url_path':url_path}
+    template_args = {'result':result,'input':input,'url_path':url_path,'archive_date':archive_date}
     return render(request,"inference2/index.html",template_args)
 
 def prove(request,archive=None):
@@ -74,3 +81,10 @@ def assign_archives(request,num=-1,type=None):
     else:
         return index(request,archive)
 
+def manual(request):
+    filename = os.path.join(settings.MANUAL_PATH)
+    wrapper = FileWrapper(file(filename))
+    response = HttpResponse(wrapper, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Disposition'] = 'attachment; filename='+os.path.basename(filename)
+    return response

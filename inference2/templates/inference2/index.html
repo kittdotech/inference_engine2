@@ -243,10 +243,16 @@ textarea {
 <form id="excel" method="post">
  {% csrf_token %}
 <!--input type="button" name="reset" value="Reset" id="reset"/-->
-<input type="submit" name="prove" value="Prove" id="prove"/>
-<input type="button" name="clear" value="Clear Result" id="clear"/>
-<a href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a>
-<a href="/archives" target="_blank">Archives</a>
+<table>
+<tr>
+<td><input type="submit" name="prove" value="Prove" id="prove"/></td>
+<td><input type="button" name="clear" value="Clear Result" id="clear"/></td>
+<td><a href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a></td>
+<td><a href="/archives" target="_blank">Archives</a></td>
+<td><a href="/manual" target="_blank">Manual</a></td>
+<td width="70%" align="right">{{ archive_date }}</td>
+</tr>
+</table>
 <hr/>
 
 <table border="1" >
