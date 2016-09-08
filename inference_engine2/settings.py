@@ -120,7 +120,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-
+# change file name here
 MANUAL_FILE = "IE_Manual.docx"
 MANUAL_PATH =  os.path.join(BASE_DIR,MANUAL_FILE)
 
