@@ -7,8 +7,8 @@ import operator
 excel = True
 debug = True
 words_used = False
-strt = 80
-stp = 81
+strt = 0
+stp = 0
 
 if not excel:
     from models import Define3
@@ -673,10 +673,11 @@ def scope_rel_pro(list,i):
 def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
 
     all_sent = remove_duplicates(all_sent,0)
-    num = [3,5,10,14,16,18,20,22,24,26,28,30,32,34]
+    num = [3,5,10,14,16,18,20,22,24,26,28,30,32,34,63,64,65]
     pronouns2 = copy.deepcopy(words[24])
     if "it" in pronouns2:
         pronouns2.remove("it")
+        pronouns2.remove("it"+up)
     pronouns = pronouns2
     determinative = words[2]
     definitions = words[16]
@@ -727,6 +728,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
             list1[0] = str1
             list1[42] = str2
             list1[41] = 1
+            #list1[46] = "x"
             all_sent.append(list1)
             # say you have the word 7 in your claim, then the code will define all numbers
             # down to 0 if you do not have the following code
@@ -774,7 +776,9 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities):
                 if m > 100:
                     easygui.msgbox('in the define function you are caught in an infinite loop')
                 for i in num:
-                    if d == 0 and m == 1 and i == 5:
+                    if i == 14 and m == 2:
+                        bb = 7
+                    if i == 64 and m == 2:
                         bb = 7
                     str1 = all_sent[m][i]
                     relat = all_sent[m][9]
@@ -1177,7 +1181,7 @@ def is_atomic(list1, atomic_relations):
 def isdefineable(list1):
 
     must_be_blank = [2,3,4,6,7,10,11,13,15,16,17,18,20,21,23,24,25,27,28,29,31,32,33,\
-        35,36,49,50,51,52]
+        35,36,49,50,51,52,55]
     must_be_variable = [5,14,22,30]
 
     for i in must_be_blank:
@@ -1194,7 +1198,7 @@ def build_sent(list1):
     #if you revise this list then then you must also revise it in the scope_rel_pro function
     #as well as the add_sent2
     str1 = "("
-    num = [11,1,2,47,3,4,5,66,67,35,48,59,6,8,9,48,12,10,13,14,36,60,63,49,15,16,17,18,\
+    num = [11,1,2,47,3,4,5,66,67,35,48,59,6,8,9,7,48,12,10,13,14,36,60,63,49,15,16,17,18,\
            61,64,50,19,20,21,22,62,65,51,23,24,25,26,52,27,28,\
            29,30,31,32,33,34]
     for i in num:
@@ -1663,7 +1667,7 @@ def build_app(list1):
 
 def division(tot_sent, all_sent,words,kind,def_sent=[]):
 
-    global anaphora
+    global anaphora,idf_var
 
     univ = ['all','any','no','no'+us]
     list2 = []
@@ -1682,8 +1686,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
         e = 2
     elif kind == 2:
         b = 4
-        e = 6
-
+        e = 7
 
     for k in range(b,e):
         if k == 0:
@@ -1694,11 +1697,12 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
             num = [35,36]
         elif k == 3:
             num = [59,60,61,62]
-        elif k == 4:
-            num = [15,19]
         elif k == 5:
+            num = [15,19]
+        elif k == 6:
             num = [5,63,64]
-
+        elif k == 4:
+            num = [62,61,60,7]
 
         if kind == 3:
             m = p
@@ -1780,14 +1784,18 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
                         list17[46] = "x"
                         all_sent.append(list17)
-                    elif k == 3 and kind == 1 and all_sent[m][i] != None and scope_uni(all_sent,m,i,1):
+                    elif k == 3 and kind == 1 and all_sent[m][i] != None and scope_uni(all_sent,m,i,1)\
+                            and all_sent[m][i] != 'that'+uc:
                         rule = "DE " + all_sent[m][i]
                         list17 = copy.deepcopy(all_sent[m])
                         dummy = rel_pro(i,m,all_sent,list1)
                         dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
                         list17[46] = "x"
                         all_sent.append(list17)
-                    elif k == 4 and kind == 2 and all_sent[m][i] != None:
+                    elif k == 4 and all_sent[m][i] == 'that'+uc:
+                        dummy = that(all_sent,m,i,tot_sent,def_sent,dv_nam,words,idf_var)
+
+                    elif k == 5 and kind == 2 and all_sent[m][i] != None:
                 #right now the only relation we have found that divides by making the object
                 # the new subject is AS
                         list17 = copy.deepcopy(all_sent[m])
@@ -1828,6 +1836,8 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                         elif i == 19:
                             d = 20
                             c = 22
+                        else:
+                            bb = 8
                         # elif i == 23:
                         #     a = 22
                         #     c = 26
@@ -1854,11 +1864,13 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             genre = 1
                         list17[46] = "x"
                         all_sent.append(list17)
-                    elif k == 5 and kind == 2:
+                    elif k == 6 and kind == 2:
                         str1 = all_sent[m][i]
                         if str1 == 'there':
                             dummy = there(all_sent,m,tot_sent,def_sent)
                             break
+
+
 
 
     if kind == 3:
@@ -1868,6 +1880,52 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
         return list2
     else:
         return
+
+def that(all_sent,m,i,tot_sent,def_sent,dv_nam,words,idf_var):
+
+    num = [11,1,2,47,3,4,5,66,67,35,48,59,6,8,9,7,48,12,10,13,14,36,60,63,49,15,16,17,18,\
+           61,64,50,19,20,21,22,62,65,51,23,24,25,26,52,27,28,\
+           29,30,31,32,33,34]
+
+    list1 = []
+    bool1 = False
+    list3 = copy.deepcopy(all_sent[m])
+    all_sent[m][46] = "x"
+    for j in num:
+        if j == i:
+            bool1 = True
+        if all_sent[m][j] != None and bool1 and j!=i:
+            list1.append(all_sent[m][j])
+            all_sent[m][j] = None
+
+    list2 = categorize_words(words,list1,idf_var,all_sent,2)
+    new_var = idf_var[0]
+    del idf_var[0]
+    list2[42] = new_var
+    all_sent[m][i] == None
+    if i == 7:
+        all_sent[m][14] = new_var
+    elif i == 61:
+        if all_sent[m][14] == 'it'+up:
+            all_sent[m][61] = 'that'+uc
+        all_sent[m][64] = new_var
+    elif i == 62:
+        if all_sent[m][14] == 'it'+up:
+            all_sent[m][62] = 'that'+uc
+        all_sent[m][65] = new_var
+
+    str1 = build_sent(list2)
+    list2[0] = str1
+    all_sent.append(list2)
+    str1 = remove_outer_paren(str1)
+    dv_nam.append([new_var,str1])
+    all_sent[m][46] = "x"
+
+
+
+
+    return
+
 
 def scope_uni(all_sent,m,i,kind = ""):
 
@@ -2208,7 +2266,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","no","many"+um,"many"+un,\
         "no" + us]
-    if definiendum == "person":
+    if definiendum == "a":
         bb = 7
     new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
@@ -2759,7 +2817,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         g = skel_string.find(iff)
         h = skel_string.find(conditional)
         if h == -1:
-            skel_string = skel_string[:g+4] + str4 + skel_string[g+4:]
+            skel_string = skel_string[:g+3] + str4 + skel_string[g+3:]
         else:
             skel_string = skel_string[:g+4] + "(" + str4 + skel_string[g+4:h-1] + ") " + skel_string[h:]
 
@@ -3009,7 +3067,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",snu
             list1[i] = list1[i].replace(",","")
             has_comma = list1[i]
         word = list1[i]
-        if word == 'speed':
+        if word == 'you':
             bb = 8
         bool3 = False
         bool5 = False
@@ -3077,7 +3135,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",snu
         if pos == 'w':
             pos = 'n'
 
-        if word == 'cold':
+        if word == 'you':
             bb = 7
         if word == ' ':
             pass
@@ -3108,9 +3166,12 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",snu
         elif pos == 'u' and relation_type == 0 and list1_cat[5] != None:
             list1_cat[59] = word
             list2.append(59)
-        elif pos == 'b' and relation_type == 0:
-            list1_cat[7] = word
-            list2.append(7)
+        elif word == 'that'+uc and list1_cat[7] == None:
+             list1_cat[7] = word
+             list2.append(7)
+        # elif pos == 'b' and relation_type == 0:
+        #     list1_cat[7] = word
+        #     list2.append(7)
         elif pos == 'm' and relation_type == 0:
             list1_cat[8] = word
             list2.append(8)
@@ -3152,7 +3213,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",snu
         elif pos == 'u' and relation_type == 1 and list1_cat[14] != None:
             list1_cat[60] = word
             list2.append(60)
-        elif pos == 'n' and relation_type == 1 and list1_cat[60] != None:
+        elif (pos == 'n' or pos == 'p') and relation_type == 1 and list1_cat[60] != None:
             list1_cat[63] = word
             list2.append(63)
         elif (pos == 'm' and relation_type == 1) or (pos == "m" and list1_cat[15] in spec_rel):
@@ -3180,7 +3241,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",snu
         elif pos == 'u' and relation_type == 2 and list1_cat[18] != None:
             list1_cat[61] = word
             list2.append(61)
-        elif pos == 'n' and relation_type == 2 and list1_cat[60] != None:
+        elif (pos == 'n' or pos == 'p') and relation_type == 2 and list1_cat[61] != None:
             list1_cat[64] = word
             list2.append(64)
         elif (pos == 'm' and relation_type == 2) or (pos == "m" and list1_cat[18] in spec_rel):
@@ -3208,7 +3269,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",snu
         elif pos == 'u' and relation_type == 3 and list1_cat[22] != None:
             list1_cat[62] = word
             list2.append(62)
-        elif pos == 'n' and relation_type == 3 and list1_cat[60] != None:
+        elif (pos == 'n' or pos == 'p') and relation_type == 3 and list1_cat[62] != None:
             list1_cat[65] = word
             list2.append(65)
         elif (pos == 'm' and relation_type == 3) or (pos == "m" and list1_cat[24] in spec_rel):
@@ -4348,7 +4409,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     tv = True # tv = truth value
     if consistent and impl != nonseq:
         tv = False
-    elif impl == nonseq and not consistent:
+    elif impl == nonseq and consistent:
         tv = False
 
     if not tv:
@@ -4818,7 +4879,9 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                 already_done = []
                 pot_id = remove_duplicates2d(pot_id,0,1)
                 # pot_id = fix_id(pot_id,rel_sent,all_sent,linked)
-                pot_id = areident(pot_id,member_prop,all_sent,dv_nam,tot_sent,candd2,not_id)
+                pot_id = areident(pot_id,member_prop,all_sent,dv_nam,tot_sent,candd2,not_id,\
+                            candd,prop_sent)
+
                 if pot_id != []:
                     added = new_cond(pot_id,candd,conditionals,tot_sent,member_prop,\
                         candd2,all_sent,orel_sent)
@@ -4844,7 +4907,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
         elif impl == nonseq and not consistent:
             print "False: " + tot_sent[0][1]
 
-            bb = 8
+
 
 
             #end5
@@ -4855,21 +4918,22 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                 anc1 = prop_sent[i][0]
                 break
         if consistent:
+            list3 = []
             for i in range(len(prop_sent)):
                 if len(prop_sent[i][1]) < 3 and prop_sent[i][1] != top and prop_sent[i][1] != bottom:
+                    list3.append([prop_sent[i][1],prop_sent[i][2]])
                     if i == 0:
                         str1 = prop_sent[i][2] + prop_sent[i][1]
                     else:
-                        str1 += ", " + prop_sent[i][2] + prop_sent[i][1]
+                        str1 += " " + prop_sent[i][2] + prop_sent[i][1]
             pn += 1
             prop_sent.append([pn,str1,"","","","","","",""])
-            candd = sorted(candd, key = operator.itemgetter(1,0))
-            for i in range(len(candd)):
-                if len(candd[i][1]) < 3:
-                    if i == 0:
-                        str1 = candd[i][2] + candd[i][1]
-                    else:
-                        str1 += " " + candd[i][2] + candd[i][1]
+            list3.sort()
+            for i in range(len(list3)):
+                if i == 0:
+                    str1 = list3[i][1] + list3[i][0]
+                else:
+                    str1 += " " + list3[i][1] + list3[i][0]
             pn += 1
             prop_sent.append([pn,str1,"","","","","","",""])
             pn += 1
@@ -4919,9 +4983,13 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
         tot_sent.append(["","","","","","","","",""])
         tot_sent += property_sent
-
     g = 401 - k -1
+
+
+
+
     for i in range(len(prop_sent)):
+
         if prop_sent[i][0] > 400 and prop_sent[i][0] != "":
             prop_sent[i][0] = prop_sent[i][0] - g
         if prop_sent[i][4] > 400 and prop_sent[i][4] != "":
@@ -4932,6 +5000,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
             prop_sent[i][6] = prop_sent[i][6] - g
         if prop_sent[i][7] > 400 and prop_sent[i][7] != "":
             prop_sent[i][7] = prop_sent[i][7] - g
+
 
     prop_sent.sort()
 
@@ -5610,7 +5679,7 @@ def asymmetry(all_sent,str1,str2):
 
 
 
-def areident(pot_id,member_prop,all_sent,dv_nam,tot_sent,candd2,not_id):
+def areident(pot_id,member_prop,all_sent,dv_nam,tot_sent,candd2,not_id,candd,prop_sent):
 
     pot_id2 = []
     global gen_var
@@ -5700,7 +5769,7 @@ def areident(pot_id,member_prop,all_sent,dv_nam,tot_sent,candd2,not_id):
                 del pot_id[w]
                 w -= 1
     if ax_ent != []:
-        dummy = axiom_entity(ax_ent,thing_con,tot_sent,candd2,candd)
+        dummy = axiom_entity(ax_ent,thing_con,tot_sent,candd2,candd,prop_sent)
 
     return pot_id
 
@@ -5755,9 +5824,9 @@ def same_group(member_prop,w,pot_id):
     #         h += 1
     #         list4.append([n,h-1])
 
-def axiom_entity(ax_ent,thing_con,tot_sent,candd2,candd):
+def axiom_entity(ax_ent,thing_con,tot_sent,candd2,candd,prop_sent):
 
-    global sn
+    global sn,cnjts
     for i in range(len(ax_ent)):
         list1 = [None] * 70
         list1[5] = ax_ent[i]
@@ -5767,6 +5836,9 @@ def axiom_entity(ax_ent,thing_con,tot_sent,candd2,candd):
         newp = name_sent(new_sent)
         sn += 1
         candd2.append([sn,newp,""])
+        candd.append([sn,newp,""])
+        cnjts.append(newp)
+        prop_sent.append([sn,newp,"","","","","","","",""])
         tot_sent.append([sn,new_sent,newp,"","AY ENT","","","",""])
 
 def isrel(str1,all_sent):
@@ -7868,7 +7940,7 @@ def get_result(post_data):
     global prop_name,plural_c,anaphora,definite, prop_var, ind_var
     global ant_cond,conditionals,candd,rel_conj,conc,prop_sent,sn,impl
     global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,p
-    global gen_var,definite2,cnjts,test_one,stp,strt,candd2
+    global gen_var,definite2,cnjts,test_one,stp,strt,candd2,pn
 
     list1 = populate_sentences(p)
     test_sent = list1[0]
@@ -7879,9 +7951,9 @@ def get_result(post_data):
 
     if stp == 0:
         stp = len(test_sent)
-
+#rajiv - use these numbers for the progress bar
     for k in range(strt,stp):
-        if k == 2:
+        if k == 37:
             bb = 7
         st1 = time.time()
         prop_name = []
@@ -7889,6 +7961,7 @@ def get_result(post_data):
         all_sent = []
         never_used = []
         plural_c = []
+        pn = 400
         anaphora = ""
         impl = ""
         definite = []
@@ -7936,7 +8009,7 @@ def get_result(post_data):
 if excel:
     dummy = get_result('hey')
     # st = time.time()
-    wb4.save('inference engine.xlsx')
+    # wb4.save('inference engine.xlsx')
     # wb5.save('dictionary.xlsx')
     # en = time.time()
     # print en-st
