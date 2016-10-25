@@ -6,8 +6,37 @@
     <title>Inference Engine</title>
 {% load staticfiles %}
     <!--link rel="stylesheet" href="{%  static 'inference2/css/style.css' %}" /-->
+    <link rel="stylesheet" href="{%  static 'inference2/jquery-asPieProgress/dist/css/asPieProgress.css' %}">
+    <link rel="stylesheet" href="{%  static 'inference2/css/jquery-ui.min.css' %}">
     <script src={% static 'inference2/js/jquery-1.11.3.min.js' %}> </script>
+    <script src={% static 'inference2/js/jquery-ui.min.js' %}> </script>
+    
+
+    <script src={% static 'inference2/jquery-asPieProgress/dist/jquery-asPieProgress.js' %}> </script>
     <style>
+     
+      #progressbar 
+      {
+      /*background-color: yellow;*/
+    
+      }
+      #progressbar > .ui-progressbar-value 
+      {
+      background-color: #ADD8E6;
+    
+      }
+      .ui-progressbar-value {
+  transition: width 1s;
+  -webkit-transition: width 1s;
+}
+.progress-label {
+    float: left;
+    margin-left: 50%;
+    margin-top: 5px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+
+}
       table{
     border: solid 1px gray;
     width: 100%;
@@ -25,19 +54,39 @@ textarea {
     padding: 0px;
     margin: 0px;
 }
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    z-index: 10000;
+}
 </style>
 
     <script type="text/javascript">
+
+
+
 
         function textAreaAdjust(o) {
     o.style.height = "1px";
     o.style.height = (25+o.scrollHeight)+"px";
 }
-	function ajaxindicatorstart(text)
+	function ajaxindicatorstart()
 	{
 		if(jQuery('body').find('#resultLoading').attr('id') != 'resultLoading'){
-		jQuery('body').append('<div id="resultLoading" style="display:none"><div><img src="{%  static 'inference2/images/ajax-loader.gif' %}"><div>'+text+'</div></div><div class="bg"></div></div>');
-		}
+		jQuery('body').append('<div id="resultLoading" style="display:none"><div><div id="progressbar"><div><div class="progress-label">Solving...</div></div></div></div><div class="bg"></div></div>');
+		    /**jQuery('body').append('<div id="resultLoading" style="display:none"><div><img src="{%  static 'inference2/images/ajax-loader.gif' %}"><div>Solving...Please wait...</div></div><div class="bg"></div></div>');**/
+
+
+    }
 
 		jQuery('#resultLoading').css({
 			'width':'100%',
@@ -99,21 +148,23 @@ textarea {
 			}
 		});
 	}
-
+/**
   jQuery(document).ajaxStart(function () {
    		//show ajax indicator
-		ajaxindicatorstart('Solving.. please wait..');
+		ajaxindicatorstart();
   }).ajaxStop(function () {
 		//hide ajax indicator
 		ajaxindicatorstop();
-  });
+  });**/
 </script>
     <script>
 
         var ROW_LENGTH=15000;
 
     $(document).ready(function () {
+
     var result = {{ result|safe }};
+
         if (result)
         {
             for(var index in result) {
@@ -140,6 +191,7 @@ textarea {
                 if ($("#text_"+i+"_2").val()=='stop')
                 {
                 stop_found = true
+
                 }
             }
                 else
@@ -154,13 +206,75 @@ textarea {
         });
 
 
-        $(document).on('click','#prove1', function(e) { //Changes
+         function progress()      
+        {
+          $.ajax({
+               type: "POST",
+               url: "progress",
+               //async: false,
+               data:{csrfmiddlewaretoken:'{{csrf_token}}' },
+               success: function (result) {
+                if ($('#progressbar').length) {
+    console.log("exist");
+}
+var v = $("#progressbar").progressbar("value");
 
+if (v < result["K"][2])
+{
+$( function() {
+    var progressLabel = $(".progress-label");
+    $( "#progressbar" ).progressbar({
+      value: result["K"][2],
+      max: result["K"][1],
+      min: result["K"][0],
+      change: function () {
+              progressLabel.text($("#progressbar").progressbar("value") + "%");
+          },
+      complete: function () {
+              progressLabel.text("Complete!");
+                  }
+
+
+  } );
+  })
+}
+                //$('.pie_progress').asPieProgress('go',((result["K"][2] - result["K"][0]) * 100) / (result["K"][1] - result["K"][0]));
+                console.log(((result["K"][2] - result["K"][0]) * 100) / (result["K"][1] - result["K"][0]));
+               },
+               error: function (err) {
+
+               }
+           });
+        }  
+
+        $(document).on('click','#prove', function(e) { //Changes
+            
+          ajaxindicatorstart();
+          $("#progressbar").progressbar();
+          setInterval(progress, 500);
+          //event.preventDefault();
+          
+          /*
+          
+var jsonStream = new EventSource('http://127.0.0.1:8000/prove')
+jsonStream.onmessage = function (e) {
+   var message = JSON.parse(e.data);
+  console.log(message);
+};
+           oboe('http://127.0.0.1:8000/prove')
+   .done(function(things) {
+
+   console.log(things)
+   })
+   .fail(function() {
+  console.log("Fail")
+      
+   });
            $.ajax({
                type: "POST",
                url: "{{ url_path }}prove",
-               data: $("#excel").serialize(),
-               //async: false,
+               data: $("#excel").serializeArray(),
+              //async: false,
                success: function (result) {
                 alert('sucess');
                },
@@ -168,6 +282,11 @@ textarea {
 
                }
            });
+           */
+       
+
+
+
        });
 
 
@@ -201,6 +320,7 @@ textarea {
 
 **/
 //Making Input
+
 {% if input %}
     {% for row in input %}
                 id_str = "text_" + String({{forloop.counter0}}) + "_1";
@@ -230,6 +350,42 @@ textarea {
       console.log('hi');
           });
 
+     (function($) {
+    $.fn.goTo = function() {
+        $('html, body').animate({
+            scrollTop: $(this).offset().top + 'px'
+        }, 'slow');
+        return this; // for chaining...
+    }
+})(jQuery);
+
+     $(function(){
+      console.log("Prove");
+     if (result["type"] == "prove")
+     {
+      
+      var stop_found = false;
+
+               for (i =0; i < ROW_LENGTH; i++) {
+            if (!stop_found)
+            {
+                if ($("#text_"+i+"_2").val()=='stop')
+                {
+                stop_found = true
+                $("#text_"+i+"_2").goTo();
+            
+                break;
+                }
+            }
+                else
+            {
+                $("#text_"+i+"_1").val('');
+            $("#text_"+i+"_2").val('');
+            $("#text_"+i+"_3").val('');
+            }
+            }
+     }})
+
     });
 
 
@@ -250,10 +406,12 @@ textarea {
 <td><a href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a></td>
 <td><a href="/archives" target="_blank">Archives</a></td>
 <td><a href="/manual" target="_blank">Instructions</a></td>
-<td width="70%" align="right">{{ archive_date }}</td>
+<td><a href="{{ url_path }}getdict" target="_blank">Get Dictionary</a></td>
+<td width="60%" align="right">{{ archive_date }}</td>
 </tr>
 </table>
 <hr/>
+
 
 <table border="1" >
 <col width="10%">

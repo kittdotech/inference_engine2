@@ -4,6 +4,8 @@ import timeit
 import copy
 import time
 import operator
+from django_tools.middlewares import ThreadLocal
+from inference2 import views
 excel = False
 debug = False
 words_used = False
@@ -7858,7 +7860,7 @@ def repeat_relations(str1):
     final_list = [a,b,c,d,e,f]
     return final_list
 
-def get_result(post_data):
+def get_result(post_data,request=None):
     global w4, result_data,p
     if not excel:
         result_data = dict(post_data.iterlists())
@@ -7886,8 +7888,13 @@ def get_result(post_data):
 
     if stp == 0:
         stp = len(test_sent)
-
+    views.progressbar_send(request,0,100,0) #Progress status init
     for k in range(strt,stp):
+
+        #For Progressbar
+        views.progressbar_send(request,strt,stp,k)
+        #End for progress
+            
         if k == 2:
             bb = 7
         st1 = time.time()
@@ -7937,6 +7944,7 @@ def get_result(post_data):
     print "final " + str("{0:.2f}".format(g))
     # print "modus ponens" + str(time1/(k+1))
     dummy = print_sent_full(test_sent,p,tot_prop_name,words)
+    views.progressbar_send(request,0,100,0) #Progress status Finish
     if not excel:
         return result_data
 

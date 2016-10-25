@@ -27,9 +27,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+"""CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}"""
+
+
 
 # Application definition
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+#SESSION_FILE_PATH = BASE_DIR
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +60,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django_tools.middlewares.ThreadLocal.ThreadLocalMiddleware',
 )
 
 ROOT_URLCONF = 'inference_engine2.urls'
@@ -73,8 +83,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'inference_engine2.wsgi.application'
-
-
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 5 * 60 #
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 CONFIG_TYPE=os.getenv('CLEARDB_DATABASE_URL','')
@@ -104,6 +115,7 @@ if not CONFIG_TYPE:
 DATABASES = {
     'default': DICT
 }
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -123,5 +135,7 @@ USE_TZ = True
 # change file name here
 MANUAL_FILE = "IE_Manual.docx"
 MANUAL_PATH =  os.path.join(BASE_DIR,MANUAL_FILE)
+
+DICT_DIRS = os.path.join(BASE_DIR,"Dicts")
 
 STATIC_URL = '/static/'

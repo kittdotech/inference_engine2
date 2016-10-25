@@ -5,11 +5,17 @@ from django.shortcuts import render
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
 from django.conf import settings
+from django.http import HttpResponse
+from django.http import StreamingHttpResponse
+from django_tools.middlewares import ThreadLocal
+from django.views.decorators.csrf import csrf_exempt
+import time
 
 import os
 import importlib
 from inference2.Proofs import prove3
 from inference2.models import Input
+
 from models import Define3, Archives
 
 from Proofs import new_prove
@@ -36,13 +42,26 @@ def index(request,archive=None):
     if request.method=='POST':
         post_data=request.POST.copy()
         prove_algorithm = importlib.import_module('.'+archive.algorithm,package='inference2.Proofs')
-        post_data = prove_algorithm.get_result(request.POST.copy())
+        post_data = prove_algorithm.get_result(request.POST.copy(),request)
+        post_data["type"]="prove"
         result=json.dumps(post_data,cls=DjangoJSONEncoder)
 
     #rows = json.dumps(rows,cls=DjangoJSONEncoder)
 
     template_args = {'result':result,'input':input,'url_path':url_path,'archive_date':archive_date}
     return render(request,"inference2/index.html",template_args)
+
+
+def stream_response_generator(request):
+    for x in range(1,11):
+        yield "%s\n" % x  # Returns a chunk of the response to the browser
+        request.session['idx'] = x
+        request.session.modified = True 
+        
+        request.session.save()
+        time.sleep(1)
+    
+
 
 def prove(request,archive=None):
     if not archive:
@@ -88,3 +107,30 @@ def manual(request):
     response['Content-Length'] = os.path.getsize(filename)
     response['Content-Disposition'] = 'attachment; filename='+os.path.basename(filename)
     return response
+
+def getdict(request,archive=None):
+    if not archive:
+        archive = current_archive()
+
+    filename = os.path.join(settings.DICT_DIRS,archive.algorithm+".csv")
+    wrapper = FileWrapper(file(filename))
+    response = HttpResponse(wrapper, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Disposition'] = 'attachment; filename='+os.path.basename(filename)
+    return response
+
+def progress(request):
+    print request.session.session_key
+    print "+++++"
+
+    
+    return HttpResponse(json.dumps({"K":request.session['idx']}), content_type="application/json")
+
+def progressbar_send(request,strt,stp,k):
+    if request is not None:
+            request.session.modified = True
+            request.session['strt'] = strt
+            request.session['stp'] = stp
+            request.session['idx'] = [strt,stp,k]
+            request.session.modified = True
+            request.session.save()
