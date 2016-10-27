@@ -11,7 +11,6 @@ from django_tools.middlewares import ThreadLocal
 from django.views.decorators.csrf import csrf_exempt
 import time
 from django.db import transaction
-
 from models import Output
 import os
 import importlib
@@ -60,7 +59,10 @@ def index(request,archive=None):
         post_data = prove_algorithm.get_result(request.POST.copy(),request)
         post_data["type"]="prove"
         result=json.dumps(post_data,cls=DjangoJSONEncoder)
+
         save_result(post_data)
+
+
 
     #rows = json.dumps(rows,cls=DjangoJSONEncoder)
 

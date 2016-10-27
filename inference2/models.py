@@ -35,10 +35,11 @@ class Input(models.Model):
         db_table = 'input'
 
 class Output(models.Model):
+
     col1 = models.CharField(max_length=200, blank=True, null=True)
     col2 = models.CharField(max_length=500, blank=True, null=True)
     col3 = models.CharField(max_length=300, blank=True, null=True)
-    
+
     class Meta:
         managed = True
         db_table = 'output'

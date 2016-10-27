@@ -54,7 +54,7 @@ def changesymbol(queryset, mode):
         ('>', unichr(8594)),
         ('nf^', unichr(8876)),
         ('ed^', unichr(8891)),
-        ('+', unichr(8744)),
+        ('v+', unichr(8744)),
         ('&&', unichr(8896)),
         ('@', unichr(8855)),
         ('if^', unichr(8660)),
