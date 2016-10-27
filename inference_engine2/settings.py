@@ -136,6 +136,6 @@ USE_TZ = True
 MANUAL_FILE = "IE_Manual.docx"
 MANUAL_PATH =  os.path.join(BASE_DIR,MANUAL_FILE)
 
-DICT_DIRS = os.path.join(BASE_DIR,"Dicts")
+DICT_DIRS = os.path.join(BASE_DIR,"dicts")
 
 STATIC_URL = '/static/'

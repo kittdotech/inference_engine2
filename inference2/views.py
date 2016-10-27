@@ -1,5 +1,5 @@
 import json
-
+import os
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.core.servers.basehttp import FileWrapper
@@ -10,7 +10,9 @@ from django.http import StreamingHttpResponse
 from django_tools.middlewares import ThreadLocal
 from django.views.decorators.csrf import csrf_exempt
 import time
+from django.db import transaction
 
+from models import Output
 import os
 import importlib
 from inference2.Proofs import prove3
@@ -20,6 +22,19 @@ from models import Define3, Archives
 
 from Proofs import new_prove
 
+
+
+
+def save_result(post_data):
+    Output.objects.all().delete()
+    Rows =[]
+    for idx in xrange(15000-1):
+        R = Output(col1=post_data["text_"+str(idx)+"_1"],
+                col2=post_data["text_"+str(idx)+"_2"],
+                col3=post_data["text_"+str(idx)+"_3"]
+                )
+        Rows.append(R)
+    Output.objects.bulk_create(Rows)
 
 
 # Create your views here.
@@ -45,6 +60,7 @@ def index(request,archive=None):
         post_data = prove_algorithm.get_result(request.POST.copy(),request)
         post_data["type"]="prove"
         result=json.dumps(post_data,cls=DjangoJSONEncoder)
+        save_result(post_data)
 
     #rows = json.dumps(rows,cls=DjangoJSONEncoder)
 
@@ -113,6 +129,8 @@ def getdict(request,archive=None):
         archive = current_archive()
 
     filename = os.path.join(settings.DICT_DIRS,archive.algorithm+".csv")
+    if not os.path.exists(filename):
+        return HttpResponse("No CSV found for Algorithm %s" %archive.algorithm )
     wrapper = FileWrapper(file(filename))
     response = HttpResponse(wrapper, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Length'] = os.path.getsize(filename)
@@ -120,10 +138,7 @@ def getdict(request,archive=None):
     return response
 
 def progress(request):
-    print request.session.session_key
-    print "+++++"
-
-    
+       
     return HttpResponse(json.dumps({"K":request.session['idx']}), content_type="application/json")
 
 def progressbar_send(request,strt,stp,k):
