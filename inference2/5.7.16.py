@@ -6,6 +6,7 @@ import time
 import operator
 excel = True
 mysql = False
+django = False
 debug = True
 words_used = False
 strt = 89
@@ -117,7 +118,8 @@ if excel:
     w4 = wb4.worksheets[0]
     ws = wb5.worksheets[0]
 elif mysql:
-
+    #rajiv
+    #load inputs and dictionary here
     pass
 else:
     ws = Define3.objects.all()
@@ -4142,6 +4144,8 @@ def build_dict(str1):
             s = row[0].value
             str1 = row[1].value
             word = row[2].value
+        elif mysql:
+            pass #rajiv
         else:
             s = row.extra
             str1 = row.type
@@ -4172,6 +4176,8 @@ def build_dict(str1):
             if excel:
                 str3 = row[3].value
                 defin = row[4].value
+            elif mysql:
+                pass #rajiv
             else:
                 str3 = row.rel
                 defin = row.definition
@@ -8473,6 +8479,8 @@ def populate_sentences(p):
                     result_data['text_'+str(p-2)+'_1']=len(test_sent)
                 first_sent = True
                 bool2 = False
+    elif mysql:
+        pass
     else:
         for row in w4.rows:
             p += 1
@@ -8527,7 +8535,7 @@ def repeat_relations(str1):
 
 def get_result(post_data):
     global w4, result_data,p
-    if not excel:
+    if not excel: #rajive fix mysql here
         result_data = dict(post_data.iterlists())
         w4=[]
         index=0
@@ -8547,7 +8555,7 @@ def get_result(post_data):
     list1 = populate_sentences(p)
     test_sent = list1[0]
     p = list1[1]
-    words = build_dict('hey')
+    words = build_dict('hey') # rajiv
     st = time.time()
     rep_rel = repeat_relations('hey')
 
@@ -8619,6 +8627,8 @@ def get_result(post_data):
     views.progressbar_send(request,0,100,0)
     if not excel:
         return result_data
+    elif mysql:
+        pass
 
 if excel:
     dummy = get_result('hey')
