@@ -5,21 +5,23 @@ import copy
 import time
 import operator
 import sys
+# from django_tools.middlewares import ThreadLocal
+# from inference2 import views
+tot_tim = time.time()
 excel = False
-mysql = True
-django = False
+mysql = False
 debug = False
 words_used = False
-strt = 0
-stp = 4
+strt = 4
+stp = 26
 
 if not excel and not mysql:
     from inference2.models import Define3, Archives, Input
     from inference2 import views
 if mysql:
     import os
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    print BASE_DIR
     sys.path.append(BASE_DIR)
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "inference_engine2.settings")
     import django
@@ -123,11 +125,11 @@ idf_var3 = [unichr(122 - t) + l1 for t in range(25)]
 idf_var4 = [unichr(122 - t) + l2 for t in range(25)]
 idf_var2 = idf_var2 + idf_var3 + idf_var4
 p = 1
-
 subscripts = [l1,l2,l3,l4]
+
 if excel:
-    wb4 = load_workbook('inference engine.xlsx')
-    wb5 = load_workbook('dictionary.xlsx')
+    wb4 = load_workbook('../inference engine.xlsx')
+    wb5 = load_workbook('../dictionary.xlsx')
     w4 = wb4.worksheets[0]
     ws = wb5.worksheets[0]
 else:
@@ -832,6 +834,11 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
                     old_sent = all_sent[m][0]
                     oldp = all_sent[m][42]
                     if d == 0:
+                        if (i == 5 and all_sent[m][3] == None and all_sent[m][40] == 69) \
+                            or (i == 14 and all_sent[m][10] == None and all_sent[m][40] == 70):
+                            pn_poss_noun = True
+                        else:
+                            pn_poss_noun = False
 
                 #this is for those sentences whose noun was once part of a relative pronoun
                         if i == all_sent[m][45]:
@@ -848,11 +855,14 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
                             all_sent[m][42] = newp
                             all_sent[m][45] = None
 
-                        elif (str1 in pronouns or str1 in determinative) \
+                        elif (str1 in pronouns or str1 in determinative or pn_poss_noun) \
                                 and str1 not in universal:
                             bool1 = True
                             if str1 in pronouns:
                                 str2 = "pronoun"
+                            elif pn_poss_noun:
+                                str2 = "proper name possessive"
+                                str1 = 'the'
                             else:
                                 str2 = "determinative"
                             if all_sent[m][43] != i:
@@ -1857,7 +1867,7 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
         elif k == 6:
             num = [5,63,64]
         elif k == 4:
-            num = [62,61,60,7,69,70]
+            num = [62,61,60,7,69,70] # that elim and poss noun elim combined
         elif k == 7:
             num = [69,70]
 
@@ -1953,8 +1963,8 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                     elif k == 4 and all_sent[m][i] == 'that'+uc:
                         dummy = that(all_sent,m,i,tot_sent,dv_nam,words,idf_var)
                         break
-                    elif k == 4 and i == 69 or i == 70 and all_sent[m][i] != None:
-                        dummy = poss_elim(all_sent,m,i)
+                    elif k == 4 and (i == 69 or i == 70) and all_sent[m][i] != None:
+                        dummy = poss_elim(all_sent,m,i,tot_sent)
                         break
                     elif k == 5 and kind == 2 and all_sent[m][i] != None:
                 #right now the only relation we have found that divides by making the object
@@ -2041,19 +2051,49 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
     else:
         return
 
-def poss_elim(all_sent,m,i):
-    pass
+def poss_elim(all_sent,m,i,tot_sent):
+
+    list1 = [None] * 80
+    str1 = all_sent[m][i][0]
+    list1[5] = str1
+    list1[9] = "OWN"
+    if i == 69:
+        str2 = all_sent[m][5]
+    elif i == 70:
+        str2 = all_sent[m][14]
+    list1[14] = str2
+    old_sent = all_sent[m][0]
+    oldp = all_sent[m][42]
+    all_sent[m][i] = None
+    str4 = build_sent(all_sent[m])
+    str4p = name_sent(str4)
+    str5 = build_sent(list1)
+    str5p = name_sent(str5)
+    str3 = "(" + str4 + " & " + str5 + ")"
+    str3p = "(" + str4p + " & " + str5p + ")"
+    list1[0] = str5
+    list1[42] = str5p
+    all_sent.append(list1)
+    dummy = new_sentence2(old_sent,oldp,str3,str3p,tot_sent,"PNE")
 
 def poss_noun(idf_var,all_sent,m,n,dv_nam,str7):
 
-    new_var = idf_var[0]
-    del idf_var[0]
+    global definite
     str1 = all_sent[m][n]
     str1 = str1[:1]
     if str7 == "a":
         str2 = "indefinite"
+        new_var = idf_var[0]
+        del idf_var[0]
     elif str7 == "the":
         str2 = "definite"
+        str9 = findinlist(str1,dv_nam,0,1)
+        str10 = findinlist(str9,definite,1,0)
+        if str10 == None:
+            new_var = idf_var[0]
+            del idf_var[0]
+            definite.append([new_var,str9])
+
     str3 = findinlist(str2,dv_nam,1,0)
     all_sent[m][n] = new_var + "'s"
     list1 = [None] * 80
@@ -2071,6 +2111,12 @@ def poss_noun(idf_var,all_sent,m,n,dv_nam,str7):
     str6 = str4 + " & " + str5
     str6p = str4p + " & " + str5p
     list3 = [str6,str6p]
+    list1[0] = str4
+    list1[42] = str4p
+    list2[0] = str5
+    list2[42] = str5p
+    all_sent.append(list1)
+    all_sent.append(list2)
     return list3
 
 def that(all_sent,m,i,tot_sent,dv_nam,words,idf_var):
@@ -2562,7 +2608,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","no","many"+um,"many"+un,\
         "no" + us]
-    if definiendum == "a":
+    if definiendum == "INB":
         bb = 7
     new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
@@ -2574,6 +2620,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         ident_det = False
     match_dv = []
     new_var = []
+    rule = ""
     taken_out = []
     detached = [conditional,iff,xorr,idisj]
     str1 = copy.copy(definition)
@@ -2652,18 +2699,17 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             match_dv.append(['i','i'])
         # when constructing definitions of personal pronouns or of determinatives the object of the IG relation
         # must be b and the subject must be z
-    elif kind == 'determinative' or kind == 'poss pro':
-        all_sent[m][k] = ""
+    elif kind == 'determinative' or kind == 'poss pro' or kind == 'proper name possessive':
         if k == 10:
             j = 14
         else:
             j = k + 2
         ovar = all_sent[m][j]
-        if kind == 'determinative':
-            match_dv.append(["b",all_sent[m][j]])
+        if kind == "proper name possessive":
+            match_dv.append(["b",all_sent[m][k]])
         else:
+            all_sent[m][k] = ""
             match_dv.append(["b",all_sent[m][j]])
-            # match_dv.append(["c",all_sent[m][o]]) #b>z,z>v
         if definiendum == 'the' or definiendum == 'that'+ud:
             str1 = all_sent[m][j]
             str3 = findinlist(str1,dv_nam,0,1)
@@ -2671,7 +2717,10 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             if str2 == None:
                 match_dv.append(["z",idf_var[0]])
                 definite.append([idf_var[0],str3])
-                all_sent[m][j] = idf_var[0]
+                if kind != 'proper name possessive':
+                    all_sent[m][j] = idf_var[0]
+                else:
+                    all_sent[m][k] = idf_var[0]
                 new_var.append(idf_var[0])
                 new_var2 = idf_var[0]
                 del idf_var[0]
@@ -2686,9 +2735,9 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             new_var.append(idf_var[0])
             del idf_var[0]
         list1 = []
-        if j == 14 and all_sent[m][70] != None:
+        if j == 14 and all_sent[m][70] != None and kind != 'proper name possessive':
             list1 = poss_noun(idf_var,all_sent,m,70,dv_nam,definiendum)
-        if j == 5 and all_sent[m][69] != None:
+        if j == 5 and all_sent[m][69] != None and kind != 'proper name possessive':
             list1 = poss_noun(idf_var,all_sent,m,69,dv_nam,definiendum)
         if list1 != []:
             poss_str = list1[0]
@@ -2697,7 +2746,6 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             str5 = findinlist(ovar,dv_nam,0,1)
             if str5 in tagged_nouns:
                 tagged_nouns2.append([all_sent[m][j],str5])
-
 
     sdefinition = def_info[8]
     def_sent = []
@@ -2754,14 +2802,18 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                     list1 = add_sent(new_var2,new_relat,new_obj)
                     sent_uniq1.append(list1)
 
+    if kind == "determinative" or kind == "pronoun" or kind == 'AS' or kind == 'poss pro':
+        rule = "DE " + definiendum
+        rule_found = True
+    elif kind == "proper name possessive":
+        rule = "PNP"
+        kind = "determinative"
+        rule_found = True
     #as we loop through the sentences they must be in the definition which is the point of n
     for i in range(len(def_info[0])):
         if i == 21:
             bb = 8
         n = def_info[4][i][0][:ld]
-        if kind == "determinative" or kind == "pronoun" or kind == 'AS' or kind == 'poss pro':
-            rule = "DE " + definiendum
-            rule_found = True
         if def_info[4][i][1] == iff and not rule_found:
             rule = "DF " + definiendum
             rule_found = True
@@ -3476,7 +3528,6 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
     has_plural = False
     bool1 = False
 
-
     if kind == 0:
         list1 = str2
         osent = str2[-3]
@@ -3505,6 +3556,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
     posp = words[28]
     doubles = words[31]
     triples = words[32]
+    proper_names = words[35]
     has_comma = ""
 
     i = -1
@@ -3605,6 +3657,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif pos == 'ps' and relation_type == 0 and list1_cat[5] == None:
             list1_cat[69] = word
             list2.append(69)
+            list1_cat[40] = 69
         elif pos == 'a' and relation_type == 0:
             list1_cat[4] = word
             list2.append(4)
@@ -3667,6 +3720,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif pos == 'ps' and relation_type == 1 and list1_cat[14] == None:
             list1_cat[70] = word
             list2.append(70)
+            list1_cat[40] = 70
         elif pos == 'a' and relation_type == 1:
             list1_cat[13] = word
             list2.append(13)
@@ -3967,7 +4021,7 @@ def syn(tot_sent, all_sent, words,def_atoms):
 def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
 
     global result_data
-    global excel, mysql,strt,stp,def_used,words_used
+    global excel,strt,stp,def_used,words_used
 
     # p = 30
     bb = 8
@@ -4123,6 +4177,7 @@ def build_dict(str1):
     subo = []
     synon = []
     redundant = []
+    proper_names = []
     aux = []
     atomic_relata = []
     negg = []
@@ -4145,7 +4200,6 @@ def build_dict(str1):
     category = ['r','s','t']
     almost_done = False
     i = 0
-    
     for row in ws:
         i += 1
         if i == 90:
@@ -4248,6 +4302,8 @@ def build_dict(str1):
                         atomic_relations.append(str3)
                 if atom == 'b':
                     really_atomic.append(str3)
+                elif atom == "j":
+                    proper_names.append(word)
                 if str5 == 'a':
                     adj.append(word)
                 elif str5 == 'b':
@@ -4318,7 +4374,7 @@ def build_dict(str1):
         aux, negg, dnoun,syn_pairs,synon,det, definitions, det_pairs, relations, \
              relations2, particles, redundant,atomic_relations, atomic_relata, \
              pronouns,poss_pronouns,plurals,neg_det,pos,really_atomic,\
-             anaphoric_relations,doubles,triples,definitions2,compound]
+             anaphoric_relations,doubles,triples,definitions2,compound,proper_names]
 
     return words
 
@@ -5047,9 +5103,9 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                             elif relat == "IG" and p == 14:
                                 kind = "NOUN CONCEPT"
                             elif relat == "H" and p == 14:
-                                kind = "ADJECTIVIAL PROPERTY"
-                            elif relat == "IA" and p == 14:
                                 kind = "NOUN PROPERTY"
+                            elif relat == "IA" and p == 14:
+                                kind = "ADJECTIVIAL PROPERTY"
                             elif relat == "HE" and p == 5:
                                 kind = "PARTICLE"
                             elif (relat == 'TK' and p == 14) or (relat == 'AI' and p == 5):
@@ -5968,6 +6024,8 @@ def new_cond(pot_id,candd,conditionals,tot_sent,member_prop,candd2,\
             if bool1:
                 bool2 = False
                 for m in range(len(orel_sent)):
+                    if i == -1:
+                        break
                     d = findposinlist(orel_sent[m][0],all_sent,42)
                     sent = all_sent[d][0]
                     for n in range(len(all_sent)):
@@ -8441,8 +8499,6 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
 def populate_sentences(p):
     global result_data
     global excel
-    global mysql
-    global w4
     bool1 = False
     bool2 = False
     bool3 = True
@@ -8452,7 +8508,7 @@ def populate_sentences(p):
     g = 0
 
     if not excel:
-        
+
         for row in w4:
             p += 1
             if row[1] == "" and bool2 == True and not bool3:
@@ -8488,8 +8544,6 @@ def populate_sentences(p):
                     result_data['text_'+str(p-2)+'_1']=len(test_sent)
                 first_sent = True
                 bool2 = False
-    #elif mysql:
-    #    pass - Using Mysql as default
     else:
         for row in w4.rows:
             p += 1
@@ -8544,15 +8598,13 @@ def repeat_relations(str1):
 
 def get_result(post_data,archive_id=None,request=None):
     global ws,w4, result_data,p
-    
-    
-    
     if not excel:
         if archive_id:
             ws = Define3.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
             ws = Define3.objects.filter(archives_id=archive.id)
+
 
     if not excel and not mysql: #rajive fix mysql here
         result_data = dict(post_data.iterlists())
@@ -8571,14 +8623,14 @@ def get_result(post_data,archive_id=None,request=None):
             tw4 = Input.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
-            tw4 = Input.objects.filter(archives_id=archive.id)    
+            tw4 = Input.objects.filter(archives_id=archive.id)
         w4 = []
         for x in tw4:
-            
+
             row = (x.col1,x.col2,x.col3)
             w4.append(row)
         w4 = tuple(w4)
-    print  type(w4[1])
+
     global prop_name,plural_c,anaphora,definite, prop_var, ind_var
     global ant_cond,conditionals,candd,rel_conj,conc,prop_sent,sn,impl,denied
     global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,p,affirmed
@@ -8587,14 +8639,13 @@ def get_result(post_data,archive_id=None,request=None):
     list1 = populate_sentences(p)
     test_sent = list1[0]
     p = list1[1]
-    words = build_dict('hey') # rajiv - TO be changed after clarification Kyle
+    words = build_dict('hey') # rajiv
     st = time.time()
     rep_rel = repeat_relations('hey')
 
     if stp == 0:
         stp = len(test_sent)
 #rajiv - use these numbers for the progress bar
-    
     views.progressbar_send(request,0,100,0)
     for k in range(strt,stp):
         views.progressbar_send(request,strt,stp,k)
@@ -8657,20 +8708,23 @@ def get_result(post_data,archive_id=None,request=None):
     print "final " + str("{0:.2f}".format(g))
     # print "modus ponens" + str(time1/(k+1))
     dummy = print_sent_full(test_sent,p,tot_prop_name,words,yy)
-    views.progressbar_send(request,0,100,0)
+    views.progressbar_send(request,0,100,100)
     if excel:
         pass #Saved at last
     elif mysql:
-        
+
         views.save_result(result_data)
     else:
         return result_data
 if excel:
     dummy = get_result('hey')
     # st = time.time()
-    wb4.save('inference engine.xlsx')
+    wb4.save('../inference engine.xlsx')
     #wb5.save('dictionary.xlsx')
     # en = time.time()
     # print en-st
 elif mysql:
     dummy = get_result('hey')
+
+tot_tim2 = time.time()
+print tot_tim2 - tot_tim
