@@ -28,9 +28,18 @@ def save_result(post_data):
     Output.objects.all().delete()
     Rows =[]
     for idx in xrange(15000-1):
-        R = Output(col1=post_data["text_"+str(idx)+"_1"],
-                col2=post_data["text_"+str(idx)+"_2"],
-                col3=post_data["text_"+str(idx)+"_3"]
+        c1 = post_data.get("text_"+str(idx)+"_1",'')
+        c2 = post_data.get("text_"+str(idx)+"_2",'')
+        c3 = post_data.get("text_"+str(idx)+"_3",'')
+        if type(c1) == type([]):
+            c1 = c1[0]
+        if type(c2) == type([]):
+            c2 = c2[0]
+        if type(c3) == type([]):
+            c3 = c3[0]
+        R = Output(col1=c1,
+                col2=c2,
+                col3=c3
                 )
         Rows.append(R)
     Output.objects.bulk_create(Rows)
@@ -56,7 +65,7 @@ def index(request,archive=None):
     if request.method=='POST':
         post_data=request.POST.copy()
         prove_algorithm = importlib.import_module('.'+archive.algorithm,package='inference2.Proofs')
-        post_data = prove_algorithm.get_result(request.POST.copy(),request)
+        post_data = prove_algorithm.get_result(request.POST.copy(),archive.id,request)
         post_data["type"]="prove"
         result=json.dumps(post_data,cls=DjangoJSONEncoder)
 
@@ -88,7 +97,7 @@ def prove(request,archive=None):
     if request.method=='POST':
         post_data=request.POST.copy()
         prove_algorithm = importlib.import_module('.'+archive.algorithm,package='inference2.Proofs')
-        post_data = prove_algorithm.get_result(request.POST.copy())
+        post_data = prove_algorithm.get_result(request.POST.copy(),archive.id,request)
         result=json.dumps(post_data,cls=DjangoJSONEncoder)
 
     #rows = json.dumps(rows,cls=DjangoJSONEncoder)

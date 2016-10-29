@@ -4,16 +4,28 @@ import timeit
 import copy
 import time
 import operator
-excel = True
-mysql = False
+import sys
+excel = False
+mysql = True
 django = False
-debug = True
+debug = False
 words_used = False
-strt = 89
-stp = 90
+strt = 0
+stp = 4
 
-if not excel:
-    from models import Define3
+if not excel and not mysql:
+    from inference2.models import Define3, Archives, Input
+    from inference2 import views
+if mysql:
+    import os
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    sys.path.append(BASE_DIR)
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "inference_engine2.settings")
+    import django
+    django.setup()
+    from inference2 import views
+    from inference2.models import Define3, Archives, Input
 if debug:
     import easygui
 
@@ -111,18 +123,16 @@ idf_var3 = [unichr(122 - t) + l1 for t in range(25)]
 idf_var4 = [unichr(122 - t) + l2 for t in range(25)]
 idf_var2 = idf_var2 + idf_var3 + idf_var4
 p = 1
+
 subscripts = [l1,l2,l3,l4]
 if excel:
     wb4 = load_workbook('inference engine.xlsx')
     wb5 = load_workbook('dictionary.xlsx')
     w4 = wb4.worksheets[0]
     ws = wb5.worksheets[0]
-elif mysql:
-    #rajiv
-    #load inputs and dictionary here
-    pass
 else:
-    ws = Define3.objects.all()
+    ws = Define3.objects.all() #Kyle
+    w4 = Input.objects.all()
 
 #
 # >> 8835
@@ -3957,7 +3967,7 @@ def syn(tot_sent, all_sent, words,def_atoms):
 def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
 
     global result_data
-    global excel,strt,stp,def_used,words_used
+    global excel, mysql,strt,stp,def_used,words_used
 
     # p = 30
     bb = 8
@@ -4135,6 +4145,7 @@ def build_dict(str1):
     category = ['r','s','t']
     almost_done = False
     i = 0
+    
     for row in ws:
         i += 1
         if i == 90:
@@ -4144,8 +4155,6 @@ def build_dict(str1):
             s = row[0].value
             str1 = row[1].value
             word = row[2].value
-        elif mysql:
-            pass #rajiv
         else:
             s = row.extra
             str1 = row.type
@@ -4176,8 +4185,6 @@ def build_dict(str1):
             if excel:
                 str3 = row[3].value
                 defin = row[4].value
-            elif mysql:
-                pass #rajiv
             else:
                 str3 = row.rel
                 defin = row.definition
@@ -8434,6 +8441,8 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
 def populate_sentences(p):
     global result_data
     global excel
+    global mysql
+    global w4
     bool1 = False
     bool2 = False
     bool3 = True
@@ -8443,7 +8452,7 @@ def populate_sentences(p):
     g = 0
 
     if not excel:
-
+        
         for row in w4:
             p += 1
             if row[1] == "" and bool2 == True and not bool3:
@@ -8479,8 +8488,8 @@ def populate_sentences(p):
                     result_data['text_'+str(p-2)+'_1']=len(test_sent)
                 first_sent = True
                 bool2 = False
-    elif mysql:
-        pass
+    #elif mysql:
+    #    pass - Using Mysql as default
     else:
         for row in w4.rows:
             p += 1
@@ -8533,9 +8542,19 @@ def repeat_relations(str1):
     final_list = [a,b,c,d,e,f]
     return final_list
 
-def get_result(post_data):
-    global w4, result_data,p
-    if not excel: #rajive fix mysql here
+def get_result(post_data,archive_id=None,request=None):
+    global ws,w4, result_data,p
+    
+    
+    
+    if not excel:
+        if archive_id:
+            ws = Define3.objects.filter(archives_id=archive_id)
+        else:
+            archive = Archives.objects.latest('archives_date')
+            ws = Define3.objects.filter(archives_id=archive.id)
+
+    if not excel and not mysql: #rajive fix mysql here
         result_data = dict(post_data.iterlists())
         w4=[]
         index=0
@@ -8547,6 +8566,19 @@ def get_result(post_data):
             index+=1
         w4=tuple(w4)
 
+    if mysql:
+        if archive_id:
+            tw4 = Input.objects.filter(archives_id=archive_id)
+        else:
+            archive = Archives.objects.latest('archives_date')
+            tw4 = Input.objects.filter(archives_id=archive.id)    
+        w4 = []
+        for x in tw4:
+            
+            row = (x.col1,x.col2,x.col3)
+            w4.append(row)
+        w4 = tuple(w4)
+    print  type(w4[1])
     global prop_name,plural_c,anaphora,definite, prop_var, ind_var
     global ant_cond,conditionals,candd,rel_conj,conc,prop_sent,sn,impl,denied
     global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,p,affirmed
@@ -8555,13 +8587,14 @@ def get_result(post_data):
     list1 = populate_sentences(p)
     test_sent = list1[0]
     p = list1[1]
-    words = build_dict('hey') # rajiv
+    words = build_dict('hey') # rajiv - TO be changed after clarification Kyle
     st = time.time()
     rep_rel = repeat_relations('hey')
 
     if stp == 0:
         stp = len(test_sent)
 #rajiv - use these numbers for the progress bar
+    
     views.progressbar_send(request,0,100,0)
     for k in range(strt,stp):
         views.progressbar_send(request,strt,stp,k)
@@ -8625,11 +8658,13 @@ def get_result(post_data):
     # print "modus ponens" + str(time1/(k+1))
     dummy = print_sent_full(test_sent,p,tot_prop_name,words,yy)
     views.progressbar_send(request,0,100,0)
-    if not excel:
-        return result_data
+    if excel:
+        pass #Saved at last
     elif mysql:
-        pass
-
+        
+        views.save_result(result_data)
+    else:
+        return result_data
 if excel:
     dummy = get_result('hey')
     # st = time.time()
@@ -8637,3 +8672,5 @@ if excel:
     #wb5.save('dictionary.xlsx')
     # en = time.time()
     # print en-st
+elif mysql:
+    dummy = get_result('hey')
