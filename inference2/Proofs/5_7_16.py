@@ -12,8 +12,8 @@ excel = False
 mysql = False
 debug = False
 words_used = False
-strt = 4
-stp = 26
+strt = 0
+stp = 5
 
 if not excel and not mysql:
     from inference2.models import Define3, Archives, Input
@@ -2608,7 +2608,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","no","many"+um,"many"+un,\
         "no" + us]
-    if definiendum == "INB":
+    if definiendum == "its"+ua:
         bb = 7
     new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
@@ -2707,6 +2707,11 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         ovar = all_sent[m][j]
         if kind == "proper name possessive":
             match_dv.append(["b",all_sent[m][k]])
+        elif definiendum == "its" + ua or definiendum == "its" + ub: # its is slightly weird because it almost never exists
+        # in the subject position
+            match_dv.append(["c",all_sent[m][14]])
+            all_sent[m][k] = ""
+            match_dv.append(["b",all_sent[m][5]])
         else:
             all_sent[m][k] = ""
             match_dv.append(["b",all_sent[m][j]])
@@ -3871,7 +3876,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
                         return 'n'
             except IndexError:
                 bb = 8
-            easygui.msgbox('you did not categorize the word ' + word)
+            # easygui.msgbox('you did not categorize the word ' + word)
         if word in anaphoric_relations and first:
                 anaphora = []
                 anaphora.append(list1_cat[9])
@@ -4045,7 +4050,7 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
                         break
 
     c = time.time()
-    print c-b
+    # print c-b
 
 
     if stp == 0:
@@ -8598,6 +8603,7 @@ def repeat_relations(str1):
 
 def get_result(post_data,archive_id=None,request=None):
     global ws,w4, result_data,p
+    p = 1
     if not excel:
         if archive_id:
             ws = Define3.objects.filter(archives_id=archive_id)
@@ -8646,9 +8652,11 @@ def get_result(post_data,archive_id=None,request=None):
     if stp == 0:
         stp = len(test_sent)
 #rajiv - use these numbers for the progress bar
-    views.progressbar_send(request,0,100,0)
+    if not excel:
+        views.progressbar_send(request,0,100,0)
     for k in range(strt,stp):
-        views.progressbar_send(request,strt,stp,k)
+        if not excel:
+            views.progressbar_send(request,strt,stp,k)
         if k == 37:
             bb = 7
         st1 = time.time()
@@ -8705,10 +8713,11 @@ def get_result(post_data,archive_id=None,request=None):
         print str(k) + " - " + str("{0:.2f}".format(z))
     en = time.time()
     g = (en-st)/(k+1)
-    print "final " + str("{0:.2f}".format(g))
+    print "average " + str("{0:.2f}".format(g))
     # print "modus ponens" + str(time1/(k+1))
     dummy = print_sent_full(test_sent,p,tot_prop_name,words,yy)
-    views.progressbar_send(request,0,100,100)
+    if not excel:
+        views.progressbar_send(request,0,100,100)
     if excel:
         pass #Saved at last
     elif mysql:
@@ -8719,7 +8728,7 @@ def get_result(post_data,archive_id=None,request=None):
 if excel:
     dummy = get_result('hey')
     # st = time.time()
-    wb4.save('../inference engine.xlsx')
+    #wb4.save('../inference engine.xlsx')
     #wb5.save('dictionary.xlsx')
     # en = time.time()
     # print en-st
@@ -8727,4 +8736,6 @@ elif mysql:
     dummy = get_result('hey')
 
 tot_tim2 = time.time()
-print tot_tim2 - tot_tim
+g = tot_tim2 - tot_tim
+print "total " + str("{0:.1f}".format(g))
+
