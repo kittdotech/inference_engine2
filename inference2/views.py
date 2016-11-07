@@ -52,6 +52,7 @@ def current_archive():
     return archive
 
 def index(request,archive=None):
+    progressbar_send(request, 1, 100, 1)
     url_path=''
     archive_date=''
     if not archive:
@@ -91,6 +92,7 @@ def stream_response_generator(request):
 
 
 def prove(request,archive=None):
+    progressbar_send(request, 1, 100, 1)
     if not archive:
         archive = current_archive()
     result={}
@@ -149,14 +151,17 @@ def getdict(request,archive=None):
     return response
 
 def progress(request):
-       
-    return HttpResponse(json.dumps({"K":request.session['idx']}), content_type="application/json")
+    contxt = {"K":request.session['idx']}
+    if request.session.get('status',0) == 2:
+        progressbar_send(request, 1, 100, 1)
+    return HttpResponse(json.dumps(contxt), content_type="application/json")
 
-def progressbar_send(request,strt,stp,k):
+def progressbar_send(request,strt,stp,k,status=0):
     if request is not None:
             request.session.modified = True
             request.session['strt'] = strt
             request.session['stp'] = stp
             request.session['idx'] = [strt,stp,k]
+            request.session['status'] = status
             request.session.modified = True
             request.session.save()

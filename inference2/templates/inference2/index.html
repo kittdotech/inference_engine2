@@ -215,10 +215,10 @@ textarea {
                data:{csrfmiddlewaretoken:'{{csrf_token}}' },
                success: function (result) {
                 if ($('#progressbar').length) {
-    console.log("exist");
+    //console.log("exist");
 }
 var v = $("#progressbar").progressbar("value");
-
+//console.log(v)
 if (v < result["K"][2])
 {
 $( function() {
@@ -239,7 +239,7 @@ $( function() {
   })
 }
                 //$('.pie_progress').asPieProgress('go',((result["K"][2] - result["K"][0]) * 100) / (result["K"][1] - result["K"][0]));
-                console.log(((result["K"][2] - result["K"][0]) * 100) / (result["K"][1] - result["K"][0]));
+                //console.log(((result["K"][2] - result["K"][0]) * 100) / (result["K"][1] - result["K"][0]));
                },
                error: function (err) {
 

@@ -13,7 +13,7 @@ mysql = False
 debug = False
 words_used = False
 strt = 0
-stp = 5
+stp = 79
 
 if not excel and not mysql:
     from inference2.models import Define3, Archives, Input
@@ -8653,10 +8653,10 @@ def get_result(post_data,archive_id=None,request=None):
         stp = len(test_sent)
 #rajiv - use these numbers for the progress bar
     if not excel:
-        views.progressbar_send(request,0,100,0)
+        views.progressbar_send(request,0,100,0,1)
     for k in range(strt,stp):
         if not excel:
-            views.progressbar_send(request,strt,stp,k)
+            views.progressbar_send(request,strt,stp,k,1)
         if k == 37:
             bb = 7
         st1 = time.time()
@@ -8717,7 +8717,7 @@ def get_result(post_data,archive_id=None,request=None):
     # print "modus ponens" + str(time1/(k+1))
     dummy = print_sent_full(test_sent,p,tot_prop_name,words,yy)
     if not excel:
-        views.progressbar_send(request,0,100,100)
+        views.progressbar_send(request,0,100,100,2)
     if excel:
         pass #Saved at last
     elif mysql:
