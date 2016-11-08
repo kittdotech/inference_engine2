@@ -13,7 +13,7 @@ mysql = False
 debug = False
 words_used = False
 strt = 0
-stp = 79
+stp = 0
 
 if not excel and not mysql:
     from inference2.models import Define3, Archives, Input
