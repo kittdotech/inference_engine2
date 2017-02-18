@@ -2,24 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/5_9_16.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/9_6_16.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/9_6_16.py.bak" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/inference engine.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/new_prove.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/old_prove" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/proof.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/proof2.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/prove3.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/dictionary.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/dictionary.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/dictionary_last_perfect.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/~$dictionary.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/~$inference engine.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference_engine2/prove.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/inference engine.xlsx" afterPath="$PROJECT_DIR$/inference2/inference engine.xlsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,7 +33,7 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.222222">
+            <state vertical-scroll-proportion="0.0">
               <caret line="679" column="0" selection-start-line="679" selection-start-column="0" selection-end-line="679" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
@@ -62,7 +45,7 @@
       <file leaf-file-name="temp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="112.55556">
+            <state vertical-scroll-proportion="0.0">
               <caret line="722" column="8" selection-start-line="722" selection-start-column="0" selection-end-line="722" selection-end-column="8" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
@@ -84,8 +67,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="33.552773">
-              <caret line="2298" column="17" selection-start-line="2298" selection-start-column="17" selection-end-line="2298" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.32692307">
+              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -188,8 +171,8 @@
         <option value="$PROJECT_DIR$/inference_engine2/prove.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/9_6_16.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
       </list>
     </option>
   </component>
@@ -200,7 +183,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="721" />
+    <option name="x" value="673" />
     <option name="y" value="23" />
     <option name="width" value="703" />
     <option name="height" value="877" />
@@ -450,7 +433,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="721" y="23" width="703" height="877" extended-state="0" />
+    <frame x="673" y="23" width="703" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2877292" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -458,11 +441,9 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24009901" sideWeight="0.51778096" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32907802" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32622334" sideWeight="0.49721116" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37768924" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29526463" sideWeight="0.48787448" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24009901" sideWeight="0.48221907" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -470,11 +451,13 @@
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="839" y="123" width="501" height="673" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32622334" sideWeight="0.49721116" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Atlassian " active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24009901" sideWeight="0.48221907" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -565,6 +548,48 @@
     </option>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Python/2.7/site-packages/django/conf/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/zipfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1023" column="0" selection-start-line="1023" selection-start-column="0" selection-end-line="1023" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference_engine2/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference_engine2/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -868,7 +893,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="112.55556">
+        <state vertical-scroll-proportion="0.0">
           <caret line="722" column="8" selection-start-line="722" selection-start-column="0" selection-end-line="722" selection-end-column="8" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
@@ -878,7 +903,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.222222">
+        <state vertical-scroll-proportion="0.0">
           <caret line="679" column="0" selection-start-line="679" selection-start-column="0" selection-end-line="679" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
@@ -888,8 +913,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="33.552773">
-          <caret line="2298" column="17" selection-start-line="2298" selection-start-column="17" selection-end-line="2298" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.32692307">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>

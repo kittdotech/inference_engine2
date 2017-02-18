@@ -14,6 +14,7 @@ debug = False
 words_used = False
 strt = 0
 stp = 0
+print 'hey again'
 
 
 ######################################
