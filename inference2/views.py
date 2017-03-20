@@ -19,7 +19,7 @@ from inference2.models import Input
 
 from models import Define3, Archives
 
-from Proofs import new_prove
+#from Proofs import 5_17_16.py
 
 
 
