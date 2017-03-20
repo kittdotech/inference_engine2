@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/~$dictionary4.xlsx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/~$inference engine2.xlsx" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/dictionary4.xlsx" afterPath="$PROJECT_DIR$/inference2/dictionary4.xlsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/inference engine.xlsx" afterPath="$PROJECT_DIR$/inference2/inference engine.xlsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,14 +37,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="679" column="0" selection-start-line="679" selection-start-column="0" selection-end-line="679" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.24202128">
+              <caret line="8750" column="39" selection-start-line="8750" selection-start-column="39" selection-end-line="8750" selection-end-column="39" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wsgi.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inference_engine2/wsgi.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-5.5555553">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -46,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="722" column="8" selection-start-line="722" selection-start-column="0" selection-end-line="722" selection-end-column="8" />
+              <caret line="9149" column="0" selection-start-line="9149" selection-start-column="0" selection-end-line="9149" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -54,44 +71,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pydevd.py" pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1030" column="0" selection-start-line="1030" selection-start-column="0" selection-end-line="1030" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="prove.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.32692307">
-              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+            <state vertical-scroll-proportion="-4.814815">
+              <caret line="917" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="8786" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file:///Library/Python/2.7/site-packages/django/conf/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="zipfile.py" pinned="false" current-in-tab="false">
-        <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/zipfile.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1023" column="0" selection-start-line="1023" selection-start-column="0" selection-end-line="1023" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -99,8 +86,18 @@
       <file leaf-file-name="actions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/actions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-28.88889">
               <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inference_engine2/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-14.444445">
+              <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -109,7 +106,7 @@
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference_engine2/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-6.6666665">
               <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
               <folding />
             </state>
@@ -170,9 +167,9 @@
         <option value="$PROJECT_DIR$/inference2/5.7.16.py" />
         <option value="$PROJECT_DIR$/inference_engine2/prove.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/9_6_16.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
       </list>
     </option>
   </component>
@@ -183,10 +180,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="673" />
+    <option name="x" value="205" />
     <option name="y" value="23" />
-    <option name="width" value="703" />
-    <option name="height" value="877" />
+    <option name="width" value="1159" />
+    <option name="height" value="876" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -199,7 +196,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -212,10 +209,47 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inference_engine2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inference_engine2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inference_engine2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inference_engine2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inference_engine2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inference_engine2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -253,7 +287,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="inference_engine2" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -433,10 +467,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="673" y="23" width="703" height="877" extended-state="0" />
+    <frame x="205" y="23" width="1159" height="876" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2877292" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17428818" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24009901" sideWeight="0.51778096" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -457,7 +491,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24009901" sideWeight="0.48221907" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24009901" sideWeight="0.48221907" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -520,7 +554,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="4937" />
+      <option name="time" value="4938" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -548,16 +582,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/2.7/site-packages/django/conf/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -714,13 +738,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference_engine2/wsgi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -779,13 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference_engine2/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/2.7/site-packages/openpyxl/reader/excel.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -836,26 +846,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/actions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/old_prove2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="824" column="0" selection-start-line="824" selection-start-column="0" selection-end-line="824" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inference_engine2/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -875,14 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1030" column="0" selection-start-line="1030" selection-start-column="0" selection-end-line="1030" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/zipfile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -891,20 +877,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="722" column="8" selection-start-line="722" selection-start-column="0" selection-end-line="722" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
+          <caret line="1801" column="0" selection-start-line="1801" selection-start-column="0" selection-end-line="1801" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
+    <entry file="file://$PROJECT_DIR$/inference2/actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-28.88889">
+          <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference_engine2/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.444445">
+          <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference_engine2/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.6666665">
+          <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference_engine2/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="679" column="0" selection-start-line="679" selection-start-column="0" selection-end-line="679" selection-end-column="0" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference_engine2/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.5555553">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9149" column="0" selection-start-line="9149" selection-start-column="0" selection-end-line="9149" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
@@ -913,8 +937,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.32692307">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state vertical-scroll-proportion="-4.814815">
+          <caret line="917" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="8786" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24202128">
+          <caret line="8750" column="39" selection-start-line="8750" selection-start-column="39" selection-end-line="8750" selection-end-column="39" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>

@@ -14,7 +14,7 @@ debug = False
 words_used = False
 strt = 0
 stp = 0
-print 'hey again'
+
 
 
 ######################################
@@ -135,8 +135,8 @@ p = 1
 subscripts = [l1,l2,l3,l4]
 
 if excel:
-    wb4 = load_workbook('../inference engine1.xlsx')
-    wb5 = load_workbook('../dictionary new 2.xlsx')
+    wb4 = load_workbook('../inference engine.xlsx')
+    wb5 = load_workbook('../dictionary last perfect.xlsx')
     w4 = wb4.worksheets[0]
     ws = wb5.worksheets[0]
 else:
@@ -855,6 +855,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
 
                 #this is for those sentences whose noun was once part of a relative pronoun
                         if i == all_sent[m][45]:
+                            print 'noun once part of relative pronoun'
                             str3 = findinlist(all_sent[m][i],tagged_nouns2,1,0)
                             if str3 == None:
                                 all_sent.append(all_sent[m])
@@ -1939,8 +1940,10 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             list1[14] = all_sent[m][i]
                             all_sent[m][i] = None
                             if kind == 0:
+
                                 dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
                             else:
+
                                 g += 1
                                 list2.append(list1)
                                 all_sent.append(list1)
@@ -3106,8 +3109,8 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                         elif temp_str == str3:
                             already_checked2.append([i,j])
                         elif def_sent[i][j] == rr_var:
-                            print 'rr var used'
-                            print def_sent[i][j]
+
+
                             dummy = abb_change2(match_dv,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename)
                         else:
                             # here we check to see if it has a plural form
@@ -8770,7 +8773,7 @@ def get_result(post_data,archive_id=None,request=None):
 if excel:
     dummy = get_result('hey')
     # st = time.time()
-    wb4.save('../inference engine1.xlsx')
+    #wb4.save('../inference engine.xlsx')
     # wb5.save('dictionary new 2.xlsx')
     # en = time.time()
     # print en-st
