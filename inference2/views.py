@@ -14,7 +14,7 @@ from django.db import transaction
 from models import Output
 import os
 import importlib
-from inference2.Proofs import prove3
+#from inference2.Proofs #import 5.17.16.py
 from inference2.models import Input
 
 from models import Define3, Archives
