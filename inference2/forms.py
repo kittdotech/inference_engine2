@@ -71,7 +71,7 @@ class ImportCSVForm(forms.Form):
                 six.advance_iterator(reader_iter)
             if self.cleaned_data['archives']:
                 archives_id = self.cleaned_data['archives'].id
-            old_archives = self.importer_class.Meta.model.objects.filter(archives_id=archives_id)
+            old_archives = self.importer_class.Meta.model.objects.filter(id=archives_id)
             if old_archives:
                 if self.cleaned_data['archives_check']:
                     self.append_import_error(_("Defination already exist for this archives."))

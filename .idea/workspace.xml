@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/views.py" afterPath="$PROJECT_DIR$/inference2/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/forms.py" afterPath="$PROJECT_DIR$/inference2/forms.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,14 +42,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43882978">
+            <state vertical-scroll-proportion="-12.222222">
               <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/inference2/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5984042">
+              <caret line="73" column="73" selection-start-line="73" selection-start-column="73" selection-end-line="73" selection-end-column="73" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -158,7 +168,6 @@
         <option value="$PROJECT_DIR$/inference2/prove3.py" />
         <option value="$PROJECT_DIR$/inference2/old_prove" />
         <option value="$PROJECT_DIR$/inference2/new_prove.py" />
-        <option value="$PROJECT_DIR$/inference2/forms.py" />
         <option value="$PROJECT_DIR$/inference2/templates/inference2/archives.html" />
         <option value="$PROJECT_DIR$/inference2/admin.py" />
         <option value="$PROJECT_DIR$/inference_engine2/urls.py" />
@@ -175,6 +184,7 @@
         <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
         <option value="$PROJECT_DIR$/inference2/views.py" />
+        <option value="$PROJECT_DIR$/inference2/forms.py" />
       </list>
     </option>
   </component>
@@ -254,7 +264,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/inference2/views.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/inference2/forms.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -786,14 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/admincsv.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -955,11 +957,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43882978">
+        <state vertical-scroll-proportion="-12.222222">
           <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5984042">
+          <caret line="73" column="73" selection-start-line="73" selection-start-column="73" selection-end-line="73" selection-end-column="73" />
+          <folding />
         </state>
       </provider>
     </entry>
