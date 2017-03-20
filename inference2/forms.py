@@ -73,11 +73,11 @@ class ImportCSVForm(forms.Form):
                 archives_id = self.cleaned_data['archives'].id
             old_archives = self.importer_class.Meta.model.objects.filter(id=archives_id)
             if old_archives:
-                if self.cleaned_data['archives_check']:
-                    self.append_import_error(_("Defination already exist for this archives."))
-                    raise CSVImportError()
-                else:
-                    old_archives.delete()
+                # if self.cleaned_data['archives_check']:
+                #     self.append_import_error(_("Defination already exist for this archives."))
+                #     raise CSVImportError()
+                # else:
+                old_archives.delete()
             self.process_csv(reader_iter,archives_id)
             if not self.is_valid():
                 raise CSVImportError()  # Abort the transaction
