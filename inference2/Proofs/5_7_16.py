@@ -8,8 +8,8 @@ import sys
 # from django_tools.middlewares import ThreadLocal
 # from inference2 import views
 tot_tim = time.time()
-excel = True
-mysql = False
+excel = False
+mysql = True
 debug = False
 words_used = False
 strt = 0
