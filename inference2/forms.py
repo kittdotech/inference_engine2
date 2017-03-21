@@ -27,6 +27,7 @@ class ImportCSVForm(forms.Form):
     archives = forms.ModelChoiceField(
         queryset=Archives.objects.all(),
         label=_('Select for Archives'),
+        required=False,
         help_text=_('Create Archives if it is not here.'),
     )
     archives_check = forms.BooleanField(
