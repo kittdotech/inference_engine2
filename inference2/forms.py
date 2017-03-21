@@ -10,6 +10,7 @@ from inference2.models import Archives, Define3
 
 from django.forms import ModelChoiceField
 
+
 class CSVImportError(Exception):
     pass
 
@@ -24,10 +25,10 @@ class ImportCSVForm(forms.Form):
         required=False,
     )
     archives = forms.ModelChoiceField(
-        queryset = Archives.objects.all(),
+        queryset=Archives.objects.all(),
         label=_('Select for Archives'),
         help_text=_('Create Archives if it is not here.'),
-        )
+    )
     archives_check = forms.BooleanField(
         label=_('Check for Old Archives'),
         help_text=_('UnCheck this if your Definition has to replace '
@@ -40,7 +41,8 @@ class ImportCSVForm(forms.Form):
         self.importer_class = kwargs.pop('importer_class')
         self.dialect = kwargs.pop('dialect')
         super(ImportCSVForm, self).__init__(*args, **kwargs)
-        self.fields['csv_file'].help_text = "Expected fields: {}".format(self.expected_fields)
+        self.fields['csv_file'].help_text = "Expected fields: {}".format(
+            self.expected_fields)
 
     def clean_csv_file(self):
         if six.PY3:
@@ -66,31 +68,37 @@ class ImportCSVForm(forms.Form):
             )
 
             reader_iter = enumerate(reader, 1)
-            archives_id = -1 #No Archives
+            archives_id = -1  # No Archives
             if self.cleaned_data['has_headers']:
                 six.advance_iterator(reader_iter)
             if self.cleaned_data['archives']:
                 archives_id = self.cleaned_data['archives'].id
-            old_archives = self.importer_class.Meta.model.objects.filter(id=archives_id)
+            old_archives = self.importer_class.Meta.model.objects.filter(
+                id=archives_id)
             if old_archives:
                 # if self.cleaned_data['archives_check']:
                 #     self.append_import_error(_("Defination already exist for this archives."))
                 #     raise CSVImportError()
                 # else:
                 old_archives.delete()
-            self.process_csv(reader_iter,archives_id)
+            self.process_csv(reader_iter, archives_id)
             if not self.is_valid():
                 raise CSVImportError()  # Abort the transaction
         except csv.Error:
             self.append_import_error(_("Bad CSV format"))
             raise CSVImportError()
 
-    def process_csv(self, reader,archives_id=-1):
+    def process_csv(self, reader, archives_id=-1):
+        list_obj = []
         for i, row in reader:
-            if archives_id!=-1:
+            if archives_id != -1:
                 row['archives'] = archives_id
-            self.process_row(i, row)
-
+            row_result = self.process_row(i, row)
+            if row_result:
+                list_obj.append(row_result)
+        if list_obj:
+            list_obj[0].__class__.objects.bulk_create(
+                list_obj, batch_size=500)
 
     def append_import_error(self, error, rownumber=None, column_name=None):
         if rownumber is not None:
@@ -117,7 +125,7 @@ class ImportCSVForm(forms.Form):
     def process_row(self, i, row):
         importer = self.importer_class(data=row)
         if importer.is_valid():
-            importer.save()
+            return importer.save(commit=False)
         else:
             for error in importer.non_field_errors():
                 self.append_import_error(rownumber=i, error=error)
@@ -125,3 +133,4 @@ class ImportCSVForm(forms.Form):
                 for error in field.errors:
                     self.append_import_error(rownumber=i, column_name=field.label,
                                              error=error)
+            return None
