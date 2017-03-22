@@ -92,7 +92,8 @@ class ImportCSVForm(forms.Form):
     def process_csv(self, reader, archives_id=-1):
         list_obj = []
         for i, row in reader:
-            if not row:
+            if not row.get('definition'):
+                #SKIP empty rows
                 continue
             if archives_id != -1:
                 row['archives'] = archives_id
