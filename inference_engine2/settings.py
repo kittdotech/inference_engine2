@@ -35,7 +35,6 @@ ALLOWED_HOSTS = []
 }"""
 
 
-
 # Application definition
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 #SESSION_FILE_PATH = BASE_DIR
@@ -85,27 +84,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'inference_engine2.wsgi.application'
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 5 * 60 #
+SESSION_COOKIE_AGE = 5 * 60
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-CONFIG_TYPE=os.getenv('CLEARDB_DATABASE_URL','')
+CONFIG_TYPE = 1  # os.getenv('CLEARDB_DATABASE_URL','')
 if CONFIG_TYPE:
-
     DICT = {
-        'ENGINE':'django.db.backends.mysql',
-        'NAME': 'heroku_e080b104b4741bc',
-        'HOST': 'us-cdbr-iron-east-03.cleardb.net',
-        'USER': 'bddaf22a8f080b',
-        'PASSWORD': 'c4c504bd',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'inference_engine',
+        'HOST': '34.208.135.45',
+        'USER': 'root',
+        'PASSWORD': 'password',
 
     }
 if not CONFIG_TYPE:
-    DEVELOP = os.getenv('DEVELOP','')
+    DEVELOP = os.getenv('DEVELOP', '')
     DB_PASSWORD = 'deductive'
     if DEVELOP:
         DB_PASSWORD = 'root'
     DICT = {
-        'ENGINE':'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'inference_engine',
         'HOST': 'localhost',
         'USER': 'root',
@@ -134,8 +132,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 # change file name here
 MANUAL_FILE = "IE_Manual.docx"
-MANUAL_PATH =  os.path.join(BASE_DIR,MANUAL_FILE)
+MANUAL_PATH = os.path.join(BASE_DIR, MANUAL_FILE)
 
-DICT_DIRS = os.path.join(BASE_DIR,"dicts")
+DICT_DIRS = os.path.join(BASE_DIR, "dicts")
 
 STATIC_URL = '/static/'

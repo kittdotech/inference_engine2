@@ -3911,7 +3911,8 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             except IndexError:
                 bb = 8
             print "you misspelled " + word
-            sys.exit()
+            if excel:
+                sys.exit()
             # easygui.msgbox('you did not categorize the word ' + word)
         if word in anaphoric_relations and first:
                 anaphora = []

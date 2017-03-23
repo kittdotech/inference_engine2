@@ -49,7 +49,9 @@ class MyDefineForm(ModelForm):
         model = Define3
         fields = ('id','extra','type', 'word', 'rel','definition', 'archives')
 
-
+def delete_everything(modeladmin, request, queryset):
+    Define3.objects.all().delete()
+    
 class MyDefine(ImportCSVModelAdmin):
     importer_class = MyDefineImporter
     form = MyDefineForm
@@ -57,6 +59,8 @@ class MyDefine(ImportCSVModelAdmin):
     empty_value_display = ""
     ordering = ("id",)
     list_per_page = 1000
+    actions = [delete_everything]
+
 
 class MyInputImporter(ModelForm):
 
