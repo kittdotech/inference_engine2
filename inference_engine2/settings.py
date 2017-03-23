@@ -90,11 +90,11 @@ SESSION_COOKIE_AGE = 5 * 60
 CONFIG_TYPE = 1  # os.getenv('CLEARDB_DATABASE_URL','')
 if CONFIG_TYPE:
     DICT = {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inferenceengine',
-        'HOST': 'inferenceengine.cb7mntlm87jh.us-east-2.rds.amazonaws.com',
-        'USER': 'inferenceengine',
-        'PASSWORD': 'inferenceengine',
+        'ENGINE':'django.db.backends.mysql',
+         'NAME': 'heroku_e080b104b4741bc',
+         'HOST': 'us-cdbr-iron-east-03.cleardb.net',
+         'USER': 'bddaf22a8f080b',
+         'PASSWORD': 'c4c504bd',
 
     }
 if not CONFIG_TYPE:
@@ -104,7 +104,7 @@ if not CONFIG_TYPE:
         DB_PASSWORD = 'root'
     DICT = {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inferenceengine',
+        'NAME': 'inference_engine',
         'HOST': 'localhost',
         'USER': 'root',
         'PASSWORD': DB_PASSWORD,
