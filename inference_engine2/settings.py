@@ -91,10 +91,10 @@ CONFIG_TYPE = 1  # os.getenv('CLEARDB_DATABASE_URL','')
 if CONFIG_TYPE:
     DICT = {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inference_engine',
-        'HOST': '34.208.135.45',
-        'USER': 'root',
-        'PASSWORD': 'password',
+        'NAME': 'inferenceengine',
+        'HOST': 'inferenceengine.cb7mntlm87jh.us-east-2.rds.amazonaws.com',
+        'USER': 'inferenceengine',
+        'PASSWORD': 'inferenceengine',
 
     }
 if not CONFIG_TYPE:
@@ -104,7 +104,7 @@ if not CONFIG_TYPE:
         DB_PASSWORD = 'root'
     DICT = {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'inference_engine',
+        'NAME': 'inferenceengine',
         'HOST': 'localhost',
         'USER': 'root',
         'PASSWORD': DB_PASSWORD,

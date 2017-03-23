@@ -4979,6 +4979,7 @@ def simple_id(tot_sent,all_sent,identities):
     num = [5,14,18,22]
     dummy = remove_duplicates2d(identities,0,1)
     for i in range(len(identities)):
+        #TODO: identities[i][0][0] is none and identities[i][0][1] is none sometimes
         str1 = "(" + identities[i][0][0] + " = " + identities[i][0][1] + ")"
         for j in range(len(tot_sent)-1,0,-1):
             if str1 in tot_sent[j][1]:
@@ -8474,6 +8475,7 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
                 else:
                     ng = negat[i]
                 list2 = mainconn(str2)
+                #TODO: list2[0] == idisj or list2[0] == xorr a value is none some times
                 if list2[0] == idisj or list2[0] == xorr:
                     if oc(str2):
                         candd.append([nstring, str2,ng])
