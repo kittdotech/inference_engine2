@@ -27,7 +27,6 @@ from models import Define3, Archives
 def save_result(post_data):
     Output.objects.all().delete()
     Rows =[]
-    print post_data
     for idx in xrange(15000-1):
         c1 = post_data.get("text_"+str(idx)+"_1",'')
         c2 = post_data.get("text_"+str(idx)+"_2",'')
@@ -70,8 +69,6 @@ def index(request,archive=None):
         post_data = prove_algorithm.get_result(request.POST.copy(),archive.id,request)
         if post_data:
             post_data["type"]="prove"
-            # import pdb
-            # pdb.set_trace()
             result=json.dumps(post_data,cls=DjangoJSONEncoder)
 
             save_result(post_data)

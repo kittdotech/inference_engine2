@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.core import serializers
 from django.http import HttpResponse
-
+from django.db import transaction
 from .utils import json_to_csv
 
 
@@ -35,6 +35,7 @@ def export(queryset, format):
     return response
 
 
+@transaction.atomic
 def changesymbol(queryset, mode):
     import json
     # data = serialize_queryset(queryset, "json")
@@ -108,6 +109,7 @@ def changesymbol(queryset, mode):
 
     if modelname == 'define3':
         if mode == 'TtoS':
+
             for x in queryset:
                 original_text_definition = x.definition
                 original_text_word = x.word
@@ -125,6 +127,7 @@ def changesymbol(queryset, mode):
                 x.definition = original_text_definition
                 x.word = original_text_word
                 x.rel = original_text_rel
+
                 x.save()
         if mode == 'StoT':
             for x in queryset:

@@ -58,7 +58,7 @@ class MyDefine(ImportCSVModelAdmin):
     list_display = ('id','extra','type','word', 'rel','definition')
     empty_value_display = ""
     ordering = ("id",)
-    list_per_page = 1000
+    list_per_page = 100
     actions = [delete_everything]
 
 
