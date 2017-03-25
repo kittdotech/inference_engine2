@@ -70,7 +70,8 @@ class ImportCSVModelAdmin(admin.ModelAdmin):
     def change_list_template(self):
         opts = self.model._meta
         return [
-            'admin/%s/%s/change_list_csv.html' % (opts.app_label, opts.object_name.lower()),
+            'admin/%s/%s/change_list_csv.html' % (
+                opts.app_label, opts.object_name.lower()),
             'admin/%s/change_list_csv.html' % opts.app_label,
             'admin/change_list_csv.html',
         ]

@@ -30,7 +30,8 @@ def export(queryset, format):
         data = serialize_queryset(queryset, format)
 
     response = HttpResponse(data, content_type="application/x-download")
-    response["Content-Disposition"] = "attachment;filename=export.{extention}".format(extention=format.lower())
+    response["Content-Disposition"] = "attachment;filename=export.{extention}".format(
+        extention=format.lower())
 
     return response
 
@@ -41,7 +42,7 @@ def changesymbol(queryset, mode):
     # data = serialize_queryset(queryset, "json")
     # data = json.loads(data)
     # for item in data:
-    #	print
+    #   print
     symbol_map = (
         ('>>', unichr(8835)),
         ('ta^', unichr(8868)),
@@ -84,16 +85,17 @@ def changesymbol(queryset, mode):
         ('-s', u"\u02e2"),
         ('-h', u"\u02b0"),
         ('zzz', u"\u2260"),
-        )
-    modelname =  queryset.model._meta.model_name
+    )
+    modelname = queryset.model._meta.model_name
     if modelname == 'input':
         if mode == 'TtoS':
             for x in queryset:
                 original_text_col2 = x.col2
                 if original_text_col2:
-                    for (T,S) in symbol_map:
+                    for (T, S) in symbol_map:
                         if T in original_text_col2:
-                            original_text_col2 = original_text_col2.replace(T, S)
+                            original_text_col2 = original_text_col2.replace(
+                                T, S)
                 x.col2 = original_text_col2
                 x.save()
 
@@ -101,9 +103,10 @@ def changesymbol(queryset, mode):
             for x in queryset:
                 original_text_col2 = x.col2
                 if original_text_col2:
-                    for (T,S) in symbol_map:
+                    for (T, S) in symbol_map:
                         if S in original_text_col2:
-                            original_text_col2 = original_text_col2.replace(S, T)
+                            original_text_col2 = original_text_col2.replace(
+                                S, T)
                 x.col2 = original_text_col2
                 x.save()
 
@@ -115,14 +118,15 @@ def changesymbol(queryset, mode):
                 original_text_word = x.word
                 original_text_rel = x.rel
                 if original_text_definition or original_text_word or original_text_rel:
-                    for (T,S) in symbol_map:
+                    for (T, S) in symbol_map:
                         if T in original_text_definition:
-                            original_text_definition = original_text_definition.replace(T, S)
+                            original_text_definition = original_text_definition.replace(
+                                T, S)
                         if T in original_text_word:
-                            original_text_word = original_text_word.replace(T, S)
+                            original_text_word = original_text_word.replace(
+                                T, S)
                         if T in original_text_rel:
                             original_text_rel = original_text_rel.replace(T, S)
-
 
                 x.definition = original_text_definition
                 x.word = original_text_word
@@ -136,11 +140,13 @@ def changesymbol(queryset, mode):
                 original_text_word = x.word
                 original_text_rel = x.rel
                 if original_text_definition or original_text_word or original_text_rel:
-                    for (T,S) in symbol_map:
+                    for (T, S) in symbol_map:
                         if S in original_text_definition:
-                            original_text_definition = original_text_definition.replace(S, T)
+                            original_text_definition = original_text_definition.replace(
+                                S, T)
                         if S in original_text_word:
-                            original_text_word = original_text_word.replace(S, T)
+                            original_text_word = original_text_word.replace(
+                                S, T)
                         if S in original_text_rel:
                             original_text_rel = original_text_rel.replace(S, T)
                 x.definition = original_text_definition

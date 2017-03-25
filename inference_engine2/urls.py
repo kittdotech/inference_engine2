@@ -20,14 +20,16 @@ from inference2 import views
 
 urlpatterns = [
 
-    url(r'^$', views.index,name='index'),
-    url(r'^dictionary$', views.dictionary,name='result'),
-    url(r'^prove$', views.prove,name='prove'),
-    url(r'^progress$', views.progress,name='progress'),
-    url(r'^archives$', views.archives,name='archives'),
-    url(r'^archives/(?P<num>[0-9]+)$', views.assign_archives,name='assign_archives'),
-    url(r'^archives/(?P<num>[0-9]+)/(?P<type>[a-z]+)$', views.assign_archives,name='assign_archives_type'),
+    url(r'^$', views.index, name='index'),
+    url(r'^dictionary$', views.dictionary, name='result'),
+    url(r'^prove$', views.prove, name='prove'),
+    url(r'^progress$', views.progress, name='progress'),
+    url(r'^archives$', views.archives, name='archives'),
+    url(r'^archives/(?P<num>[0-9]+)$',
+        views.assign_archives, name='assign_archives'),
+    url(r'^archives/(?P<num>[0-9]+)/(?P<type>[a-z]+)$',
+        views.assign_archives, name='assign_archives_type'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^getdict$', views.getdict,name='getdict'),
+    url(r'^getdict$', views.getdict, name='getdict'),
 
 ]
