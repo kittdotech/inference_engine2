@@ -62,6 +62,8 @@ def index(request, archive=None):
         archive_date = archive.archives_date
     input = Input.objects.filter(archives_id=archive.id)
     result = {}
+    output = []
+    output = Output.objects.all()
     if request.method == 'POST':
         post_data = request.POST.copy()
         prove_algorithm = importlib.import_module(
@@ -73,11 +75,14 @@ def index(request, archive=None):
             result = json.dumps(post_data, cls=DjangoJSONEncoder)
 
             save_result(post_data)
+        output = Output.objects.all()
 
     #rows = json.dumps(rows,cls=DjangoJSONEncoder)
 
     template_args = {'result': result, 'input': input,
-                     'url_path': url_path, 'archive_date': archive_date}
+                     'url_path': url_path, 'archive_date': archive_date,
+                     'output': output
+                     }
     return render(request, "inference2/index.html", template_args)
 
 

@@ -252,8 +252,8 @@ $( function() {
             
           ajaxindicatorstart();
           $("#progressbar").progressbar();
-          setInterval(progress, 1500);
-          //event.preventDefault();
+          setInterval(progress, 500);
+          // event.preventDefault();
           
           /*
           
@@ -326,6 +326,8 @@ jsonStream.onmessage = function (e) {
     {% for row in input %}
                 id_str = "text_" + String({{forloop.counter0}}) + "_1";
                 document.getElementById(id_str).value = "{{ row.col1}}";
+                href = "table_output_{{row.col1}}_3";
+                $("#a_text_" + String({{forloop.counter0}}) + "_1").attr('href','#table_output_{{row.col1}}_3');
 
                 //$("#" + id_str).attr("disabled", true);
                 $("#" + id_str).attr('readonly', true);
@@ -419,14 +421,21 @@ jsonStream.onmessage = function (e) {
 <col width="70%">
 <col width="20%">
 
-{% for i in 5000|range %}
+{% for i in input|length|range %}
     <tr>
-    <td id="table_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_1" id="text_{{i}}_1"></textarea></td>
+    <td id="table_{{i}}_1"><a id="a_text_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_1" id="text_{{i}}_1"></textarea></a></td>
     <td id="table_{{i}}_2"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_2" id="text_{{i}}_2"></textarea></td>
     <td id="table_{{i}}_3"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_3" id="text_{{i}}_3"></textarea></td>
     </tr>
 {% endfor %}
 
+{% for i in output%}
+    <tr>
+    <td id="table_output_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</textarea></td>
+    <td id="table_output_{{i}}_2"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</textarea></td>
+    <td id="table_output_{{i}}_3"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</textarea></td>
+    </tr>
+{% endfor %}
 </table>
 
 </form>
