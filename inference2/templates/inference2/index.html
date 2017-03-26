@@ -321,33 +321,36 @@ jsonStream.onmessage = function (e) {
 
 **/
 //Making Input
-
+{% autoescape off %}
 {% if input %}
     {% for row in input %}
-                id_str = "text_" + String({{forloop.counter0}}) + "_1";
-                document.getElementById(id_str).value = "{{ row.col1}}";
-                href = "table_output_{{row.col1}}_3";
-                $("#a_text_" + String({{forloop.counter0}}) + "_1").attr('href','#table_output_{{row.col1}}_3');
-
-                //$("#" + id_str).attr("disabled", true);
-                $("#" + id_str).attr('readonly', true);
-                $("#" + id_str).css('background-color', '#DCDCDC');
+               //  id_str = "text_" + String({{forloop.counter0}}) + "_1";
+               //  document.getElementById(id_str).value = "{{ row.col1}}";
 
 
-               id_str = "text_" + String({{ forloop.counter0 }}) + "_2";
-               document.getElementById(id_str).value = "{{row.col2}}";
-               //$("#" + id_str).attr("disabled", true);
-                $("#" + id_str).attr('readonly', true);
-                $("#" + id_str).css('background-color', '#DCDCDC');
+               //  href = "table_output_{{row.col1}}_3";
+               //  $("#a_text_" + String({{forloop.counter0}}) + "_1").attr('href','#table_output_{{row.col1}}_3');
 
-               id_str = "text_" + String({{ forloop.counter0 }}) + "_3";
-               document.getElementById(id_str).value = "{{  row.col3}}";
-               //$("#" + id_str).attr("disabled", true);
-                $("#" + id_str).attr('readonly', true);
-                $("#" + id_str).css('background-color', '#DCDCDC');
+               //  //$("#" + id_str).attr("disabled", true);
+               //  $("#" + id_str).attr('readonly', true);
+               //  $("#" + id_str).css('background-color', '#DCDCDC');
+
+
+               // id_str = "text_" + String({{ forloop.counter0 }}) + "_2";
+               // document.getElementById(id_str).value = "{{row.col2|safe}}";
+               // //$("#" + id_str).attr("disabled", true);
+               //  $("#" + id_str).attr('readonly', true);
+               //  $("#" + id_str).css('background-color', '#DCDCDC');
+
+               // id_str = "text_" + String({{ forloop.counter0 }}) + "_3";
+               // document.getElementById(id_str).value = "{{  row.col3}}";
+               // //$("#" + id_str).attr("disabled", true);
+               //  $("#" + id_str).attr('readonly', true);
+               //  $("#" + id_str).css('background-color', '#DCDCDC');
     {% endfor %}
         {% endif %}
 
+{% endautoescape %}
 
      $('textarea').on('change',function(){
       console.log('hi');
@@ -421,11 +424,11 @@ jsonStream.onmessage = function (e) {
 <col width="70%">
 <col width="20%">
 
-{% for i in input|length|range %}
+{% for i in input %}
     <tr>
-    <td id="table_{{i}}_1"><a id="a_text_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_1" id="text_{{i}}_1"></textarea></a></td>
-    <td id="table_{{i}}_2"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_2" id="text_{{i}}_2"></textarea></td>
-    <td id="table_{{i}}_3"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_3" id="text_{{i}}_3"></textarea></td>
+    <td id="table_{{ forloop.counter }}_1"><a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3"><textarea disabled readonly onchange="textAreaAdjust(this)" style="background-color:#DCDCDC; overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</textarea></a></td>
+    <td id="table_{{ forloop.counter }}_2"><textarea disabled readonly onchange="textAreaAdjust(this)" style="background-color:#DCDCDC;overflow:hidden" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</textarea></td>
+    <td id="table_{{ forloop.counter }}_3"><textarea disabled readonly onchange="textAreaAdjust(this)" style="background-color:#DCDCDC;overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</textarea></td>
     </tr>
 {% endfor %}
 
