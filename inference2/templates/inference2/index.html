@@ -41,7 +41,7 @@
     border: solid 1px gray;
     width: 100%;
   }
-textarea {
+div {
     border: none;
     width: 100%;
     resize: none;
@@ -426,17 +426,17 @@ jsonStream.onmessage = function (e) {
 
 {% for i in input %}
     <tr>
-    <td id="table_{{ forloop.counter }}_1"><a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3"><textarea disabled readonly onchange="textAreaAdjust(this)" style="background-color:#DCDCDC; overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</textarea></a></td>
-    <td id="table_{{ forloop.counter }}_2"><textarea disabled readonly onchange="textAreaAdjust(this)" style="background-color:#DCDCDC;overflow:hidden" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</textarea></td>
-    <td id="table_{{ forloop.counter }}_3"><textarea disabled readonly onchange="textAreaAdjust(this)" style="background-color:#DCDCDC;overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</textarea></td>
+    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1"><a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div></a></td>
+    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</div></td>
+    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</div></td>
     </tr>
 {% endfor %}
 
 {% for i in output%}
     <tr>
-    <td id="table_output_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</textarea></td>
-    <td id="table_output_{{i}}_2"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</textarea></td>
-    <td id="table_output_{{i}}_3"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</textarea></td>
+    <td id="table_output_{{i}}_1"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</div></td>
+    <td id="table_output_{{i}}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</div></td>
+    <td id="table_output_{{i}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</div></td>
     </tr>
 {% endfor %}
 </table>
