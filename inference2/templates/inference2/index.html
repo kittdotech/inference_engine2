@@ -29,6 +29,24 @@
   transition: width 1s;
   -webkit-transition: width 1s;
 }
+.scrollToTop{
+  width:100px; 
+  height:130px;
+  padding:10px; 
+  text-align:center; 
+  background: whiteSmoke;
+  font-weight: bold;
+  color: #444;
+  text-decoration: none;
+  position:fixed;
+  top:75px;
+  right:40px;
+  display:none;
+  background: url("{%  static 'inference2/images/arrow_up.png' %}") no-repeat 0px 20px;
+}
+.scrollToTop:hover{
+  text-decoration:none;
+}
 .progress-label {
     float: left;
     margin-left: 50%;
@@ -66,6 +84,7 @@ div {
     -moz-opacity:0.5;
     -khtml-opacity: 0.5;
     opacity: 0.5;
+    background: url("paper.gif");
     z-index: 10000;
 }
 </style>
@@ -73,7 +92,24 @@ div {
     <script type="text/javascript">
 
 
-
+$(document).ready(function(){
+  
+  //Check to see if the window is top if not then display button
+  $(window).scroll(function(){
+    if ($(this).scrollTop() > 100) {
+      $('.scrollToTop').fadeIn();
+    } else {
+      $('.scrollToTop').fadeOut();
+    }
+  });
+  
+  //Click event to scroll to top
+  $('.scrollToTop').click(function(){
+    $('html, body').animate({scrollTop : 0},800);
+    return false;
+  });
+  
+});
 
         function textAreaAdjust(o) {
     o.style.height = "1px";
@@ -183,24 +219,26 @@ div {
 
         });
            $(document).on('click','#clear', function(e) {
-            var stop_found=false;
 
-               for (i =0; i < ROW_LENGTH; i++) {
-            if (!stop_found)
-            {
-                if ($("#text_"+i+"_2").val()=='stop')
-                {
-                stop_found = true
+            $('.output_row').remove();
+            // var stop_found=false;
 
-                }
-            }
-                else
-            {
-                $("#text_"+i+"_1").val('');
-            $("#text_"+i+"_2").val('');
-            $("#text_"+i+"_3").val('');
-            }
-            }
+            //    for (i =0; i < ROW_LENGTH; i++) {
+            // if (!stop_found)
+            // {
+            //     if ($("#text_"+i+"_2").val()=='stop')
+            //     {
+            //     stop_found = true
+
+            //     }
+            // }
+            //     else
+            // {
+            //     $("#text_"+i+"_1").val('');
+            // $("#text_"+i+"_2").val('');
+            // $("#text_"+i+"_3").val('');
+            // }
+            // }
 
 
         });
@@ -433,7 +471,7 @@ jsonStream.onmessage = function (e) {
 {% endfor %}
 
 {% for i in output%}
-    <tr>
+    <tr class="output_row">
     <td id="table_output_{{i}}_1"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</div></td>
     <td id="table_output_{{i}}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</div></td>
     <td id="table_output_{{i}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</div></td>
@@ -442,5 +480,7 @@ jsonStream.onmessage = function (e) {
 </table>
 
 </form>
+<a href="#" class="scrollToTop">Scroll To Top</a>
+
 </body>
 </html>

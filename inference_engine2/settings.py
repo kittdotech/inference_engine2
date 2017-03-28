@@ -87,7 +87,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 5 * 60
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-CONFIG_TYPE = 1  # os.getenv('CLEARDB_DATABASE_URL','')
+CONFIG_TYPE = 0  # os.getenv('CLEARDB_DATABASE_URL','')
 if CONFIG_TYPE:
     DICT = {
         'ENGINE': 'django.db.backends.mysql',
