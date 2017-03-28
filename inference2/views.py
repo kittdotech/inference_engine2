@@ -10,7 +10,7 @@ from django_tools.middlewares import ThreadLocal
 from django.views.decorators.csrf import csrf_exempt
 import time
 from django.db import transaction
-from models import Output
+from models import Output, InstructionFile
 import os
 import importlib
 # from inference2.Proofs #import 5.17.16.py
@@ -50,6 +50,11 @@ def current_archive():
 
 
 def index(request, archive=None):
+    ins_file = InstructionFile.objects.all().order_by('-id').first()
+    if(ins_file):
+        ins_file = request.META['HTTP_HOST'] + '/' + str(ins_file.data)
+    else:
+        ins_file = ''
     progressbar_send(request, 1, 100, 1)
     url_path = ''
     archive_date = ''
@@ -80,19 +85,22 @@ def index(request, archive=None):
 
     template_args = {'result': result, 'input': input,
                      'url_path': url_path, 'archive_date': archive_date,
-                     'output': output
+                     'output': output, 'ins_file': ins_file
                      }
     return render(request, "inference2/index.html", template_args)
+
 
 def export_xlsx(request):
     import openpyxl
     from openpyxl.cell import get_column_letter
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=mymodel.xlsx'
     wb = openpyxl.Workbook()
     ws = wb.get_active_sheet()
     ws.title = "MyModel"
     queryset = Output.objects.all()
+    input_queryset = Input.objects.all()
     row_num = 0
 
     columns = [
@@ -106,7 +114,20 @@ def export_xlsx(request):
         c.value = columns[col_num][0]
         c.style.font.bold = True
         # set column width
-        ws.column_dimensions[get_column_letter(col_num+1)].width = columns[col_num][1]
+        ws.column_dimensions[get_column_letter(
+            col_num + 1)].width = columns[col_num][1]
+
+    for obj in input_queryset:
+        row_num += 1
+        row = [
+            obj.col1,
+            obj.col2,
+            obj.col3,
+        ]
+        for col_num in xrange(len(row)):
+            c = ws.cell(row=row_num + 1, column=col_num + 1)
+            c.value = row[col_num]
+            c.style.alignment.wrap_text = True
 
     for obj in queryset:
         row_num += 1
@@ -122,6 +143,7 @@ def export_xlsx(request):
 
     wb.save(response)
     return response
+
 
 def stream_response_generator(request):
     for x in range(1, 11):

@@ -3,6 +3,14 @@ from django.db import models
 # Create your models here.
 
 
+class InstructionFile(models.Model):
+    data = models.FileField(upload_to='./static/inference2/')
+
+    def save(self, *args, **kwargs):
+        super(InstructionFile, self).save(*args, **kwargs)
+        filename = self.data.url
+
+
 class Archives(models.Model):
     archives_date = models.DateField()
     algorithm = models.CharField(max_length=300, blank=False, null=False)

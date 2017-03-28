@@ -8,6 +8,8 @@
     <!--link rel="stylesheet" href="{%  static 'inference2/css/style.css' %}" /-->
     <link rel="stylesheet" href="{%  static 'inference2/jquery-asPieProgress/dist/css/asPieProgress.css' %}">
     <link rel="stylesheet" href="{%  static 'inference2/css/jquery-ui.min.css' %}">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src={% static 'inference2/js/jquery-1.11.3.min.js' %}> </script>
     <script src={% static 'inference2/js/jquery-ui.min.js' %}> </script>
     
@@ -431,32 +433,28 @@ jsonStream.onmessage = function (e) {
      }})
 
     });
-
-
-
-
     </script>
 </head>
 
 
-<body>
+<body class="container-fluid">
 <form id="excel" method="post">
  {% csrf_token %}
 <!--input type="button" name="reset" value="Reset" id="reset"/-->
-<table>
-<tr>
-<td><input type="submit" name="prove" value="Prove" id="prove"/></td>
-<td><input type="button" name="clear" value="Clear Result" id="clear"/></td>
-<td><a href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a></td>
-<td><a href="/archives" target="_blank">Archives</a></td>
-<td><a href="/manual" target="_blank">Instructions</a></td>
-<td><a href="{{ url_path }}getdict" target="_blank">Get Dictionary</a></td>
-<td width="60%" align="right">{{ archive_date }}</td>
-</tr>
-</table>
+<div class="row">
+<input class="btn btn-default" type="submit" name="prove" value="Prove" id="prove"/>
+<input class="btn btn-default" type="button" name="clear" value="Clear Result" id="clear"/>
+<a class="btn btn-default" href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a>
+<a class="btn btn-default" href="/archives" target="_blank">Archives</a>
+<a class="btn btn-default" href="/manual" target="_blank">Instructions</a>
+<a class="btn btn-default" href="{{ url_path }}getdict" target="_blank">Get Dictionary</a>
+<a class="btn btn-default" href="{{ ins_file }}" target="_blank">Instruction File</a>
+<a class="btn btn-default" href="/export_xlsx">Export</a>
+<span>{{ archive_date }}</span>
+</div>
 <hr/>
 
-
+<div id = "table_wrapper">
 <table border="1" >
 <col width="10%">
 <col width="70%">
@@ -478,6 +476,7 @@ jsonStream.onmessage = function (e) {
     </tr>
 {% endfor %}
 </table>
+</div>
 
 </form>
 <a href="#" class="scrollToTop">Scroll To Top</a>

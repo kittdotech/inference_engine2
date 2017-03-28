@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q1%u(oc%%d^4k3sh&tzn8(jp7m1!=+c(54u58_#y!#xax3z%q5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 """CACHES = {
     'default': {
@@ -139,3 +139,4 @@ MANUAL_PATH = os.path.join(BASE_DIR, MANUAL_FILE)
 DICT_DIRS = os.path.join(BASE_DIR, "dicts")
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
