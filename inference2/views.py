@@ -52,7 +52,7 @@ def current_archive():
 def index(request, archive=None):
     ins_file = InstructionFile.objects.all().order_by('-id').first()
     if(ins_file):
-        ins_file = request.META['HTTP_HOST'] + '/' + str(ins_file.data)
+        ins_file = '/' + str(ins_file.data)
     else:
         ins_file = ''
     progressbar_send(request, 1, 100, 1)
@@ -67,7 +67,7 @@ def index(request, archive=None):
     input = Input.objects.filter(archives_id=archive.id)
     result = {}
     output = []
-    output = Output.objects.all()
+    # output = Output.objects.all()
     if request.method == 'POST':
         post_data = request.POST.copy()
         prove_algorithm = importlib.import_module(
