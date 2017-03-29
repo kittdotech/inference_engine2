@@ -32,11 +32,11 @@
   -webkit-transition: width 1s;
 }
 .scrollToTop{
-  width:100px; 
+  /*width:100px; */
   height:130px;
-  padding:10px; 
+  /*padding:10px; */
   text-align:center; 
-  background: whiteSmoke;
+  /*background: whiteSmoke;*/
   font-weight: bold;
   color: #444;
   text-decoration: none;
@@ -44,7 +44,7 @@
   top:75px;
   right:40px;
   display:none;
-  background: url("{%  static 'inference2/images/arrow_up.png' %}") no-repeat 0px 20px;
+  background: url("{%  static 'inference2/images/arrow_up.png' %}") no-repeat 15px 15px;
 }
 .scrollToTop:hover{
   text-decoration:none;
@@ -448,7 +448,7 @@ jsonStream.onmessage = function (e) {
 <a class="btn btn-default" href="/archives" target="_blank">Archives</a>
 <a class="btn btn-default" href="/manual" target="_blank">Instructions</a>
 <!-- <a class="btn btn-default" href="{{ url_path }}getdict" target="_blank">Get Dictionary</a>-->
-<a class="btn btn-default" href="{{ ins_file }}" target="_blank">Instruction File</a>
+<a class="btn btn-default" href="{{ ins_file }}">Instruction File</a>
 <a class="btn btn-default" href="/export_xlsx">Download Dictionary</a>
 <span>{{ archive_date }}</span>
 </div>
