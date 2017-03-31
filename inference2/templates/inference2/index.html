@@ -272,7 +272,7 @@ $( function() {
           },
       complete: function () {
               progressLabel.text("Complete!");
-              progressLabel.text("Wait 10 more seconds!");
+              progressLabel.text("Wait 10 seconds!");
                   }
 
 
@@ -455,6 +455,10 @@ jsonStream.onmessage = function (e) {
 <hr/>
 
 <div id = "table_wrapper">
+  {% if output %}
+  <span>  TIP : Click number to see proof</span>
+  {%endif%}
+
 <table border="1" >
 <col width="3%">
 <col width="77%">
