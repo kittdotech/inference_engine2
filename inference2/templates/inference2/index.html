@@ -456,13 +456,13 @@ jsonStream.onmessage = function (e) {
 
 <div id = "table_wrapper">
 <table border="1" >
-<col width="10%">
-<col width="70%">
+<col width="3%">
+<col width="77%">
 <col width="20%">
 
 {% for i in input %}
     <tr>
-    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1"><a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div></a></td>
+    <td style="text-align: center;background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1"><a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div></a></td>
     <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</div></td>
     <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</div></td>
     </tr>
@@ -470,7 +470,7 @@ jsonStream.onmessage = function (e) {
 
 {% for i in output%}
     <tr class="output_row">
-    <td id="table_output_{{i}}_1"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</div></td>
+    <td id="table_output_{{i}}_1 text-align: center;"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</div></td>
     <td id="table_output_{{i}}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</div></td>
     <td id="table_output_{{i}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</div></td>
     </tr>
