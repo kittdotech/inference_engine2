@@ -10,10 +10,11 @@
     <link rel="stylesheet" href="{%  static 'inference2/css/jquery-ui.min.css' %}">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    
     <script src={% static 'inference2/js/jquery-1.11.3.min.js' %}> </script>
     <script src={% static 'inference2/js/jquery-ui.min.js' %}> </script>
     
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src={% static 'inference2/jquery-asPieProgress/dist/jquery-asPieProgress.js' %}> </script>
     <style>
      
@@ -455,8 +456,11 @@ jsonStream.onmessage = function (e) {
 <hr/>
 
 <div id = "table_wrapper">
-  {% if output %}
-  <span>  TIP : Click number to see proof</span>
+  {% if not output %}
+  <div class="alert alert-info alert-dismissable">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <strong>Info!</strong> Click number to see proof.
+  </div>
   {%endif%}
 
 <table border="1" >
