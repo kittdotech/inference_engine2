@@ -99,6 +99,8 @@ def export_xlsx(request):
     wb = openpyxl.Workbook()
     ws = wb.get_active_sheet()
     ws.title = "MyModel"
+    only_output = request.GET.get('only_output', None)
+
     queryset = Output.objects.all()
     input_queryset = Input.objects.all()
     row_num = 0
@@ -116,18 +118,18 @@ def export_xlsx(request):
         # set column width
         ws.column_dimensions[get_column_letter(
             col_num + 1)].width = columns[col_num][1]
-
-    for obj in input_queryset:
-        row_num += 1
-        row = [
-            obj.col1,
-            obj.col2,
-            obj.col3,
-        ]
-        for col_num in xrange(len(row)):
-            c = ws.cell(row=row_num + 1, column=col_num + 1)
-            c.value = row[col_num]
-            c.style.alignment.wrap_text = True
+    if not only_output:
+        for obj in input_queryset:
+            row_num += 1
+            row = [
+                obj.col1,
+                obj.col2,
+                obj.col3,
+            ]
+            for col_num in xrange(len(row)):
+                c = ws.cell(row=row_num + 1, column=col_num + 1)
+                c.value = row[col_num]
+                c.style.alignment.wrap_text = True
 
     for obj in queryset:
         row_num += 1
