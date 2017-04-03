@@ -17,12 +17,15 @@ import importlib
 from inference2.models import Input
 
 from models import Define3, Archives
+import openpyxl
+from openpyxl.cell import get_column_letter
 
 # from Proofs import 5_17_16.py
 
 
-def save_result(post_data):
+def save_result(archive_id, post_data):
     Output.objects.all().delete()
+    archive = Archives.objects.get(pk=archive_id)
     Rows = []
     for idx in xrange(15000 - 1):
         c1 = post_data.get("text_" + str(idx) + "_1", '')
@@ -36,7 +39,8 @@ def save_result(post_data):
             c3 = c3[0]
         R = Output(col1=c1,
                    col2=c2,
-                   col3=c3
+                   col3=c3,
+                   archives=archive,
                    )
         Rows.append(R)
     Output.objects.bulk_create(Rows)
@@ -78,7 +82,7 @@ def index(request, archive=None):
             post_data["type"] = "prove"
             result = json.dumps(post_data, cls=DjangoJSONEncoder)
 
-            save_result(post_data)
+            save_result(archive.id, post_data)
         output = Output.objects.all()
 
     #rows = json.dumps(rows,cls=DjangoJSONEncoder)
@@ -91,8 +95,6 @@ def index(request, archive=None):
 
 
 def export_xlsx(request):
-    import openpyxl
-    from openpyxl.cell import get_column_letter
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=mymodel.xlsx'

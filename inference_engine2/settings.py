@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q1%u(oc%%d^4k3sh&tzn8(jp7m1!=+c(54u58_#y!#xax3z%q5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,6 +39,12 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 #SESSION_FILE_PATH = BASE_DIR
+
+BOOTSTRAP3_FOLDER = os.path.abspath(os.path.join(BASE_DIR, '..', 'bootstrap3'))
+
+if BOOTSTRAP3_FOLDER not in sys.path:
+    sys.path.insert(0, BOOTSTRAP3_FOLDER)
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,7 +53,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'inference2'
+    'inference2',
+    'bootstrap3',
 
 )
 
@@ -64,10 +72,10 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'inference_engine2.urls'
 
-TEMPLATES = [
+TEMPLATES = (
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,10 +84,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-
+            'debug': DEBUG,
         },
     },
-]
+)
 
 WSGI_APPLICATION = 'inference_engine2.wsgi.application'
 SESSION_SAVE_EVERY_REQUEST = True
@@ -140,3 +148,11 @@ DICT_DIRS = os.path.join(BASE_DIR, "dicts")
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Settings for django-bootstrap3
+BOOTSTRAP3 = {
+    'set_required': False,  # For Django <= 1.8 only
+    'error_css_class': 'bootstrap3-error',
+    'required_css_class': 'bootstrap3-required',
+    'javascript_in_head': True,
+}

@@ -8658,6 +8658,7 @@ def get_result(post_data,archive_id=None,request=None):
             ws = Define3.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
+            archive_id = archive.id
             ws = Define3.objects.filter(archives_id=archive.id)
 
 
@@ -8678,6 +8679,7 @@ def get_result(post_data,archive_id=None,request=None):
             tw4 = Input.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
+            archive_id = archive.id
             tw4 = Input.objects.filter(archives_id=archive.id)
         w4 = []
         for x in tw4:
@@ -8770,8 +8772,7 @@ def get_result(post_data,archive_id=None,request=None):
     if excel:
         pass #Saved at last
     elif mysql:
-
-        views.save_result(result_data)
+        views.save_result(archive_id, result_data)
     else:
         return result_data
 if excel:

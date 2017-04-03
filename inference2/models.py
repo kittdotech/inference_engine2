@@ -52,6 +52,7 @@ class Output(models.Model):
     col1 = models.CharField(max_length=200, blank=True, null=True)
     col2 = models.CharField(max_length=1000, blank=True, null=True)
     col3 = models.CharField(max_length=300, blank=True, null=True)
+    archives = models.ForeignKey(Archives)
 
     class Meta:
         managed = True
