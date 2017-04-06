@@ -147,7 +147,9 @@ MANUAL_PATH = os.path.join(BASE_DIR, MANUAL_FILE)
 DICT_DIRS = os.path.join(BASE_DIR, "dicts")
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static/'),  )
+
 
 # Settings for django-bootstrap3
 BOOTSTRAP3 = {
