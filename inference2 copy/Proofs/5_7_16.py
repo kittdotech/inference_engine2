@@ -731,8 +731,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
     pronouns2 = copy.deepcopy(words[24])
     if "it" in pronouns2:
         pronouns2.remove("it")
-        if "it"+up in pronouns2:
-            pronouns2.remove("it"+up)
+        pronouns2.remove("it"+up)
     pronouns = pronouns2
     prop_con = [] # delete this after I'm sure I don't need it
     p_sent = []
@@ -4979,7 +4978,6 @@ def simple_id(tot_sent,all_sent,identities):
     num = [5,14,18,22]
     dummy = remove_duplicates2d(identities,0,1)
     for i in range(len(identities)):
-        #TODO: identities[i][0][0] is none and identities[i][0][1] is none sometimes
         str1 = "(" + identities[i][0][0] + " = " + identities[i][0][1] + ")"
         for j in range(len(tot_sent)-1,0,-1):
             if str1 in tot_sent[j][1]:
@@ -8475,7 +8473,6 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
                 else:
                     ng = negat[i]
                 list2 = mainconn(str2)
-                #TODO: list2[0] == idisj or list2[0] == xorr a value is none some times
                 if list2[0] == idisj or list2[0] == xorr:
                     if oc(str2):
                         candd.append([nstring, str2,ng])
@@ -8658,7 +8655,6 @@ def get_result(post_data,archive_id=None,request=None):
             ws = Define3.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
-            archive_id = archive.id
             ws = Define3.objects.filter(archives_id=archive.id)
 
 
@@ -8679,7 +8675,6 @@ def get_result(post_data,archive_id=None,request=None):
             tw4 = Input.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
-            archive_id = archive.id
             tw4 = Input.objects.filter(archives_id=archive.id)
         w4 = []
         for x in tw4:
@@ -8772,7 +8767,8 @@ def get_result(post_data,archive_id=None,request=None):
     if excel:
         pass #Saved at last
     elif mysql:
-        views.save_result(archive_id, result_data)
+
+        views.save_result(result_data)
     else:
         return result_data
 if excel:

@@ -8,18 +8,12 @@ import sys
 # from django_tools.middlewares import ThreadLocal
 # from inference2 import views
 tot_tim = time.time()
-excel = False
-mysql = True
+excel = True
+mysql = False
 debug = False
 words_used = False
-strt = 0
+strt = 47
 stp = 0
-
-
-
-######################################
-# last perfect
-
 
 if not excel and not mysql:
     from inference2.models import Define3, Archives, Input
@@ -135,8 +129,8 @@ p = 1
 subscripts = [l1,l2,l3,l4]
 
 if excel:
-    wb4 = load_workbook('../inference engine.xlsx')
-    wb5 = load_workbook('../dictionary last perfect.xlsx')
+    wb4 = load_workbook('../inference engine2.xlsx')
+    wb5 = load_workbook('../dictionary new 2.xlsx')
     w4 = wb4.worksheets[0]
     ws = wb5.worksheets[0]
 else:
@@ -731,8 +725,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
     pronouns2 = copy.deepcopy(words[24])
     if "it" in pronouns2:
         pronouns2.remove("it")
-        if "it"+up in pronouns2:
-            pronouns2.remove("it"+up)
+        pronouns2.remove("it"+up)
     pronouns = pronouns2
     prop_con = [] # delete this after I'm sure I don't need it
     p_sent = []
@@ -856,7 +849,6 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
 
                 #this is for those sentences whose noun was once part of a relative pronoun
                         if i == all_sent[m][45]:
-                            print 'noun once part of relative pronoun'
                             str3 = findinlist(all_sent[m][i],tagged_nouns2,1,0)
                             if str3 == None:
                                 all_sent.append(all_sent[m])
@@ -876,7 +868,6 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
                             if str1 in pronouns:
                                 str2 = "pronoun"
                             elif pn_poss_noun:
-
                                 str2 = "proper name possessive"
                                 str1 = 'the'
                             else:
@@ -1941,10 +1932,8 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             list1[14] = all_sent[m][i]
                             all_sent[m][i] = None
                             if kind == 0:
-
                                 dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
                             else:
-
                                 g += 1
                                 list2.append(list1)
                                 all_sent.append(list1)
@@ -3110,8 +3099,6 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                         elif temp_str == str3:
                             already_checked2.append([i,j])
                         elif def_sent[i][j] == rr_var:
-
-
                             dummy = abb_change2(match_dv,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename)
                         else:
                             # here we check to see if it has a plural form
@@ -3912,8 +3899,7 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             except IndexError:
                 bb = 8
             print "you misspelled " + word
-            if excel:
-                sys.exit()
+            sys.exit()
             # easygui.msgbox('you did not categorize the word ' + word)
         if word in anaphoric_relations and first:
                 anaphora = []
@@ -4979,7 +4965,6 @@ def simple_id(tot_sent,all_sent,identities):
     num = [5,14,18,22]
     dummy = remove_duplicates2d(identities,0,1)
     for i in range(len(identities)):
-        #TODO: identities[i][0][0] is none and identities[i][0][1] is none sometimes
         str1 = "(" + identities[i][0][0] + " = " + identities[i][0][1] + ")"
         for j in range(len(tot_sent)-1,0,-1):
             if str1 in tot_sent[j][1]:
@@ -8475,7 +8460,6 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
                 else:
                     ng = negat[i]
                 list2 = mainconn(str2)
-                #TODO: list2[0] == idisj or list2[0] == xorr a value is none some times
                 if list2[0] == idisj or list2[0] == xorr:
                     if oc(str2):
                         candd.append([nstring, str2,ng])
@@ -8658,7 +8642,6 @@ def get_result(post_data,archive_id=None,request=None):
             ws = Define3.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
-            archive_id = archive.id
             ws = Define3.objects.filter(archives_id=archive.id)
 
 
@@ -8679,7 +8662,6 @@ def get_result(post_data,archive_id=None,request=None):
             tw4 = Input.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
-            archive_id = archive.id
             tw4 = Input.objects.filter(archives_id=archive.id)
         w4 = []
         for x in tw4:
@@ -8772,13 +8754,14 @@ def get_result(post_data,archive_id=None,request=None):
     if excel:
         pass #Saved at last
     elif mysql:
-        views.save_result(archive_id, result_data)
+
+        views.save_result(result_data)
     else:
         return result_data
 if excel:
     dummy = get_result('hey')
     # st = time.time()
-    #wb4.save('../inference engine.xlsx')
+    wb4.save('../inference engine2.xlsx')
     # wb5.save('dictionary new 2.xlsx')
     # en = time.time()
     # print en-st

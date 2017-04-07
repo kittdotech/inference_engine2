@@ -8,13 +8,10 @@
     <!--link rel="stylesheet" href="{%  static 'inference2/css/style.css' %}" /-->
     <link rel="stylesheet" href="{%  static 'inference2/jquery-asPieProgress/dist/css/asPieProgress.css' %}">
     <link rel="stylesheet" href="{%  static 'inference2/css/jquery-ui.min.css' %}">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    
     <script src={% static 'inference2/js/jquery-1.11.3.min.js' %}> </script>
     <script src={% static 'inference2/js/jquery-ui.min.js' %}> </script>
     
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src={% static 'inference2/jquery-asPieProgress/dist/jquery-asPieProgress.js' %}> </script>
     <style>
      
@@ -32,27 +29,9 @@
   transition: width 1s;
   -webkit-transition: width 1s;
 }
-.scrollToTop{
-  /*width:100px; */
-  height:130px;
-  /*padding:10px; */
-  text-align:center; 
-  /*background: whiteSmoke;*/
-  font-weight: bold;
-  color: #444;
-  text-decoration: none;
-  position:fixed;
-  top:75px;
-  right:40px;
-  display:none;
-  background: url("{%  static 'inference2/images/arrow_up.png' %}") no-repeat 15px 15px;
-}
-.scrollToTop:hover{
-  text-decoration:none;
-}
 .progress-label {
     float: left;
-    margin-left: 25%;
+    margin-left: 50%;
     margin-top: 5px;
     font-weight: bold;
     text-shadow: 1px 1px 0 #fff;
@@ -62,7 +41,7 @@
     border: solid 1px gray;
     width: 100%;
   }
-div {
+textarea {
     border: none;
     width: 100%;
     resize: none;
@@ -87,40 +66,14 @@ div {
     -moz-opacity:0.5;
     -khtml-opacity: 0.5;
     opacity: 0.5;
-    background: url("paper.gif");
     z-index: 10000;
-}
-.color-none{
-  color:black !important;
-  cursor: default;
-}
-
-.color-none:hover{
-  text-decoration: none; !important;
 }
 </style>
 
     <script type="text/javascript">
 
 
-$(document).ready(function(){
-  
-  //Check to see if the window is top if not then display button
-  $(window).scroll(function(){
-    if ($(this).scrollTop() > 100) {
-      $('.scrollToTop').fadeIn();
-    } else {
-      $('.scrollToTop').fadeOut();
-    }
-  });
-  
-  //Click event to scroll to top
-  $('.scrollToTop').click(function(){
-    $('html, body').animate({scrollTop : 0},800);
-    return false;
-  });
-  
-});
+
 
         function textAreaAdjust(o) {
     o.style.height = "1px";
@@ -206,7 +159,7 @@ $(document).ready(function(){
 </script>
     <script>
 
-        var ROW_LENGTH=5000;
+        var ROW_LENGTH=15000;
 
     $(document).ready(function () {
 
@@ -230,27 +183,24 @@ $(document).ready(function(){
 
         });
            $(document).on('click','#clear', function(e) {
+            var stop_found=false;
 
-            $('.output_row').remove();
-            $('.input_a').addClass('color-none');
-            // var stop_found=false;
+               for (i =0; i < ROW_LENGTH; i++) {
+            if (!stop_found)
+            {
+                if ($("#text_"+i+"_2").val()=='stop')
+                {
+                stop_found = true
 
-            //    for (i =0; i < ROW_LENGTH; i++) {
-            // if (!stop_found)
-            // {
-            //     if ($("#text_"+i+"_2").val()=='stop')
-            //     {
-            //     stop_found = true
-
-            //     }
-            // }
-            //     else
-            // {
-            //     $("#text_"+i+"_1").val('');
-            // $("#text_"+i+"_2").val('');
-            // $("#text_"+i+"_3").val('');
-            // }
-            // }
+                }
+            }
+                else
+            {
+                $("#text_"+i+"_1").val('');
+            $("#text_"+i+"_2").val('');
+            $("#text_"+i+"_3").val('');
+            }
+            }
 
 
         });
@@ -282,7 +232,6 @@ $( function() {
           },
       complete: function () {
               progressLabel.text("Complete!");
-              progressLabel.text("Wait 10 seconds!");
                   }
 
 
@@ -303,7 +252,7 @@ $( function() {
           ajaxindicatorstart();
           $("#progressbar").progressbar();
           setInterval(progress, 500);
-          // event.preventDefault();
+          //event.preventDefault();
           
           /*
           
@@ -371,36 +320,31 @@ jsonStream.onmessage = function (e) {
 
 **/
 //Making Input
-{% autoescape off %}
+
 {% if input %}
     {% for row in input %}
-               //  id_str = "text_" + String({{forloop.counter0}}) + "_1";
-               //  document.getElementById(id_str).value = "{{ row.col1}}";
+                id_str = "text_" + String({{forloop.counter0}}) + "_1";
+                document.getElementById(id_str).value = "{{ row.col1}}";
+
+                //$("#" + id_str).attr("disabled", true);
+                $("#" + id_str).attr('readonly', true);
+                $("#" + id_str).css('background-color', '#DCDCDC');
 
 
-               //  href = "table_output_{{row.col1}}_3";
-               //  $("#a_text_" + String({{forloop.counter0}}) + "_1").attr('href','#table_output_{{row.col1}}_3');
+               id_str = "text_" + String({{ forloop.counter0 }}) + "_2";
+               document.getElementById(id_str).value = "{{row.col2}}";
+               //$("#" + id_str).attr("disabled", true);
+                $("#" + id_str).attr('readonly', true);
+                $("#" + id_str).css('background-color', '#DCDCDC');
 
-               //  //$("#" + id_str).attr("disabled", true);
-               //  $("#" + id_str).attr('readonly', true);
-               //  $("#" + id_str).css('background-color', '#DCDCDC');
-
-
-               // id_str = "text_" + String({{ forloop.counter0 }}) + "_2";
-               // document.getElementById(id_str).value = "{{row.col2|safe}}";
-               // //$("#" + id_str).attr("disabled", true);
-               //  $("#" + id_str).attr('readonly', true);
-               //  $("#" + id_str).css('background-color', '#DCDCDC');
-
-               // id_str = "text_" + String({{ forloop.counter0 }}) + "_3";
-               // document.getElementById(id_str).value = "{{  row.col3}}";
-               // //$("#" + id_str).attr("disabled", true);
-               //  $("#" + id_str).attr('readonly', true);
-               //  $("#" + id_str).css('background-color', '#DCDCDC');
+               id_str = "text_" + String({{ forloop.counter0 }}) + "_3";
+               document.getElementById(id_str).value = "{{  row.col3}}";
+               //$("#" + id_str).attr("disabled", true);
+                $("#" + id_str).attr('readonly', true);
+                $("#" + id_str).css('background-color', '#DCDCDC');
     {% endfor %}
         {% endif %}
 
-{% endautoescape %}
 
      $('textarea').on('change',function(){
       console.log('hi');
@@ -443,68 +387,47 @@ jsonStream.onmessage = function (e) {
      }})
 
     });
+
+
+
+
     </script>
 </head>
 
 
-<body class="container-fluid">
+<body>
 <form id="excel" method="post">
  {% csrf_token %}
 <!--input type="button" name="reset" value="Reset" id="reset"/-->
-<div class="row">
-<input class="btn btn-default" type="submit" name="prove" value="Prove" id="prove"/>
-<input class="btn btn-default" type="button" name="clear" value="Clear Result" id="clear"/>
-<a class="btn btn-default" href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a>
-<a class="btn btn-default" disabled href="/archives" target="_blank">Archives</a>
-<!-- <a class="btn btn-default" href="/manual" target="_blank">Instructions</a> -->
-<!-- <a class="btn btn-default" href="{{ url_path }}getdict" target="_blank">Get Dictionary</a>-->
-<a class="btn btn-default" href="{{ ins_file }}">Instruction File</a>
-<a class="btn btn-default" href="/export_xlsx">Download Dictionary</a>
-<a class="btn btn-default" href="/export_xlsx?only_output=1">Download Arguments</a>
-
-<span>{{ archive_date }}</span>
-</div>
+<table>
+<tr>
+<td><input type="submit" name="prove" value="Prove" id="prove"/></td>
+<td><input type="button" name="clear" value="Clear Result" id="clear"/></td>
+<td><a href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a></td>
+<td><a href="/archives" target="_blank">Archives</a></td>
+<td><a href="/manual" target="_blank">Instructions</a></td>
+<td><a href="{{ url_path }}getdict" target="_blank">Get Dictionary</a></td>
+<td width="60%" align="right">{{ archive_date }}</td>
+</tr>
+</table>
 <hr/>
 
-<div id = "table_wrapper">
-  {% if output %}
-  <div class="alert alert-info alert-dismissable">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Info!</strong> Click number to see proof.
-  </div>
-  {%endif%}
 
 <table border="1" >
-<col width="3%">
-<col width="77%">
+<col width="10%">
+<col width="70%">
 <col width="20%">
 
-{% for i in input %}
+{% for i in 15000|range %}
     <tr>
-    <td style="text-align: center;background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1">
-    <a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3" {% if not output %} class='color-none input_a' {% else %} class='input_a'{% endif %} >
-
-      <div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div>
-    </a>
-    </td>
-
-    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</div></td>
-    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</div></td>
+    <td id="table_{{i}}_1"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_1" id="text_{{i}}_1"></textarea></td>
+    <td id="table_{{i}}_2"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_2" id="text_{{i}}_2"></textarea></td>
+    <td id="table_{{i}}_3"><textarea onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{i}}_3" id="text_{{i}}_3"></textarea></td>
     </tr>
 {% endfor %}
 
-{% for i in output%}
-    <tr class="output_row">
-    <td id="table_output_{{i}}_1 text-align: center;"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</div></td>
-    <td id="table_output_{{i}}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</div></td>
-    <td id="table_output_{{i}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</div></td>
-    </tr>
-{% endfor %}
 </table>
-</div>
 
 </form>
-<a href="#" class="scrollToTop">Scroll To Top</a>
-
 </body>
 </html>
