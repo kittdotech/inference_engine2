@@ -90,6 +90,14 @@ div {
     background: url("paper.gif");
     z-index: 10000;
 }
+.color-none{
+  color:black !important;
+  cursor: default;
+}
+
+.color-none:hover{
+  text-decoration: none; !important;
+}
 </style>
 
     <script type="text/javascript">
@@ -224,6 +232,7 @@ $(document).ready(function(){
            $(document).on('click','#clear', function(e) {
 
             $('.output_row').remove();
+            $('.input_a').addClass('color-none');
             // var stop_found=false;
 
             //    for (i =0; i < ROW_LENGTH; i++) {
@@ -472,7 +481,13 @@ jsonStream.onmessage = function (e) {
 
 {% for i in input %}
     <tr>
-    <td style="text-align: center;background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1"><a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div></a></td>
+    <td style="text-align: center;background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1">
+    <a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3" {% if not output %} class='color-none input_a' {% else %} class='input_a'{% endif %} >
+
+      <div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div>
+    </a>
+    </td>
+
     <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</div></td>
     <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</div></td>
     </tr>
