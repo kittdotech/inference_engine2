@@ -44,16 +44,16 @@ def changesymbol(queryset, mode):
     # for item in data:
     #   print
     symbol_map = (
-        ('>>', unichr(8835)),
+        ('u+', unichr(8835)),
         ('ta^', unichr(8868)),
         ('co^', unichr(8869)),
-        (';', unichr(172)),
-        ('<>', unichr(8801)),
+        ('nt+', unichr(172)),
+        ('x^', unichr(8801)),
         ('c^', unichr(8658)),
         ('b^', unichr(8703)),
-        ('#', unichr(8703)),
+        # ('#', unichr(8703)),
         ('i^', unichr(8866)),
-        ('>', unichr(8594)),
+        ('t^', unichr(8594)),
         ('nf^', unichr(8876)),
         ('ed^', unichr(8891)),
         ('v+', unichr(8744)),
