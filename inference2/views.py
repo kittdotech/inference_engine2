@@ -89,12 +89,13 @@ def index(request, archive=None):
 
     template_args = {'result': result, 'input': input,
                      'url_path': url_path, 'archive_date': archive_date,
-                     'output': output, 'ins_file': ins_file
+                     'output': output, 'ins_file': ins_file,
+                     'archive': archive,
                      }
     return render(request, "inference2/index.html", template_args)
 
 
-def export_xlsx(request):
+def export_xlsx(request, archives_id=None):
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=mymodel.xlsx'
@@ -103,8 +104,8 @@ def export_xlsx(request):
     ws.title = "MyModel"
     only_output = request.GET.get('only_output', None)
 
-    queryset = Output.objects.all()
-    input_queryset = Input.objects.all()
+    queryset = Output.objects.filter(archives_id=int(archives_id))
+    input_queryset = Input.objects.filter(archives_id=int(archives_id))
     row_num = 0
 
     columns = [
