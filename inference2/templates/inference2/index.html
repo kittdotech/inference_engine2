@@ -195,14 +195,7 @@ $(document).ready(function(){
 			}
 		});
 	}
-/**
-  jQuery(document).ajaxStart(function () {
-   		//show ajax indicator
-		ajaxindicatorstart();
-  }).ajaxStop(function () {
-		//hide ajax indicator
-		ajaxindicatorstop();
-  });**/
+
 </script>
     <script>
 
@@ -233,26 +226,7 @@ $(document).ready(function(){
 
             $('.output_row').remove();
             $('.input_a').addClass('color-none');
-            // var stop_found=false;
-
-            //    for (i =0; i < ROW_LENGTH; i++) {
-            // if (!stop_found)
-            // {
-            //     if ($("#text_"+i+"_2").val()=='stop')
-            //     {
-            //     stop_found = true
-
-            //     }
-            // }
-            //     else
-            // {
-            //     $("#text_"+i+"_1").val('');
-            // $("#text_"+i+"_2").val('');
-            // $("#text_"+i+"_3").val('');
-            // }
-            // }
-
-
+            $('.output_info').hide();
         });
 
 
@@ -303,108 +277,7 @@ $( function() {
           ajaxindicatorstart();
           $("#progressbar").progressbar();
           setInterval(progress, 500);
-          // event.preventDefault();
-          
-          /*
-          
-var jsonStream = new EventSource('http://127.0.0.1:8000/prove')
-jsonStream.onmessage = function (e) {
-   var message = JSON.parse(e.data);
-  console.log(message);
-};
-           oboe('http://127.0.0.1:8000/prove')
-   .done(function(things) {
-
-   console.log(things)
-   })
-   .fail(function() {
-  console.log("Fail")
-      
-   });
-           $.ajax({
-               type: "POST",
-               url: "{{ url_path }}prove",
-               data: $("#excel").serializeArray(),
-              //async: false,
-               success: function (result) {
-                alert('sucess');
-               },
-               error: function (err) {
-
-               }
-           });
-           */
-       
-
-
-
        });
-
-
-/**
-        $(".text").bind("paste", function(e){
-    // access the clipboard using the api
-    var pastedData = e.originalEvent.clipboardData.getData('text');
-
-              e.preventDefault();
-    var row = Number(this.name.split('_')[1]);
-    var col = Number(this.name.split('_')[2]);
-    pastedData_array=pastedData.split('\n');
-     var i=0;
-    for ( i=0;i<pastedData_array.length;i++)
-    {
-        pastedData_array_row = pastedData_array[i].split('\t');
-        var j=0;
-
-        tcol=col;
-        for (j=0;j<pastedData_array_row.length;j++) {
-
-            id_str="text_"+String(row)+"_"+String(tcol);
-
-            document.getElementById(id_str).value=pastedData_array_row[j];
-        tcol = tcol+1;
-        }
-        row = row+1;
-    }
-
-    });
-
-**/
-//Making Input
-{% autoescape off %}
-{% if input %}
-    {% for row in input %}
-               //  id_str = "text_" + String({{forloop.counter0}}) + "_1";
-               //  document.getElementById(id_str).value = "{{ row.col1}}";
-
-
-               //  href = "table_output_{{row.col1}}_3";
-               //  $("#a_text_" + String({{forloop.counter0}}) + "_1").attr('href','#table_output_{{row.col1}}_3');
-
-               //  //$("#" + id_str).attr("disabled", true);
-               //  $("#" + id_str).attr('readonly', true);
-               //  $("#" + id_str).css('background-color', '#DCDCDC');
-
-
-               // id_str = "text_" + String({{ forloop.counter0 }}) + "_2";
-               // document.getElementById(id_str).value = "{{row.col2|safe}}";
-               // //$("#" + id_str).attr("disabled", true);
-               //  $("#" + id_str).attr('readonly', true);
-               //  $("#" + id_str).css('background-color', '#DCDCDC');
-
-               // id_str = "text_" + String({{ forloop.counter0 }}) + "_3";
-               // document.getElementById(id_str).value = "{{  row.col3}}";
-               // //$("#" + id_str).attr("disabled", true);
-               //  $("#" + id_str).attr('readonly', true);
-               //  $("#" + id_str).css('background-color', '#DCDCDC');
-    {% endfor %}
-        {% endif %}
-
-{% endautoescape %}
-
-     $('textarea').on('change',function(){
-      console.log('hi');
-          });
 
      (function($) {
     $.fn.goTo = function() {
@@ -468,7 +341,7 @@ jsonStream.onmessage = function (e) {
 
 <div id = "table_wrapper">
   {% if output %}
-  <div class="alert alert-info alert-dismissable">
+  <div class="alert alert-info alert-dismissable output_info">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
   <strong>Info!</strong> Click number to see proof.
   </div>
