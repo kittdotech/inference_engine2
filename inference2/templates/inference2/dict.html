@@ -4,29 +4,21 @@
 <body>
 
 <table border="1">
-<tr>
-    <th>Type</th>
-    <th>Word</th>
-    <th>Relation</th>
-    <th>Definition</th>
+    <tr>
+        <th>Type</th>
+        <th>Word</th>
+        <th>Relation</th>
+        <th>Definition</th>
 
-</tr>
+    </tr>
 {% for row in result %}
-<tr>
-    <td>{{ row.type }}</td>
-    <td>{{ row.word }}</td>
-    <td>{{ row.rel }}</td>
-    <td>{{ row.definition }}</td>
+    <tr>
+        <td>{{ row.type }}</td>
+        <td>{{ row.word }}</td>
+        <td>{{ row.rel }}</td>
+        <td>{{ row.definition }}</td>
 
-</tr>
-<tr style='height:15px;'>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-</tr>
-
-
+    </tr>
 {% endfor %}
 
 </table>
