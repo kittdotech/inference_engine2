@@ -5,22 +5,14 @@ from django.shortcuts import render
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
 from django.conf import settings
-from django.http import StreamingHttpResponse
-from django_tools.middlewares import ThreadLocal
-from django.views.decorators.csrf import csrf_exempt
 import time
-from django.db import transaction
 from models import Output, InstructionFile
-import os
 import importlib
-# from inference2.Proofs #import 5.17.16.py
 from inference2.models import Input
 
 from models import Define3, Archives
 import openpyxl
 from openpyxl.cell import get_column_letter
-
-# from Proofs import 5_17_16.py
 
 
 def save_result(archive_id, post_data):
@@ -45,8 +37,6 @@ def save_result(archive_id, post_data):
         Rows.append(R)
     Output.objects.bulk_create(Rows)
 
-
-# Create your views here.
 
 def current_archive():
     archive = Archives.objects.latest('archives_date')
@@ -84,8 +74,6 @@ def index(request, archive=None):
 
             save_result(archive.id, post_data)
         output = Output.objects.all()
-
-    #rows = json.dumps(rows,cls=DjangoJSONEncoder)
 
     template_args = {'result': result, 'input': input,
                      'url_path': url_path, 'archive_date': archive_date,
@@ -173,7 +161,6 @@ def prove(request, archive=None):
             request.POST.copy(), archive.id, request)
         result = json.dumps(post_data, cls=DjangoJSONEncoder)
 
-    #rows = json.dumps(rows,cls=DjangoJSONEncoder)
     return result
 
 

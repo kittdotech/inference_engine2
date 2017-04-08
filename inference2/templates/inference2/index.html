@@ -1,21 +1,17 @@
+
+
+    
+
+
+{% extends "base.html" %}
 {% load extra_tags %}
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Inference Engine</title>
-{% load staticfiles %}
-    <!--link rel="stylesheet" href="{%  static 'inference2/css/style.css' %}" /-->
-    <link rel="stylesheet" href="{%  static 'inference2/jquery-asPieProgress/dist/css/asPieProgress.css' %}">
-    <link rel="stylesheet" href="{%  static 'inference2/css/jquery-ui.min.css' %}">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    
-    <script src={% static 'inference2/js/jquery-1.11.3.min.js' %}> </script>
-    <script src={% static 'inference2/js/jquery-ui.min.js' %}> </script>
-    
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src={% static 'inference2/jquery-asPieProgress/dist/jquery-asPieProgress.js' %}> </script>
+{% block base_head %}
+
+<link rel="stylesheet" href="/static/inference2/jquery-asPieProgress/dist/css/asPieProgress.css">
+    <link rel="stylesheet" href="/static/inference2/css/jquery-ui.min.css">
+    <script src="/static/inference2/js/jquery-1.11.3.min.js"> </script>
+    <script src='/static/inference2/js/jquery-ui.min.js'> </script>
+    <script src='/static/inference2/jquery-asPieProgress/dist/jquery-asPieProgress.js'> </script>
     <style>
      
       #progressbar 
@@ -45,7 +41,7 @@
   top:75px;
   right:40px;
   display:none;
-  background: url("{%  static 'inference2/images/arrow_up.png' %}") no-repeat 15px 15px;
+  background: url("/static/inference2/images/arrow_up.png") no-repeat 15px 15px;
 }
 .scrollToTop:hover{
   text-decoration:none;
@@ -62,14 +58,7 @@
     border: solid 1px gray;
     width: 100%;
   }
-div {
-    border: none;
-    width: 100%;
-    resize: none;
-    -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
-       -moz-box-sizing: border-box; /* FF1+ */
-            box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
-}
+
   input[type=text] {
     width: 98%;
     padding: 0px;
@@ -126,75 +115,74 @@ $(document).ready(function(){
     o.style.height = "1px";
     o.style.height = (25+o.scrollHeight)+"px";
 }
-	function ajaxindicatorstart()
-	{
-		if(jQuery('body').find('#resultLoading').attr('id') != 'resultLoading'){
-		jQuery('body').append('<div id="resultLoading" style="display:none"><div><div id="progressbar"><div><div class="progress-label">Solving...</div></div></div></div><div class="bg"></div></div>');
-		    /**jQuery('body').append('<div id="resultLoading" style="display:none"><div><img src="{%  static 'inference2/images/ajax-loader.gif' %}"><div>Solving...Please wait...</div></div><div class="bg"></div></div>');**/
+  function ajaxindicatorstart()
+  {
+    if(jQuery('body').find('#resultLoading').attr('id') != 'resultLoading'){
+    jQuery('body').append('<div id="resultLoading" style="display:none"><div><div id="progressbar"><div><div class="progress-label">Solving...</div></div></div></div><div class="bg"></div></div>');
 
 
     }
 
-		jQuery('#resultLoading').css({
-			'width':'100%',
-			'height':'100%',
-			'position':'fixed',
-			'z-index':'10000000',
-			'top':'0',
-			'left':'0',
-			'right':'0',
-			'bottom':'0',
-			'margin':'auto'
-		});
+    jQuery('#resultLoading').css({
+      'width':'100%',
+      'height':'100%',
+      'position':'fixed',
+      'z-index':'10000000',
+      'top':'0',
+      'left':'0',
+      'right':'0',
+      'bottom':'0',
+      'margin':'auto'
+    });
 
-		jQuery('#resultLoading .bg').css({
-			'background':'#000000',
-			'opacity':'0.7',
-			'width':'100%',
-			'height':'100%',
-			'position':'absolute',
-			'top':'0'
-		});
+    jQuery('#resultLoading .bg').css({
+      'background':'#000000',
+      'opacity':'0.7',
+      'width':'100%',
+      'height':'100%',
+      'position':'absolute',
+      'top':'0'
+    });
 
-		jQuery('#resultLoading>div:first').css({
-			'width': '250px',
-			'height':'75px',
-			'text-align': 'center',
-			'position': 'fixed',
-			'top':'0',
-			'left':'0',
-			'right':'0',
-			'bottom':'0',
-			'margin':'auto',
-			'font-size':'16px',
-			'z-index':'10',
-			'color':'#ffffff'
+    jQuery('#resultLoading>div:first').css({
+      'width': '250px',
+      'height':'75px',
+      'text-align': 'center',
+      'position': 'fixed',
+      'top':'0',
+      'left':'0',
+      'right':'0',
+      'bottom':'0',
+      'margin':'auto',
+      'font-size':'16px',
+      'z-index':'10',
+      'color':'#ffffff'
 
-		});
+    });
 
-	    jQuery('#resultLoading .bg').height('100%');
+      jQuery('#resultLoading .bg').height('100%');
         jQuery('#resultLoading').fadeIn(300);
-	    jQuery('body').css('cursor', 'wait');
-	}
+      jQuery('body').css('cursor', 'wait');
+  }
 
-	function ajaxindicatorstop()
-	{
-	    jQuery('#resultLoading .bg').height('100%');
+  function ajaxindicatorstop()
+  {
+      jQuery('#resultLoading .bg').height('100%');
         jQuery('#resultLoading').fadeOut(300);
-	    jQuery('body').css('cursor', 'default');
-	}
+      jQuery('body').css('cursor', 'default');
+  }
 
-	function callAjax()
-	{
-		jQuery.ajax({
-			type: "GET",
-			url: "fetch_data.php",
-			cache: false,
-			success: function(res){
-					jQuery('#ajaxcontent').html(res);
-			}
-		});
-	}
+  function callAjax()
+  {
+    jQuery.ajax({
+      type: "GET",
+      url: "fetch_data.php",
+      cache: false,
+      success: function(res){
+          jQuery('#ajaxcontent').html(res);
+      }
+    });
+  }
 
 </script>
     <script>
@@ -317,67 +305,63 @@ $( function() {
 
     });
     </script>
-</head>
 
-
-<body class="container-fluid">
-<form id="excel" method="post">
- {% csrf_token %}
-<!--input type="button" name="reset" value="Reset" id="reset"/-->
-<div class="row">
-<input class="btn btn-default" type="submit" name="prove" value="Prove" id="prove"/>
-<input class="btn btn-default" type="button" name="clear" value="Clear Result" id="clear"/>
-<a class="btn btn-default" href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a>
-<a class="btn btn-default" disabled href="/archives" target="_blank">Archives</a>
-<!-- <a class="btn btn-default" href="/manual" target="_blank">Instructions</a> -->
-<!-- <a class="btn btn-default" href="{{ url_path }}getdict" target="_blank">Get Dictionary</a>-->
-<a class="btn btn-default" href="{{ ins_file }}">Instruction File</a>
-<a class="btn btn-default" href="/export_xlsx/{{archive.id}}">Download Dictionary</a>
-<a class="btn btn-default" href="/export_xlsx/{{archive.id}}?only_output=1">Download Arguments</a>
-
-<span>{{ archive_date }}</span>
-</div>
-<hr/>
-
-<div id = "table_wrapper">
-  {% if output %}
-  <div class="alert alert-info alert-dismissable output_info">
-  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Info!</strong> Click number to see proof.
+{% endblock %}
+{% block content %}
+  <form id="excel" method="post">
+   {% csrf_token %}
+  <!--input type="button" name="reset" value="Reset" id="reset"/-->
+  <div class="row" style="
+    margin-left: 1px;">
+  <input class="btn btn-default" type="submit" name="prove" value="Prove" id="prove"/>
+  <input class="btn btn-default" type="button" name="clear" value="Clear Result" id="clear"/>
+  <a class="btn btn-default" href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a>
+  <a class="btn btn-default" href="{{ ins_file }}">Instruction File</a>
+  <a class="btn btn-default" href="/export_xlsx/{{archive.id}}">Download Dictionary</a>
+  <a class="btn btn-default" href="/export_xlsx/{{archive.id}}?only_output=1">Download Arguments</a>
   </div>
-  {%endif%}
+  <div class="page-header">
+    <h4>{{ archive }}</h4>      
+  </div>
+  <hr/>
 
-<table border="1" >
-<col width="3%">
-<col width="77%">
-<col width="20%">
+  <div id = "table_wrapper">
+    {% if output %}
+    <div class="alert alert-info alert-dismissable output_info">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Info!</strong> Click number to see proof.
+    </div>
+    {%endif%}
 
-{% for i in input %}
-    <tr>
-    <td style="text-align: center;background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1">
-    <a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3" {% if not output %} class='color-none input_a' {% else %} class='input_a'{% endif %} >
+  <table border="1" >
+  <col width="3%">
+  <col width="77%">
+  <col width="20%">
 
-      <div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div>
-    </a>
-    </td>
+  {% for i in input %}
+      <tr>
+      <td style="text-align: center;background-color:#DCDCDC;" id="table_{{ forloop.counter }}_1">
+      <a id="a_text_{{ forloop.counter }}_1" href ="#table_output_{{i.col1}}_3" {% if not output %} class='color-none input_a' {% else %} class='input_a'{% endif %} >
 
-    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</div></td>
-    <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</div></td>
-    </tr>
-{% endfor %}
+        <div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_1" id="text_{{ forloop.counter }}_1">{{i.col1}}</div>
+      </a>
+      </td>
 
-{% for i in output%}
-    <tr class="output_row">
-    <td id="table_output_{{i}}_1 text-align: center;"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</div></td>
-    <td id="table_output_{{i}}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</div></td>
-    <td id="table_output_{{i}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</div></td>
-    </tr>
-{% endfor %}
-</table>
-</div>
+      <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="text_{{ forloop.counter }}_2" id="text_{{ forloop.counter }}_2">{{i.col2}}</div></td>
+      <td style="background-color:#DCDCDC;" id="table_{{ forloop.counter }}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="text_{{ forloop.counter }}_3" id="text_{{ forloop.counter }}_3">{{i.col3}}</div></td>
+      </tr>
+  {% endfor %}
 
-</form>
-<a href="#" class="scrollToTop">Scroll To Top</a>
+  {% for i in output%}
+      <tr class="output_row">
+      <td id="table_output_{{i}}_1 text-align: center;"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_1" id="table_output_{{i}}_1">{{i.col1}}</div></td>
+      <td id="table_output_{{i}}_2"><div onchange="textAreaAdjust(this)" style="overflow:hidden;min-height: 20px;" class="text" name="table_output_{{i}}_2" id="table_output_{{i}}_2">{{i.col2}}</div></td>
+      <td id="table_output_{{i}}_3"><div onchange="textAreaAdjust(this)" style="overflow:hidden" class="text" name="table_output_{{i}}_3" id="table_output_{{i.col3}}_3">{{i.col3}}</div></td>
+      </tr>
+  {% endfor %}
+  </table>
+  </div>
 
-</body>
-</html>
+  </form>
+  <a href="#" class="scrollToTop">Scroll To Top</a>
+{% endblock content %}
