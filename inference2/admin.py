@@ -117,7 +117,7 @@ class MyArchive(ImportCSVModelAdmin):
     empty_value_display = ""
 
     def input_link(self, obj):
-        return '<a href="/export_xlsx/%d" class="link">Download input</a>' %obj.id
+        return '<a href="/export_xlsx/%d?only_input=1" class="link">Download input</a>' %obj.id
     input_link.short_description = 'Inputs'
     input_link.allow_tags = True
 

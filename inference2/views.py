@@ -91,6 +91,7 @@ def export_xlsx(request, archives_id=None):
     ws = wb.get_active_sheet()
     ws.title = "MyModel"
     only_output = request.GET.get('only_output', None)
+    only_input = request.GET.get('only_input', None)
 
     queryset = Output.objects.filter(archives_id=int(archives_id))
     input_queryset = Input.objects.filter(archives_id=int(archives_id))
@@ -122,17 +123,18 @@ def export_xlsx(request, archives_id=None):
                 c.value = row[col_num]
                 c.style.alignment.wrap_text = True
 
-    for obj in queryset:
-        row_num += 1
-        row = [
-            obj.col1,
-            obj.col2,
-            obj.col3,
-        ]
-        for col_num in xrange(len(row)):
-            c = ws.cell(row=row_num + 1, column=col_num + 1)
-            c.value = row[col_num]
-            c.style.alignment.wrap_text = True
+    if not only_input:
+        for obj in queryset:
+            row_num += 1
+            row = [
+                obj.col1,
+                obj.col2,
+                obj.col3,
+            ]
+            for col_num in xrange(len(row)):
+                c = ws.cell(row=row_num + 1, column=col_num + 1)
+                c.value = row[col_num]
+                c.style.alignment.wrap_text = True
 
     wb.save(response)
     return response
