@@ -1,8 +1,3 @@
-
-
-    
-
-
 {% extends "base.html" %}
 {% load extra_tags %}
 {% block base_head %}
@@ -313,12 +308,12 @@ $( function() {
   <!--input type="button" name="reset" value="Reset" id="reset"/-->
   <div class="row" style="
     margin-left: 1px;">
-  <input class="btn btn-default" type="submit" name="prove" value="Prove" id="prove"/>
-  <input class="btn btn-default" type="button" name="clear" value="Clear Result" id="clear"/>
+  <input class="btn btn-primary" type="submit" name="prove" value="Prove" id="prove"/>
+  <input class="btn btn-primary" type="button" name="clear" value="Clear Result" id="clear"/>
   <a class="btn btn-default" href="{{ url_path }}dictionary" target="_blank">Show Dictionary</a>
-  <a class="btn btn-default" href="{{ ins_file }}">Instruction File</a>
-  <a class="btn btn-default" href="/export_xlsx/{{archive.id}}">Download Dictionary</a>
-  <a class="btn btn-default" href="/export_xlsx/{{archive.id}}?only_output=1">Download Arguments</a>
+  <a class="btn btn-primary" href="{{ ins_file }}">Instruction File</a>
+  <a class="btn btn-primary" href="/export_xlsx/{{archive.id}}">Download Dictionary</a>
+  <a class="btn btn-primary" href="/export_xlsx/{{archive.id}}?only_output=1">Download Arguments</a>
   </div>
   <div class="page-header">
     <h4>{{ archive }}</h4>      
