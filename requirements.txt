@@ -19,3 +19,4 @@ wsgiref==0.1.2
 xlrd==0.9.4
 django-tools
 django-bootstrap3
+django-admin-bootstrapped

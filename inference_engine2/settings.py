@@ -44,8 +44,11 @@ BOOTSTRAP3_FOLDER = os.path.abspath(os.path.join(BASE_DIR, '..', 'bootstrap3'))
 
 if BOOTSTRAP3_FOLDER not in sys.path:
     sys.path.insert(0, BOOTSTRAP3_FOLDER)
+# DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'
+
 
 INSTALLED_APPS = (
+    # 'django_admin_bootstrapped',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -157,4 +160,12 @@ BOOTSTRAP3 = {
     'error_css_class': 'bootstrap3-error',
     'required_css_class': 'bootstrap3-required',
     'javascript_in_head': True,
+}
+
+from django.contrib import messages
+
+MESSAGE_TAGS = {
+            messages.SUCCESS: 'alert-success success',
+            messages.WARNING: 'alert-warning warning',
+            messages.ERROR: 'alert-danger error'
 }

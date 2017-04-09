@@ -57,3 +57,5 @@ class Output(models.Model):
     class Meta:
         managed = True
         db_table = 'output'
+        verbose_name = "Argument"
+        verbose_name_plural = "Arguments"

@@ -5,22 +5,14 @@ from django.shortcuts import render
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
 from django.conf import settings
-from django.http import StreamingHttpResponse
-from django_tools.middlewares import ThreadLocal
-from django.views.decorators.csrf import csrf_exempt
 import time
-from django.db import transaction
 from models import Output, InstructionFile
-import os
 import importlib
-# from inference2.Proofs #import 5.17.16.py
 from inference2.models import Input
 
 from models import Define3, Archives
 import openpyxl
 from openpyxl.cell import get_column_letter
-
-# from Proofs import 5_17_16.py
 
 
 def save_result(archive_id, post_data):
@@ -45,8 +37,6 @@ def save_result(archive_id, post_data):
         Rows.append(R)
     Output.objects.bulk_create(Rows)
 
-
-# Create your views here.
 
 def current_archive():
     archive = Archives.objects.latest('archives_date')
@@ -85,16 +75,15 @@ def index(request, archive=None):
             save_result(archive.id, post_data)
         output = Output.objects.all()
 
-    #rows = json.dumps(rows,cls=DjangoJSONEncoder)
-
     template_args = {'result': result, 'input': input,
                      'url_path': url_path, 'archive_date': archive_date,
-                     'output': output, 'ins_file': ins_file
+                     'output': output, 'ins_file': ins_file,
+                     'archive': archive,
                      }
     return render(request, "inference2/index.html", template_args)
 
 
-def export_xlsx(request):
+def export_xlsx(request, archives_id=None):
     response = HttpResponse(
         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=mymodel.xlsx'
@@ -102,9 +91,10 @@ def export_xlsx(request):
     ws = wb.get_active_sheet()
     ws.title = "MyModel"
     only_output = request.GET.get('only_output', None)
+    only_input = request.GET.get('only_input', None)
 
-    queryset = Output.objects.all()
-    input_queryset = Input.objects.all()
+    queryset = Output.objects.filter(archives_id=int(archives_id))
+    input_queryset = Input.objects.filter(archives_id=int(archives_id))
     row_num = 0
 
     columns = [
@@ -133,17 +123,18 @@ def export_xlsx(request):
                 c.value = row[col_num]
                 c.style.alignment.wrap_text = True
 
-    for obj in queryset:
-        row_num += 1
-        row = [
-            obj.col1,
-            obj.col2,
-            obj.col3,
-        ]
-        for col_num in xrange(len(row)):
-            c = ws.cell(row=row_num + 1, column=col_num + 1)
-            c.value = row[col_num]
-            c.style.alignment.wrap_text = True
+    if not only_input:
+        for obj in queryset:
+            row_num += 1
+            row = [
+                obj.col1,
+                obj.col2,
+                obj.col3,
+            ]
+            for col_num in xrange(len(row)):
+                c = ws.cell(row=row_num + 1, column=col_num + 1)
+                c.value = row[col_num]
+                c.style.alignment.wrap_text = True
 
     wb.save(response)
     return response
@@ -172,7 +163,6 @@ def prove(request, archive=None):
             request.POST.copy(), archive.id, request)
         result = json.dumps(post_data, cls=DjangoJSONEncoder)
 
-    #rows = json.dumps(rows,cls=DjangoJSONEncoder)
     return result
 
 

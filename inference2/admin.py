@@ -84,10 +84,10 @@ class MyInputForm(ModelForm):
 class MyInput(ImportCSVModelAdmin):
     importer_class = MyInputImporter
     form = MyInputForm
-    list_display = ('col1', 'col2', 'col3')
+    list_display = ('col1', 'col2', 'col3', 'archives')
     empty_value_display = ""
     ordering = ("id",)
-    list_per_page = 1000
+    list_per_page = 50
 
 
 class MyArchiveImporter(ModelForm):
@@ -111,10 +111,25 @@ class MyArchiveForm(ModelForm):
 class MyArchive(ImportCSVModelAdmin):
     importer_class = MyArchiveImporter
     form = MyArchiveForm
-    list_display = ('archives_date', 'algorithm')
+    list_display = ('archives_date', 'algorithm','input_link', 'output_link', 'dictionary_link')
     ordering = ("archives_date",)
     list_per_page = 1000
     empty_value_display = ""
+
+    def input_link(self, obj):
+        return '<a href="/export_xlsx/%d?only_input=1" class="link">Download input</a>' %obj.id
+    input_link.short_description = 'Inputs'
+    input_link.allow_tags = True
+
+    def dictionary_link(self, obj):
+        return '<a href="/export_xlsx/%d" class="link">Download dictionary</a>' %obj.id
+    dictionary_link.short_description = 'Dictionaries'
+    dictionary_link.allow_tags = True
+
+    def output_link(self, obj):
+        return '<a href="/export_xlsx/%d?only_output=1" class="link">Download argument</a>' %obj.id
+    output_link.short_description = 'Outputs'
+    output_link.allow_tags = True
 
 
 class OutputAdmin(admin.ModelAdmin):
