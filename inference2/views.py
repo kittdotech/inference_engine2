@@ -19,7 +19,12 @@ def save_result(archive_id, post_data):
     Output.objects.all().delete()
     archive = Archives.objects.get(pk=archive_id)
     Rows = []
+    data_found = False
     for idx in xrange(15000 - 1):
+        if post_data.get("text_" + str(idx) + "_2", '') or post_data.get("text_" + str(idx) + "_3", ''):
+            data_found = True
+        if not data_found:
+            continue
         c1 = post_data.get("text_" + str(idx) + "_1", '')
         c2 = post_data.get("text_" + str(idx) + "_2", '')
         c3 = post_data.get("text_" + str(idx) + "_3", '')
@@ -44,6 +49,7 @@ def current_archive():
 
 
 def index(request, archive=None):
+
     ins_file = InstructionFile.objects.all().order_by('-id').first()
     if(ins_file):
         ins_file = '/' + str(ins_file.data)
