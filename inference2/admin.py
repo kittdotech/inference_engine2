@@ -16,7 +16,7 @@ except ImportError:
     pass
 else:
     add_import(admin.ModelAdmin, add_button=True)
-from inference2.models import Define3, Input, Output, InstructionFile
+from inference2.models import Define3, Input, Output, InstructionFile, Algorithm
 from django.contrib import admin
 from .actions import export_as_csv_action
 from .actions import change_text_to_symbol_action
@@ -98,10 +98,11 @@ class MyArchiveImporter(ModelForm):
 
 
 class MyArchiveForm(ModelForm):
-    pkgpath = os.path.dirname(Proofs.__file__)
-    MY_CHOICES = [(name, name)
-                  for _, name, _ in pkgutil.iter_modules([pkgpath])]
-    algorithm = forms.ChoiceField(choices=MY_CHOICES)
+    def get_my_choices():
+        return [(_.data.name.split('/')[-1], _.data.name.split('/')[-1])
+                for _ in Algorithm.objects.all()]
+
+    algorithm = forms.ChoiceField(choices=get_my_choices)
 
     class Meta:
         model = Archives
@@ -111,23 +112,24 @@ class MyArchiveForm(ModelForm):
 class MyArchive(ImportCSVModelAdmin):
     importer_class = MyArchiveImporter
     form = MyArchiveForm
-    list_display = ('archives_date', 'algorithm','input_link', 'output_link', 'dictionary_link')
+    list_display = ('archives_date', 'algorithm', 'input_link',
+                    'output_link', 'dictionary_link')
     ordering = ("archives_date",)
     list_per_page = 1000
     empty_value_display = ""
 
     def input_link(self, obj):
-        return '<a href="/export_xlsx/%d?only_input=1" class="link">Download input</a>' %obj.id
+        return '<a href="/export_xlsx/%d?only_input=1" class="link">Download input</a>' % obj.id
     input_link.short_description = 'Inputs'
     input_link.allow_tags = True
 
     def dictionary_link(self, obj):
-        return '<a href="/export_xlsx/%d" class="link">Download dictionary</a>' %obj.id
+        return '<a href="/export_xlsx/%d" class="link">Download dictionary</a>' % obj.id
     dictionary_link.short_description = 'Dictionaries'
     dictionary_link.allow_tags = True
 
     def output_link(self, obj):
-        return '<a href="/export_xlsx/%d?only_output=1" class="link">Download argument</a>' %obj.id
+        return '<a href="/export_xlsx/%d?only_output=1" class="link">Download argument</a>' % obj.id
     output_link.short_description = 'Outputs'
     output_link.allow_tags = True
 
@@ -149,3 +151,4 @@ admin.site.register(Input, MyInput)
 admin.site.register(Archives, MyArchive)
 admin.site.register(Output, OutputAdmin)
 admin.site.register(InstructionFile)
+admin.site.register(Algorithm)

@@ -59,3 +59,17 @@ class Output(models.Model):
         db_table = 'output'
         verbose_name = "Argument"
         verbose_name_plural = "Arguments"
+
+
+class Algorithm(models.Model):
+    def validate_file_extension(value):
+        from django.core.exceptions import ValidationError
+        if not value.name.endswith('.py'):
+            raise ValidationError(u'Only files with py extenstion are supported.')
+
+    data = models.FileField(upload_to='./inference2/Proofs/',
+                            validators=[validate_file_extension])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        super(Algorithm, self).save(*args, **kwargs)

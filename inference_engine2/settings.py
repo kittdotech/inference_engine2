@@ -151,7 +151,8 @@ DICT_DIRS = os.path.join(BASE_DIR, "dicts")
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = ( os.path.join(BASE_DIR,'static/'),  )
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),
+                    os.path.join(BASE_DIR, 'inference2/Proofs/'),)
 
 
 # Settings for django-bootstrap3
@@ -165,7 +166,7 @@ BOOTSTRAP3 = {
 from django.contrib import messages
 
 MESSAGE_TAGS = {
-            messages.SUCCESS: 'alert-success success',
-            messages.WARNING: 'alert-warning warning',
-            messages.ERROR: 'alert-danger error'
+    messages.SUCCESS: 'alert-success success',
+    messages.WARNING: 'alert-warning warning',
+    messages.ERROR: 'alert-danger error'
 }
