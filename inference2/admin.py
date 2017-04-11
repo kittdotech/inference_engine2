@@ -133,8 +133,10 @@ class MyArchive(ImportCSVModelAdmin):
 
 
 class OutputAdmin(admin.ModelAdmin):
-    pass
-
+    list_display = ('col1', 'col2', 'col3', 'archives')
+    empty_value_display = ""
+    ordering = ("id",)
+    list_per_page = 50
 
 """
 class MyArchivesForm(admin.ModelAdmin):
