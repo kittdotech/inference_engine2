@@ -10,11 +10,11 @@ class Migration(migrations.Migration):
         ('inference2', '0001_initial'),
     ]
 
-    operations = [
-        migrations.AddField(
-            model_name='output',
-            name='archives',
-            field=models.ForeignKey(default=33, to='inference2.Archives'),
-            preserve_default=False,
-        ),
-    ]
+    # operations = [
+    #     migrations.AddField(
+    #         model_name='output',
+    #         name='archives',
+    #         field=models.ForeignKey(default=33, to='inference2.Archives'),
+    #         preserve_default=False,
+    #     ),
+    # ]

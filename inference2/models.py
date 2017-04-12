@@ -67,8 +67,9 @@ class Algorithm(models.Model):
         if not value.name.endswith('.py'):
             raise ValidationError(u'Only files with py extenstion are supported.')
 
+    name = models.CharField(max_length=200)
     data = models.FileField(upload_to='./inference2/Proofs/',
-                            validators=[validate_file_extension])
+                            validators=[])
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

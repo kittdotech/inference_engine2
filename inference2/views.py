@@ -16,7 +16,7 @@ from openpyxl.cell import get_column_letter
 
 
 def save_result(archive_id, post_data):
-    Output.objects.all().delete()
+    Output.objects.filter(archives_id=archive_id).delete()
     archive = Archives.objects.get(pk=archive_id)
     Rows = []
     data_found = False
