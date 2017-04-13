@@ -13,7 +13,7 @@ mysql = False
 debug = False
 words_used = False
 strt = 0
-stp = 0
+stp = 1
 x = 0
 x = 1
 x = 2
@@ -810,6 +810,8 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
 
     m = -1
     g = (len(all_sent))
+    # import pdb
+    # pdb.set_trace()
     while m < g - 1:
         m += 1
         if all_sent[m][45] > 2:
