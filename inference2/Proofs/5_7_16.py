@@ -8,8 +8,8 @@ import sys
 # from django_tools.middlewares import ThreadLocal
 # from inference2 import views
 tot_tim = time.time()
-excel = False
-mysql = True
+excel = True
+mysql = False
 debug = False
 words_used = False
 strt = 0
@@ -139,8 +139,12 @@ p = 1
 subscripts = [l1,l2,l3,l4]
 
 if excel:
+    #himanshu fix here
+    g = time.time()
     wb4 = load_workbook('../inference engine.xlsx')
     wb5 = load_workbook('../dictionary last perfect.xlsx')
+    h = time.time()
+    j = h-g
     w4 = wb4.worksheets[0]
     ws = wb5.worksheets[0]
 else:
@@ -8781,11 +8785,12 @@ def get_result(post_data,archive_id=None,request=None):
         return result_data
 if excel:
     dummy = get_result('hey')
-    # st = time.time()
-    #wb4.save('../inference engine.xlsx')
-    # wb5.save('dictionary new 2.xlsx')
-    # en = time.time()
-    # print en-st
+    #himanshu fix here
+    st = time.time()
+    wb4.save('../inference engine.xlsx')
+    wb5.save('dictionary new 2.xlsx')
+    en = time.time()
+    print en-st
 elif mysql:
     dummy = get_result('hey')
 
