@@ -2,62 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/IE_Manual.docx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/Proofs/5_7_16.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/Proofs/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/Proofs/kk.sh" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/Proofs/last perfect.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/Proofs/prove.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/Proofs/temp.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/actions.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/admin.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/admincsv.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/dictionary 10.16.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/dictionary last perfect copy.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/dictionary last perfect.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/dictionary last perfect.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/dictionary4.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/forms.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/guided_proof.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/inference engine.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/inference engine.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/inference engine2.xlsx" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/models.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/monopoly-master/.ipynb_checkpoints/monopoly-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/monopoly-master/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/monopoly-master/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/monopoly-master/board.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/monopoly-master/examples/edajubehuy.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/monopoly-master/monopoly.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/monopoly-master/monopoly.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/old_prove2.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/sample.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/css/jquery-ui.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/images/ajax-loader.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/jquery-asPieProgress/dist/css/asPieProgress.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/jquery-asPieProgress/dist/css/asPieProgress.min.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/jquery-asPieProgress/dist/jquery-asPieProgress.es.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/jquery-asPieProgress/dist/jquery-asPieProgress.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/jquery-asPieProgress/dist/jquery-asPieProgress.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/js/jquery-1.11.3.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/static/inference2/js/jquery-ui.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templates/admin/change_list_csv.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templates/admin/csv_import.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templates/inference2/ajax-loader.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templates/inference2/archives.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templates/inference2/dict.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templates/inference2/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templatetags/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/templatetags/extra_tags.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/tests.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/utils.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/views.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2 copy/~$dictionary new.xlsx" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/dictionary4.xlsx" afterPath="$PROJECT_DIR$/inference2/dictionary4.xlsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/inference engine.xlsx" afterPath="$PROJECT_DIR$/inference2/inference engine.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/actions.py" afterPath="$PROJECT_DIR$/inference2/actions.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -85,11 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.09139785">
-              <caret line="4258" column="18" selection-start-line="4258" selection-start-column="18" selection-end-line="4258" selection-end-column="18" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="154" column="9" selection-start-line="154" selection-start-column="9" selection-end-line="154" selection-end-column="9" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -106,16 +53,6 @@
                 <element signature="e#0#11#0" expanded="true" />
                 <marker date="1492011904000" expanded="true" signature="487:507" placeholder="..." />
                 <marker date="1492011904000" expanded="true" signature="1530:2914" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="2960:4728" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="4770:5001" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="5037:5523" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="5564:5884" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="5909:6016" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="6067:6254" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="6277:6683" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="6721:7328" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="7353:7564" placeholder="..." />
-                <marker date="1492011904000" expanded="true" signature="7621:7927" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -165,11 +102,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="actions.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="actions.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/actions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
+            <state vertical-scroll-proportion="0.35172415">
+              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -190,10 +127,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-              <folding>
-                <marker date="1492011904000" expanded="false" signature="390:410" placeholder="import ..." />
-                <marker date="1492011904000" expanded="true" signature="858:1012" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -245,7 +179,6 @@
         <option value="$PROJECT_DIR$/inference2/templates/inference2/index.html" />
         <option value="/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/zipfile.py" />
         <option value="$PROJECT_DIR$/inference2/old_prove2.py" />
-        <option value="$PROJECT_DIR$/inference2/actions.py" />
         <option value="$PROJECT_DIR$/inference2/models.py" />
         <option value="$PROJECT_DIR$/inference2/5.7.16.py" />
         <option value="$PROJECT_DIR$/inference_engine2/prove.py" />
@@ -255,6 +188,7 @@
         <option value="$PROJECT_DIR$/inference2/forms.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+        <option value="$PROJECT_DIR$/inference2/actions.py" />
       </list>
     </option>
   </component>
@@ -265,10 +199,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="695" />
+    <option name="x" value="178" />
     <option name="y" value="23" />
-    <option name="width" value="703" />
-    <option name="height" value="856" />
+    <option name="width" value="1120" />
+    <option name="height" value="849" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -567,23 +501,35 @@
       <option name="project" value="LOCAL" />
       <updated>1491731311872</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="hey">
+      <created>1492093279675</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1492093279675</updated>
+    </task>
+    <task id="LOCAL-00005" summary="hey">
+      <created>1492094695677</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1492094695678</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="695" y="23" width="703" height="856" extended-state="0" />
+    <frame x="178" y="23" width="1120" height="849" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2327189" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22109276" sideWeight="0.5234708" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3278237" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32692307" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32622334" sideWeight="0.49721116" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37768924" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29526463" sideWeight="0.48787448" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22109276" sideWeight="0.47652915" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22109276" sideWeight="0.47652915" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -662,7 +608,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="4939" />
+      <option name="time" value="4941" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -709,10 +655,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="100" column="0" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
-          <folding>
-            <marker date="1492011904000" expanded="false" signature="390:410" placeholder="import ..." />
-            <marker date="1492011904000" expanded="true" signature="858:1012" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -976,6 +919,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="26" column="7" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="154" column="9" selection-start-line="154" selection-start-column="9" selection-end-line="154" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <marker date="1492011904000" expanded="true" signature="487:507" placeholder="..." />
+            <marker date="1492011904000" expanded="true" signature="1530:2914" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="79" column="23" selection-start-line="79" selection-start-column="23" selection-end-line="79" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference_engine2/wsgi.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -994,36 +974,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <marker date="1492011904000" expanded="true" signature="487:507" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="1530:2914" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="2960:4728" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="4770:5001" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="5037:5523" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="5564:5884" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="5909:6016" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="6067:6254" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="6277:6683" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="6721:7328" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="7353:7564" placeholder="..." />
-            <marker date="1492011904000" expanded="true" signature="7621:7927" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="79" column="23" selection-start-line="79" selection-start-column="23" selection-end-line="79" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1031,14 +981,6 @@
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/actions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1054,28 +996,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-          <folding>
-            <marker date="1492011904000" expanded="false" signature="390:410" placeholder="import ..." />
-            <marker date="1492011904000" expanded="true" signature="858:1012" placeholder="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/importlib/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="7" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
+    <entry file="file://$PROJECT_DIR$/inference2/actions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09139785">
-          <caret line="4258" column="18" selection-start-line="4258" selection-start-column="18" selection-end-line="4258" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.35172415">
+          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
