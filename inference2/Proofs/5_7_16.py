@@ -1,5 +1,6 @@
 from openpyxl import load_workbook
 from collections import Counter
+from pprint import pprint
 import timeit
 import copy
 import time
@@ -8,24 +9,63 @@ import sys
 # from django_tools.middlewares import ThreadLocal
 # from inference2 import views
 tot_tim = time.time()
-excel = True
-mysql = False
-debug = False
-words_used = False
+
+j = 4
 strt = 0
-stp = 1
-x = 0
-x = 1
-x = 2
-x = 3
+stp = 0
+if j == 1:
+    django2 = False
+    temp17 = False
+    excel = True
+    one_sent = False
+    mysql = False
+    debug = False
+    words_used = True
+elif j == 2:
+    strt = 0
+    stp = 1
+    django2 = False
+    excel = False
+    temp17 = False
+    one_sent = True
+    bool1 = True
+    wb4 = load_workbook('../temp_proof.xlsx')
+    w4 = wb4.worksheets[0]
+    mysql = False
+    debug = False
+    words_used = False
+elif j == 3:
+    django2 = False
+    excel = False
+    one_sent = False
+    mysql = True
+    debug = False
+    words_used = False
+elif j == 4:
+    django2 = False
+    temp17 = True
+    excel = False
+    one_sent = False
+    mysql = False
+    debug = False
+    words_used = False
+elif j == 5:
+    django2 = True
+    temp17 = False
+    excel = False
+    one_sent = False
+    mysql = False
+    debug = False
+
+
 
 
 
 ######################################
-# last perfect
+# somewhat last perfect
 
 
-if not excel and not mysql:
+if django2:
     from inference2.models import Define3, Archives, Input
     from inference2 import views
 if mysql:
@@ -139,14 +179,15 @@ p = 1
 subscripts = [l1,l2,l3,l4]
 
 if excel:
-    #himanshu fix here
-    g = time.time()
-    wb4 = load_workbook('../inference engine.xlsx')
-    wb5 = load_workbook('../dictionary last perfect.xlsx')
-    h = time.time()
-    j = h-g
+    wb4 = load_workbook('../inference engine old.xlsx')
     w4 = wb4.worksheets[0]
+    wb5 = load_workbook('../dictionary last perfect.xlsx')
     ws = wb5.worksheets[0]
+elif temp17:
+    wb4 = load_workbook('../inference engine old.xlsx')
+    w4 = wb4.worksheets[0]
+elif one_sent:
+    pass
 else:
     ws = Define3.objects.all() #Kyle
     w4 = Input.objects.all()
@@ -167,6 +208,125 @@ else:
 # && 8896
 # @ 8855
 # if^ 8660
+
+
+
+def tran_str(str1,type3):
+
+    list2 = []
+    str2 = ""
+    if 'co^' in str1:
+        str1 = str1.replace('co^ ',"")
+        str2 = 'co'
+    if "|" in str1:
+        for i in range(len(str1)):
+            if str1[i:i+1] == "|":
+                str3 = str1[i+1:i+2]
+                str4 = get_super(str3)
+                str1 = str1[:i] + str4 + str1[i+2:]
+                bb = 8
+
+    if type3 == 3:
+
+        if "t^" in str1:
+            str1 = str1.replace("t^",conditional)
+        if "nt+" in str1:
+            str1 = str1.replace("nt+",neg)
+        if "zzz" in str1:
+            str1 = str1.replace("zzz",ne)
+        if "x^" in str1:
+            str1 = str1.replace("x^",iff)
+        if "b^" in str1:
+            str1 = str1.replace("b^",mini_e)
+        if "c^" in str1:
+            str1 = str1.replace("c^",mini_c)
+        if "ed^" in str1:
+            str1 = str1.replace("ed^",xorr)
+        if "v+" in str1:
+            str1 = str1.replace("v+",idisj)
+    if type3 == 1:
+        list2 = str1.split(" % ")
+    else:
+        list2 = str1
+
+    return [list2,str2]
+
+
+
+def get_super(str1):
+
+    if str1 == "a":
+        return u"\u1d43"
+    elif str1 == "b":
+        return u"\u1d47"
+    elif str1 == "c":
+        return u"\u1d9c"
+    elif str1 == "d":
+        return u"\u1d48"
+    elif str1 == "e":
+        return u"\u1d49"
+    elif str1 == "f":
+        return u"\u1da0"
+    elif str1 == "g":
+        return u"\u1d4d"
+    elif str1 == "h":
+        return u"\u02b0"
+    elif str1 == "i":
+        return u"\u2071"
+    elif str1 == "j":
+        return u"\u02B2"
+    elif str1 == "k":
+        return u"\u1d4f"
+
+     # ua = u"\u1d43"
+    # ub = u"\u1d47"
+    # uc = u"\u1d9c"
+    # ud = u"\u1d48"
+    # ue = u"\u1d49"
+    # uf = u"\u1da0"
+    # ug = u"\u1d4d"
+    # uh = u"\u02b0"
+    # ui = u"\u2071"
+    # uj = u"\u02B2"
+    # uk = u"\u1d4f"
+    # ul = u"\u02E1"
+    # um = u"\u1d50"
+    # un = u"\u207f"
+    # uo = u"\u1d52"
+    # up = u"\u1d56"
+    # ur = u"\u02b3"
+    # us = u"\u02e2"
+    # ut = u"\u1d57"
+    # uu = u"\u1d58"
+    # uv = u"\u1d5b"
+    # uw = u"\u02b7"
+    # uy = u"\u02b8"
+
+    elif str1 == "l":
+        return u"\u02E1"
+    elif str1 == "m":
+        return u"\u1d50"
+    elif str1 == "n":
+        return u"\u207f"
+    elif str1 == "o":
+        return u"\u1d52"
+    elif str1 == "p":
+        return u"\u1d56"
+    elif str1 == "r":
+        return u"\u02b3"
+    elif str1 == "s":
+        return u"\u02e2"
+    elif str1 == "t":
+        return u"\u1d57"
+    elif str1 == "u":
+        return u"\u1d58"
+    elif str1 == "v":
+        return u"\u1d5b"
+    elif str1 == "w":
+        return u"\u02b7"
+    elif str1 == "y":
+        return u"\u02b8"
+
 
 
 def remove_outer_paren(str1):
@@ -739,8 +899,8 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
     pronouns2 = copy.deepcopy(words[24])
     if "it" in pronouns2:
         pronouns2.remove("it")
-        if "it"+up in pronouns2:
-            pronouns2.remove("it"+up)
+    if "it"+up in pronouns2:
+        pronouns2.remove("it"+up)
     pronouns = pronouns2
     prop_con = [] # delete this after I'm sure I don't need it
     p_sent = []
@@ -844,12 +1004,12 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
                 break
             if all_sent[m][46] != "x" and all_sent[m][46] != "y":
                 bool2 = False
-                if m == 5 and d == 8:
+                if m == 0 and i == 14:
                     bb = 7
                 if m > 100:
                     easygui.msgbox('in the define function you are caught in an infinite loop')
                 for i in num:
-                    if i == 14 and m == 2:
+                    if i == 14 and m == 2 and d == 8:
                         bb = 7
                     if i == 64 and m == 2:
                         bb = 7
@@ -1500,7 +1660,7 @@ def remove_values_from_list(the_list, val):
 def divide_sent(words, list2, idf_var,tot_sent,all_sent):
 
     global sn
-    global impl
+    global impl, def_used
     redundant = words[21]
     conn = words[4]
     relations = words[6]
@@ -1524,6 +1684,9 @@ def divide_sent(words, list2, idf_var,tot_sent,all_sent):
         all_sent[i] = all_sent[i].split(" ")
         all_sent[i] += ["("+tot_sent[i][1]+")",tot_sent[i][2],""]
         for j in range(len(all_sent[i])):
+            if all_sent[i][j] not in def_used and "(" not in all_sent[i][j]:
+                if all_sent[i][j] != "":
+                    def_used.append(all_sent[i][j])
             if all_sent[i][j] in modals:
                 if all_sent[i][j+1] == 'that' and all_sent[i][j+2] == 'if':
                     old_sent = all_sent[i][-3]
@@ -1716,10 +1879,10 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                 bool3 = check_dimension(doubles,1,str4)
                 if bool3:
                     str3 += " " + all_sent[j][i+1]
-                    if str3 not in def_used:
+                    if str3 not in def_used and "(" not in str3:
                         def_used.append(str3)
             else:
-                if str3 not in def_used:
+                if str3 not in def_used and "(" not in str3:
                     def_used.append(str3)
             str2 = findinlist(str3,relations,0,1)
 
@@ -2641,7 +2804,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","no","many"+um,"many"+un,\
         "no" + us]
-    if definiendum == "you":
+    if definiendum == "personhood":
         bb = 7
     new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
@@ -3274,9 +3437,11 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #jjj
     no_var_ch = var_ch(match_dv)
     if no_var_ch:
-        rule = rule[0] + "E" + rule[2:]
-        sn += 1
-
+        try:
+            rule = rule[0] + "E" + rule[2:]
+            sn += 1
+        except IndexError:
+            bb = 8
 
     # we now replace the skel string with the new sentences, to get the true definition
     skel_string = def_info[5]
@@ -3656,8 +3821,8 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             #this means that the subject of the previous sentences obtains the anaphor
             #to which it refers
             all_sent[len(all_sent)-2][57] = 3
-        # if word == 'TO':
-        #     bb = 8
+        if word == "AB":
+            bb = 8
         #     break
         if isvariable(word):
             pos = 'n'
@@ -3688,6 +3853,10 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             pos = findinlist(word,posp,0,1)
         if word == 'plural form':
             has_plural = True
+        if not isvariable(word):
+            if word not in def_used:
+                def_used.append(word)
+
 
         #determined nouns occupy the noun position
         if pos == 'w':
@@ -3922,8 +4091,8 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             except IndexError:
                 bb = 8
             print "you misspelled " + word
-            if excel:
-                sys.exit()
+            # if excel:
+            #     sys.exit()
             # easygui.msgbox('you did not categorize the word ' + word)
         if word in anaphoric_relations and first:
                 anaphora = []
@@ -4081,25 +4250,34 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
     b = time.time()
     p += 2
     definitions2 = words[33]
+    definitions = words[16]
+    for i in range(len(dv_nam)):
+        if dv_nam[i][0] not in def_used:
+            def_used.append(dv_nam[i][1])
 
+    # iio
     if excel and words_used:
         for i in range(len(def_used)):
-            j = findinlist(def_used[i],definitions2,0,1)
+            if i == 12:
+                bb = 8
+            if def_used[i][0].isupper():
+                j = findinlist(def_used[i],definitions,0,6)
+            else:
+                j = findinlist(def_used[i],definitions2,0,1)
             if j != None:
-                ws.cell(row=j,column=1).value = 1
+                ws.cell(row=j,column=2).value = 1
                 bool2 = True
                 while bool2:
                     j += 1
-                    word2 = ws.cell(row=j,column=3).value
-                    if word2 == def_used[i]:
-                        ws.cell(row=j,column=1).value = 1
+                    word2 = ws.cell(row=j,column=4).value
+                    if word2 == def_used[i]: #kko
+                        ws.cell(row=j,column=2).value = 1
                     else:
                         bool2 = False
                         break
 
     c = time.time()
     # print c-b
-
 
     if stp == 0:
         stp = len(test_sent)
@@ -4135,7 +4313,7 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
                 str1 = ""
             if j == 0:
                 str1 = i
-            if excel:
+            if excel or one_sent:
                 w4.cell(row=p,column=2).value = test_sent[i][j][0]
                 w4.cell(row=p,column=3).value = test_sent[i][j][1]
                 w4.cell(row=p,column=4).value = str1
@@ -4149,7 +4327,7 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
         o += 1
         list1 = build_sent_name(tot_prop_name[o])
         for j in range(len(list1)):
-            if excel:
+            if excel or one_sent:
                 w4.cell(row=p,column=3).value = list1[j]
             else:
                 result_data['text_'+str(p)+'_2']=list1[j]
@@ -4169,7 +4347,7 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
 
                     bool1 = True
                     p += 1
-                if excel:
+                if excel or one_sent:
                     w4.cell(row=p,column=2).value = tot_prop_sent[o][j][0]
                     w4.cell(row=p,column=3).value = tot_prop_sent[o][j][2] + tot_prop_sent[o][j][1]
                 else:
@@ -4194,7 +4372,7 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
                         if tot_prop_sent[o][j][7] != "" and tot_prop_sent[o][j][7] != None:
                             str2 += "," + str(tot_prop_sent[o][j][7])
 
-                if excel:
+                if excel or one_sent:
                     w4.cell(row=p,column=4).value = str2
                 else:
                     result_data['text_'+str(p)+'_3']= str2
@@ -4206,10 +4384,264 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
     e = time.time()
     g = e - b
     return
+# hhh
+def small_dict(str1):
+
+    dict2= [['rbt','above','AB','((bIGc) x^ (dABb)) & ((bIGc) x^ (bABe)) & (c=point)'],\
+['rbt','after|n ','AF','((bIGc) x^ (dAFb)) & ((bIGc) x^ (bAFe)) & (c=number)'],\
+['rbt','after ','A','((bIGc) x^ (dAb)) & ((bIGc) x^ (bAe)) & (c=moment)'],\
+['rbi','are|a','IA','((bIAc) x^ (cIGd)) & ((bIAc) t^ (bIGe)) & ((bIAc) t^ (cIGf)) & (d=property) & (e=thing) & (f=adjective)'],\
+['rbi','are|g ','IG','((bIGc) x^ (cIGd)) & ((eIGf) x^ (eIGg)) & (d=concept|n) & (g=instance)'],\
+['rbis','at','S','((bIGc) x^ (dSb)) & ((dIGf) x^ (dSb)) & (c=point) & (f=particle) '],\
+['rbi','at|i ','AI','((dAIb) t^ (dIGc)) & ((bIGf) x^ (dAIb)) & (c=relationship) & (f=imagination) '],\
+['rbi','at|n ','N','((bIGc) x^ (dNb)) & ((eIGf) x^ ((eNh) & (hAFg))) & ((jIGk) x^ (mNg)) & ((nIGo) x^ (nNp)) & (f=whole) & (c=number) & (g=1) & (k=individual) & (p=0) & (o=contradiction) '],\
+['rbi','at|p ','P','((dPb) t^ (dIGc)) & ((bIGf) x^ (dPb)) & (c=relationship) & (f=possible world) '],\
+['rbit','at|t ','T','((dTb) t^ (dIGc)) & ((bIGf) x^ (dTb)) & (c=relationship) & (f=moment) '],\
+['rbi','desire','DS','((dDSb) t^ ((bIGc) & (bIAe))) & ((bIGf) x^ (dDSb)) & (c=relationship) & (f=mind) & (e=open|r)'],\
+['r','have','H','((bHc) x^ (cIGd)) & ((bHc) t^ (bIGe)) & ((bHc) t^ (cIGf)) & (d=property|n) & (e=thing) & (f=noun)'],\
+['rbi','has|w ','HW','((bIGc) x^ (bHWd)) & ((dIGe) x^ (bHWd)) & (d=whole) & (e=part)'],\
+['rbts','in front of','FR','((bIGc) x^ (dFRb)) & ((bIGc) x^ (bFRe)) & (c=point)'],\
+['rbts','left of','LF','((bIGc) x^ (dLFb)) & ((bIGc) x^ (bLFe)) & (c=point)'],\
+['rbi','think about','TK','((bTKd) t^ (dIGc)) & ((bIGf) x^ (bTKd)) & (c=relationship) & (f=mind) '],\
+['n','concept|n',None,'(c=concept|n) & ((bIGc) x^ (zIGb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','instance',None,'(c=instance) & ((bIGc) x^ (bIGd))'],\
+['n','integer',None,'(c=integer) & ((bIGc) x^ (bAFd)) & ((bIGc) x^ (eAFb)) & ((bIGc) x^ (fNb)) & ((bIGc) t^ (bIGg)) & (g=non_whole)'],\
+['n','mind',None,'(c=mind) & ((bIGc) t^ (bTKz))'],\
+['n','moment',None,'(c=moment) & ((bIGc) x^ (dTb)) & ((bIGc) x^ (bAh)) & ((bIGc) x^ (eAb)) & ((bIGc) t^ (bIGf)) & (f=non_whole)'],\
+['n','part',None,'(c=part) & ((bIGc) x^ (dHWb))'],\
+['n','part|p',None,'(c=part|p) & (((bIGc) & (bOFd)) x^ (dHWb))'],\
+['n','particle',None,'(c=particle) & ((bIGc) x^ (bSd)) & ((bIGd) x^ (hTg)) & ((bIGc) t^ (bIGf)) & (f=non_whole) & (g=now) & (hb^bSd)'],\
+['n','point',None,'(c=point) & ((bIGc) x^ (dSb)) & ((bIGc) x^ (eABb)) & ((bIGc) x^ (bABm)) & ((bIGc) x^ (fFRb)) & ((bIGc) x^ (bFRj)) & ((bIGc) x^ (gLFb)) & ((bIGc) x^ (bLFk)) & ((bIGc) t^ (bIGh)) & (h=non_whole)'],\
+['n','property',None,'(c=property) & ((bIGc) x^ (dIAb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','property|n',None,'(c=property|n) & ((bIGc) x^ (dHb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['na','thing',None,'See atomic categories'],\
+['n','thought',None,'(c=thought) & ((bIGc) x^ (dTKb)) & ((bIGc) t^ (bIGe)) & ((bIGc) x^ (bAIf)) & (e=relationship)'],\
+['n','whole',None,'(c=whole) & ((bIGc) x^ (bHWd))'],\
+['na','plural form',None,'indefinable'],\
+['rai','relational variable','R','indefinable'],\
+['ns','set',None,'(set = whole)'],\
+['ns','class',None,'(class = concept|n)'],\
+['ns','concept|a',None,'(concept|a = property)'],\
+['r','exist','EX','(exist=EX) & ((bEX) x^ (bIAc)) & (c=extant)'],\
+['ns','group',None,'(group = whole)'],\
+['a','material',None,'(c=material) & (d=particle) & ((bIAc) x^ (bIGd))'],\
+['ns','number|i',None,'(number|i=integer)'],\
+['as','physical ',None,'(physical=material)'],\
+['ns','universal',None,'(universal = concept|n)'],\
+['rbt','is','=','(is = =)'],\
+['lb','then',None,'(then = i^)'],\
+['u','that|c',None,'(it IA p that q) x^ (qIAp)'],\
+['na','there',None,'(there EX b) x^ (bEX)'],\
+['na','this|n',None,'(this|n Rc) x^ (bRc)'],\
+['u','which',None,'(bRc which Qd) x^ ((bRc) & (cQd))'],\
+['u','who',None,'((bRc who Qd) x^ ((bRc) & (cQd) & (bIGe))) & (e=person)'],\
+['b','a|r',None,'redundant'],\
+['b','an|r',None,'redundant'],\
+['b','did',None,'redundant'],\
+['b','do',None,'redundant'],\
+['b','does',None,'redundant'],\
+['b','if',None,'redundant'],\
+['b','is|r',None,'redundant'],\
+['b','is|r',None,'redundant'],\
+['b','itself|r',None,'redundant'],\
+['b','of|r',None,'redundant'],\
+['b','on|r',None,'redundant'],\
+['b','same',None,'redundant'],\
+['dr','the|r',None,'redundant'],\
+['b','was|r',None,'redundant'],\
+['b','will|r',None,'redundant'],\
+['b','b^',None,'The symbol to the left of b^ is an abbreviation of the symbols on the right which are relationships'],\
+['r','=',None,'(b=c) means wherever we see b we may replace it with c and vice_versa'],\
+['ra','zzz',None,'(bzzzc) means we may not replace b with c and vice_versa'],\
+['b','nt+',None,'(nt+p t^ (pIGc)) & (c=relationship) & (qIAd) & (qb^p&nt+p) & (d=consistent)'],\
+['m','not',None,'~'],\
+['a','~',None,'(~p t^ (pIGc)) & (c=relationship) & (qIAd) & (qb^p&~p) & (d=contradictory)'],\
+['c','and|c',None,'(b and|c c R d) x^ (b.cRd)'],\
+['m','not|i',None,'(not|i = nt+)'],\
+['nu','2',None,'((b=2) x^ ((cAFb) & (bAFe))) & (c=3) & (e=1)'],\
+['ddi','a',None,'((a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=indefinite)'],\
+['ddi','a|a',None,'((a|a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=general)'],\
+['ddi','any',None,'((any bRc) x^ (((zIGb) t^ (zRc)) & (zIAe) & (yIGb) & (yIAd))) & (d=particular) & (e=general)'],\
+['dt','any|n',None,'(b~R any|n c) x^ (bR no c)'],\
+['ds','every',None,'(every=any)'],\
+['dd','many|n',None,'(((many|n bRc) & (bOFPd) & (bIGe)) x^ ((zIGd) & (zRc) & (zIAg) & (yIGd) & (y~Rc) & (yIAg) & (yIAf) & (zIAf) & (yIAh) & (zIAh) & (y zzz z))) & (e=plural form) & (f=indefinite) & (g=many) & (h=particular)'],\
+['dd','many|o',None,'(((many|o bIGc) & (bOFPd) & (bIGe) & (cOFPf) & (cIGe)) x^ ((zIGf) & (zIGd) & (zIAd) & (yIGd) & (y~IGf) & (yIAd) & (zIAh) & (yIAh))) & (e=plural form) & (g=many) & (h=indefinite)'],\
+['dd','no',None,'(((no bRc) & (bIGy) & (bOFPd)) x^ ((xIAe) & (xIGd) & (zIAf) & ((zIGd) t^ (z~Rc)))) & (y=plural form) & (e=indefinite) & (f=general)'],\
+['d','no|s',None,'((no|s bRc) x^ (((zIGb) t^ (z~Rc)) & (yIGb) & (zIAe) & (yIAd))) & (d=indefinite) & (e=general)'],\
+['ddi','the',None,'((the bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=definite)'],\
+['ws','anyone',None,'(anyone = any person)'],\
+['ws','anything',None,'(anything = any thing)'],\
+['ws','anything|a',None,'(anything|a = a|a thing)'],\
+['ws','everyone',None,'(everyone = any person)'],\
+['ws','nothing',None,'(nothing = no|s thing)'],\
+['ds','some',None,'(some=a)'],\
+['ds','some|o',None,'(some|o = many|o)'],\
+['ds','some|p',None,'(some|p = many|n)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something|a',None,'(something|a = a|a thing)'],\
+['ds','that|d',None,'(that|d=the)'],\
+['ds','this',None,'(this=the)'],\
+['p','he',None,'(d=person) & (e=male) & ((he Rb) t^ ((cRb) & (cIAe) & (cIGd))) & (g=definite) & (h=particular)'],\
+['q','his',None,'((his bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=he)'],\
+['p','i',None,'(d=person) & ((i Rb) t^ ((iIGd) & (iIAg))) & (g=definite)'],\
+['p','it|p',None,'propositional it'],\
+['q','its|a',None,'(bR its|a c) t^ ((zIGc) & (bHMz) & (bRz))'],\
+['q','its|b',None,'((b R its|b c) t^ ((zIGd) & (bHMz) & (bRz))) & ((b R its|b c) t^ ((cOFPd) & (cIGe))) & (e=plural form)'],\
+['q','my',None,'((my bRc) t^ ((zRc) & (zIGb) & (iOWNz)))'],\
+['p','you',None,'(d=person) & ((you Rb) t^ ((cRb) & (cIGd) & (cIAg))) & (g=definite)'],\
+['q','your',None,'(e=person) & ((your bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=you)'],\
+['ra','about','ABT','postponed'],\
+['rc','as','AS','(as=AS) & (((bASc) & (dRb)) x^ (cRb))'],\
+['r','believe','B','(believe=B) & ((bBc) x^ (bTKd)) & ((bBc) t^ (bTKc)) & (e=true) & (db^cIAe)'],\
+['na','body|c',None,'(c=body|c) & ((bIGc) x^ ((bHWd) t^ (dIGe))) & (e=particle)'],\
+['ra','breaks','BRK','postponed'],\
+['na','causal role',None,'postponed'],\
+['ra','cause','CA','((pCAq) x^ ((bRc INMd Te) t^ ((fQg INMj Th) & (dCTGj) & (hSUTe)))) & (pb^bRc INMd) & (qb^fQg INMj)'],\
+['n','courage',None,'(b=courage) & ((cHb) x^ (cIAd)) & (d=courageous)'],\
+['na','courageous',None,'postponed'],\
+['aa','definite',None,'(definite = individual)'],\
+['rs','distinct from',None,'(distinct from = zzz)'],\
+['r','exists','EX','(exists=EX) & ((bEX) x^ (bIAc)) & (c=extant)'],\
+['n','familial part',None,'(c=familial part) & (((bIGc) & (bOFd)) x^ (bIGd))'],\
+['na','family',None,'postponed'],\
+['rs','from|b',None,'(from|b = born)'],\
+['r','has|c|r (causal role)','HCA','((bHCAc) x^ (bCAc)) & ((bHCAc) t^ (bHc))'],\
+['r','has|g|c','HGC','(cHGCb) x^ ((cHWe) t^ (eIGb))'],\
+['r','has|m','HM','(have|m=HM) & ((bHMc) x^ (cIGb))'],\
+['r','has|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['r','have|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['ra','have|w','HW','(c=body) &  (((bHWz) & (zIGc)) x^ (zSy))'],\
+['ratso','in','IN','((bINc) x^ ((bIGd) & (cHWb))) & (d=point)'],\
+['r','in|b','INB','((bINBc) x^ ((cHWb) & (bIGd))) & (d=moment)'],\
+['r','in|e','INE','(bINEc) x^ ((bSd) & (cHWd))'],\
+['r','in|m','INM','(bINMc) x^ ((bHWd) x^ ((dSe) & (cHWe)))'],\
+['nk','individual',None,'(b=individual) & ((cIGb) x^ (((dIGe) t^ (d~IGc)) & (cIAf) & ((d zzz c) x^ (d~IAf)))) & (e=thing)'],\
+['rs','inside',None,'(inside = INE)'],\
+['ra','is|e','EX','((bEX) x^ (bIAc)) & (c=extant)'],\
+['aa','large',None,'postponed'],\
+['ra','lives','LV','postponed'],\
+['na','logic',None,'postponed'],\
+['a','many',None,'(z=many) & (y=2) & ((bIAz) x^ ((bNy) ed^ ((bNc) & (cAFy))))'],\
+['a','mental',None,'(c=mental) & ((bIAc) x^ (bTKd))'],\
+['a','mental|b',None,'(c=mental) & ((bIAc) x^ (dTKb))'],\
+['na','murder',None,'postponed'],\
+['n','non_whole',None,'(c=non_whole) & ((bIGc) x^ ((dIGe) t^ (b~HWd))) & (e=thing)'],\
+['ra','of|p','OFP','(((bOFPc) & (bIGd) & (cIGe)) x^ ((fHWb.c) & (fIGg))) & (g=root) & (d=plural form) & (e=singular form)'],\
+['ra','of','OF','postponed'],\
+['r','of|i','OFI','(bOFIc) x^ (cHGCb)'],\
+['r','on','ON','(on=ON) & ((bONc) x^ ((bABc) & (bNXTc)))'],\
+['ns','one|p',None,'(one|p = person)'],\
+['ra','own','OWN','postponed'],\
+['ns','part|f',None,'(part|f=familial part)'],\
+['a','partially material|a (property)',None,'(b=partially material|a) & ((cIAb) x^ ((dHWf) & (fIGg) & (dIAc) & (dHWh) & (hIGk))) & ((cIGb) t^ (cIGe)) & (e=property) & (g=body|c) & (k=mind)'],\
+['na','party',None,'postponed'],\
+['n','person',None,'(c=person) & (d=personhood) & ((bIGc) x^ (bHd))'],\
+['n','personhood',None,'(c=personhood) & ((bHc) t^ ((bIGd) & (zTKw) & (zDSx) & (bHWz) & (bHWy) & (yIGe))) & (d=person) & (e=body|c)'],\
+['n','region|a',None,'(c=region|a) & ((bIGc) x^ (dINEb))'],\
+['nu','time',None,'(b=time) x^ ((eTd) x^ (bHWd))'],\
+['ra','took','TAK','postponed'],\
+['a','true',None,'(c=true) & ((bIAc) x^ (bIe)) & ((bIAc) t^ (bIGf)) & (e=reality) & (f=non_meta_statement)'],\
+['aa','white',None,'postponed'],\
+['ns','members',None,'(members = parts)'],\
+['ns','numbers|i',None,'(numbers|i = integers)'],\
+['ra','ate','ATE','postponed'],\
+['ra','ate from','ATF','postponed'],\
+['na','ball',None,'postponed'],\
+['ra','born','BRN','postponed'],\
+['na','boy',None,'postponed'],\
+['ra','broke','BRK','postponed'],\
+['na','cake',None,'postponed'],\
+['na','casablanca',None,'postponed'],\
+['na','cat',None,'postponed'],\
+['aa','caught',None,'postponed'],\
+['aa','cold',None,'postponed'],\
+['nc','dog',None,'(c=dog) & (d=doglike) & ((bIGc) x^ (bIAd))'],\
+['ac','doglike',None,'(c=dog) & (d=doglike) & ((bIAd) x^ ((bIGc) & (bHWe) & (bHWg) & (eIGh) & (gIGk))) & (k=mind) & (h=body|c)'],\
+['na','door',None,'postponed'],\
+['ra','drank','DRK','postponed'],\
+['ra','drink','DRK','postponed'],\
+['ra','drinks','DRK','postponed'],\
+['na','earth',None,'postponed'],\
+['ra','eat from','ATF','postponed'],\
+['na','girl',None,'postponed'],\
+['aa','green',None,'postponed'],\
+['na','hamlet',None,'postponed'],\
+['na','house',None,'postponed'],\
+['n','kennedy',None,'(b=kennedy) & ((cIGb) t^ (bIGd)) & (d=family)'],\
+['a','kennedy|a',None,'(b=kennedy|a) & (c=kennedy) & (((eIAb) & (fIGe)) x^ (fIGc))'],\
+['ra','kiss','KS','postponed'],\
+['ra','kissed','KS','postponed'],\
+['na','male',None,'(b=male) & (c=female) & ((dIAb) t^ (d~IAc))'],\
+['ra','love','LOV','postponed'],\
+['n','man',None,'(b=man) & ((cIGb) x^ ((cIGd) & (cIAe))) & (d=person) & (e=male)'],\
+['na','mars',None,'natural'],\
+['na','movie',None,'postponed'],\
+['na','munich',None,'postponed'],\
+['na','nazi',None,'postponed'],\
+['ra','reads','RD','postponed'],\
+['a','red',None,'(c=red) & ((bIAc) t^ (bINMd))'],\
+['n','redness',None,'(c=redness) & ((bHc) x^ (bIAd)) & (d=red)'],\
+['aa','rewarded',None,'postponed'],\
+['ra','saw','SEE','postponed'],\
+['ra','see','SEE','postponed'],\
+['na','set theory',None,'postponed'],\
+['ra','shed','SHD','postponed'],\
+['aa','smart',None,'postponed'],\
+['r','smell','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['r','smells','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['na','speed limit',None,'postponed'],\
+['ra','spied on','SPD','postponed'],\
+['ra','spies on','SPD','postponed'],\
+['ra','studied','STD','postponed'],\
+['ra','teach','TCH','postponed'],\
+['na','teacher',None,'postponed'],\
+['na','tear',None,'postponed'],\
+['na','van',None,'postponed'],\
+['na','water',None,'postponed'],\
+['n','woman',None,'(b=woman) & ((cIGb) t^ ((cIGd) & (cIAe))) & (d=person) & (e=female)'],\
+['nm','beers',None,'plural of beer'],\
+['ns','groups',None,'(groups = wholes)'],\
+['nm','instances',None,'plural of instance'],\
+['nm','integers',None,'plural of integer'],\
+['nm','minds',None,'plural of mind'],\
+['nm','moments',None,'plural of moment'],\
+['nm','parts',None,'plural of part'],\
+['nm','points',None,'plural of point'],\
+['nm','tears',None,'plural of tear'],\
+['nm','thoughts',None,'plural of thought'],\
+['nm','wholes',None,'plural of whole'],\
+['nu','ada',None,'((b=ada) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','aristotle',None,'((b=aristotle) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jessica',None,'((b=jessica) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','jfk',None,'((b=jfk) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jim',None,'((b=jim) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','julius caesar',None,'((b=julius caesar) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','leibniz',None,'((b=leibniz) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','marilyn',None,'((b=marilyn) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','plato',None,'((b=plato) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','russell',None,'((b=russell) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','socrates',None,'((b=socrates) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','xenothon',None,'((b=xenothon) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['ra','be|a','IA','(be|a=IA)'],\
+['rbi','desires','DS','(desires=DS)'],\
+['ra','has','H','(has=H)'],\
+['rbi','is|a ','IA','(is|a=IA)'],\
+['rbi','is|g ','IG','(is|g=IG)'],\
+['rai','think','TK','(think=TK)'],\
+['rai','thinks','TK','(thinks=TK)'],\
+['ra','was','=','(was = =)'],\
+['ra','was|a','IA','(was|a=IA)'],\
+['ra','was|g','IG','(was|g=IG)'],\
+['ns','whole|c (fallacious)',None,'(whole|c = concept|n)'],\
+[None,None,None,None]]
+
+
+    return dict2
 
 
 
-def build_dict(str1):
+def build_dict(ex_dict):
 
     global excel
     list1 = []
@@ -4254,16 +4686,38 @@ def build_dict(str1):
     pos = []
     category = ['r','s','t']
     almost_done = False
-    i = 0
-    for row in ws:
+    i = -1
+    if one_sent or temp17:
+        mm = len(ex_dict)
+    else:
+        mm = 2000
+
+    while i < mm-1:
         i += 1
-        if i == 90:
+        if i == 45:
             bb = 8
 
         if excel:
-            s = row[0].value
-            str1 = row[2].value
-            word = row[3].value
+            if i == 0:
+                i = 1
+            s = ws.cell(row=i,column=1).value
+            str1 = ws.cell(row=i,column=3).value
+            word = ws.cell(row=i,column=4).value
+            if word == "true*":
+                word = "true"
+            if word == "false*":
+                word = "false"
+            # s = row[0].value
+            # str1 = row[2].value
+            # word = row[3].value
+        elif one_sent or temp17:
+
+            s=0
+            str1 = ex_dict[i][0]
+            word = ex_dict[i][1]
+            if word != None:
+                word = tran_str(word,2)
+                word = word[0]
         else:
             s = row.extra
             str1 = row.type
@@ -4288,12 +4742,28 @@ def build_dict(str1):
 
             if isinstance(word,(int,long)):
                 word = str(word)
+            if "(" in word:
+                cc = word.index("(")
+                word = word[:cc-1]
+            #     kkm
 
             word = word.strip()
             definitions2.append([word,i])
             if excel:
-                str3 = row[4].value
-                defin = row[5].value
+                # str3 = row[4].value
+                # defin = row[5].value
+                str3 = ws.cell(row=i,column=5).value
+                defin = ws.cell(row=i,column=6).value
+                if str3 == "=":
+                    bb = 8
+
+            elif one_sent or temp17:
+                str3 = ex_dict[i][2]
+                if str3 == "AB":
+                    bb = 8
+                defin = ex_dict[i][3]
+                defin = tran_str(defin, 3)
+                defin = defin[0]
             else:
                 str3 = row.rel
                 defin = row.definition
@@ -4302,7 +4772,7 @@ def build_dict(str1):
             if defin == 'redundant':
                 redundant.append(word)
             if defin != None and defin.find("E.g.") == -1 and defin.find("EXP") == -1 \
-                    and defin != 'redundant' and word != ".":
+                    and defin != 'redundant' and word != "." and defin.find("e.g.") == -1:
                 if word != None:
                     word = word.strip()
                 if str3 != None:
@@ -4415,8 +4885,9 @@ def build_dict(str1):
                     syn_pairs.append(list3a)
                     synon.append(str7)
 
-                if sec_let != 'a' and sec_let != 'm' and defin != "artificial" and defin != 'redundant'\
-                    and defin != "postponed" and sec_let != 'b':
+
+                if defin != "artificial" and defin != 'redundant'\
+                    and defin != "postponed":
                     if fir_let in category:
                         definitions.append([str3,defin,fir_let,sec_let,thir_let,fif_let,i])
                     else:
@@ -4427,6 +4898,7 @@ def build_dict(str1):
     syn_pairs.sort()
     relat.sort()
     atomic_relata.sort()
+    pos = sorted(pos, key = operator.itemgetter(1,0))
     # relations.sort()
     # relations2.sort()
     words = [adj, cor, detm, adv, lcon, noun, relat, srelat, trelat, subo,\
@@ -8571,7 +9043,7 @@ def populate_sentences(p):
     test_sent = []
     g = 0
 
-    if not excel:
+    if mysql: # change
 
         for row in w4:
             p += 1
@@ -8661,9 +9133,10 @@ def repeat_relations(str1):
     return final_list
 
 def get_result(post_data,archive_id=None,request=None):
+
+
     global ws,w4, result_data,p
-    p = 1
-    if not excel:
+    if django2:
         if archive_id:
             ws = Define3.objects.filter(archives_id=archive_id)
         else:
@@ -8672,7 +9145,7 @@ def get_result(post_data,archive_id=None,request=None):
             ws = Define3.objects.filter(archives_id=archive.id)
 
 
-    if not excel and not mysql: #rajive fix mysql here
+    if django2 and not mysql:
         result_data = dict(post_data.iterlists())
         w4=[]
         index=0
@@ -8703,20 +9176,47 @@ def get_result(post_data,archive_id=None,request=None):
     global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,p,affirmed
     global gen_var,definite2,cnjts,test_one,stp,strt,candd2,pn,embed,affneg
 
-    list1 = populate_sentences(p)
-    test_sent = list1[0]
-    p = list1[1]
-    words = build_dict('hey') # rajiv
+
+    if one_sent: #ggg
+        str99 = 'co^ Russell has courage  % Russell is|a not courageous'
+        str99 = str99.lower()
+        list2 = tran_str(str99,1)
+        if len(list2[0]) == 1:
+            test_sent = [[[1,list2[0],1,list2[1]]]]
+        else:
+            test_sent = [[]]
+            for i in range(len(list2[0])):
+                if i == 0:
+                    test_sent[0].append([i + 1,list2[0][i],1,list2[1]])
+                else:
+                    test_sent[0].append([i+1,list2[0][i],None,None])
+        ex_dict = small_dict('hey')
+    elif temp17:
+        list1 = populate_sentences(p)
+        test_sent = list1[0]
+        p = list1[1]
+        ex_dict = small_dict('hey')
+    else:
+        list1 = populate_sentences(p)
+        test_sent = list1[0]
+        p = list1[1]
+        ex_dict = ""
+
+    j = time.time()
+    h = j - tot_tim
+    # 35 seconds to here
+    words = build_dict(ex_dict)
     st = time.time()
     rep_rel = repeat_relations('hey')
 
+    # 38 seconds to here
     if stp == 0:
         stp = len(test_sent)
-#rajiv - use these numbers for the progress bar
-    if not excel:
+
+    if django2:
         views.progressbar_send(request,0,100,0,1)
     for k in range(strt,stp):
-        if not excel:
+        if django2:
             views.progressbar_send(request,strt,stp,k,1)
         if k == 37:
             bb = 7
@@ -8753,7 +9253,9 @@ def get_result(post_data,archive_id=None,request=None):
         def_atoms = []
         prop_var = copy.deepcopy(prop_var4)
         idf_var = copy.deepcopy(idf_var2)
+
         id_num = test_sent[k][-1][0] + 1
+
         sn = id_num
         dummy = divide_sent(words, test_sent[k], idf_var,tot_sent,all_sent)
         dummy = syn(tot_sent, all_sent, words,def_atoms)
@@ -8776,8 +9278,10 @@ def get_result(post_data,archive_id=None,request=None):
     g = (en-st)/(k+1)
     print "average " + str("{0:.2f}".format(g))
     # print "modus ponens" + str(time1/(k+1))
+
     dummy = print_sent_full(test_sent,p,tot_prop_name,words,yy)
-    if not excel:
+
+    if django2:
         views.progressbar_send(request,0,100,100,2)
     if excel:
         pass #Saved at last
@@ -8785,16 +9289,22 @@ def get_result(post_data,archive_id=None,request=None):
         views.save_result(archive_id, result_data)
     else:
         return result_data
-if excel:
+if excel or one_sent or temp17:
     dummy = get_result('hey')
     #himanshu fix here
     st = time.time()
-    wb4.save('../inference engine.xlsx')
-    wb5.save('dictionary new 2.xlsx')
+    if excel:
+        wb4.save('../inference engine old.xlsx')
+    if one_sent:
+        wb4.save('../temp_proof.xlsx')
+    if words_used:
+        wb5.save('../dictionary last perfect.xlsx')
     en = time.time()
     print en-st
 elif mysql:
     dummy = get_result('hey')
+
+
 
 tot_tim2 = time.time()
 g = tot_tim2 - tot_tim

@@ -8,19 +8,63 @@ import sys
 # from django_tools.middlewares import ThreadLocal
 # from inference2 import views
 tot_tim = time.time()
-excel = True
-mysql = False
-debug = False
-words_used = False
+
+j = 2
 strt = 0
 stp = 0
+if j == 1:
+    django2 = False
+    temp17 = False
+    excel = True
+    one_sent = False
+    mysql = False
+    debug = False
+    words_used = True
+elif j == 2:
+    strt = 0
+    stp = 1
+    django2 = False
+    excel = False
+    temp17 = False
+    one_sent = True
+    bool1 = True
+    wb4 = load_workbook('../temp_proof.xlsx')
+    w4 = wb4.worksheets[0]
+    mysql = False
+    debug = False
+    words_used = False
+elif j == 3:
+    django2 = False
+    excel = False
+    one_sent = False
+    mysql = True
+    debug = False
+    words_used = False
+elif j == 4:
+    django2 = False
+    temp17 = True
+    excel = False
+    one_sent = False
+    mysql = False
+    debug = False
+    words_used = False
+elif j == 5:
+    django2 = True
+    temp17 = False
+    excel = False
+    one_sent = False
+    mysql = False
+    debug = False
 
 
-######################################
-# last perfect
 
 
-if not excel and not mysql:
+########################
+# new code
+
+
+
+if mysql:
     from inference2.models import Define3, Archives, Input
     from inference2 import views
 if mysql:
@@ -33,8 +77,7 @@ if mysql:
     django.setup()
     from inference2 import views
     from inference2.models import Define3, Archives, Input
-if debug:
-    import easygui
+
 
 anaphoric_relations = []
 prop_name = []
@@ -71,7 +114,7 @@ cond_r = unichr(8835)
 top = unichr(8868)
 bottom = unichr(8869)
 neg = unichr(172)
-idd = unichr(8781)
+idd = unichr(8781) # translation symbol
 iff = unichr(8801)
 mini_c = unichr(8658)
 mini_e = unichr(8703)
@@ -84,11 +127,12 @@ cj = unichr(8896)
 aid = unichr(8776)
 disj = unichr(8855)
 equi = unichr(8660)
+ne = u"\u2260" # not equal
+
 sn = 1
 pn = 400
 id_num=0
 
-ne = u"\u2260"
 l1 = u"\u2081"
 l2 = u"\u2082"
 l3 = u"\u2083"
@@ -127,6 +171,7 @@ prop_var6 = [unichr(97 + t) + u"\u2084" for t in range(26)]
 prop_var4 = prop_var4 + prop_var2 + prop_var3 + prop_var5 + prop_var6
 idf_var2 = [unichr(122 - t) for t in range(25)]
 idf_var2.remove("i")
+idf_var2.remove("l")
 idf_var3 = [unichr(122 - t) + l1 for t in range(25)]
 idf_var4 = [unichr(122 - t) + l2 for t in range(25)]
 idf_var2 = idf_var2 + idf_var3 + idf_var4
@@ -134,10 +179,15 @@ p = 1
 subscripts = [l1,l2,l3,l4]
 
 if excel:
-    wb4 = load_workbook('../inference engine.xlsx')
-    wb5 = load_workbook('../dictionary last perfect.xlsx')
+    wb4 = load_workbook('../inference engine new.xlsx')
     w4 = wb4.worksheets[0]
+    wb5 = load_workbook('../dictionary4.xlsx')
     ws = wb5.worksheets[0]
+elif temp17:
+    wb4 = load_workbook('../inference engine new.xlsx')
+    w4 = wb4.worksheets[0]
+elif one_sent:
+    pass
 else:
     ws = Define3.objects.all() #Kyle
     w4 = Input.objects.all()
@@ -146,18 +196,142 @@ else:
 # >> 8835
 # ta^ 8868
 # co^ 8869
-# ; 172
-# <> 8801
+# nt+ 172
+# x^ 8801
 # c^ 8658
 # # 8703
 # i^ 8866
-# > 8594
+# t^ 8594
 # nf^ 8876
 # ed^ 8891
-# + 8744
+# v+ 8744
 # && 8896
 # @ 8855
 # if^ 8660
+
+
+def tran_str(str1,type3):
+
+    list2 = []
+    str2 = ""
+    if 'co^' in str1:
+        str1 = str1.replace('co^ ',"")
+        str2 = 'co'
+    if "|" in str1:
+        for i in range(len(str1)):
+            if str1[i:i+1] == "|":
+                str3 = str1[i+1:i+2]
+                str4 = get_super(str3)
+                str1 = str1[:i] + str4 + str1[i+2:]
+                bb = 8
+
+    if type3 == 3:
+
+        if "t^" in str1:
+            str1 = str1.replace("t^",conditional)
+        if "nt+" in str1:
+            str1 = str1.replace("nt+",neg)
+        if "zzz" in str1:
+            str1 = str1.replace("zzz",ne)
+        if "x^" in str1:
+            str1 = str1.replace("x^",iff)
+        if "b^" in str1:
+            str1 = str1.replace("b^",mini_e)
+        if "c^" in str1:
+            str1 = str1.replace("c^",mini_c)
+        if "ed^" in str1:
+            str1 = str1.replace("ed^",xorr)
+        if "v+" in str1:
+            str1 = str1.replace("v+",idisj)
+    if type3 == 1:
+        list2 = str1.split(" % ")
+    else:
+        list2 = str1
+
+    return [list2,str2]
+
+
+
+def get_super(str1):
+
+    if str1 == "a":
+        return u"\u1d43"
+    elif str1 == "b":
+        return u"\u1d47"
+    elif str1 == "c":
+        return u"\u1d9c"
+    elif str1 == "d":
+        return u"\u1d48"
+    elif str1 == "e":
+        return u"\u1d49"
+    elif str1 == "f":
+        return u"\u1da0"
+    elif str1 == "g":
+        return u"\u1d4d"
+    elif str1 == "h":
+        return u"\u02b0"
+    elif str1 == "i":
+        return u"\u2071"
+    elif str1 == "j":
+        return u"\u02B2"
+    elif str1 == "k":
+        return u"\u1d4f"
+
+     # ua = u"\u1d43"
+    # ub = u"\u1d47"
+    # uc = u"\u1d9c"
+    # ud = u"\u1d48"
+    # ue = u"\u1d49"
+    # uf = u"\u1da0"
+    # ug = u"\u1d4d"
+    # uh = u"\u02b0"
+    # ui = u"\u2071"
+    # uj = u"\u02B2"
+    # uk = u"\u1d4f"
+    # ul = u"\u02E1"
+    # um = u"\u1d50"
+    # un = u"\u207f"
+    # uo = u"\u1d52"
+    # up = u"\u1d56"
+    # ur = u"\u02b3"
+    # us = u"\u02e2"
+    # ut = u"\u1d57"
+    # uu = u"\u1d58"
+    # uv = u"\u1d5b"
+    # uw = u"\u02b7"
+    # uy = u"\u02b8"
+
+    elif str1 == "l":
+        return u"\u02E1"
+    elif str1 == "m":
+        return u"\u1d50"
+    elif str1 == "n":
+        return u"\u207f"
+    elif str1 == "o":
+        return u"\u1d52"
+    elif str1 == "p":
+        return u"\u1d56"
+    elif str1 == "r":
+        return u"\u02b3"
+    elif str1 == "s":
+        return u"\u02e2"
+    elif str1 == "t":
+        return u"\u1d57"
+    elif str1 == "u":
+        return u"\u1d58"
+    elif str1 == "v":
+        return u"\u1d5b"
+    elif str1 == "w":
+        return u"\u02b7"
+    elif str1 == "y":
+        return u"\u02b8"
+
+
+
+
+
+
+
 
 
 def remove_outer_paren(str1):
@@ -298,7 +472,8 @@ def isvariable(str3,kind=""):
             else:
                 bool2 = False
     except AttributeError:
-        easygui.msgbox('error in isvariable function')
+        print ('error in isvariable function')
+        sys.exit()
     if kind == "":
         return bool2
     else:
@@ -346,8 +521,8 @@ def find_sentences(instring, cut_skel = False):
     g = instring.count('(')
     h = instring.count(')')
     if g != h:
-        easygui.msgbox('wrong number of parentheses in sentence:' + instring)
-        return "stop"
+        print 'wrong number of parentheses in sentence:' + instring
+        sys.exit()
     marker = False
     il = -1
     total = -1
@@ -629,47 +804,53 @@ def word_sub(idf_var, dv_nam, tot_sent, all_sent, words,id_num):
     m = -1
     while m < len(all_sent) -1:
         m += 1
-        if all_sent[m][47] == "no word sub":
-            return
-        bool1 = False
-        list4 = copy.deepcopy(all_sent[m][46])
-        old_sent = all_sent[m][0]
-        oldp = all_sent[m][42]
-        # old_list = copy.deepcopy(all_sent[m])
-        for i in range(len(all_sent[m][46])):
-            k = all_sent[m][46][i]
-            if k == 49:
-                bb = 8
-            str2 = all_sent[m][k]
-            if str2 != None:
-                if str2 not in def_used and not str2.isupper():
-                    def_used.append(str2)
-            if k in num3 and str2 != None:
-                bool1 = True
-                str5 = findinlist(str2,words[16],0,1)
-                if k == 12:
-                    all_sent[m][8] = str5
-                    all_sent[m][12] = None
-                else:
-                    all_sent[m][k] = str5
-            if k == 69 or k == 70:
-                str2 = str2[:-2]
-                dummy = add_to_dv(dv_nam,all_sent,m,k,idf_var,str2)
-                list4.remove(k)
-            elif k in num and all_sent[m][45] != k:
-                bool1 = True
-                if str2 != None and str2 not in pronouns and str2 != 'there':
+        if all_sent[m][47] != "no word sub":
+            bool1 = False
+            list4 = copy.deepcopy(all_sent[m][46])
+            old_sent = all_sent[m][0]
+            oldp = all_sent[m][42]
+            # old_list = copy.deepcopy(all_sent[m])
+            for i in range(len(all_sent[m][46])):
+                k = all_sent[m][46][i]
+                if k == 8:
+                    bb = 8
+                str2 = all_sent[m][k]
+                if str2 != None:
+                    if str2 == "~":
+                        str2 = None
+                    elif str2 not in def_used and not str2.isupper():
+                        def_used.append(str2)
+                if k in num3 and str2 != None:
+                    bool1 = True
+                    str5 = findinlist(str2,words[16],0,1)
+                    if k == 12:
+                        all_sent[m][8] = str5
+                        all_sent[m][12] = None
+                    else:
+                        all_sent[m][k] = str5
+                if k == 69 or k == 70:
+                    str2 = str2[:-2]
                     dummy = add_to_dv(dv_nam,all_sent,m,k,idf_var,str2)
                     list4.remove(k)
+                elif k in num and all_sent[m][45] != k:
+                    bool1 = True
+                    if str2 != None and str2 not in pronouns and str2 != 'there':
+                        dummy = add_to_dv(dv_nam,all_sent,m,k,idf_var,str2)
+                        list4.remove(k)
 
-        if bool1:
-            new_sent = build_sent(all_sent[m])
-            newp = name_sent(new_sent)
-            all_sent[m][0] = new_sent
-            all_sent[m][42] = newp
-            dummy = new_sentence2(old_sent,oldp,new_sent,newp,tot_sent,"SUB",id_num)
-            all_sent[m][46] = list4
-            bool1 = False
+            if bool1:
+                new_sent = build_sent(all_sent[m])
+                newp = name_sent(new_sent)
+                all_sent[m][0] = new_sent
+                all_sent[m][42] = newp
+                dummy = new_sentence2(old_sent,oldp,new_sent,newp,tot_sent,"SUB",id_num)
+                all_sent[m][46] = list4
+                bool1 = False
+
+            # decision = []
+            # decision = dec_pro(decision,all_sent[m],pronouns)
+            # all_sent[m][56] = decision
+
     return
 
 def assigned_var(str1, dv_nam, idf_var):
@@ -723,13 +904,97 @@ def scope_rel_pro(list,i):
     else:
         return True
 
-def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atoms):
+def cia(all_sent,m,tot_sent,i):
+
+    list1 = [None] * 80
+    old_sent = all_sent[m][0]
+    oldp = all_sent[m][42]
+    rule = "CIA"
+    # list17 = copy.deepcopy(all_sent[m])
+    if i == 35:
+        j = 5
+    elif i == 36:
+        j = 14
+    elif i == 37:
+        j = 18
+    elif i == 38:
+        j = 22
+    str1 = all_sent[m][j]
+    all_sent[m][j] = all_sent[m][i]
+    list1[14] = str1
+    list1[5] = all_sent[m][i]
+    list1[9] = "IG"
+    all_sent[m][i] = None
+    dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
+    # list17[46] = "x"
+    # all_sent.append(list17)
+
+
+def adje(all_sent,m,tot_sent,i):
+
+    rule = 'ADJ E'
+    list1 = [None] * 80
+    old_sent = all_sent[m][0]
+    oldp = all_sent[m][42]
+    if i == 13:
+        n = 10
+        r = 9
+    else:
+        r = i-2
+        n = i-1
+    # list17 = copy.deepcopy(all_sent[m])
+    if all_sent[m][8] != None or all_sent[m][12] != None:
+        str7 = "~"
+        all_sent[m][8] = None
+        all_sent[m][12] = None
+    else:
+        str7 = None
+    list1[8] = str7
+    list1[3] = all_sent[m][n]
+    if all_sent[m][r] != "IG":
+        list1[5] = all_sent[m][i+1]
+    else:
+        list1[5] = all_sent[m][5]
+    list1[9] = "IA"
+    list1[14] = all_sent[m][i]
+    all_sent[m][i] = None
+    dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
+    # list17[46] = "x"
+    # all_sent.append(list17)
+
+def rel_pro_elim(all_sent,m,tot_sent,i):
+
+    list1 = [None] * 80
+    old_sent = all_sent[m][0]
+    oldp = all_sent[m][42]
+    rule = "DE " + all_sent[m][i]
+    # list17 = copy.deepcopy(all_sent[m])
+    dummy = rel_pro(i,m,all_sent,list1)
+    dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
+    # list17[46] = "x"
+    # all_sent.append(list17)
+
+def ande(all_sent,m,tot_sent,i):
+
+    all_sent[m][66] = None
+    old_sent = all_sent[m][0]
+    oldp = all_sent[m][42]
+    list1 = [None] * 80
+    list1[5] = all_sent[m][67]
+    all_sent[m][67] = None
+    rule = "DE and" + uc
+    for i in range(6,20):
+        list1[i] = all_sent[m][i]
+    dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
+
+def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,def_atoms,num_sent):
 
     all_sent = remove_duplicates(all_sent,0)
     num = [3,5,10,14,16,18,20,22,24,26,28,30,32,34,63,64,65]
     pronouns2 = copy.deepcopy(words[24])
     if "it" in pronouns2:
         pronouns2.remove("it")
+    if "it"+up in pronouns2:
         pronouns2.remove("it"+up)
     pronouns = pronouns2
     prop_con = [] # delete this after I'm sure I don't need it
@@ -765,10 +1030,10 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
     numbers_def = []
     defined = []
     last = ["many"+ua,"few"+ua]
-    universal = ['all','no','any','no'+us,"a","many"+un,"a"+ua]
-    universal2 = ['no','no'+us]
+    universal = ['every',"a","many"+un,"a"+ua]
+    universal2 = ['every']
     indefinite = ['a',"many"+un,"a"+ua]
-    universal3 = ['all','any','no','no'+us]
+    universal3 = ['every']
 
     for i in range(len(dv_nam)):
         if i == 3:
@@ -798,251 +1063,201 @@ def define(tot_sent, all_sent, idf_var, dv_nam,words,rep_rel,identities,def_atom
             except ValueError:
                 pass
 
-    m = -1
-    g = (len(all_sent))
-    while m < g - 1:
-        m += 1
-        if all_sent[m][45] > 2:
-            all_sent.append(all_sent[m])
-            del all_sent[m]
-            m -= 1
-            g -= 1
-    for d in range(0,9):
-        if d == 1:
-            once = True
-            num = [0]
-        elif d == 2:
-            num = [3,10,16,20,24]
-        elif d == 4:
-            once = True
-            num = [0]
-        elif d == 5:
-            num = [3,10,16,20,24]
-        elif d == 6:
-            num = [5,14]
-        elif d == 7:
-            once = True
-            num = [0]
-        elif d == 8:
-            num = [9,14,48]
-        m = -1
-        while m < len(all_sent) -1:
-            m += 1
-            if len(all_sent) > 80:
-                break
-            if all_sent[m][46] != "x" and all_sent[m][46] != "y":
-                bool2 = False
-                if m == 5 and d == 8:
-                    bb = 7
-                if m > 100:
-                    easygui.msgbox('in the define function you are caught in an infinite loop')
-                for i in num:
-                    if i == 14 and m == 2:
-                        bb = 7
-                    if i == 64 and m == 2:
-                        bb = 7
-                    str1 = all_sent[m][i]
-                    relat = all_sent[m][9]
-                    old_sent = all_sent[m][0]
-                    oldp = all_sent[m][42]
-                    if d == 0:
-                        if (i == 5 and all_sent[m][3] == None and all_sent[m][40] == 69) \
-                            or (i == 14 and all_sent[m][10] == None and all_sent[m][40] == 70):
-                            pn_poss_noun = True
-                        else:
-                            pn_poss_noun = False
 
-                #this is for those sentences whose noun was once part of a relative pronoun
-                        if i == all_sent[m][45]:
-                            print 'noun once part of relative pronoun'
-                            str3 = findinlist(all_sent[m][i],tagged_nouns2,1,0)
-                            if str3 == None:
-                                all_sent.append(all_sent[m])
-                                print "this might contain an error"
-                                break
-                            all_sent[m][i] = str3
-                            new_sent = build_sent(all_sent[m])
-                            newp = name_sent(new_sent)
-                            dummy = new_sentence2(old_sent,oldp,new_sent,newp,tot_sent,"rel pro")
-                            all_sent[m][0] = new_sent
-                            all_sent[m][42] = newp
-                            all_sent[m][45] = None
+    num10 = [5,14,18,22,26,30,34] # pronouns
+    num20 = [3,10,16,20,24,28,32] # determiners
+    num30 = [69,70] # proper name possessive
+    num40 = [66] # and
+    num50 = [4,13,17,21,25,33] # adjective
+    num60 = [35,36] # cia
+    num70 = [59,60,61,62] # relative pronouns
+    num80 = [62,61,60,7] # that-c
+    num90 = [69,70] # possessives
+    num100 = [15,19] # RDA,RDB
+    num110 = [5,63,64] # there
+    num120 = [3,10,16,20,24,28,32] # every, many-n
+    num130 = [9,14]
+    #
+    # m = -1
+    # g = (len(all_sent))
+    # while m < g - 1:
+    #     m += 1
+    #
+    #     if all_sent[m][56][0] == 10:
+    #         for i in num10:
+    #             if i in all_sent[m][46]:
+    #                 pass
 
-                        elif (str1 in pronouns or str1 in determinative or pn_poss_noun) \
-                                and str1 not in universal:
-                            bool1 = True
-                            if str1 in pronouns:
-                                str2 = "pronoun"
-                            elif pn_poss_noun:
 
-                                str2 = "proper name possessive"
-                                str1 = 'the'
-                            else:
-                                str2 = "determinative"
-                            if all_sent[m][43] != i:
-                                definition = findinlist(str1,definitions,0,1)
-                                if all_sent[m][0] not in def_sent:
-                                    list3 = copy.deepcopy(all_sent[m])
-                                    dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
-                                        dv_nam, idf_var,words, all_sent,m,rep_rel,[],[],\
-                                            str2,i)
 
-                                    if str1 == 'i': # this prevents 'i' from being defined
-                                        list3[43] = i # many times
-                                    else:
-                                        list3[46] = "x"
-                                    all_sent[m] = list3
+    for m in range(num_sent):
+        for i in num10:
+            if i in all_sent[m][46]:
+                str1 = all_sent[m][i]
+                definition = findinlist(str1,definitions,0,1)
+                if all_sent[m][0] not in def_sent:
+                    # list3 = copy.deepcopy(all_sent[m])
+                    dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
+                        dv_nam, idf_var,words,rep_rel, all_sent,m,[],[],\
+                            "pronoun",i)
 
-                                    if str1 == "i":
-                                        m -= 1
-                                    else:
-                                        def_sent.append(all_sent[m][0])
-                                    break
-                    elif d == 1 and once:
-                        once = False
-                        dummy = division(tot_sent,all_sent,words,0,def_sent)
-                        dummy = division(tot_sent,all_sent,words,4,def_sent)
-                        m = len(all_sent)
-                        break
-                    elif d == 2 and all_sent[m][i] in universal2 and scope_rel_pro(all_sent[m],i):
-                        definition = findinlist(str1,definitions,0,1)
-                        list3 = copy.deepcopy(all_sent[m])
-                        dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
-                            dv_nam, idf_var,words, all_sent,m,rep_rel,[],[],\
-                                       "determinative",i)
-                        list3[46] = "x"
-                        all_sent[m] = list3
+                    # if str1 == 'i': # this prevents 'i' from being defined
+                    #     list3[43] = i # many times
+                    # else:
+                    #     list3[46] = "x"
+                    # all_sent[m] = list3
+
+                    if str1 == "i":
+                        m -= 1
+                    else:
                         def_sent.append(all_sent[m][0])
-                        break
 
-                    elif d == 3 and (all_sent[m][i] in indefinite or (all_sent[m][i] in universal2 and scope_rel_pro(all_sent[m],i))):
+    for m in range(num_sent):
+        for i in num20:
+            if i in all_sent[m][46]:
+                str1 = all_sent[m][i]
+                definition = findinlist(str1,definitions,0,1)
+                if all_sent[m][0] not in def_sent:
+                    # list3 = copy.deepcopy(all_sent[m])
+                    dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
+                        dv_nam, idf_var,words,rep_rel, all_sent,m,[],[],\
+                            "determinative",i)
+
+    for m in range(num_sent):
+        for i in num30:
+            if i in all_sent[m][46] and i in all_sent[m][40]:
+                definition = findinlist("the",definitions,0,1)
+                if all_sent[m][0] not in def_sent:
+                    # list3 = copy.deepcopy(all_sent[m])
+                    dummy = def_rn(defined,al_def,definition, "the",0, tot_sent, \
+                        dv_nam, idf_var,words,rep_rel, all_sent,m,[],[],\
+                            "proper name possessive",i)
+
+    for d in range(8):
+        for m in range(num_sent):
+            if d == 9 and m == 1:
+                bb = 8
+            if d == 0 and all_sent[m][66] != None and all_sent[m][9] not in compound:
+                    dummy = ande(all_sent,m,tot_sent,i)
+            elif d == 1:
+                if 50 in all_sent[m][56]:
+                    for i in num50:
+                        if i in all_sent[m][46] and scope_uni(all_sent,m,i):
+                            dummy = adje(all_sent,m,tot_sent,i)
+            elif d == 2:
+                for i in num60:
+                    if all_sent[m][i] != None:
+                        dummy = cia(all_sent,m,tot_sent,i)
+            elif d == 3:
+                if 70 in all_sent[m][56]:
+                    for i in num70:
+                        if i in all_sent[m][46] and scope_uni(all_sent,m,i,1) and \
+                            all_sent[m][i] != 'that'+uc:
+                            dummy = rel_pro_elim(all_sent,m,tot_sent,i)
+            elif d == 4:
+                if 80 in all_sent[m][56]:
+                    for i in num80:
+                        if i in all_sent[m][46] and scope_uni(all_sent,m,i,1):
+                            dummy = that(all_sent,m,i,tot_sent,dv_nam,words,idf_var)
+            elif d == 5:
+                for i in num90:
+                    dummy = poss_elim(all_sent,m,i,tot_sent)
+            elif d == 6:
+                for i in num100:
+                    dummy = rel_div(all_sent,m,i,tot_sent,posp)
+            elif d == 7:
+                for i in num110:
+                    dummy = there(all_sent,m,tot_sent,def_sent)
+            elif d == 8:
+                for i in num120:
+                    if i in all_sent[m][46]:
+                        str1 = all_sent[m][i]
                         definition = findinlist(str1,definitions,0,1)
-                        list3 = copy.deepcopy(all_sent[m])
-                        dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
-                            dv_nam, idf_var,words, all_sent,m,rep_rel,[],[],\
-                                "determinative",i)
-                        list3[46] = "x"
-                        all_sent[m] = list3
-                        def_sent.append(all_sent[m][0])
-                        if all_sent[m][57] != None:
-                            if all_sent[m][57] == i:
-                                if all_sent[m][3] == "":
-                                    anaphora = all_sent[m][5]
-                                    all_sent[m][57] = None
-                        break
-                    elif d == 4 and once:
-                        once = False
-                        dummy = division(tot_sent,all_sent,words,1,def_sent)
-                        m = len(all_sent)
-                        break
-                    elif d == 5 and (all_sent[m][i] in universal3 or all_sent[m][i] in poss_pro):
-                        definition = findinlist(str1,definitions,0,1)
-                        list3 = copy.deepcopy(all_sent[m])
-                        if all_sent[m][i] in poss_pro:
-                            str2 = "poss pro"
-                        else:
-                            str2 = "determinative"
+                        if all_sent[m][0] not in def_sent:
+                            # list3 = copy.deepcopy(all_sent[m])
+                            dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
+                                dv_nam, idf_var,words,rep_rel, all_sent,m,[],[],\
+                                    "determinative",i)
 
-                        dummy = def_rn(defined,al_def,definition, str1,0, tot_sent, \
-                            dv_nam, idf_var,words, all_sent,m,rep_rel,[],[],\
-                                str2,i)
-                        list3[46] = "x"
-                        all_sent[m] = list3
-                        def_sent.append(all_sent[m][0])
-                        break
-                    elif d == 6 and all_sent[m][i] == 'it':
-                        list3 = copy.deepcopy(all_sent[m])
-                        list2 = copy.deepcopy(all_sent[m])
-                        list2[i] = anaphora
-                        list2[0] = None
-                        dummy = new_sentence(tot_sent,all_sent[m],list2,"","",1,"DE it")
-                        list3[46] = "x"
-                        all_sent[m] = list3
-                        all_sent.append(list2)
-                        break
-                    elif d == 7 and once:
-                        once = False
-                        dummy = division(tot_sent,all_sent,words,2,def_sent)
-                        m = len(all_sent)
-                        break
-                    elif d == 8:
-                        adverb = False
-                        id = False
-                        kind = ""
-                        if str1 == 's':
-                            bb = 8
-                        if m == 5:
-                            bb = 8
+            elif d == 9:
+                for i in num130:
+                    adverb = False
+                    id = False
+                    kind = ""
+                    if str1 == 's':
+                        bb = 8
+                    if m == 5:
+                        bb = 8
 
-                        if all_sent[m][43] != 'cc':
-                            if relat in def_relat and i == 14:
-                                definiendum = findinlist(str1,dv_nam,0,1)
-                                if definiendum in atomic_relata:
-                                    bool2 = False
-                                else:
-                                    bool2 = True
-
-                            elif i == 48 and all_sent[m][48] != None:
-                                definiendum = str1
-                                bool2 = True
-                                adverb = True
-                                kind = 'R'
-                            elif i == 9 and relat == 'AS':
-                                kind = 'AS'
-                                definiendum = str1
-                                bool2 = True
-                            elif i == 9 and relat in ua_relat:
-                                dummy = add_atomic(all_sent,m,atoms2,tot_sent,dv_nam)
-                            elif relat == '=' and all_sent[m][41] == 1:
-                                id = True
-                                bool2 = True
-                                definiendum = all_sent[m][14]
-                                all_sent[m][41] = None
-                                try:
-                                    str4 = int(definiendum)
-                                    if definiendum not in numbers_def:
-                                        bool2 = False
-                                except ValueError:
-                                    pass
-                            elif relat == "=" and all_sent[m][41] != 1:
+                    if all_sent[m][43] != 'cc':
+                        if relat in def_relat and i == 14:
+                            definiendum = findinlist(str1,dv_nam,0,1)
+                            if definiendum in atomic_relata:
                                 bool2 = False
-                                identities.append([[all_sent[m][5],all_sent[m][14]],"","",""])
-                                all_sent[m][46] = "x"
-                            elif i == 9 and relat != 'IA' and relat != 'IG' and relat != '=' \
-                                and str1 not in atomic_relations:
-                                definiendum = str1
+                            else:
                                 bool2 = True
-                                kind = 'R'
-                            if (bool2 and isdefineable(all_sent[m]) and definiendum != None and \
-                                    definiendum != '') or id:
-                                if definiendum in not_oft_def:
-                                    break
-                                if (id and definiendum not in uniq_obj) or (definiendum == "concept"+un and id):
-                                    break
 
-                                g = findposinlist(definiendum,definitions,0)
-                                definition = definitions[g][1]
-                                if definition == 'natural':
-                                    definition = "(c'=" + definiendum + ") & (d'=natural_whole) & ((bIGc') " + conditional \
-                                    + " (bIGd'))"
-                                pos = definitions[g][2]
-                                circ = definitions[g][3]
-                                circ2 = all_sent[m][43]
-                                basic_molecule = definitions[g][4]
-                    #this prevents us from getting caught in an infinite loop.
-                                if basic_molecule == 'b' and all_sent[m][9] == 'IG':
+                        elif i == 48 and all_sent[m][48] != None:
+                            definiendum = str1
+                            bool2 = True
+                            adverb = True
+                            kind = 'R'
+                        elif i == 9 and relat == 'AS':
+                            kind = 'AS'
+                            definiendum = str1
+                            bool2 = True
+                        elif i == 9 and relat in ua_relat:
+                            dummy = add_atomic(all_sent,m,atoms2,tot_sent,dv_nam)
+                        elif relat == '=' and all_sent[m][41] == 1:
+                            id = True
+                            bool2 = True
+                            definiendum = all_sent[m][14]
+                            all_sent[m][41] = None
+                            try:
+                                str4 = int(definiendum)
+                                if definiendum not in numbers_def:
+                                    bool2 = False
+                            except ValueError:
+                                pass
+                        elif relat == "=" and all_sent[m][41] != 1:
+                            bool2 = False
+                            identities.append([[all_sent[m][5],all_sent[m][14]],"","",""])
+                            all_sent[m][46] = "x"
+                        elif i == 9 and relat != 'IA' and relat != 'IG' and relat != '=' \
+                            and str1 not in atomic_relations:
+                            definiendum = str1
+                            bool2 = True
+                            kind = 'R'
+                        if (bool2 and isdefineable(all_sent[m]) and definiendum != None and \
+                                definiendum != '') or id:
+                            if definiendum in not_oft_def:
+                                break
+                            if (id and definiendum not in uniq_obj) or (definiendum == "concept"+un and id):
+                                break
+
+                            g = findposinlist(definiendum,definitions,0)
+                            definition = definitions[g][1]
+                            if definition == 'natural':
+                                definition = "(c'=" + definiendum + ") & (d'=natural_whole) & ((bIGc') " + conditional \
+                                + " (bIGd'))"
+                            pos = definitions[g][2]
+                            circ = definitions[g][3]
+                            circ2 = all_sent[m][43]
+                            basic_molecule = definitions[g][4]
+                #this prevents us from getting caught in an infinite loop.
+                            if basic_molecule == 'b' and all_sent[m][9] == 'IG':
+                                break
+                            if relat == 'IG' and definiendum in unq_gr:
+                                break
+                            if circ2 == 'c':
+                                circ += circ2
+                            if (relat == 'IA' and pos == 'a') or (relat == 'IG' and pos == 'n') or (relat == 'H' and pos == 'n') \
+                                or pos == 'r' or pos == 'e' or pos == 's' or (relat== '=' and pos == 'n') or adverb or id:
+                                if definition != None and all_sent[m][0] not in def_sent:
+                                    def_sent.append(all_sent[m][0])
+                                    dummy = def_rn(defined,al_def,definition, definiendum,0,tot_sent,dv_nam, idf_var,\
+                                        words,rep_rel,all_sent,m,[],[],kind,i,circ)
                                     break
-                                if relat == 'IG' and definiendum in unq_gr:
-                                    break
-                                if circ2 == 'c':
-                                    circ += circ2
-                                if (relat == 'IA' and pos == 'a') or (relat == 'IG' and pos == 'n') or (relat == 'H' and pos == 'n') \
-                                    or pos == 'r' or pos == 'e' or pos == 's' or (relat== '=' and pos == 'n') or adverb or id:
-                                    if definition != None and all_sent[m][0] not in def_sent:
-                                        def_sent.append(all_sent[m][0])
-                                        dummy = def_rn(defined,al_def,definition, definiendum,0,tot_sent,dv_nam, idf_var,\
-                                            words,all_sent,m,rep_rel,[],[],kind,i,circ)
-                                        break
 
     if def_atoms != []:
         for i in range(len(def_atoms)):
@@ -1512,6 +1727,8 @@ def divide_sent(words, list2, idf_var,tot_sent,all_sent):
         all_sent[i] = all_sent[i].split(" ")
         all_sent[i] += ["("+tot_sent[i][1]+")",tot_sent[i][2],""]
         for j in range(len(all_sent[i])):
+            if all_sent[i][j] not in def_used:
+                def_used.append(all_sent[i][j])
             if all_sent[i][j] in modals:
                 if all_sent[i][j+1] == 'that' and all_sent[i][j+2] == 'if':
                     old_sent = all_sent[i][-3]
@@ -1748,29 +1965,40 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
             bool1 = False # yyy
             if all_sent[i][j] == "not" or all_sent[i][j] == neg:
                 if j == 8:
+                    if all_sent[i][9] != ne:
+                        if all_sent[i][8] == 'not':
+                            all_sent[i][8] = "~"
                     if all_sent[i][10] == "a":
-                        all_sent[i][10] = 'no' + us
-                        bool1 = True
+                        all_sent[i][10] = 'every'
                         bool2 = True
                         rule = "DE ~ a"
+                    elif all_sent[i][10] == "every":
+                        all_sent[i][10] = 'many'+un
+                        bool2 = True
+                        bool1 = True
+                        rule = "DE ~ every"
                     elif all_sent[i][10] in cat:
                         rule = "DE ~ " + all_sent[i][10]
-                        all_sent[i][10] = 'no'
-                        bool1 = True
+                        all_sent[i][10] = 'every'
                         bool2 = True
                     elif all_sent[i][9] == ne:
                         all_sent[i][9] = "="
-                        bool1 = True
                         bool2 = True
+                        bool1 = True
                         rule = "DE ~"+ne
                 elif j == 49:
                     if all_sent[i][16] == "a":
-                        all_sent[i][16] = 'no' + us
+                        all_sent[i][16] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
+                    elif all_sent[i][16] == "every":
+                        all_sent[i][16] = 'many'+un
+                        bool1 = True
+                        bool2 = True
+                        rule = "DE ~ every"
                     elif all_sent[i][16] in cat:
-                        all_sent[i][16] = 'no'
+                        all_sent[i][16] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][18]
@@ -1781,34 +2009,49 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                         rule = "DE ~"+ne
                 elif j == 50:
                     if all_sent[i][20] == "a":
-                        all_sent[i][20] = 'no' + us
+                        all_sent[i][20] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
+                    elif all_sent[i][20] == "every":
+                        all_sent[i][20] = 'many'+un
+                        bool1 = True
+                        bool2 = True
+                        rule = "DE ~ every"
                     elif all_sent[i][20] in cat:
-                        all_sent[i][20] = 'no'
+                        all_sent[i][20] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][22]
                 elif j == 51:
                     if all_sent[i][24] == "a":
-                        all_sent[i][24] = 'no' + us
+                        all_sent[i][24] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
+                    elif all_sent[i][24] == "every":
+                        all_sent[i][24] = 'many'+un
+                        bool1 = True
+                        bool2 = True
+                        rule = "DE ~ every"
                     elif all_sent[i][24] in cat:
-                        all_sent[i][24] = 'no'
+                        all_sent[i][24] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][26]
                 elif j == 52:
                     if all_sent[i][28] == "a":
-                        all_sent[i][28] = 'no' + us
+                        all_sent[i][28] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
+                    elif all_sent[i][28] == "every":
+                        all_sent[i][28] = 'many'+un
+                        bool1 = True
+                        bool2 = True
+                        rule = "DE ~ every"
                     elif all_sent[i][28] in cat:
-                        all_sent[i][28] = 'no'
+                        all_sent[i][28] = 'every'
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][30]
@@ -1845,11 +2088,77 @@ def build_app(list1):
         str1 += ", " + list1[i]
     return str1
 
+def rel_div(all_sent,m,tot_sent,i,pos):
+
+    genre = 1
+    old_sent = all_sent[m][0]
+    oldp = all_sent[m][42]
+    str2 = findinlist(all_sent[m][i],pos,0,2)
+    if (all_sent[m][i] == 'AS'):
+        rule = "RDB"
+        a = 14
+        if all_sent[m][i] == 'AS':
+            anaphora.append(all_sent[m][5])
+    elif str2 == 'o':
+        rule = "RDC"
+        list3 = [None] * 80
+        a = 14
+        list3[8] = all_sent[m][8]
+        list3[3] = all_sent[m][10]
+        list3[5] = all_sent[m][5]
+        list3[9] = all_sent[m][i]
+        list3[10] = all_sent[m][16]
+        list3[14] = all_sent[m][18]
+        list2.append(list3)
+        all_sent.append(list3)
+        g += 1
+        genre = 2
+        str4 = build_sent(list3)
+        str4p = name_sent(str4)
+        list3[0] = str4
+        list3[42] = str4p
+    else:
+        rule = "RDA"
+        a = 5
+    if i == 15:
+        d = 16
+        c = 18
+    elif i == 19:
+        d = 20
+        c = 22
+
+    # elif i == 23:
+    #     a = 22
+    #     c = 26
+    # elif i == 31:
+    #     a = 30
+    #     c = 34
+
+    list1[8] = all_sent[m][8]
+    list1[3] = all_sent[m][3]
+    list1[5] = all_sent[m][a]
+    list1[9] = all_sent[m][i]
+    list1[10] = all_sent[m][d]
+    list1[14] = all_sent[m][c]
+    if genre == 1:
+        all_sent[m][i] = None
+        all_sent[m][c] = None
+        all_sent[m][d] = None
+        all_sent[m][8] = None
+    if genre == 1:
+        dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
+    elif genre == 2:
+        dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,2,list3)
+        genre = 1
+    # list17[46] = "x"
+    # all_sent.append(list17)
+
+
 def division(tot_sent, all_sent,words,kind,def_sent=[]):
 
     global anaphora,idf_var
 
-    univ = ['all','any','no','no'+us]
+    univ = ['every']
     list2 = []
     p = len(all_sent) -2
     g = 0
@@ -1939,10 +2248,8 @@ def division(tot_sent, all_sent,words,kind,def_sent=[]):
                             list1[14] = all_sent[m][i]
                             all_sent[m][i] = None
                             if kind == 0:
-
                                 dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
                             else:
-
                                 g += 1
                                 list2.append(list1)
                                 all_sent.append(list1)
@@ -2213,7 +2520,7 @@ def that(all_sent,m,i,tot_sent,dv_nam,words,idf_var):
 def scope_uni(all_sent,m,i,kind = ""):
 
     comma = all_sent[m][39]
-    univ = ['all','any','no','no'+us,'a','many'+up,'many'+uo]
+    univ = ['every','a','many'+up,'many'+uo]
     if kind == 1:
         if i == 59:
             i = 12
@@ -2397,7 +2704,9 @@ def prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con):
     elif paren_conn == "&" and gparen_conn == iff:
         str1 = 'bic'
     elif paren_conn == xorr and gparen_conn == conditional:
-        easygui.msgbox("you have not coded for this sentence type yet")
+        print "you have not coded for this sentence type yet"
+        sys.exit()
+
 
     return str1
 
@@ -2464,7 +2773,16 @@ def add_sent2(all_sent,m,k,o,new_var2,words):
         list3[i][40] = False
     return list3
 
-def abb_change(list5, already_checked,all_sent,def_sent,i,match_dv,rename,j,def_con,\
+def repl_sign(str3,match_dv,match_type):
+
+    s = findposinmd(str3,match_dv,1)
+    s = match_type[s]
+    if s == 0:
+        return mini_c
+    else:
+        return idd
+
+def abb_change(list5, already_checked,all_sent,def_sent,i,match_dv,match_type,rename,j,def_con,\
                new_match = [],second=False):
 
     global never_used,dv_nam
@@ -2507,13 +2825,17 @@ def abb_change(list5, already_checked,all_sent,def_sent,i,match_dv,rename,j,def_
                 if not no_match:
                     match_dv.append([def_sent[i][j],all_sent[t][j]])
                     #cap is for a denied consequent sentence
-                    str2 = "(" + def_sent[i][j] + mini_c + all_sent[t][j] + ")"
-                    rename.append(str2)
+                    str2 = "(" + def_sent[i][j] + idd + all_sent[t][j] + ")"
                     if cap:
-
                         str3 = build_sent(def_sent[i])
-                        # str3 = str3 + l3
-                        rename.append(str3) #eee
+                        str3 = str3 + l4
+                        match_type.append(4)
+                        rename.append(str3)
+                    else:
+                        str2 = str2 + l3
+                        match_type.append(3)
+                        rename.append(str2)
+                        #eee
                     if second:
                         for s in range(len(match_dv)):
                             if match_dv[s][0] == def_sent[i][j]:
@@ -2524,10 +2846,12 @@ def abb_change(list5, already_checked,all_sent,def_sent,i,match_dv,rename,j,def_
                     return False
     return True
 
-def abb_change2(match_dv,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename):
+def abb_change2(match_dv,match_type,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename):
 
     match_dv.append([def_sent[i][j], idf_var[0]])
-    str1 = "(" + def_sent[i][j] + mini_c + idf_var[0] + ")"
+    match_type.append(2)
+    str1 = "(" + def_sent[i][j] + idd + idf_var[0] + ")"
+    str1 = str1 + l2
     temp_match.append([def_sent[i][j], idf_var[0]])
     def_sent[i][j] = idf_var[0]
     gen_var.append(idf_var[0])
@@ -2619,17 +2943,21 @@ def cut_def(def_info,definition):
 
 
 def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var, \
-           words,all_sent,m,rep_rel,prop_con,p_sent,kind = "",k=0,circ = ""):
+           words,rep_rel,all_sent,m,prop_con,p_sent,kind = "",k=0,circ = ""):
     # def_rn = definition rename
     # this function renames the variables in a definition
     #end0
+    #match_type 0 = instantiation
+    #match_type 1 = idd, constants, 2 = unused var, 3 = already has relation
+    # 4 = negated consequent
+
+
     global sn,plural_c,definite2,definite,anaphora,ind_var,gen_var,def_used
     b = time.time()
     #this is for those determinatives which have negations in their definitions where
     #the sentences has an R variable
-    identical_det = ["only","anything_except","anyone_except","no","many"+um,"many"+un,\
-        "no" + us]
-    if definiendum == "you":
+    identical_det = ["only","anything_except","anyone_except","many"+un]
+    if definiendum == "its"+ua:
         bb = 7
     new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
@@ -2644,6 +2972,11 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     new_var = []
     rule = ""
     taken_out = []
+    x = findposinlist(definiendum,rep_rel,0)
+    if x > -1:
+        rr_var = rep_rel[x][1]
+    else:
+        rr_var = 0
     detached = [conditional,iff,xorr,idisj]
     str1 = copy.copy(definition)
     #if bool1 is false then there is a series of conjuncts that need to be removed from
@@ -2652,11 +2985,6 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         def_info = find_sentences(definition,True)
     else:
         def_info = find_sentences(definition)
-    x = findposinlist(definiendum,rep_rel,0)
-    if x > -1:
-        rr_var = rep_rel[x][1]
-    else:
-        rr_var = 0
     def_loc = def_info[7]
     def_num = def_info[4][def_loc][0]
     dfn_num = def_num + "2"
@@ -2708,7 +3036,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     dv_nam += list1
 
     if kind == 'pronoun':
-
+        match_type.append(9)
         if definiendum != 'i':
             str1 = findinlist(definiendum,dv_nam,1,0)
             if str1 == None:
@@ -2716,15 +3044,12 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                 match_dv.append(["c",idf_var[0]])
                 dv_nam.append([idf_var[0],definiendum])
                 new_var.append(idf_var[0])
-                match_type.append(9)
                 del idf_var[0]
             else:
                 all_sent[m][k] = str1
                 match_dv.append(["c'",str1])
-                match_type.append(9)
         else:
             match_dv.append(['i','i'])
-            match_type.append(9)
         # when constructing definitions of personal pronouns or of determinatives the object of the IG relation
         # must be b and the subject must be z
     elif kind == 'determinative' or kind == 'poss pro' or kind == 'proper name possessive':
@@ -2733,6 +3058,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         else:
             j = k + 2
         ovar = all_sent[m][j]
+        match_type.append(9)
         if kind == "proper name possessive":
             match_dv.append(["b",all_sent[m][k]])
         elif definiendum == "its" + ua or definiendum == "its" + ub: # its is slightly weird because it almost never exists
@@ -2740,6 +3066,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             match_dv.append(["c",all_sent[m][14]])
             all_sent[m][k] = ""
             match_dv.append(["b",all_sent[m][5]])
+            match_type.append(9)
         else:
             all_sent[m][k] = ""
             match_dv.append(["b",all_sent[m][j]])
@@ -2747,6 +3074,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             str1 = all_sent[m][j]
             str3 = findinlist(str1,dv_nam,0,1)
             str2 = findinlist(str3,definite,1,0)
+            match_type.append(9)
             if str2 == None:
                 match_dv.append(["z",idf_var[0]])
                 definite.append([idf_var[0],str3])
@@ -2762,6 +3090,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                 match_dv.append(["z'",str2])
                 new_var2 = str2
         elif definiendum not in syn_det:
+            match_type.append(9)
             new_var2 = idf_var[0]
             all_sent[m][j] = idf_var[0]
             match_dv.append(["z",idf_var[0]])
@@ -2791,7 +3120,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     heir_num = []
     spec_var = ['y','x','w']
     rule_found = False
-    univ = ['any','all','no','no' + us]
+    univ = ['every']
     idfq = ['a','many'+up,'many'+us,'many'+ud,'many'+uo,"a"+ua]
     sent_uniq1 = []
     bool1 = False
@@ -2902,6 +3231,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                             str2 = idf_var[0]
                             spec_var.remove(telist7[p])
                             match_dv.append([telist7[p],str2])
+                            match_type.append(9)
                             del idf_var[0]
                         if p == j and str2 != "" and str2 != None:
                             telist7[p] = str2
@@ -2944,6 +3274,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                         telist7[k] = temp_det
                     if definiendum == 'everything_except' + up and i == 13:
                         telist7[8] = "~"
+                        match_type.append(9)
                         if 'y' in idf_var:
                             telist7[j] = 'y'
                             match_dv.append(['y','y'])
@@ -2957,8 +3288,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                         telist7[42] = None
 
                     if definiendum == 'any' + un and i == 2:
-                        telist7[8] = ""
-                        telist7[10] = "no"
+                        telist7[10] = "every"
                     if bool2:
                         str2 = findinlist("z",match_dv,0,1)
                         telist7[j] = str2
@@ -3031,8 +3361,10 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             if bool2:
                 if heir_num[i] in first_in_def:
                     match_dv.append([def_sent[i][5],all_sent[m][5]])
+                    match_type.append(0)
                     if kind == "R" or kind == 'AS':
                         match_dv.append([def_sent[i][14],all_sent[m][14]])
+                        match_type.append(0)
                         if bool1:
                             break
                 else:
@@ -3042,13 +3374,14 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                     for j in range(len(all_sent)):
                         if all_sent[j][9] == relat and all_sent[j][14] == nobj:
                             match_dv.append([def_sent[i][5],all_sent[j][5]])
+                            match_type.append(0)
                             break
 
 
     #if the definiendum is many-o then its object variable needs to be matched
     if definiendum == 'many' + uo:
         match_dv.append(['c',all_sent[m][14]])
-
+        match_type.append(9)
     num = [5,14]
     num2 = [5,14,18,22,26,30,34]
     num3 = [9,14,8]
@@ -3096,7 +3429,8 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                         elif str3 != None and temp_str != str3:
                             already_checked2.append([i,j])
                             def_sent[i][j] = str3
-                            str2 = '(' + temp_str + mini_c + str3 + ')'
+                            str4 = repl_sign(str3,match_dv,match_type)
+                            str2 = '(' + temp_str + str4 + str3 + ')'
                             if str2 not in rename and str2 != "":
                                 rename.append(str2)
                             str2 = ""
@@ -3108,30 +3442,30 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                         elif temp_str == str3:
                             already_checked2.append([i,j])
                         elif def_sent[i][j] == rr_var:
-
-
-                            dummy = abb_change2(match_dv,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename)
+                            dummy = abb_change2(match_dv,match_type,def_sent,i,idf_var,temp_match,j,gen_var,\
+                                    cnnan,rename)
                         else:
                             # here we check to see if it has a plural form
-                            if j == 14 and def_sent[i][9] == 'OFP':
-                                g = findposinlist(def_sent[i][5],plural_c,1)
-                                if g > -1:
-                                    match_dv.append([def_sent[i][j],plural_c[g][0]])
-                                    def_sent[i][j] = plural_c[g][0]
+                            # if j == 14 and def_sent[i][9] == 'OFP':
+                            #     g = findposinlist(def_sent[i][5],plural_c,1)
+                            #     if g > -1:
+                            #         match_dv.append([def_sent[i][j],plural_c[g][0]])
+                            #         match_type.append(9)
+                            #         def_sent[i][j] = plural_c[g][0]
+
+                            already_checked = []
+                            if j == 5:
+                                list5 = num3
                             else:
-                                already_checked = []
-                                if j == 5:
-                                    list5 = num3
-                                else:
-                                    list5 = num4
-                                no_match = abb_change(list5, already_checked,all_sent,\
-                                    def_sent,i,match_dv,rename,j,def_con)
-                                if not no_match and j == 14 and unmatched != []:
-                                    dummy = abb_change(num3, already_checked,all_sent,\
-                                        def_sent,i,match_dv,rename,j,def_con)
-                                elif no_match:
-                                    unmatched.append([i,j])
-                                    # unmat_var.append(def_sent[i][j])
+                                list5 = num4
+                            no_match = abb_change(list5, already_checked,all_sent,\
+                                def_sent,i,match_dv,match_type,rename,j,def_con)
+                            if not no_match and j == 14 and unmatched != []:
+                                dummy = abb_change(num3, already_checked,all_sent,\
+                                    def_sent,i,match_dv,match_type,rename,j,def_con)
+                            elif no_match:
+                                unmatched.append([i,j])
+                                # unmat_var.append(def_sent[i][j])
     if unmatched != []:
         new_match = []
         unmatched2 = []
@@ -3150,33 +3484,38 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                 else:
                     #yyy
                     no_match = abb_change(num3, already_checked,all_sent,\
-                        def_sent,i,match_dv,rename,5,def_con,new_match,True)
+                        def_sent,i,match_dv,match_type,rename,5,def_con,new_match,True)
                     if no_match:
                         temp_str = def_sent[i][j]
                         str3 = findinlist(temp_str,match_dv,0,1)
                         if str3 != None and temp_str != str3:
                             def_sent[i][j] = str3
-                            str2 = '(' + temp_str + mini_c + str3 + ')'
+                            print "rare rename rule used"
+                            str2 = '(' + temp_str + idd + str3 + ')'
+                            str2 = str2 + l2
                             if str2 not in rename and str2 != "":
                                 rename.append(str2)
                             str2 = ""
                         elif temp_str == str3:
                             pass
                         else:
-                            dummy = abb_change2(match_dv,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename)
+                            dummy = abb_change2(match_dv,match_type,def_sent,i,idf_var,temp_match,j,\
+                                    gen_var,cnnan,rename)
                             unmatched2.append([i,j])
             else:
                 temp_str = def_sent[i][j]
                 str3 = findinlist(temp_str,match_dv,0,1)
                 if str3 != None and temp_str != str3:
                     def_sent[i][j] = str3
-                    str2 = '(' + temp_str + mini_c + str3 + ')'
+                    # str4 = repl_sign(str3,match_dv,match_type)
+                    str2 = '(' + temp_str + idd + str3 + ')'
+                    str2 = str2 + l2
                     if str2 not in rename and str2 != "":
                         rename.append(str2)
                     str2 = ""
                 else:
                     if def_sent[i][j] not in taken_out:
-                        dummy = abb_change2(match_dv,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename)
+                        dummy = abb_change2(match_dv,match_type,def_sent,i,idf_var,temp_match,j,gen_var,cnnan,rename)
                     unmatched2.append([i,j])
                     gen_var.append(def_sent[i][j])
 
@@ -3190,7 +3529,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                     str4 = findinlist(str3,new_match,0,1)
                     if str4 != None:
                         print "unmatched2 used"
-                        str2 = '(' + str3 + mini_c + str4 + ')'
+                        str2 = '(' + str3 + idd + str4 + ')'
                         if str2 not in rename and str2 != "":
                             rename.append(str2)
                             str2 = ""
@@ -3225,7 +3564,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                     str2 = dv_nam[g][0]
                     prop_con[i][0] = str2
                     match_dv2.append([str3,prop_con[i][0]])
-                    str4 = "(" + str3 + "=" + prop_con[i][0] + ")"
+                    str4 = "(" + str3 + idd + prop_con[i][0] + ")"
                     rename.append(str4)
                 g = findposinlist(prop_con[i][0],dv_nam,1)
                 if g > -1:
@@ -3233,7 +3572,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                     str3 =idf_var[0]
                     del idf_var[0]
                     match_dv2.append([prop_con[i][0],str3])
-                    str4 = "(" + prop_con[i][0] + "=" + str3 + ")"
+                    str4 = "(" + prop_con[i][0] + idd + str3 + ")"
                     rename.append(str4)
                 else:
                     g = findposinlist(str3,dv_nam,0)
@@ -3243,7 +3582,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                             str3 =idf_var[0]
                             del idf_var[0]
                             match_dv2.append([prop_con[i][0],str3])
-                            str4 = "(" + prop_con[i][0] + "=" + str3 + ")"
+                            str4 = "(" + prop_con[i][0] + idd + str3 + ")"
                             rename.append(str4)
 
                 dv_nam.append([str3,str1,1])
@@ -3390,8 +3729,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             sn += 1
             tot_sent.append([sn, skel_string, str3,"", rule,"","","",""])
 
-    if definiendum == 'any':
-        bb = 8
+
     list1 = []
     num = [5,14,15,18,26,30]
     def_var = findinlist("definite",dv_nam,1,0)
@@ -3419,7 +3757,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         for n in num:
             if def_sent[i][n] in new_var:
                 new_var.remove(def_sent[i][n])
-        if definiendum == "no"+us or definiendum == "no" or definiendum == "many" + un:
+        if definiendum == "many" + un:
             if not def_sent[i][40] and def_sent[i][8] == "~":
                 def_sent[i] = not_a(def_sent[i],k,tot_sent,all_sent)
 
@@ -3475,12 +3813,14 @@ def ant_var(list1):
         g = list2.count(list2[i])
         if g > 1:
             return list2[i]
+    print 'your method for finding the antecedent variable is not working'
+    sys.exit()
 
-    easygui.msgbox('your method for finding the antecedent variable is not working')
 
 def not_a(list1,k,tot_sent,all_sent):
 
     num = [10,16,20,24]
+
 
     for i in num:
         if i > k and (list1[i] == "a" or list1[i] == "a" + ua):
@@ -3489,8 +3829,7 @@ def not_a(list1,k,tot_sent,all_sent):
                 rule = "DE not a"
             else:
                 rule = "DE not a" + ua
-            list2[i] = 'no'+us
-            list2[8] = None
+            list2[i] = 'every'
             str1 = build_sent(list2)
             str1p = name_sent(str1)
             list2[0] = str1
@@ -3500,59 +3839,6 @@ def not_a(list1,k,tot_sent,all_sent):
             all_sent.append(list1)
             return list2
     return list1
-
-def plurals(tot_sent, all_sent, words, dv_nam, idf_var):
-
-    global plural_c
-    global sn
-    c = time.time()
-    all_sent = remove_duplicates(all_sent,0)
-    pnouns = words[26]
-    bool1 = False
-    for m in range(len(dv_nam)):
-        pluralf = dv_nam[m][1]
-        g = findposinlist(pluralf,pnouns,0)
-        if g > -1:
-            if not bool1:
-                new_abb = idf_var[0]
-                del idf_var[0]
-                dv_nam.append([new_abb,"plural form"])
-                bool1 = True
-            str1 = dv_nam[m][0]
-            singular = findinlist(pluralf,pnouns,0,1)
-            singa = findinlist(singular,dv_nam,1,0)
-            if singa == None:
-                singa = idf_var[0]
-                del idf_var[0]
-                dv_nam.append([singa,singular])
-            defndm = "(" + str1 + "=" + pluralf + ")"
-            sent1 = "(" + str1 + "OFP" + singa + ")"
-            list1 = [None] * 80
-            list1[0] = sent1
-            list1[5] = str1
-            list1[9] = "OFP"
-            list1[14] = singa
-            plural_c.append([singa,str1])
-            sent2 = "(" + str1 + "IG" + new_abb + ")"
-            list3 = [None] * 80
-            list3[5] = str1
-            list3[9] = "IG"
-            list3[14] = new_abb
-            list3[0] = sent2
-            defp = name_sent(defndm)
-            sent1p = name_sent(sent1)
-            list1[42] = sent1p
-            all_sent.append(list1)
-            sent2p = name_sent(sent2)
-            list3[42] = sent2p
-            all_sent.append(list3)
-            tot = defndm + " " + iff + " (" + sent1 + " & " + sent2 + ")"
-            totp = defp + " " + iff + " (" + sent1p + " & " + sent2p + ")"
-            sn += 1
-            tot_sent.append([sn,tot,totp,"","DE " + pluralf,"","","",""])
-    b = time.time()
-    d = b - c
-    return
 
 def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
                 snum="",taken_out=[]):
@@ -3587,6 +3873,8 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
     relation_type = 0
     list2 = []
     list3 = []
+    decision = []
+    spec_det = ['every','many'+un]
     spec_rel = ["IG","IA"]
     posp = words[28]
     doubles = words[31]
@@ -3609,7 +3897,6 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             bb = 8
         bool3 = False
         bool5 = False
-
         bool4 = check_dimension(triples,0,word)
         bool5 = False
 
@@ -3638,15 +3925,12 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
                     if has_comma != "":
                         has_comma = word
 
-
-
         if word == 'it':
             #this means that the subject of the previous sentences obtains the anaphor
             #to which it refers
             all_sent[len(all_sent)-2][57] = 3
-        # if word == 'TO':
-        #     bb = 8
-        #     break
+        if word == 'there':
+            decision.append(110)
         if isvariable(word):
             pos = 'n'
             if word in idf_var: #zzz
@@ -3692,13 +3976,20 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif (pos == 'd' or pos == 'q') and relation_type == 0:
             list1_cat[3] = word
             list2.append(3)
+            if pos == 'd' and word not in spec_det:
+                decision.append(20)
+            if pos == 'd' and word in spec_det:
+                decision.append(120)
         elif pos == 'ps' and relation_type == 0 and list1_cat[5] == None:
             list1_cat[69] = word
             list2.append(69)
             list1_cat[40] = 69
+            decision.append(30)
+
         elif pos == 'a' and relation_type == 0:
             list1_cat[4] = word
             list2.append(4)
+            decision.append(50)
         elif pos == 'm' and list1_cat[3] == None and list1_cat[5] == None and relation_type == 0:
             list1_cat[47] = word
             list2.append(47)
@@ -3708,12 +3999,17 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif (pos == 'n' or pos == 'p') and relation_type == 0 and list1_cat[5] == None:
             list1_cat[5] = word
             list2.append(5)
+            if pos == 'p':
+                decision.append(10)
         elif (pos == 'n' or pos == 'p') and relation_type == 0 and list1_cat[5] == None:
             list1_cat[5] = word
             list2.append(5)
+            if word == 'there':
+                decision.append(110)
         elif pos == 'c' and relation_type == 0 and list1_cat[5] != None:
             list1_cat[66] = word
             list2.append(66)
+            decision.append(40)
         elif (pos == 'n' or pos == 'p') and relation_type == 0 and list1_cat[66] != None:
             list1_cat[67] = word
             list2.append(67)
@@ -3723,9 +4019,11 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif pos == 'u' and relation_type == 0 and list1_cat[5] != None:
             list1_cat[59] = word
             list2.append(59)
+            decision.append(70)
         elif word == 'that'+uc and list1_cat[7] == None and list1_cat[14] == None: # uc
-             list1_cat[7] = word
-             list2.append(7)
+            list1_cat[7] = word
+            list2.append(7)
+            decision.append(80)
         # elif pos == 'b' and relation_type == 0:
         #     list1_cat[7] = word
         #     list2.append(7)
@@ -3746,6 +4044,10 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif (pos == 'd' or pos == 'q') and relation_type == 1:
             list1_cat[10] = word
             list2.append(10)
+            if pos == 'd' and word not in spec_det:
+                decision.append(20)
+            if pos == 'd' and word in spec_det:
+                decision.append(110)
         # this line of code must be first because if the word is an adjective
         # and the relation is IA then it must go in slot 14
         elif pos == 'm' and relation_type == 1 and list1_cat[14] == None and \
@@ -3759,12 +4061,16 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             list1_cat[70] = word
             list2.append(70)
             list1_cat[40] = 70
+            decision.append(30)
         elif pos == 'a' and relation_type == 1:
             list1_cat[13] = word
             list2.append(13)
+            decision.append(50)
         elif (pos == 'n' or pos == 'p') and relation_type == 1 and list1_cat[14] == None:
             list1_cat[14] = word
             list2.append(14)
+            if pos == 'p':
+                decision.append(10)
         elif pos == 'n' and relation_type == 1 and list1_cat[14] != None and list1_cat[60] == None:
             list1_cat[36] = word
             list2.append(36)
@@ -3774,9 +4080,13 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif pos == 'u' and relation_type == 1 and list1_cat[14] != None:
             list1_cat[60] = word
             list2.append(60)
+            if word != 'that'+uc:
+                decision.append(70)
         elif (pos == 'n' or pos == 'p') and relation_type == 1 and list1_cat[60] != None:
             list1_cat[63] = word
             list2.append(63)
+            if word == 'there':
+                decision.append(110)
         elif (pos == 'm' and relation_type == 1) or (pos == "m" and list1_cat[15] in spec_rel):
             list1_cat[49] = word
             list2.append(49)
@@ -3784,11 +4094,16 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             list1_cat[15] = word
             relation_type = 2
             list2.append(15)
+            decision.append(100)
             if snoun != "" and snum == 18:
                 list1_cat[18] = snoun
         elif (pos == 'd' or pos == 'q') and relation_type == 2:
             list1_cat[16] = word
             list2.append(16)
+            if pos == 'd' and word not in spec_det:
+                decision.append(20)
+            if pos == 'd' and word in spec_det:
+                decision.append(110)
         elif pos == 'a' and relation_type == 2 and list1_cat[15] == 'IA':
             list1_cat[18] = word
             relation_type = 2
@@ -3796,15 +4111,22 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif pos == 'a' and relation_type == 2:
             list1_cat[17] = word
             list2.append(17)
+            decision.append(50)
         elif (pos == 'n' or pos == 'p') and relation_type == 2 and list1_cat[18] == None:
             list1_cat[18] = word
             list2.append(18)
+            if pos == 'p':
+                decision.append(10)
         elif pos == 'u' and relation_type == 2 and list1_cat[18] != None:
             list1_cat[61] = word
             list2.append(61)
+            if word != 'that'+uc:
+                decision.append(70)
         elif (pos == 'n' or pos == 'p') and relation_type == 2 and list1_cat[61] != None:
             list1_cat[64] = word
             list2.append(64)
+            if word == 'there':
+                decision.append(110)
         elif (pos == 'm' and relation_type == 2) or (pos == "m" and list1_cat[18] in spec_rel):
             list1_cat[50] = word
             list2.append(50)
@@ -3812,11 +4134,16 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
             relation_type = 3
             list1_cat[19] = word
             list2.append(19)
+            decision.append(19)
             if snoun != "" and snum == 22:
                 list1_cat[22] = snoun
         elif (pos == 'd' or pos == 'q') and relation_type == 3:
             list1_cat[20] = word
             list2.append(20)
+            if pos == 'd' and word not in spec_det:
+                decision.append(20)
+            if pos == 'd' and word in spec_det:
+                decision.append(110)
         elif pos == 'a' and relation_type == 3 and list1_cat[19] == 'IA':
             list1_cat[22] = word
             relation_type = 3
@@ -3824,12 +4151,17 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif pos == 'a' and relation_type == 3:
             list1_cat[21] = word
             list2.append(21)
+            decision.append(50)
         elif (pos == 'n' or pos == 'p') and relation_type == 3 and list1_cat[22] == None:
             list1_cat[22] = word
             list2.append(22)
+            if pos == 'p':
+                decision.append(10)
         elif pos == 'u' and relation_type == 3 and list1_cat[22] != None:
             list1_cat[62] = word
             list2.append(62)
+            if word != 'that'+uc:
+                decision.append(70)
         elif (pos == 'n' or pos == 'p') and relation_type == 3 and list1_cat[62] != None:
             list1_cat[65] = word
             list2.append(65)
@@ -3845,6 +4177,10 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif (pos == 'd' or pos == 'q') and relation_type == 4:
             list1_cat[24] = word
             list2.append(24)
+            if pos == 'd' and word not in spec_det:
+                decision.append(20)
+            if pos == 'd' and word in spec_det:
+                decision.append(110)
         elif pos == 'a' and relation_type == 4 and list1_cat[23] == 'IA':
             list1_cat[26] = word
             relation_type = 4
@@ -3852,9 +4188,12 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif pos == 'a' and relation_type == 4:
             list1_cat[25] = word
             list2.append(25)
+            decision.append(50)
         elif (pos == 'n' or pos == 'p') and relation_type == 4:
             list1_cat[26] = word
             list2.append(26)
+            if pos == 'p':
+                decision.append(10)
         elif (pos == 'm' and relation_type == 4) or (pos == "m" and list1_cat[27] in spec_rel):
             list1_cat[52] = word
             list2.append(52)
@@ -3867,6 +4206,10 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif (pos == 'd' or pos == 'q') and relation_type == 5:
             list1_cat[28] = word
             list2.append(28)
+            if pos == 'd' and word not in spec_det:
+                decision.append(20)
+            if pos == 'd' and word in spec_det:
+                decision.append(110)
         elif pos == 'a' and relation_type == 5 and list1_cat[27] == 'IA':
             list1_cat[29] = word
             relation_type = 5
@@ -3877,6 +4220,8 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif (pos == 'n' or pos == 'p') and relation_type == 5:
             list1_cat[30] = word
             list2.append(30)
+            if pos == 'p':
+                decision.append(10)
         elif pos == 'r' and relation_type == 5:
             relation_type = 6
             list1_cat[31] = word
@@ -3886,12 +4231,19 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
         elif (pos == 'd' or pos == 'q') and relation_type == 6:
             list1_cat[32] = word
             list2.append(32)
+            if pos == 'd' and word not in spec_det:
+                decision.append(20)
+            if pos == 'd' and word in spec_det:
+                decision.append(110)
         elif pos == 'a' and relation_type == 6:
             list1_cat[33] = word
             list2.append(33)
+            decision.append(50)
         elif (pos == 'n' or pos == 'p') and relation_type == 6:
             list1_cat[34] = word
             list2.append(34)
+            if pos == 'p':
+                decision.append(10)
         elif pos == 'b':
             list1_cat[7] = word
         elif pos == 'm':
@@ -3911,7 +4263,6 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
                 bb = 8
             print "you misspelled " + word
             sys.exit()
-            # easygui.msgbox('you did not categorize the word ' + word)
         if word in anaphoric_relations and first:
                 anaphora = []
                 anaphora.append(list1_cat[9])
@@ -3931,7 +4282,79 @@ def categorize_words(words,str2,idf_var,all_sent,kind=1,first=False,snoun="",\
     list1_cat[0] = osent
     list1_cat[41] = has_plural
     list1_cat[53] = sent_type
+    list1_cat[56] = decision
     return list1_cat
+
+def dec_pro(decision,list3,pronouns):
+
+    num10 = [5,14,18,22,26,30,34] # pronouns
+    num20 = [3,10,16,20,24,28,32] # determiners
+    num30 = [69,70] # proper name possessive
+    num40 = [66] # and
+    num50 = [4,13,17,21,25,33] # adjective
+    num60 = [35,36] # cia
+    num70 = [59,60,61,62] # relative pronouns
+    num80 = [62,61,60,7] # that-c
+    num90 = [69,70] # possessives
+    num100 = [15,19] # RDA,RDB
+    num110 = [5,63,64] # there
+    num120 = [3,10,16,20,24,28,32] # every, many-n
+    list2 = list3[46]
+    list4 = ['a','the']
+
+    for i in list2:
+        if i in num10 and list3[i] in pronouns:
+            if 10 not in decision:
+                decision.append(10)
+        elif i in num20 and list3[i] in list4:
+            if 20 not in decision:
+                decision.append(20)
+        elif i in num30:
+            if i == 69:
+                if list3[3] == None:
+                    if 30 not in decision:
+                        decision.append(30)
+                else:
+                    if 90 not in decision:
+                        decision.append(90)
+            elif i == 70:
+                if list3[10] == None:
+                    if 30 not in decision:
+                        decision.append(30)
+                else:
+                    if 90 not in decision:
+                        decision.append(90)
+        elif i in num40:
+            if 40 not in decision:
+                decision.append(40)
+        elif i in num50:
+            if i == 13 and list3[10] == 'every':
+                pass
+            elif list3[i-1] == 'every':
+                pass
+            else:
+                if 50 not in decision:
+                    decision.append(50)
+        elif i in num60:
+            if 50 not in decision:
+                decision.append(50)
+        elif i in num70:
+            bool1 = False
+            if i == 59 and list3[10] != 'every':
+                bool1 = True
+
+    #     if i == 10 and list[59] != None:
+    #     return False
+    # elif i == 16 and list[60] != None:
+    #     return False
+    # elif i == 20 and list[61] != None:
+    #     return False
+    # elif i == 24 and list[62] != None:
+    #     return False
+    # else:
+    #     return True
+
+
 
 def build_sent_name(prop_name):
     str1 = ''
@@ -4068,6 +4491,9 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
     b = time.time()
     p += 2
     definitions2 = words[33]
+    for i in range(len(dv_nam)):
+        if dv_nam[i][0] not in def_used:
+            def_used.append(dv_nam[i][1])
 
     if excel and words_used:
         for i in range(len(def_used)):
@@ -4195,8 +4621,211 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
     return
 
 
+def small_dict(str1):
 
-def build_dict(str1):
+    dict2 = [['rbi','are|a','IA','((bIAc) x^ (cIGd)) & ((bIAc) t^ (bIGe)) & ((bIAc) t^ (cIGf)) & (d=property) & (e=thing) & (f=adjective)'],\
+['rbi','are|g ','IG','((bIGc) x^ (cIGd)) & ((eIGf) x^ (eIGg)) & (d=concept|n) & (g=instance)'],\
+['rbi','at|p ','P','((dPb) t^ (dIGc)) & ((bIGf) x^ (dPb)) & (c=relationship) & (f=possible world) '],\
+['rbi','desire','DS','((dDSb) t^ ((bIGc) & (bIAe))) & ((bIGf) x^ (dDSb)) & (c=relationship) & (f=mind) & (e=open|r)'],\
+['n','concept|n',None,'(c=concept|n) & ((bIGc) x^ (zIGb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','instance',None,'(c=instance) & ((bIGc) x^ (bIGd))'],\
+['n','integer',None,'(c=integer) & ((bIGc) x^ (bAFd)) & ((bIGc) x^ (eAFb)) & ((bIGc) x^ (fNb)) & ((bIGc) t^ (bIGg)) & (g=non_whole)'],\
+['n','mind',None,'(c=mind) & ((bIGc) t^ (bTKz))'],\
+['n','moment',None,'(c=moment) & ((bIGc) x^ (dTb)) & ((bIGc) x^ (bAh)) & ((bIGc) x^ (eAb)) & ((bIGc) t^ (bIGf)) & (f=non_whole)'],\
+['n','part',None,'(c=part) & ((bIGc) x^ (dHWb))'],\
+['n','part|p',None,'(c=part|p) & (((bIGc) & (bOFd)) x^ (dHWb))'],\
+['n','particle',None,'(c=particle) & ((bIGc) x^ (bSd)) & ((bIGd) x^ (hTg)) & ((bIGc) t^ (bIGf)) & (f=non_whole) & (g=now) & (hb^bSd)'],\
+['n','point',None,'(c=point) & ((bIGc) x^ (dSb)) & ((bIGc) x^ (eABb)) & ((bIGc) x^ (bABm)) & ((bIGc) x^ (fFRb)) & ((bIGc) x^ (bFRj)) & ((bIGc) x^ (gLFb)) & ((bIGc) x^ (bLFk)) & ((bIGc) t^ (bIGh)) & (h=non_whole)'],\
+['n','property',None,'(c=property) & ((bIGc) x^ (dIAb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','property|n',None,'(c=property|n) & ((bIGc) x^ (dHb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['na','thing',None,'See atomic categories'],\
+['n','thought',None,'(c=thought) & ((bIGc) x^ (dTKb)) & ((bIGc) t^ (bIGe)) & ((bIGc) x^ (bAIf)) & (e=relationship)'],\
+['n','whole',None,'(c=whole) & ((bIGc) x^ (bHWd))'],\
+['ns','class',None,'(class = concept|n)'],\
+['ns','concept|a',None,'(concept|a = property)'],\
+['ns','group',None,'(group = whole)'],\
+['a','material',None,'(c=material) & (d=particle) & ((bIAc) x^ (bIGd))'],\
+['ns','number|i',None,'(number|i=integer)'],\
+['as','physical ',None,'(physical=material)'],\
+['ns','universal',None,'(universal = concept|n)'],\
+['rbt','is','=','(is = =)'],\
+['u','that|c',None,'(it IA p that q) x^ (qIAp)'],\
+['na','there',None,'(there EX b) x^ (bEX)'],\
+['na','this|n',None,'(this|n Rc) x^ (bRc)'],\
+['u','which',None,'(bRc which Qd) x^ ((bRc) & (cQd))'],\
+['u','who',None,'((bRc who Qd) x^ ((bRc) & (cQd) & (bIGe))) & (e=person)'],\
+['b','=',None,'(b=c) means wherever we see b we may replace it with c and vice_versa'],\
+['ra','zzz',None,'(bzzzc) means we may not replace b with c and vice_versa'],\
+['m','not',None,'~'],\
+['c','and|c',None,'(b and|c c R d) x^ (b.cRd)'],\
+['nu','2',None,'((b=2) x^ ((cAFb) & (bAFe))) & (c=3) & (e=1)'],\
+['ddi','a',None,'((a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=indefinite)'],\
+['ddi','a|a',None,'((a|a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=general)'],\
+['ddi','any',None,'((any bRc) x^ (((zIGb) t^ (zRc)) & (zIAe) & (yIGb) & (yIAd))) & (d=particular) & (e=general)'],\
+['dt','any|n',None,'(b~R any|n c) x^ (bR no c)'],\
+['ds','every',None,'(every=any)'],\
+['dd','many|n',None,'(((many|n bRc) & (bOFPd) & (bIGe)) x^ ((zIGd) & (zRc) & (zIAg) & (yIGd) & (y~Rc) & (yIAg) & (yIAf) & (zIAf) & (yIAh) & (zIAh) & (y zzz z))) & (e=plural form) & (f=indefinite) & (g=many) & (h=particular)'],\
+['dd','many|o',None,'(((many|o bIGc) & (bOFPd) & (bIGe) & (cOFPf) & (cIGe)) x^ ((zIGf) & (zIGd) & (zIAd) & (yIGd) & (y~IGf) & (yIAd) & (zIAh) & (yIAh))) & (e=plural form) & (g=many) & (h=indefinite)'],\
+['dd','no',None,'(((no bRc) & (bIGy) & (bOFPd)) x^ ((xIAe) & (xIGd) & (zIAf) & ((zIGd) t^ (z~Rc)))) & (y=plural form) & (e=indefinite) & (f=general)'],\
+['d','no|s',None,'((no|s bRc) x^ (((zIGb) t^ (z~Rc)) & (yIGb) & (zIAe) & (yIAd))) & (d=indefinite) & (e=general)'],\
+['ddi','the',None,'((the bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=definite)'],\
+['ws','anyone',None,'(anyone = any person)'],\
+['ws','anything',None,'(anything = any thing)'],\
+['ws','anything|a',None,'(anything|a = a|a thing)'],\
+['ws','everyone',None,'(everyone = any person)'],\
+['ws','nothing',None,'(nothing = no|s thing)'],\
+['ds','some',None,'(some=a)'],\
+['ds','some|o',None,'(some|o = many|o)'],\
+['ds','some|p',None,'(some|p = many|n)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something|a',None,'(something|a = a|a thing)'],\
+['ds','that|d',None,'(that|d=the)'],\
+['ds','this',None,'(this=the)'],\
+['p','he',None,'(d=person) & (e=male) & ((he Rb) t^ ((cRb) & (cIAe) & (cIGd))) & (g=definite) & (h=particular)'],\
+['q','his',None,'((his bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=he)'],\
+['p','i',None,'(d=person) & ((i Rb) t^ ((iIGd) & (iIAg))) & (g=definite)'],\
+['p','it|p',None,'propositional it'],\
+['q','its|a',None,'(bR its|a c) t^ ((zIGc) & (bHMz) & (bRz))'],\
+['q','its|b',None,'((b R its|b c) t^ ((zIGd) & (bHMz) & (bRz))) & ((b R its|b c) t^ ((cOFPd) & (cIGe))) & (e=plural form)'],\
+['q','my',None,'((my bRc) t^ ((zRc) & (zIGb) & (iOWNz)))'],\
+['p','you',None,'(d=person) & ((you Rb) t^ ((cRb) & (cIGd) & (cIAg))) & (g=definite)'],\
+['q','your',None,'(e=person) & ((your bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=you)'],\
+['ra','about','ABT','postponed'],\
+['rc','as','AS','(as=AS) & (((bASc) & (dRb)) x^ (cRb))'],\
+['r','believe','B','(believe=B) & ((bBc) x^ (bTKd)) & ((bBc) t^ (bTKc)) & (e=true) & (db^cIAe)'],\
+['ra','breaks','BRK','postponed'],\
+['na','causal role',None,'postponed'],\
+['n','courage',None,'(b=courage) & ((cHb) x^ (cIAd)) & (d=courageous)'],\
+['na','courageous',None,'postponed'],\
+['rs','distinct from',None,'(distinct from = zzz)'],\
+['n','familial part',None,'(c=familial part) & (((bIGc) & (bOFd)) x^ (bIGd))'],\
+['na','family',None,'postponed'],\
+['rs','from|b',None,'(from|b = born)'],\
+['r','has|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['r','have|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['ra','have|w','HW','(c=body) &  (((bHWz) & (zIGc)) x^ (zSy))'],\
+['ratso','in','IN','((bINc) x^ ((bIGd) & (cHWb))) & (d=point)'],\
+['r','in|b','INB','((bINBc) x^ ((cHWb) & (bIGd))) & (d=moment)'],\
+['nk','individual',None,'(b=individual) & ((cIGb) x^ (((dIGe) t^ (d~IGc)) & (cIAf) & ((d zzz c) x^ (d~IAf)))) & (e=thing)'],\
+['rs','inside',None,'(inside = INE)'],\
+['ra','is|e','EX','((bEX) x^ (bIAc)) & (c=extant)'],\
+['aa','large',None,'postponed'],\
+['ra','lives','LV','postponed'],\
+['na','logic',None,'postponed'],\
+['a','many',None,'(z=many) & (y=2) & ((bIAz) x^ ((bNy) ed^ ((bNc) & (cAFy))))'],\
+['a','mental',None,'(c=mental) & ((bIAc) x^ (bTKd))'],\
+['a','mental|b',None,'(c=mental) & ((bIAc) x^ (dTKb))'],\
+['na','murder',None,'postponed'],\
+['n','non_whole',None,'(c=non_whole) & ((bIGc) x^ ((dIGe) t^ (b~HWd))) & (e=thing)'],\
+['ra','of','OF','postponed'],\
+['r','of|i','OFI','(bOFIc) x^ (cHGCb)'],\
+['ns','one|p',None,'(one|p = person)'],\
+['ra','own','OWN','postponed'],\
+['ns','part|f',None,'(part|f=familial part)'],\
+['na','party',None,'postponed'],\
+['n','person',None,'(c=person) & (d=personhood) & ((bIGc) x^ (bHd))'],\
+['n','personhood',None,'(c=personhood) & ((bHc) t^ ((bIGd) & (zTKw) & (zDSx) & (bHWz) & (bHWy) & (yIGe))) & (d=person) & (e=body|c)'],\
+['n','region|a',None,'(c=region|a) & ((bIGc) x^ (dINEb))'],\
+['nu','time',None,'(b=time) x^ ((eTd) x^ (bHWd))'],\
+['ra','took','TAK','postponed'],\
+['a','true',None,'(c=true) & ((bIAc) x^ ((bCRRd) & (dIe))) & ((bIAc) t^ (bIGf)) & (e=reality) & (f=non_meta_statement)'],\
+['aa','white',None,'postponed'],\
+['ns','members',None,'(members = parts)'],\
+['ns','numbers|i',None,'(numbers|i = integers)'],\
+['ra','ate from','ATF','postponed'],\
+['na','ball',None,'postponed'],\
+['ra','born','BRN','postponed'],\
+['na','boy',None,'postponed'],\
+['ra','broke','BRK','postponed'],\
+['na','cake',None,'postponed'],\
+['na','casablanca',None,'postponed'],\
+['na','cat',None,'postponed'],\
+['aa','caught',None,'postponed'],\
+['aa','cold',None,'postponed'],\
+['nc','dog',None,'(c=dog) & (d=doglike) & ((bIGc) x^ (bIAd))'],\
+['ac','doglike',None,'(c=dog) & (d=doglike) & ((bIAd) x^ ((bIGc) & (bHWe) & (bHWg) & (eIGh) & (gIGk))) & (k=mind) & (h=body|c)'],\
+['na','door',None,'postponed'],\
+['ra','drank','DRK','postponed'],\
+['ra','drink','DRK','postponed'],\
+['ra','drinks','DRK','postponed'],\
+['na','earth',None,'postponed'],\
+['ra','eat from','ATF','postponed'],\
+['na','girl',None,'postponed'],\
+['aa','green',None,'postponed'],\
+['na','hamlet',None,'postponed'],\
+['na','house',None,'postponed'],\
+['n','kennedy',None,'(b=kennedy) & ((cIGb) t^ (bIGd)) & (d=family)'],\
+['a','kennedy|a',None,'(b=kennedy|a) & (c=kennedy) & (((eIAb) & (fIGe)) x^ (fIGc))'],\
+['ra','kiss','KS','postponed'],\
+['ra','kissed','KS','postponed'],\
+['ra','love','LOV','postponed'],\
+['n','man',None,'(b=man) & ((cIGb) x^ ((cIGd) & (cIAe))) & (d=person) & (e=male)'],\
+['na','mars',None,'natural'],\
+['na','movie',None,'postponed'],\
+['na','munich',None,'postponed'],\
+['na','nazi',None,'postponed'],\
+['ra','reads','RD','postponed'],\
+['a','red',None,'(c=red) & ((bIAc) t^ (bINMd))'],\
+['n','redness',None,'(c=redness) & ((bHc) x^ (bIAd)) & (d=red)'],\
+['aa','rewarded',None,'postponed'],\
+['ra','saw','SEE','postponed'],\
+['ra','see','SEE','postponed'],\
+['na','set theory',None,'postponed'],\
+['ra','shed','SHD','postponed'],\
+['aa','smart',None,'postponed'],\
+['r','smell','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['r','smells','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['na','speed limit',None,'postponed'],\
+['ra','spied on','SPD','postponed'],\
+['ra','spies on','SPD','postponed'],\
+['ra','studied','STD','postponed'],\
+['ra','teach','TCH','postponed'],\
+['na','teacher',None,'postponed'],\
+['na','tear',None,'postponed'],\
+['na','van',None,'postponed'],\
+['na','water',None,'postponed'],\
+['n','woman',None,'(b=woman) & ((cIGb) t^ ((cIGd) & (cIAe))) & (d=person) & (e=female)'],\
+['nm','beers',None,'plural of beer'],\
+['ns','groups',None,'(groups = wholes)'],\
+['nm','instances',None,'plural of instance'],\
+['nm','integers',None,'plural of integer'],\
+['nm','minds',None,'plural of mind'],\
+['nm','moments',None,'plural of moment'],\
+['nm','parts',None,'plural of part'],\
+['nm','points',None,'plural of point'],\
+['nm','tears',None,'plural of tear'],\
+['nm','thoughts',None,'plural of thought'],\
+['nm','wholes',None,'plural of whole'],\
+['nu','ada',None,'((b=ada) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','aristotle',None,'((b=aristotle) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jessica',None,'((b=jessica) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','jfk',None,'((b=jfk) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jim',None,'((b=jim) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','julius caesar',None,'((b=julius caesar) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','leibniz',None,'((b=leibniz) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','marilyn',None,'((b=marilyn) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','plato',None,'((b=plato) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','russell',None,'((b=russell) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','socrates',None,'((b=socrates) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','xenothon',None,'((b=xenothon) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['ra','be|a','IA','(be|a=IA)'],\
+['rbi','desires','DS','(desires=DS)'],\
+['ra','has','H','(has=H)'],\
+['rbi','is|a ','IA','(is|a=IA)'],\
+['rbi','is|g ','IG','(is|g=IG)'],\
+['rai','thinks','TK','(thinks=TK)'],\
+['ra','was','=','(was = =)'],\
+['ra','was|a','IA','(was|a=IA)'],\
+['ra','was|g','IG','(was|g=IG)'],\
+[None,None,None,None]]
+
+
+    return dict2
+
+
+
+def build_dict(ex_dict):
 
     global excel
     list1 = []
@@ -4241,16 +4870,39 @@ def build_dict(str1):
     pos = []
     category = ['r','s','t']
     almost_done = False
-    i = 0
-    for row in ws:
+
+    i = -1
+    if one_sent:
+        mm = len(ex_dict)
+    else:
+        mm = 2000
+
+    while i < mm-1:
+    # for row in ws:
         i += 1
         if i == 90:
             bb = 8
 
         if excel:
-            s = row[0].value
-            str1 = row[2].value
-            word = row[3].value
+            if i == 0:
+                i = 1
+            s = ws.cell(row=i,column=1).value
+            str1 = ws.cell(row=i,column=3).value
+            word = ws.cell(row=i,column=4).value
+            if word == "true*":
+                word = "true"
+            if word == "false*":
+                word = "false"
+            # s = row[0].value
+            # str1 = row[2].value
+            # word = row[3].value
+        elif one_sent:
+            s=0
+            str1 = ex_dict[i][0]
+            word = ex_dict[i][1]
+            if word != None:
+                word = tran_str(word,2)
+                word = word[0]
         else:
             s = row.extra
             str1 = row.type
@@ -4276,11 +4928,22 @@ def build_dict(str1):
             if isinstance(word,(int,long)):
                 word = str(word)
 
+            if "(" in word:
+                cc = word.index("(")
+                word = word[:cc-1]
+
             word = word.strip()
             definitions2.append([word,i])
             if excel:
-                str3 = row[4].value
-                defin = row[5].value
+                # str3 = row[4].value
+                # defin = row[5].value
+                str3 = ws.cell(row=i,column=5).value
+                defin = ws.cell(row=i,column=6).value
+            elif one_sent:
+                str3 = ex_dict[i][2]
+                defin = ex_dict[i][3]
+                defin = tran_str(defin, 3)
+                defin = defin[0]
             else:
                 str3 = row.rel
                 defin = row.definition
@@ -4289,13 +4952,14 @@ def build_dict(str1):
             if defin == 'redundant':
                 redundant.append(word)
             if defin != None and defin.find("E.g.") == -1 and defin.find("EXP") == -1 \
-                    and defin != 'redundant' and word != ".":
+                    and defin != 'redundant' and word != "." and defin.find("e.g.") == -1:
                 if word != None:
                     word = word.strip()
                 if str3 != None:
                     str3 = str3.strip()
                 if str1 == None:
-                    easygui.msgbox("you did not state the part of speech for " + word)
+                    print "you did not state the part of speech for " + word
+                    sys.exit()
                 sec_let = copy.copy(str1)
                 fir_let = str1[0:1]
 
@@ -4417,7 +5081,7 @@ def build_dict(str1):
     # relations.sort()
     # relations2.sort()
     words = [adj, cor, detm, adv, lcon, noun, relat, srelat, trelat, subo,\
-        aux, negg, dnoun,syn_pairs,synon,det, definitions, det_pairs, relations, \
+            aux, negg, dnoun,syn_pairs,synon,det, definitions, det_pairs, relations, \
              relations2, particles, redundant,atomic_relations, atomic_relata, \
              pronouns,poss_pronouns,plurals,neg_det,pos,really_atomic,\
              anaphoric_relations,doubles,triples,definitions2,compound,proper_names,\
@@ -4450,9 +5114,16 @@ def findposmd(str1,str2,list1,p,q,r):
 
     return -1
 
+def findposinmd(str1,list1,p):
+
+    for i in range(len(list1)):
+        if list1[i][p] == str1:
+            return i
+    return -1
+
 def findposinlist(str1, list1,i):
     # this function takes a string, matches it to an element in the first dimension
-    # of the list, then returns the matching second element
+    # of the list, then returns the position in the list
 
     if str1 == 0:
         return
@@ -4923,8 +5594,8 @@ def get_sent(all_sent,str1):
         str2 = all_sent[i][42].replace("~","")
         if str1 == str2:
             return i
-
-    easygui.msgbox("the get sent function is wrong")
+    print "the get sent function is wrong"
+    sys.exit()
 
 
 def find_group(str1,all_sent,subj,basic_objects):
@@ -6674,7 +7345,8 @@ def new_sentence(tot_sent,  old_list, list1, list2, list3, quant, rule,conn = if
         str3 = build_sent(list3)
         str3v = name_sent(str3)
         list3[0] = str3
-        easygui.msgbox('you have not coded for three new sentences yet')
+        print 'you have not coded for three new sentences yet'
+        sys.exit()
     if quant == 1:
         str1 = old_sent + ' ' + conn + ' ' + str1
         str1v = old_prop + ' ' + conn + ' ' + str1v
@@ -7502,9 +8174,11 @@ def material_implication(prop_sent, conditionals,kind):
                             j -= 1
                             m += 1
                             if m > 200:
-                                easygui.msgbox("in the material implication function \
-                                you are caught in an infinite loop")
-                                return
+                                print "in the material implication function \
+                                you are caught in an infinite loop"
+                                sys.exit()
+
+
                             str3= str1[j:j+1]
                             if str3.islower() and k == 0:
                                 bool1 = True
@@ -7611,9 +8285,10 @@ def demorgan(prop_sent, conditionals, candd,candd2,kind,one_sent = False, str8 =
             while s < r:
                 i += 1
                 if i > 200:
-                    easygui.msgbox("you are caught in an infinite loop in the \
-                    demorgan function")
-                    return
+                    print "you are caught in an infinite loop in the \
+                    demorgan function"
+                    sys.exit()
+
                 bool2 = False
                 str2 = str1[i:i+2]
                 if str2 == "~(":
@@ -7632,9 +8307,9 @@ def demorgan(prop_sent, conditionals, candd,candd2,kind,one_sent = False, str8 =
                     while j < len(str1):
                         m += 1
                         if m > 200:
-                            easygui.msgbox("you are caught in an infinite loop in the \
-                            demorgan function")
-                            return
+                            print "you are caught in an infinite loop in the \
+                            demorgan function"
+                            sys.exit()
                         bool1 = False
                         str3 = str1[j:j+1]
                         if j-1 > 0:
@@ -8428,16 +9103,16 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
         g = sent[i].count('(')
         h = sent[i].count(')')
         if g != h:
-            easygui.msgbox('wrong number of parentheses in sentence:' + sent[i])
-            return "stop"
+            print 'wrong number of parentheses in sentence:' + sent[i]
+            sys.exit()
         if nat_logic == False:
             sent[i][1] = enclose(sent[i][1])
         if sent[i][1].find("!") > -1:
             qq += 1
         else:
             if sent[i][1].count("(") != sent[i][1].count(")"):
-                easygui.msgbox("line " + str(sent[i][0]) + " does not have the right number \
-                                             of parentheses" )
+                print "line " + str(sent[i][0]) + " does not have the right number \
+                                             of parentheses"
             if nat_logic == False:
                 sent[i][1] = remove_outer_paren(sent[i][1])
             ostring = copy.copy(sent[i][1])
@@ -8544,6 +9219,1346 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
     consistent = statement_logic(prop_sent, conditionals, candd,candd2,disjuncts,kind,conc,impl)
     return consistent
 
+def repeat_relations(str1):
+    #this is for those definitions in which the same relation is related to two different
+    #general variables
+    a = ["group","x"]
+    b = ["member",'z']
+    e = ['every',"y"]
+    f = ['personhood','y']
+
+    final_list = [a,b,e,f]
+    return final_list
+
+#fff
+def large_dict(str1):
+
+    dict2= [['rbt','above','AB','((bIGc) x^ (dABb)) & ((bIGc) x^ (bABe)) & (c=point)'],\
+['rbt','after|l','AL','((bIGc) x^ (dALb)) & ((bIGc) x^ (bALe)) & (c=letter)'],\
+['rbt','after|n ','AF','((bIGc) x^ (dAFb)) & ((bIGc) x^ (bAFe)) & (c=number)'],\
+['rbt','after ','A','((bIGc) x^ (dAb)) & ((bIGc) x^ (bAe)) & (c=moment)'],\
+['rbi','and','&','((p&q) t^ (p.qIGb)) & (q~Ic) & (rPd) & (b=relationship) & (qb^p&~p) & (c=reality|t) & (rb^p&~q)'],\
+['rbi','are|a','IA','((bIAc) x^ (cIGd)) & ((bIAc) t^ (bIGe)) & ((bIAc) t^ (cIGf)) & (d=property) & (e=thing) & (f=adjective)'],\
+['rbi','are|g ','IG','((bIGc) x^ (cIGd)) & ((eIGf) x^ (eIGg)) & (d=concept|n) & (g=instance)'],\
+['rbis','at','S','((bIGc) x^ (dSb)) & ((dIGf) x^ (dSb)) & (c=point) & (f=particle) '],\
+['rbi','at|i ','AI','((dAIb) t^ (dIGc)) & ((bIGf) x^ (dAIb)) & (c=relationship) & (f=imagination) '],\
+['rbi','at|n ','N','((bIGc) x^ (dNb)) & ((eIGf) x^ ((eNh) & (hAFg))) & ((jIGk) x^ (mNg)) & ((nIGo) x^ (nNp)) & (f=whole) & (c=number) & (g=1) & (k=individual) & (p=0) & (o=contradiction) '],\
+['rbi','at|p ','P','((dPb) t^ (dIGc)) & ((bIGf) x^ (dPb)) & (c=relationship) & (f=possible world) '],\
+['rbi','at|s ','SS','((bIGc) x^ (dSSb)) & ((dIGc) x^ (dSSb)) & (f=sensation) & (c=point|s) '],\
+['rbit','at|t ','T','((dTb) t^ (dIGc)) & ((bIGf) x^ (dTb)) & (c=relationship) & (f=moment) '],\
+['rbi','at|y','Z','((bIGc) x^ (dZb)) & (c=point|a)'],\
+['rbi','desire','DS','((dDSb) t^ ((bIGc) & (bIAe))) & ((bIGf) x^ (dDSb)) & (c=relationship) & (f=mind) & (e=open|r)'],\
+['r','have','H','((bHc) x^ (cIGd)) & ((bHc) t^ (bIGe)) & ((bHc) t^ (cIGf)) & (d=property|n) & (e=thing) & (f=noun)'],\
+['rbi','has|w ','HW','((bIGc) x^ (bHWd)) & ((dIGe) x^ (bHWd)) & (d=whole) & (e=part)'],\
+['rbi','in|o','I','((c=reality|t) x^ (pIc)) & ((dIGe) t^ (d~IGc)) & ((c=reality|t) t^ ((cIGf) & (cIGg))) & ((qIc) t^ (cHWq)) &  (e=thing) & (f=non_relationship) & (g=relationship)'],\
+['rbts','in front of','FR','((bIGc) x^ (dFRb)) & ((bIGc) x^ (bFRe)) & (c=point)'],\
+['rbi','is|v','IV','((bIVc) x^ (bIGd)) & ((bIVc) x^ (cIGf)) & ((bIVc) t^ (bIGe)) & (d=property|v) & (f=adverb) & (e=non_whole)'],\
+['rbi','is|y','IY','((bIYc) x^ (cIGd)) & ((bIYc) x^ (cIGf)) & ((bIYc) t^ (bIGe)) & (d=property|d) & (f=determinative) & (e=non_whole)'],\
+['rbts','left of','LF','((bIGc) x^ (dLFb)) & ((bIGc) x^ (bLFe)) & (c=point)'],\
+['rbi','think about','TK','((bTKd) t^ (dIGc)) & ((bIGf) x^ (bTKd)) & (c=relationship) & (f=mind) '],\
+['n','concept|n',None,'(c=concept|n) & ((bIGc) x^ (zIGb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['a','consistent',None,'(c=consistent) & ((pIAc) k^ (pPq)) & ((pIAc) t^ (pIGd)) & (d=relationship)'],\
+['aa','extant',None,'((bIAc) t^ (cIGd)) & (d=property)'],\
+['n','fact',None,'(c=fact) & ((bIGc) x^ (bId)) & ((bIGc) t^ (bIGe)) & (((hAg) & (bIGc)) t^ (b~Id Th)) & (d=reality) & (e=relationship) & (g=now)'],\
+['na','here',None,'(b=here) t^ (cSb)'],\
+['n','imagination',None,'(c=imagination) & ((bIGc) x^ (dAIb)) & ((bIGc) t^ (bIGf)) & (f=non_relationship)'],\
+['n','instance',None,'(c=instance) & ((bIGc) x^ (bIGd))'],\
+['n','integer',None,'(c=integer) & ((bIGc) x^ (bAFd)) & ((bIGc) x^ (eAFb)) & ((bIGc) x^ (fNb)) & ((bIGc) t^ (bIGg)) & (g=non_whole)'],\
+['n','letter',None,'(c=letter) & ((bIGc) x^ ((dPe) & (jPg))) & ((bIGc) t^ (bIGm)) & (hIGc) & (db^bALh) & (jb^(kIGc) t^ (k~ALb)) & (m=non_whole)'],\
+['n','mind',None,'(c=mind) & ((bIGc) t^ (bTKz))'],\
+['n','mind|a',None,'(c=mind) & ((bIGc) x^ (bTKh)) & ((bIGc) x^ (bDSt)) & ((bIGc) t^ (bIGj)) & (((bTKr) & (rCRRq) & (sHWb) & (qPh) & (To)) t^ ((qPe) & (nt+qPf) & (Tg) & (gAo))) & (j=non_whole) & (rb^sRt INSm) & (qb^sQu INSm)'],\
+['n','moment',None,'(c=moment) & ((bIGc) x^ (dTb)) & ((bIGc) x^ (bAh)) & ((bIGc) x^ (eAb)) & ((bIGc) t^ (bIGf)) & (f=non_whole)'],\
+['na','now',None,'(b=now) t^ (cSb)'],\
+['n','part',None,'(c=part) & ((bIGc) x^ (dHWb))'],\
+['n','part|p',None,'(c=part|p) & (((bIGc) & (bOFd)) x^ (dHWb))'],\
+['n','particle',None,'(c=particle) & ((bIGc) x^ (bSd)) & ((bIGd) x^ (hTg)) & ((bIGc) t^ (bIGf)) & (f=non_whole) & (g=now) & (hb^bSd)'],\
+['n','particle|m',None,'(c=particle|m) & ((bIGc) x^ (bSSd)) & ((bIGd) x^ (hTg)) & ((bIGc) t^ (bIGf)) & (f=non_whole) & (g=now) & (hb^bSSd)'],\
+['n','point',None,'(c=point) & ((bIGc) x^ (dSb)) & ((bIGc) x^ (eABb)) & ((bIGc) x^ (bABm)) & ((bIGc) x^ (fFRb)) & ((bIGc) x^ (bFRj)) & ((bIGc) x^ (gLFb)) & ((bIGc) x^ (bLFk)) & ((bIGc) t^ (bIGh)) & (h=non_whole)'],\
+['n','point|s',None,'(c=point|s) & ((bIGc) x^ (dSSb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','point|b',None,'(c=point|b) & ((bIGc) x^ (dZb)) & ((bIGc) x^ (eABb)) & ((bIGc) x^ (bABm)) & ((bIGc) x^ (gLFb)) & ((bIGc) x^ (bLFk)) & ((bIGc) t^ (bIGh)) & (h=non_whole)'],\
+['n','possible relationship',None,'(c=possible relationship) & ((pIGc) x^ (pPb))'],\
+['n','possible world',None,'(c=possible world) & ((bIGc) x^ (pPb))'],\
+['n','property',None,'(c=property) & ((bIGc) x^ (dIAb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','property|d',None,'(c=property|d) & ((bIGc) x^ (dIYb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','property|n',None,'(c=property|n) & ((bIGc) x^ (dHb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','property|v',None,'(c=property|v) & ((bIGc) x^ (dIVb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','reality|t',None,'((c=reality|t) x^ (pIc)) & ((dIGe) t^ (d~IGc)) & ((c=reality|t) t^ ((cIGf) & (cIGg))) & ((qIc) t^ (cHWq)) &  (e=thing) & (f=non_relationship) & (g=relationship)'],\
+['n','sensation',None,'(c=sensation) & ((bIGc) x^ (bSSd)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','sensorium',None,'(c=sensorium) & ((bIGc) x^ ((bHWd) x^ (eSSd)))'],\
+['na','thing',None,'See atomic categories'],\
+['n','thought',None,'(c=thought) & ((bIGc) x^ (dTKb)) & ((bIGc) t^ (bIGe)) & ((bIGc) x^ (bAIf)) & (e=relationship)'],\
+['n','whole',None,'(c=whole) & ((bIGc) x^ (bHWd))'],\
+['na','abbreviation',None,'(c=abbreviation) & ((bIGc) x^ ((bIGd) ed^ (bIGe))) & (d=constant) & (e=variable)'],\
+['na','adjective',None,'(wildly disjunctive)'],\
+['na','constant',None,'indefinable'],\
+['na','intransitive verb',None,'(wildly disjunctive)'],\
+['na','noun',None,'indefinable'],\
+['na','noun form',None,'indefinable'],\
+['na','plural form',None,'indefinable'],\
+['','non_spatio_temporal',None,'(wildly disjunctive)'],\
+['','spatio_temporal',None,'(wildly disjunctive)'],\
+['','active',None,'(wildly disjunctive)'],\
+['','passive',None,'(wildly disjunctive)'],\
+['na','relation',None,'(c=relation) & ((bIGc) t^ (bIGd)) & (d=non_whole)'],\
+['rai','relational variable','R','indefinable'],\
+['na','relatum',None,'(c=relatum) & ((bIGc) x^ (bRd)) & ((eIGc) x^ (fRe))'],\
+['a','root (word)',None,'(wildly disjunctive), (c=root) & ((bIAc) t^ (bIGd)) & (d=word)'],\
+['na','singular form',None,'(wildly disjunctive)'],\
+['na','subject',None,'hard coded - the first relatum is the subject'],\
+['na','subject|i',None,'indefinable (must occur in if the relation is an intransitive verb)'],\
+['na','variable',None,'indefinable'],\
+['na','verb form',None,'(wildly disjunctive)'],\
+['a','actual|p',None,'(c=actual|p) & (d=reality) & ((pIAc) x^ (pId))'],\
+['a','actual|w',None,'(c=actual|w) & ((bIAc) x^ (b=reality))'],\
+['ns','set',None,'(set = whole)'],\
+['rs','aware of',None,'(aware of=TK)'],\
+['rs','belong|g ',None,'(belong|g=IG)'],\
+['r','belong to','BLN','(bBLNc) x^ (cHWb)'],\
+['ns','body ',None,'(body=particle)'],\
+['ns','category|c ',None,'(category|c=concept|n)'],\
+['ns','attribute',None,'(attribute = property)'],\
+['ns','characteristic ',None,'(characteristic=property)'],\
+['ns','class',None,'(class = concept|n)'],\
+['ns','class|w',None,'(class|w = whole)'],\
+['ns','class concept',None,'(class concept=concept|n)'],\
+['ns','agglomeration',None,'(agglomeration = whole)'],\
+['ns','concept|a',None,'(concept|a = property)'],\
+['ns','condition',None,'(condition=property)'],\
+['rs','conscious of',None,'(conscious of=TK)'],\
+['n','consciousness',None,'(consciousness=mind)'],\
+['aa','consistent',None,'(b=consistent) & ((cIAb) x^ (cPd))'],\
+['r','exist','EX','(exist=EX) & ((bEX) x^ (bIAc)) & (c=extant)'],\
+['ns','feature ',None,'(feature=property)'],\
+['ns','group',None,'(group = whole)'],\
+['ns','group|c',None,'(group|c = concept|n)'],\
+['rs','instantiate',None,'(instantiate=IG)'],\
+['r','instantiated by','INSP','(instantiated by=INSP) & ((bINSPc) x^ (cIGb))'],\
+['ns','item',None,'(item=thing)'],\
+['a','material',None,'(c=material) & (d=particle) & ((bIAc) x^ (bIGd))'],\
+['a','material|m',None,'(z=material|m) & (((bIAz) & (cIGb)) x^ (cSd))'],\
+['ns','material|n ',None,'(material|n=matter)'],\
+['ns','matter',None,'(matter=particle)'],\
+['ns','member',None,'(member = part)'],\
+['ns','member|i',None,'(member|i = instance)'],\
+['ns','mental whole',None,'(mental whole = thought)'],\
+['n','mind|b',None,'(c=mind|b) & ((bIGc) x^ ((bHWd.h.j) & (dIGe) & (hIGf) & (jIGg))) & (e=mind) & (f=imagination) & (g=sensorium)'],\
+['as','natural|p',None,'(natural|p = material)'],\
+['ns','number|i',None,'(number|i=integer)'],\
+['ns','object',None,'(object=thing)'],\
+['n','part|f|a',None,'(c=part|f|a) & ((bIGc) x^ (bIGd)) & (d=fact)'],\
+['n','part|i',None,'(c=part|i) & ((bIGc) x^ (bIGd)) & (d=thought)'],\
+['n','part|w',None,'(c=part|w) & ((bIGc) x^ (bIGd)) & (d=possible relationship)'],\
+['as','physical|c',None,'(physical|c = material|c)'],\
+['as','physical|m',None,'(physical|m = material|m)'],\
+['as','physical ',None,'(physical=material)'],\
+['ns','trait',None,'(trait = property)'],\
+['aa','possible',None,'(b=possible) & ((pIAb) x^ (pPc))'],\
+['n','present',None,'(present = now)'],\
+['ns','qualia ',None,'(qualia=sensation)'],\
+['r','right of','RT','(right of=RT) & ((bRTc) x^ (cLFb))'],\
+['ns','sense datum ',None,'(sense datum=particle|m)'],\
+['ns','collection',None,'(collection = whole)'],\
+['ns','time|m ',None,'(time|m=moment)'],\
+['ns','character trait',None,'(character trait = property)'],\
+['ns','universal',None,'(universal = concept|n)'],\
+['','thing',None,'(c=thing) & ((bIGc) x^ ((bIGd) ed^ (bIGe))) & ((bIGd) t^ (bIGh)) & (d=relation) & (e=non_relation) & (h=non_whole)'],\
+['','non_relation',None,'(c=non_relation) & ((bIGc) x^ ((bIGd) ed^ (bIGe) ed^ (bIGf) ed^ (bIGg))) & (((bIGe) ed^ (bIGf)) t^ (bIGh)) & (d=class concept) & (e=property|n) & (f=property) & (g=instance) & (h=non_whole)'],\
+['','class concept',None,'(c=class concept) & ((bIGc) x^ ((bIGd) ed^ (bIGe))) & ((bIGd) t^ (bIGf)) & ((bIGc) t^ (bIGg)) & (d=relationship) & (e=non_relationship) & (f=whole) & (g=non_whole)'],\
+['','non_relationship',None,'(c=non_relationship) & ((bIGc) x^ ((bIGd) ed^ (bIGe))) & (d=whole) & (e=non_whole)'],\
+['','non_whole',None,'(c=non_whole) & ((bIGc) x^ ((bIGe) ed^ (bIGf) ed^ (bIGg) ed^ (bIGh) ed^ (bIGj) ed^ (bIGk))) & (e=letter) & (f=mind) & (g=moment) & (h=basic number) & (j=particle) & (k=point)'],\
+['','whole',None,' (c=whole) & ((bIGc) x^ ((bIGd) ed^ (bIGe) ed^ (bIGf) ed^ (bIGg) ed^ (bIGh))) & (d=imagination) & (e=possible world) & (f=reality) & (g=sensorium) & (h=other)'],\
+['','relationship',None,'(c=relationship) & ((bIGc) x^ ((bIGd) ed^ (bIGe))) & (d=external relationship) & (e=thought)'],\
+['','thought',None,'(c=thought) & ((bIGc) x^ ((bIAd) ed^ (bIAe))) & (d=imaginary relationship) & (e=sensational relationship)'],\
+['l','t^',None,'(p t^ q) & (eIAc) & (nt+e~IAc) & (eb^dIAc) & (db^(rIAc) & (s~IAc) & (tIAc) & (uIAc))'],\
+['l','v+',None,'(p v+ q) & (eIAc) & (nt+e~IAc) & (eb^dIAc) & (db^(rIAc) & (s~IAc) & (tIAc) & (u~IAc))'],\
+['l','x^',None,'(p x^ q) & (eIAc) & (nt+e~IAc) & (eb^dIAc) & (db^(rIAc) & (s~IAc) & (t~IAc) & (uIAc))'],\
+['l','i^',None,'postponed'],\
+['l','nf^',None,'postponed'],\
+['l','ed^',None,'(p ed^ q) & (eIAc) & (nt+e~IAc) & (eb^dIAc) & (db^(r~IAc) & (sIAc) & (tIAc) & (u~IAc))'],\
+['lc','because',None,'(because b, c) x^ (b & (b i^ c))'],\
+['rs','entails ',None,'(entails = i^)'],\
+['lb','hence',None,'(hence = i^)'],\
+['rbt','is','=','(is = =)'],\
+['l','is|b',None,'(is|b = b^)'],\
+['r','is|i ',None,'(is|i = x^)'],\
+['rs','mean|e ',None,'(mean|e = x^)'],\
+['rs','means|s ',None,'(means|s = =)'],\
+['rs','means|t ',None,'(means|t = i^)'],\
+['lb','not follow',None,'(not follow = nf^)'],\
+['lc','since',None,'(since = because)'],\
+['lb','so',None,'(so = i^)'],\
+['r','synonymous|p with',None,'(synonymous|p with=x^)'],\
+['r','synonymous with ',None,'(synonymous with==)'],\
+['lb','then',None,'(then = i^)'],\
+['lb','then|a',None,'(then|a = t^)'],\
+['lb','therefore',None,'(therefore = i^)'],\
+['lb','thus',None,'(thus = i^)'],\
+['u','that|c',None,'(it IA p that q) x^ (qIAp)'],\
+['u','that|o',None,'hard coded'],\
+['us','that|s',None,'(that|s = which)'],\
+['na','that|n',None,'(that|n = this|n)'],\
+['na','there',None,'(there EX b) x^ (bEX)'],\
+['na','this|n',None,'(this|n Rc) x^ (bRc)'],\
+['u','where|i',None,'hardcoded - (bRc where|i dQf) x^ ((bRc) & (dQf INE c))'],\
+['u','which',None,'(bRc which Qd) x^ ((bRc) & (cQd))'],\
+['u','which|o',None,'hard coded'],\
+['u','who',None,'((bRc who Qd) x^ ((bRc) & (cQd) & (bIGe))) & (e=person)'],\
+['u','who|o',None,'hard coded'],\
+['u','whom',None,'hard coded'],\
+['b','a|r',None,'redundant'],\
+['b','an|r',None,'redundant'],\
+['b','be|r',None,'redundant'],\
+['b','did',None,'redundant'],\
+['b','do',None,'redundant'],\
+['b','does',None,'redundant'],\
+['b','each other',None,'redundant'],\
+['b','if',None,'redundant'],\
+['b','in|r',None,'redundant'],\
+['b','in common|r',None,'redundant'],\
+['b','is|r',None,'redundant'],\
+['b','it|r',None,'redundant'],\
+['b','itself|r',None,'redundant'],\
+['b','of|r',None,'redundant'],\
+['b','on|r',None,'redundant'],\
+['b','particular',None,'redundant'],\
+['b','real|g',None,'redundant'],\
+['b','same',None,'redundant'],\
+['b','that|r',None,'redundant'],\
+['dr','the|r',None,'redundant'],\
+['b','then|r',None,'redundant'],\
+['b','to|r',None,'redundant'],\
+['b','was|r',None,'redundant'],\
+['b','will|r',None,'redundant'],\
+['b','(period)',None,'(b.cRd) x^ ((bRd) & (cRd))'],\
+['b','c^',None,'(bc^c) means wherever we see b we may replace it with c but not vice_versa'],\
+['b','e^',None,'If the symbols to the left or the right of e^ are written on a line, then we may write the symbols on the other side of e^ on a different line.'],\
+['b','k^',None,'If the symbols to the left of k^ are written on a line, then we may write the symbol to the right of k^ on a different line'],\
+['b','b^',None,'The symbol to the left of b^ is an abbreviation of the symbols on the right which are relationships'],\
+['r','=',None,'(b=c) means wherever we see b we may replace it with c and vice_versa'],\
+['ra','zzz',None,'(bzzzc) means we may not replace b with c and vice_versa'],\
+['b','nt+',None,'(nt+p t^ (pIGc)) & (c=relationship) & (qIAd) & (qb^p&nt+p) & (d=consistent)'],\
+['m','not',None,'~'],\
+['ma','~',None,'(~p t^ (pIGc)) & (c=relationship) & (qIAd) & (qb^p&~p) & (d=contradictory)'],\
+['b','g^',None,'If we have (bg^c) on line 3 and SUB 2,3 in the justification section then only in line 2 may we replace b with c but not vice versa.'],\
+['c','and|c',None,'(b and|c c R d) x^ (b.cRd)'],\
+['m','not|i',None,'(not|i = nt+)'],\
+['rat','not equal to',None,'(not equal to = zzz)'],\
+['','0',None,''],\
+['','0',None,'Numbers'],\
+['','0',None,''],\
+['nu','0',None,'((b=0) x^ ((cAFb) & (bAFe))) & (c=1) & (e=1)'],\
+['nu','1',None,'((b=1) x^ ((cAFb) & (bAFe))) & (c=2) & (e=0)'],\
+['nu','2',None,'((b=2) x^ ((cAFb) & (bAFe))) & (c=3) & (e=1)'],\
+['nu','3',None,'((b=3) x^ ((cAFb) & (bAFe))) & (c=4) & (e=2)'],\
+['dd','at least one',None,'(at least one bRc) x^ ((zRc) & (zIGb))'],\
+['dd','at least three',None,'(((at least three bRc) & (bOFd) & (bIGe)) x^ ((zRc) & (zIGd) & (yRc) & (yIGd) & (xIGd) & (xRc))) & (e=plural form)'],\
+['dd','at least two',None,'(((at least two bRc) & (bOFd) & (bIGe)) x^ ((zRc) & (zIGd) & (yRc) & (yIGd))) & (e=plural form)'],\
+['dd','exactly one',None,'(exactly one b R c) x^ ((zIGb) & (((yIGb) & (yRc)) t^ (y=z)))'],\
+['dd','exactly three',None,'(((exactly three bRc) & (bOFd) & (bIGe)) x^ ((yIGd) & (xIGd) & (yRc) & (xRc) & (wRc) & (wIGd) & (((zIGd) & (zRc)) t^ ((z=y) ed^ (z=x) ed^ (z=w))))) & (e=plural form)'],\
+['dd','exactly two',None,'(((exactly two bRc) & (bOFd) & (bIGe)) x^ ((yIGd) & (xIGd) & (yRc) & (xRc) & (((zIGd) & (zRc)) t^ ((z=y) ed^ (z=x))))) & (e=plural form)'],\
+['a','second|m',None,'(z=second|m) & (y=first|m) & ((bIAz) & (bIGc)) x^ ((dIAy) & (dIGc) & (bSCMd))'],\
+['a','second|o',None,'(z=second|o) & (y=first|o) & ((bIAz) & (bIGc)) x^ ((dIAy) & (dIGc) & (bSUOd))'],\
+['a','second|p',None,'(z=second|p) & (y=first|p) & ((bIAz) & (b=c Te)) x^ ((dIAy) & (d=c Tf) & (bSCPd ASCc))'],\
+['a','second|s',None,'(z=second|s) & (y=first|s) & ((bIAz) & (bIGc)) x^ ((dIAy) & (dIGc) & (bSCDd))'],\
+['a','second|u',None,'(z=second|u) & (y=first|u) & ((bIAz) & (bIGc)) x^ ((dIAy) & (dIGc) & (bSCUd))'],\
+['dd','zero',None,'(bR zero c) x^ ((b~Rc) & (cN0))'],\
+['dd','zero',None,'(zero = no)'],\
+['ddi','a',None,'((a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=indefinite)'],\
+['ddi','a|a',None,'((a|a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=general)'],\
+['di','all',None,'(all = every)'],\
+['ds','another',None,'(another bRc) x^ ((zRc) & (zIGb))'],\
+['ds','any',None,'(any = every)'],\
+['dt','any|n',None,'(b~R any|n c) x^ (bR no c)'],\
+['d','anyone except',None,'((anyone except bRc) x^ ((anything except bRc) & (bIGd))) & (d=person)'],\
+['d','anything except',None,'(anything except bRc) x^ (((z=~b) t^ (zRc)) & (b~Rc))'],\
+['d','every',None,'((every bRc) x^ (((zIGb) t^ (zRc)) & (zIAe) & (yIGb) & (yIAd))) & (d=particular) & (e=general)'],\
+['','every (different)',None,'((every b R different|b c) x^ ((dIGb) t^ ((dRe) & (dRf) & (d~Rg))) & (((mIGb) & (jIGb) & (kIGc)) t^ ((m~Rk) v+ (j~Rk)))) & (h=indefinite) & (e.f.gIAh) & (e.f.gIGc)'],\
+['d','everything except|p',None,'((everything except|p bRc) x^ (((z~IGb) t^ (zRc)) & ((yIGb) t^ (y~Rc)))'],\
+['dd','few',None,'postponed'],\
+['dd','many|d',None,'((many|d bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=many)'],\
+['dd','many|n',None,'((many|n bRc) x^ ((zIGb) & (zRc) & (zIAg) & (yIGb) & (y~Rc) & (yIAg) & (y zzz z))) & (g=many)'],\
+['dd','many|s',None,'(many|s bRc) x^ ((zIGb) & (zRc) & (zIAd) & (yIGb) & (y~Rc) & (yIAd))'],\
+['dd','no',None,'((no bRc) x^ (every b~Rc))'],\
+['d','no one except',None,'((no one except bRc) x^ ((only bRc) & (bIGd))) & (d=person)'],\
+['dd','only',None,'(only bRc) x^ (((z=~b) t^ (z~Rc)) & (bRc))'],\
+['ddi','the',None,'((the bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=definite)'],\
+['ds','all of the',None,'(all of the=all)'],\
+['ds','all the',None,'(all the=all)'],\
+['ds','an',None,'(an = a)'],\
+['ds','an|a',None,'(an|a = a|a)'],\
+['ws','anyone',None,'(anyone = any person)'],\
+['ws','anything',None,'(anything = any thing)'],\
+['ws','anything|a',None,'(anything|a = a|a thing)'],\
+['ws','everyone',None,'(everyone = any person)'],\
+['ds','everyone except',None,'(everyone except = anyone except)'],\
+['ws','everything',None,'(everything = any thing)'],\
+['d','everything except',None,'(everything except = anything except)'],\
+['ds','none of the',None,'(none of the = no)'],\
+['xs','not|i a',None,'(not|i a = no|s)'],\
+['xs','not|i a',None,'(not|i a = no|s)'],\
+['xs','not|i a|a',None,'(not|i a|a = no|s)'],\
+['xs','not|i all',None,'(not|i all = many|n)'],\
+['xs','not|i anything',None,'(not|i anything = no thing)'],\
+['xs','not|i everyone',None,'(not|i everyone = many|s person)'],\
+['xs','not|i everything',None,'(not|i everything = many|s thing)'],\
+['dd','not|i many|d',None,'(not|i many|d bRc) x^ (exactly one bRc)'],\
+['xs','not|i many|m',None,'(not|i many|m = few)'],\
+['xs','not|i many|n',None,'(not|i many|n = every)'],\
+['ws','nothing',None,'(nothing = no|s thing)'],\
+['d','nothing|d',None,'((nothing|d bRc) x^ ((no b dRc) & (dIGz))) & (z=thing)'],\
+['ds','nothing except',None,'(nothing except = only)'],\
+['ds','nothing except|p',None,'(nothing except|p = only|p)'],\
+['ds','one',None,'(one=some)'],\
+['ds','one of',None,'(one of=some)'],\
+['ds','some',None,'(some=a)'],\
+['ds','some|m',None,'(some|m = many|d)'],\
+['ds','some|o',None,'(some|o = many|o)'],\
+['ds','some|p',None,'(some|p = many|n)'],\
+['ds','some of the',None,'(some of the = many|d)'],\
+['ws','someone',None,'(someone = some person)'],\
+['ws','someone|n',None,'(someone|n = some|m person)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something|a',None,'(something|a = a|a thing)'],\
+['ds','that|d',None,'(that|d=the)'],\
+['ds','the|a',None,'(the|a=a)'],\
+['ds','this',None,'(this=the)'],\
+['p','he',None,'(d=person) & (e=male) & ((he Rb) t^ ((cRb) & (cIAe) & (cIGd))) & (g=definite) & (h=particular)'],\
+['ps','her',None,'(her=she)'],\
+['q','her|p',None,'(d=person) & (e=female) & ((her|p bRc) t^ ((bRc) & (dIAe) & (dPSb)))'],\
+['ps','him',None,'(him=he)'],\
+['q','his',None,'((his bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=he)'],\
+['p','i',None,'(d=person) & ((i Rb) t^ ((iIGd) & (iIAg))) & (g=definite)'],\
+['pa','it',None,'hard coded'],\
+['p','it|p',None,'propositional it'],\
+['p','it|w',None,'hard coded'],\
+['q','its|a',None,'(bR its|a c) t^ ((zIGc) & (bHMz) & (bRz))'],\
+['ps','me',None,'(me=i)'],\
+['q','my',None,'((my bRc) t^ ((zRc) & (zIGb) & (iOWNz)))'],\
+['q','my|a',None,'((my bRc) t^ ((zRc) & (zIGb) & (iHWz)))'],\
+['q','our',None,'(d=person) & ((our bRc) t^ ((bRc) & (eIGd) & (zIGe) & (ePSb)))'],\
+['p','she',None,'(d=person) & (e=female) & ((she Rb) t^ ((cRb) & (cIGd) & (cIAe) & (cIAg) & (cIAh))) & (g=definite) & (h=particular)'],\
+['ps','them',None,'(them=they)'],\
+['p','they',None,'(d=person) & ((they Rb) t^ ((cRb) & (cIGd) & (zIGc) & (cIAg) & (cIAh))) & (g=definite) & (h=particular)'],\
+['p','we',None,'(d=person) & ((we Rb) t^ ((cRb) & (cIGd) & (zIGc) & (cIAg) & (cIAh))) & (g=definite) & (h=particular)'],\
+['p','you',None,'(d=person) & ((you Rb) t^ ((cRb) & (cIGd) & (cIAg))) & (g=definite)'],\
+['p','you|p',None,'(d=person) & ((you|p Rb) t^ ((cRb) & (cIGd) & (zIGc))) & (g=definite) & (h=particular)'],\
+['q','your',None,'(e=person) & ((your bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=you)'],\
+['q','your|p',None,'(d=person) & ((your|p bRc) t^ ((bRc) & (eIGd) & (zIGe) & (ePSb)))'],\
+['n','ability',None,'(c=ability) & ((dH can b) x^ (d can R)) & (((bIGc) & (R OFV b)) t^ (d can R))'],\
+['ra','about','ABT','postponed'],\
+['r','above|a','ABO','(above|a=ABO) & ((bABOc) x^ ((bSz) & (zABc)))'],\
+['r','above|m','ABV','(above|m=ABV) & ((bABVc) x^ ((bSz) & (cSy) & (zABy)))'],\
+['a','abstract',None,'(c=abstract) & ((bIAc) x^ ((bAd) ed^ (bABe) ed^ (bAFf) ed^ (gHb) ed^ (bHWj) ed^ (mIGb) ed^ (nIAb) ed^ (bIGo))) & (o=relation)'],\
+['a','abstract|a',None,'(c=abstract|a) & (((bIAc) & (bITd) & (bRe)) x^ (((fIGd) t^ (fRe))))'],\
+['a','abstract|c',None,'(c=abstract|c) & (e=abstract) & (((bIAc) & (dIGb)) x^ (dIAe))'],\
+['a','abstract|d',None,'(c=abstract|d) & ((bIAc) x^ ((bAd) ed^ (bABe) ed^ (bAFf) ed^ (gHb) ed^ (bIAp) ed^ (mIGb) ed^ (nIAb) ed^ (bIGo))) & (o=relation) & (p=abstract|g)'],\
+['a','abstract|g',None,'(c=abstract|g) & ((bIAc) x^ ((bHWe) t^ (eIAf))) & (f=abstract|d)'],\
+['n','abstract essence',None,'(abstract essence = essence|a)'],\
+['e','abstractly',None,'((bEX abstractly) x^ ((bIAd) & (bIAc))) & (c=abstract) & (d=extant)'],\
+['a','absurd',None,'(b=absurd) & ((pIAb) x^ ((pIAc) & (nt+pIAc))) & (c=contradictory)'],\
+['as','absurd|r',None,'(absurd|r = ridiculous)'],\
+['ns','action',None,'(action = effect)'],\
+['a','actual',None,'(c=actual) & (((bIAc) & (bIGd)) x^ (bIGd))'],\
+['ns','actual|s',None,'(actual|s = physical|s)'],\
+['rs','actualize','ACU','(actualize = materialize)'],\
+['e','actually',None,'(b=reality) & ((p actually) x^ (pIb))'],\
+['r','after|p','AFT','((bAFTc) x^ ((bHWd) & (dIAe) & (dAc))) & (e=first)'],\
+['r','allow','ALO','(allow=ALO) & (eb^bPRVc) & ((bALOc) x^ ((dTRYc) t^ (b~TRYe)))'],\
+['e','always|p',None,'(c=always|p) & ((pIVc) x^ ((bIGd) t^ (pPb))) & (d=possible world)'],\
+['e','always',None,'(c=always) & ((pIVc) x^ ((bIGd) t^ (pTb))) & (d=moment)'],\
+['rs','appear',None,'(appear=SM)'],\
+['ns','arbitrary group',None,'(arbitrary group = group|a)'],\
+['ns','area ',None,'(area=region)'],\
+['a','artificial',None,'(c=artificial) & ((bIAc) x^ ((bIAd) & (eIGf) & (eCAg INTh))) & (d=natural) & (f=person) & (gb^bIAd) & (h=past)'],\
+['rc','as','AS','(as=AS) & (((bASc) & (dRb)) x^ (cRb))'],\
+['o','ask (how)',None,'((bASKc) x^ ((gIGf) t^ (bTKk))) & (c b^ how CAe) & (f=cause) & (h b^ gCAe) & (k b^ hUj)  '],\
+['o','ask (what)',None,'((hASKg) x^ ((cIGd) t^ (hTKk))) & (d=thing) & (e b^ bRc) & (g b^ bR what?) & (k b^ eUf)'],\
+['rs','at|i',None,'(at|i=INP)'],\
+['rs','at|n',None,'(at|n=NXT)'],\
+['a','atomic|p',None,'(b=indefinable|p) & (c=property) & (e=relationship) & (gb^fHd) & (((dIGc) & (dIAb)) x^ ((hIGe) t^ (hnf^g)))'],\
+['a','atomic|r',None,'(b=indefinable|r) & (f=relationship) & (h=relation) & (cb^dRe) & (((R IAb) & (R IGf)) x^ ((gIGf) t^ (gnf^c)))'],\
+['o','atomic equivalent',None,'(b=indefinable equivalent) & (((cIGb) & (cOFd)) x^ ((c x^ d) & (d~IAf) & ((eIGc) t^ (eIAf)))) & (f=indefinable)'],\
+['n','atomic relationship',None,'(c=indefinable relationship) & (d=subject) & (e=relation) & (f=object) & (g=truth value) & (h=locative molecular relationship) & (k=variable) & ((bIGc) x^ ((zIGd) & (yIGe) & (wIGg) & (bHz) & (bHy) & (vIGf) & (bHV) & (bHv) & (vIGk) & (zIGk) & (uIGh) & (bIGd) & (uHb)))'],\
+['rs','attempt',None,'(attempt=TRY)'],\
+['rs','attended',None,'(attended = participated)'],\
+['as','authentic',None,'(authentic=actual)'],\
+['na','authority',None,'postponed'],\
+['n','axiom',None,'(c=axiom) & ((bIGc) x^ ((eIGd) t^ (enf^b)) & (((bHWf) & (fIGg)) t^ (f~HWh))) & (g=antecedent sentence) & (h=IG)'],\
+['r','before','BF','(before=BF) & ((bBFc) x^ (cAb))'],\
+['r','behind','BH','(behind=BH) & ((bBHc) x^ (cFRb))'],\
+['r','behind|w','BEH','(behind|d=BEH) & ((bBEHc) x^ ((bHWd) & (dSe) & (cFRe)))'],\
+['n','belief',None,'(c=belief) & ((bIGc) x^ (zBb))'],\
+['r','believe','B','(believe=B) & ((bBc) x^ (bTKd)) & ((bBc) t^ (bTKc)) & (e=true) & (db^cIAe)'],\
+['rs','believe|t ',None,'(believe|t=BT)'],\
+['rs','believes',None,'(believes = B)'],\
+['r','believes|t','BT','(believe tentatively=BT) & ((bBTp) x^ ((bBr) & (bBp))) & (qb^b~Bp) & (rb^qPz)'],\
+['r','belong|o','BLG','(belong|o=BLG) & ((bBLGc) x^ (cOWNb))'],\
+['r','belongs to|i','BIM','(bBIMc) x^ (cHIMb)'],\
+['r','below','BEL','(below|a=BEL) & ((bBELc) x^ ((bSz) & (cABz)))'],\
+['r','below','BW','(below=BW) & ((bBWc) x^ (cABb))'],\
+['r','below|m','BLW','(below|m=BLW) & ((bBLWc) x^ ((bSz) & (bSy) & (yABz)))'],\
+['r','between|p','BTP','(between|p=BTP) & ((bBTPc_d) x^ ((bNz) & (cNy) & (dNx) & (((xAFz) & (zAFy)) ed^ ((yAFz) & (zAFx)))))'],\
+['r','between|p','BTW','(between=BTW) & ((bBTWc_d) x^ (((bAFc) & (dAFb)) ed^ ((dAFb) & (cAFb))))'],\
+['r','between|a','BTA','(bBTAc_d) x^ ((eIGf) t^ ~((cRe) & (eRd))) & ((R=LF) ed^ (R=AB) ed^ (R=FR)) & (f=thing)'],\
+['rs','between|t ',None,'(between|t=CBT)'],\
+['na','body|c',None,'(c=body|c) & ((bIGc) x^ ((bHWd) t^ (dIGe))) & (e=particle)'],\
+['n','boundary',None,'(c=boundary) & (((bIGc) & (dHb)) x^ (dINb))'],\
+['rs','break',None,'(break=VIO)'],\
+['ra','breaks','BRK','postponed'],\
+['n','broad reality',None,'((b=broad reality) x^ (((cId) ed^ (cPe)) x^ (bHWc))) & (d=reality)'],\
+['ra','calculate','CLC','postponed'],\
+['ra','calculates','CLC','postponed'],\
+['ea','can|a',None,'(d=ability) & (((pb^bR) & (p can|a) & (R VCPc)) x^ (cIGd))'],\
+['e','cannot|w',None,'(state=STT) & (c=absolutely false) & (((p cannot|w) & (bSTTp)) x^ ((bDSz) & (zb^pIAc)))'],\
+['as','case',None,'(case = true)'],\
+['r','continguous','CTG','(bCTGc) x^ (((bHWd) x^ ((dINb) & (c~HWd))) & ((cHWe) x^ ((eINc) & (b~HWe))) & (bHWf) & (cHWg) & ((hIGj) t^ (h~BTAf_g))) & (j=thing)'],\
+['ns','causal part',None,'(causal part = part|c)'],\
+['na','causal role',None,'postponed'],\
+['n','causal whole',None,'(c=causal whole) & (((bIGc) & (bOFd)) x^ ((bCAUc) & (dIGb)))'],\
+['ra','cause','CA','((pCAq) x^ ((bRc INMd Te) t^ ((fQg INMj Th) & (dCTGj) & (hSUTe)))) & (pb^bRc INMd) & (qb^fQg INMj)'],\
+['r','cause|i','CAU','(cause|i=CAU) & ((bCAUc) x^ ((bSz Ty CA c SzTx)))'],\
+['ra','cause|m','CAUS','postponed'],\
+['r','cause|p','CAS','(cause|p=CAS) & (e=reality) & ((bCASc GVd) x^ ((((dIe Ty) & (bSzTy)) t^ (cPx)) & (xNw) & (((dIe Ty) & (b~SzTy)) t^ (cPv)) & (vNu) & (wAFu)))'],\
+['r','cause|w','CSE','((bCSEc) x^ ((bHWd) x^ ((d~IAe Tf) t^ (c~IAe Tg)))) & (((d~IAe Tf) t^ (c~IAe Tg)) t^ (gSUTf)) & (e=extant)'],\
+['a','certain',None,'(b=certain) & (((cIAb) & (cTOd Tg)) x^ ((eb^(cIf)) & (dTKe Tg) & (hb^(d~TKe Tk)) & (nb^((jIGm) t^ (h~Pj))) & (kAg) & (dTKn))) & (f=reality) & (g=now) & (m=possible world)'],\
+['rxd','chronologically between','CBT','(chronologically between=CBT) & ((bCBTc and|c d) x^ (((bAc) & (dAb)) ed^ ((bAd) & (cAb))))'],\
+['n','common name',None,'(c=common name) & ((bIGc) x^ ((bIGd) & (bRFe) & (eIGf))) & (d=word) & (f=concept|n)'],\
+['ns','concept|p',None,'(concept|p=plan)'],\
+['n','concept',None,'(c=concept) & ((dIGb) ed^ (eHb) ed^ (fIAb)) t^ (bIGc)'],\
+['na','concept phrase',None,'(c=concept_phrase) & ((bIGc) x^ ((dIGb) & (eRFb) & ((eHWf) t^ (fIGj)) & (eNg) & (gAFh))) & (h=1) & (g=word)'],\
+['ns','conclusion',None,'(conclusion=inference)'],\
+['as','concrete',None,'(concrete=particular)'],\
+['ns','condition|s',None,'(condition|s=situation)'],\
+['o','connected|i',None,'(b=connected|i) & ((cIAb) x^ ((gIGe) & (gOFc) & (hIGd) & (cHVh) & (mHVc) & ((kIGg) ed^ (k=g)) & (kIAf))) & (d=main relation) & (e=indefinable equivalent) & (f=connected|s)'],\
+['a','connected|s',None,'(b=connected|s) & ((c and|c d IA b Te) x^ (((c t^ d) ed^ (c ed^ d) ed^ (c x^ d) ed^ (c v+ d)) & (c~If Te) & (d~If Te))) & (f=reality)'],\
+['ns','consequence',None,'(consequence=inference)'],\
+['a','consistently extant',None,'(c=consistently extant) & ((bIAc) x^ (pPc)) & (pb^bIAd) & (d=extant)'],\
+['r','contain','CT','(contain=CT) & ((bCTc) x^ (cINb))'],\
+['a','contingently contradictory',None,'(b=contingently contradictory) & ((p.qIAb) x^ ((pIAd) & (qIAd) & (p.q~IAd))) & (d=consistent)'],\
+['a','contradictorily extant',None,'(c=contradictorily extant) & ((bIAc) x^ ((eIGf) t^ (p~Pe))) & (pb^bIAd) & (d=extant) & (f=possible world)'],\
+['a','contradictorily extant|a',None,'(c=contradictorily extant|a) & ((bIAc contradictorily) x^ ((pHWb) & ((eIGf) t^ (p~Pe)))) & (d=extant) & (f=possible world)'],\
+['','contradictory',None,'(c=contradictory) & ((pIAc) x^ ((bIGd) t^ (p~Pb))) & (pb^q.nt+q)'],\
+['rs','contrary of',None,'(contrary of=NEG)'],\
+['as','contrasting ',None,'(contrasting=different)'],\
+['r','correspond|s','CRS','(corresponds|s to=CRS) & ((bCRSc) x^ ((zb^yIx) & (((bHw) & (w=~z)) t^ (cHw))))'],\
+['r','count',None,'((bCNTc) x^ (bTKd)) & (db^(cHWe) & (cNf))'],\
+['r','count|n',None,'(bCOTc) x^ (cNb)'],\
+['n','courage',None,'(b=courage) & ((cHb) x^ (cIAd)) & (d=courageous)'],\
+['na','courageous',None,'postponed'],\
+['na','dead',None,'postponed'],\
+['ns','deduction',None,'(deduction=inference)'],\
+['aa','definite',None,'(definite = individual)'],\
+['as','definite|v',None,'(definite|v = certain)'],\
+['n','definite description',None,'(c=definite description) & ((bIGc) x^ ((dHb) & ((ezzzd) t^ (e~Hb)))) & (d=property)'],\
+['axd','different',None,'(c=different) & ((b and|c d IA c) x^ (b=~c))'],\
+['r','different from','DF','(different from=DF) & ((bDFc) x^ (bzzzc))'],\
+['a','difficult',None,'(c=difficult) & (((bIAc) & (bTOd)) x^ ((dTRYb Tf) t^ ((hHWe) x^ ((bPe Tg) & (gAf) & (hIAk))))) & (k=few)         '],\
+['rs','distinct from',None,'(distinct from = zzz)'],\
+['a','divine',None,'(b=divine) & (c=God) & ((dIAb) x^ (d=c))'],\
+['a','divine|s',None,'(c=divine|s) & (d=God) & ((bIAc) x^ (bSMLd))'],\
+['ns','duration ',None,'(duration=period)'],\
+['r','during','DUR','(during=DUR) & ((pDURb) x^ ((bHWc.d.e) & (pTe) & (eAc) & (dAe)))'],\
+['r','during|o','DRG','(during|o=DRG) & ((bDRGc) x^ ((bHWe) t^ ((cHWe) & (eIGf)))) & (f=moment)'],\
+['r','during|t','DR','(during|t=DR) & ((bDRc) x^ ((cHWb.d.e) & (eAb) & (bAd)))'],\
+['r','earlier|p than','ELA','(bELAc) x^ (((bHWd) & (cHWe)) t^ (eAd))'],\
+['r','earlier than','EL','(earlier than=EL) & ((bELc) x^ (cAb))'],\
+['a','easy',None,'(c=easy) & (((bIAc) & (bTOd)) x^ ((dTRYb Tf) t^ ((hHWe) x^ ((bPe Tg) & (gAf) & (hIAk))))) & (k=many)         '],\
+['r','empirical (of a relation)',None,'(b=empirical) & (R IAb) x^ ((R = SEE) ed^ (R = HR) ed^ (R = TOC) ed^ (R = TST) ed^ (R = SML))'],\
+['ns','empty space',None,'(empty space=void)'],\
+['n','energy',None,'(c=energy) & ((bIGc) t^ ((dHb) & (dIGf))) & (f=particle)'],\
+['a','entire past',None,'((b=entire past) x^ ((bHWc) t^ (dAc))) & (d=now)'],\
+['ns','entity',None,'(entity=thing)'],\
+['ns','entity|n',None,'(entity|n=object|n)'],\
+['n','epistemic possible world',None,'(b=epistemic possible world) & (fb^d~Be) & (((cIGb) & (cTOd)) x^ (fPc))'],\
+['a','epistemically contingent',None,'postponed'],\
+['a','epistemically impossible',None,'(b=epistemically impossible) & (e=possible world) & (rb^(dIGe) u+ (d~Pe)) & (qb^cBp) & ((pIA b TO c) x^ ((cBr) & (bBp)))'],\
+['a','epistemically necessary',None,'(b=epistemically necessary) & ((pIA b TO c) x^ (cKNp))'],\
+['a','epistemically probable',None,'(b=epistemically probable) & (((pIAb) & (pTOc Td)) x^ ((zb^cBp Ty) & (xb^c~Bp Ty) & (yAd) & (zNw) & (yNv) & (ub^wAFv) & (cBu Td)))'],\
+['n','essence|a',None,'(c=essence|a) & ((bIGc) x^ ((zIGy) x^ (zHb)))'],\
+['n','essence|i',None,'(c=individual essence) & ((bIGc) & (uHSb Te)) x^ (((bHWj Tg) & (jIGn) & (dHj)) t^ ((qIAr) & (s~IAr))) & ((fHWm) x^ ((tHm Tg) & (mIGn))) & ((qHWp) x^ (oPp)) & ((sHWq) x^ (nt+oPq)) & (uHWt.d) & (eSUTg))) & (n=intrinsic accidental property) & (r=many) & (ob^fHWj Te)'],\
+['na','essence|n',None,'postponed'],\
+['n','essence|p',None,'(c=individual essence|p) & (((bIGc) & (dHSb) & (fHWd)) x^ ((fHSj) & (jIGg) & ((bHWh) x^ (jHWh)))) & (g=individual essence)'],\
+['n','event',None,'(b=event) & ((pIGb) x^ (pOC))'],\
+['n','everything|n',None,'((b=everything|n) x^ ((cIGd) t^ (bHWc))) & (d=thing)'],\
+['r','exist|b','EXB','((bEXB) x^ (bIAc)) & (c=contradictorily extant)'],\
+['r','exist|c','EXC','((bEXC) x^ (bIAc)) & (c=consistently extant)'],\
+['rs','exist as',None,'(exist as = IG)'],\
+['r','exists','EX','(exists=EX) & ((bEX) x^ (bIAc)) & (c=extant)'],\
+['rs','exists|a',None,'(exists|a=EA)'],\
+['rs','exists|i',None,'(exists|i=EI)'],\
+['rs','exists|m',None,'(exists|m=EM)'],\
+['rs','exists|n',None,'(exists|n=EXN)'],\
+['rs','exists|p',None,'(exists|p=EP)'],\
+['rs','exists|s',None,'(exists|s=ES)'],\
+['r','exists divinely','ED','(exists divinely=ED) & (c=God) & ((bED) x^ (bIGc))'],\
+['r','exists historically','EH','(exist historically=EH) & (c=current present) & ((bEH) x^ ((bSzTy) & (cAy)))'],\
+['r','exists in the imagination','EI','(exists in the imagination=EI) & ((bEI) x^ (bAIz))'],\
+['r','exists intersubjectively','EIN','(exists intersubjectively=EIN) & ((bEIN) x^ ((bAIy z) & (xN2) & ((y=x) ed^ (yAFx))))'],\
+['r','exists mentally','EM','(exists mentally=EM) & ((bEM) x^ (bTKz))'],\
+['r','exists naturally','EXN','(exists naturally=EXN) & ((bEXN) x^ (bSz))'],\
+['rs','exists physically ',None,'(exists physically=EXN )'],\
+['r','exists probabilistically','EP','(exists probabilistically=EP) & ((bEP) x^ (bPz))'],\
+['r','exists sensationally','ES','(exists sensationally=ES) & ((bES) x^ (bSSz))'],\
+['n','explicit|e relationship|e',None,'(c=explicit|e relationship|e) & ((bIGc) x^ ((bHWd) & (bHWe) & (bHWh) & (dIGf) & (eIGg) & (hIGf))) & (f=relatum) & (g=relation)'],\
+['n','external relationship',None,'(c=external relationship) & ((pIGc) x^ ((pPd) v+ (pIe))) & (e=reality)'],\
+['a','fake',None,'(c=fake) & (((bIAc) & (bIGd)) x^ (b~IGd))'],\
+['a','false',None,'(c=false) & ((bIAc) x^ (b~IAd)) & (d=true)'],\
+['n','familial part',None,'(c=familial part) & (((bIGc) & (bOFd)) x^ (bIGd))'],\
+['n','familial part|a',None,'(c=familial part|a) & ((bIGc) x^ (dHMb))'],\
+['ns','familial whole',None,'(familial whole=group)'],\
+['na','family',None,'postponed'],\
+['n','family|i',None,'(b=family|i) & (((cIGb) & (dIGc) & (eIGc)) x^ (((dIGf) & (dOFe)) ed^ ((eIGf) & (eOFd)) ed^ ((dIGh) & (dOFe)) ed^ ((eIGh) & (eOFd)) ed^ ((dIGg) & (dOFe)) ed^ ((eIGg) & (eOFd)) ed^ ((dIGk) & (dOFe)) ed^ ((eIGk) & (eOFd)) ed^ ((dIGl) & (dOFe)) ed^ ((eIGl) & (eOFd)))) & (f=sibling) & (g=mother) & (h=father) & (k=aunt) & (l=uncle)'],\
+['aa','fanatical',None,'postponed'],\
+['ra','feel',None,'postponed'],\
+['ra','feels',None,'postponed'],\
+['a','few|a',None,'(c=few|a) & (((bIAc) & (eIAf)) x^ ((bNd) & (eNg) & (gAFd))) & (f=many|a)'],\
+['d','few ',None,'(few=~mn)'],\
+['a','fictional',None,'(c=fictional) & ((bIGc TOh) x^ ((bAId) & (hTKe))) & (eb^(fIg) t^ (b~CRRf)) & (g=reality)'],\
+['ra','follows from (contingently)','FLC','(follows from=FLC) & ((bFLCc) x^ ((dIAm Pe) & (fIAm Pg) & (h~IAm Pm) & (jIAm Pk))) & (db^b.c) & (fb^b.nt+c) & (hb^nt+b.c) & (jb^nt+b.nt+c) & (m=probable)'],\
+['ra','follows from (necessarily)','FL','(follows from=FL) & ((bFLc) x^ ((dIAta^ Pe) & (fIAta^ Pg) & (hIAco^ Pm) & (jIAta^ Pk))) & (db^b.c) & (fb^b.nt+c) & (hb^nt+b.c) & (jb^nt+b.nt+c)'],\
+['as','forbidden',None,'(forbidden=morally impossible)'],\
+['as','forbidden|l',None,'(forbidden|l=legally impossible)'],\
+['rs','from|b',None,'(from|b = born)'],\
+['rs','from|c','FRMC','(FRMC = FLC)'],\
+['r','front|a','FRA','(in|r front|a of|r=FRA) & ((bFRAc) x^ (((bHWm) & (mSj)) t^ (jFRc))) & (cIGf) & (jIGf) & (f=point) & (h=particle) & (k=natural whole) & (bIGk) & (mIGh)'],\
+['r','front|m','FRN','(in|r front|m of|r=FRN) & ((bFRNc) x^ ((bSz) & (cSy) & (zFRy)))'],\
+['r','front|o','FRO','(in|r front|p of|r=FRO) & ((bFROc) x^ (((cHWd) & (dSe)) t^ (bFRe))) & (f=natural whole) & (g=point) & (h=particle) & (bIGg) & (cIGf) & (dIGh)'],\
+['r','front|w','FNT','(in|r front|w of|r=FNT) & ((bFNTc) x^ ((bHWd) & (dSe) & (cHWf) & (fSg)) t^ (eFRg))'],\
+['aa','general',None,'hard coded'],\
+['ns','general term',None,'(general term = concept|n)'],\
+['as','genuine',None,'(genuine=actual)'],\
+['r','given','GV','(given=GV) & ((pGVq) x^ (qu+p))'],\
+['ra','go','GO','postponed'],\
+['ra','go to','GO','postponed'],\
+['n','goal',None,'(c=goal) & (((bIGc) & (bFORd)) x^ (dDSb))'],\
+['n','God',None,'(b=God) x^ (((b~EX) & (z=~b)) t^ (z~EXN))'],\
+['ra','goes','GO','(GO=MOV)'],\
+['aa','good',None,'postponed'],\
+['r','greater than','GR','(greater than=GR) & ((bGRc) x^ (bAFc))'],\
+['n','group|a',None,'(c=group|a) & ((bIGc) x^ ((bHWs) x^ (sHu))) & (xb^(wHWb) x^ (wHv)) & (ub^tBx)'],\
+['na','HA ... friend icm',None,'b and c have a friend in common: postponed'],\
+['ns','haecceity',None,'(haecceity=unique essence)'],\
+['rs','happen ',None,'(happen=OC)'],\
+['ra','has|c','HC','postponed'],\
+['r','has|p|k (causal power)','HCB','(has|p|k= HCB) & ((bHCBc) x^ ((bRd INMe Tf) t^ ((gRh INMe Tg) & (gSUTf)))'],\
+['r','has|c|p','HCP','(bHCPc) x^ ((bHWc) x^ (bCSEd))'],\
+['r','has|c|r (causal role)','HCA','((bHCAc) x^ (bCAc)) & ((bHCAc) t^ (bHc))'],\
+['ra','has|e (corpse)','HA','has|c=HA, c=matter, d=dead ((bHAz) & (zIGc)) x^ ((zSy) & (bOWNz) & (zIAd))'],\
+['r','has|g|c','HGC','(cHGCb) x^ ((cHWe) t^ (eIGb))'],\
+['r','has|i','HI','((bHIc) x^ (((bHWc) ed^ (bHc)) & (cIAd))) & (d=intrinsic)'],\
+['r','has|i|m','HIM','((bHIMc) x^ (cAIb))'],\
+['r','has|m','HM','(have|m=HM) & ((bHMc) x^ (cIGb))'],\
+['r','has|n','HN','(has|n=HN) & ((bHNc) x^ ((bINd) & (bINe) & (eINUd)))'],\
+['r','has|s','HSS','(bHSSc) x^ ((cSSd) & (bHWc))'],\
+['r','has|s|p','HSP','(bHSPc) x^ (cINb)'],\
+['r','has|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['r','has|p|j','HCD','(has|p|j = HCD) & ((bHCDc) x^ (((bTKWr) & (rCRRq) & (qPh) & (To)) t^ ((qTg) & (gAo))) & (qb^bRu INSm)'],\
+['r','has|p|e','HCE','(bHCEc) x^ ((bHCBc) ed^ (bHCDc))'],\
+['','have|b','HB','((bHBc) x^ ((bHWc) & (cIGd))) & (d=body|c)'],\
+['r','have|g|c','HGC','(cHGCb) x^ ((cHWe) t^ (eIGb))'],\
+['rxd','have|i|c (... in common|r)','HCM','(b and|c c HCM d) x^ ((bIAd) & (cIAd))'],\
+['rs','have|o ',None,'(have|o=own)'],\
+['r','have|p|n','HPN','((bHPNc) x^ (cRFb)) & ((bHPNc) t^ ((bIGd) & (cIGe))) & (d=individual) & (e=proper name)'],\
+['r','have|r (object is a relation)','HR','((bHRc TOd) x^ (bRd)) & (c=R)'],\
+['r','have|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['ra','have|w','HW','(c=body) &  (((bHWz) & (zIGc)) x^ (zSy))'],\
+['ra','have a baby',None,'postponed'],\
+['ra','have a feeling that',None,'postponed'],\
+['ra','have a friend',None,'postponed'],\
+['ra','have a moment',None,'postponed'],\
+['ra','have a name',None,'postponed'],\
+['ra','have a permit',None,'postponed'],\
+['ra','have a person',None,'postponed'],\
+['ra','have a plan',None,'postponed'],\
+['ra','have a question',None,'postponed'],\
+['ra','have a requirement',None,'postponed'],\
+['ra','have an experience',None,'postponed'],\
+['ra','have an idea',None,'postponed'],\
+['ra','have difficulty',None,'postponed'],\
+['ra','have fun',None,'postponed'],\
+['ra','have sex',None,'postponed'],\
+['ra','have space left',None,'postponed'],\
+['ra','have time',None,'postponed'],\
+['ra','have trouble',None,'postponed'],\
+['rs','hence ',None,'(hence=i^)'],\
+['a','historical',None,'(c=historical) & (d=current present) & ((bIAc) x^ ((bTz) & (dAz) & (b~Td)))'],\
+['n','hypothetical material object',None,'(c=hypothetical material object) & ((bIGc) x^ ((bSz) ed^ (b~Sd)))'],\
+['rs','identical',None,'is identical to=='],\
+['ns','identification',None,'(identification=definite description)'],\
+['r','identify',None,'(identify=IDT) & ((bIDTc) x^ ((cHd) & (cIAe) & (bTNKf) & (dIGg))) & (f b^ cHd) & (d=individual essence) & (e=particular)'],\
+['a','imaginary',None,'(c=imaginary) & ((bIGc TOh) x^ ((bAId) & (hTKe))) & (eb^(fIg) & (bCRRf)) & (g=reality)'],\
+['n','imagination',None,'(c=imagination) & ((bIGc) x^ (zAIb))'],\
+['n','implicit|i relationship|i',None,'(c=implicit|i relationship|i) & ((bIGc) x^ ((bHWd) & (bHWe))) & (dIGf) & (eIGg) & (f=subject|i) & (g=intransitive verb)'],\
+['rs','implies ',None,'(implies=i^)'],\
+['aa','important',None,'postponed'],\
+['a','improbable',None,'(c=improbable) & ((bIAc) x^ (b~IAd)) & (d=probable)'],\
+['ratso','in','IN','((bINc) x^ ((bIGd) & (cHWb))) & (d=point)'],\
+['rs','in|a ',None,'(in|a=DUR)'],\
+['r','in|b','INB','((bINBc) x^ ((cHWb) & (bIGd))) & (d=moment)'],\
+['r','in|f','INF','(bINFc) x^ ((bIGd) & (cIGd) & ((cHWe) x^ (bHWe))) & (d=period)'],\
+['r','in|c','INC','(in) & ((bINCc) t^ ((zSc) & (dIGc) & (eIGc) & (fIGc) & (gIGc) & (hIGc) & (iIGc) & (jIGc) & (kIGc) & (hLFi) & (hABj) & (dFRh) & (eFRi) & (iABk) & (eABg) & (dLFe) & (dABf) & (fFRj) & (hLFb) & (hABb) & (bLFi) & (iABb) & (bLFk) & (bABk) & (jLFb) & (bABj)))'],\
+['ratso','in|d','IND','((bINDc) t^ (((bHWd) & (dIGe)) x^ (cHWd))) & (e=point)'],\
+['r','in|e','INE','(bINEc) x^ ((bSd) & (cHWd))'],\
+['r','in|g','ING','(c=relationship) & (in|g=ING) & ((bINGp) x^ (((bAWz) ed^ (zAWb)) & (pHWb) & (pIGc)))'],\
+['r','in|m','INM','(bINMc) x^ ((bHWd) x^ ((dSe) & (cHWe)))'],\
+['r','in|s','INS','(bINSc) x^ ((bHWd) & (dINMc))'],\
+['r','in|r','INR','(in|r=INR) & ((bINRc) x^ ((bSd) & (dINc)))'],\
+['rs','in|p','INP','(in|s = is|g)'],\
+['rs','in|t ',None,'(in|t=during)'],\
+['','in-q','INQ','((bINQc) & (cIAd)) x^ (bIAd)'],\
+['r','in|v','INV','((bINVc) x^ ((bCAc) & (dHWb.e) & (eHWf) & (fIGg))) & (cb^fMOV) & (g=body|c)'],\
+['aa','indefinite',None,'(b=indefinite) & ((cIAb) x^ ((cIAj) & ((kzzzc) t^ (k~IAj)) & ((eIGd) t^ ((fPg) & (nt+fPh))))) & (f b^ e=c) & (cIGd)'],\
+['aa','indefinite|a',None,'postponed'],\
+['a','indeterminate',None,'(b=indeterminate) & (((pIAb) & ((p=q) ed^ (p=r))) x^ ((qNz) & (rNy) & (xNw) & (pNv) & (wAFy) & (zAFw) & ((vAFw) ed^ (wAFv))))'],\
+['a','indexical',None,'postponed'],\
+['nk','individual',None,'(b=individual) & ((cIGb) x^ (((dIGe) t^ (d~IGc)) & (cIAf) & ((d zzz c) x^ (d~IAf)))) & (e=thing)'],\
+['as','individual|p',None,'(individual|p=particular)'],\
+['ns','individual essence',None,'(individual essence=essence|i)'],\
+['n','individual essence',None,'(individual essence = essence|i)'],\
+['n','individual|p',None,'(c=individual|p) & ((bIGc) x^ ((bHWd.e) & (dSf) & (eTKg) & (bNh))) & (h=2)'],\
+['r','infer','INF','(infer=INF) & ((bINFc d) x^ ((zb^nt+c && d) & (yb^zIAco^) & (bBy)))'],\
+['n','inference|c',None,'(c=inference) & ((bIGc) x^ (dFLCb)) & (follows from=FLC)'],\
+['n','inference|n',None,'(c=inference) & ((bIGc) x^ (dFLb)) & (follows from=FL)'],\
+['a','infinite',None,'(c=infinite) & (((bIAc) & (bPCPc)) x^ ((zIGc) t^ (((yAFz) & (zAFx)) ed^ ((yAz) & (zAx)) ed^ ((yLFz) & (zLFx)) ed^ ((yABz) & (zABx)) ed^ ((yFRz) & (zFRx)))))'],\
+['a','infinite',None,'(c=infinite) & ((bIAc) x^ ((zIGb) t^ ((yAFz) & (zAFx)) ed^ ((yAz) & (zAx)) ed^ ((yLFz) & (zLFx)) ed^ ((yABz) & (zABx)) ed^ ((yFRz) & (zFRx))))'],\
+['rs','inside',None,'(inside = INE)'],\
+['ns','interval ',None,'(interval=period)'],\
+['r','intrinsic',None,'(c=intrinsic) & ((dHWb) ed^ (dHb)) t^ (bIAc)'],\
+['ra','is|e','EX','((bEX) x^ (bIAc)) & (c=extant)'],\
+['ns','item|n',None,'(item|n=object|n)'],\
+['rs','judge',None,'(judge = believe)'],\
+['ns','kind',None,'(kind=type)'],\
+['ns','kind',None,'(kind|n = natural kind)'],\
+['ns','kind',None,'(kind = type)'],\
+['aa','large',None,'postponed'],\
+['r','later than','LAT','(later than=LAT) & ((bLATc) x^ (bAc))'],\
+['r','left of|a','LEF','(left of|a=LEF) & ((bLEFc) x^ ((bSz) & (zLFc)))'],\
+['r','left of|m','LFT','(left of|m=LFT) & ((bLFTc) x^ ((bSz) & (cSy) & (zLFy)))'],\
+['a','legally contingent',None,'(b=legally contingent) & (d=authorities) & (punish=PNS) & ((pIAb SsTt) x^ (((mn dDSv SsTt) ed^ (all dDSv SsTt)) & (vb^u~Po) & (uCRRp) & (xb^tPNSz) & ((z~CAp SsTt) t^ ((mn d~DSx SsTt) ed^ (all d~DSx SsTt))) & ((zCAp SsTt) t^ ((mn d~DSx SsTt) ed^ (all d~DSx SsTt)))))'],\
+['a','legally impossible',None,'(b=legally impossible) & (d=authorities) & (punish=PNS) & ((pIAb SsTt) x^ (((mn dDSv SsTt) ed^ (all dDSv SsTt)) & (vb^u~Po) & (uCRRp) & (xb^tPNSz) & ((zCAp SsTt) t^ ((mn dDSx SsTt) ed^ (all dDSx SsTt))) & ((z~CAp SsTt) t^ ((mn d~DSx SsTt) ed^ (all d~DSx SsTt)))))'],\
+['a','legally necessary',None,'(b=legally necessary) & (d=authorities) & (punish=PNS) & ((pIAb SsTt) x^ (((mn dDSv SsTt) ed^ (all dDSv SsTt)) & (vb^u~Po) & (uCRRp) & (xb^tPNSz) & ((z~CAp SsTt) t^ ((mn d~DSx SsTt) ed^ (all d~DSx SsTt))) & ((zCAp SsTt) t^ ((mn dDSx SsTt) ed^ (all dDSx SsTt)))))'],\
+['r','lesser than','LSS','(lesser than=LSS) & ((bLSSc) x^ (cAFb))'],\
+['r','lie','LI','(lies about=LI) & ((bLIp|c) x^ ((bSTTp|c) & (b~Bp) & (zb^cBp) & (bDSz)))'],\
+['ra','live','LV','postponed'],\
+['ra','lives','LV','postponed'],\
+['na','logic',None,'postponed'],\
+['a','logically contingent',None,'(b=logically contingent) & ((pIAb) x^ ((pIAta^) & (nt+pIAta^)))'],\
+['a','logically impossible',None,'(b=logically impossible) & ((pIAb) x^ ((nt+pPc) & ((dIGe) t^ (p~Pd)))) & (e=possible world)'],\
+['a','logically necessary',None,'(b=logically necessary) & ((pIAb) x^ ((pIAta^) & (nt+p~IAta^)))'],\
+['a','logically possible',None,'(b=logically possible) & (c=logically necessary) & (d=logically contingent) & ((pIAb) x^ ((pIAc) ed^ (pIAd)))'],\
+['as','logically true',None,'(logically true=logically necessary)'],\
+['n','lower class',None,'(d=lower) & (c=class) & (f=natural essence) & (((bIGc) & (bIAd) & (eIGb)) x^ (((zIGe) x^ (zHy)) & (yIGf) & (((xIGe) & (o~IGx)) t^ (xSw))))'],\
+['rs','make','MK','(make = cause)'],\
+['r','make sense','MK','(make=MK) & (c=sense|a) & (d=grammatical) & ((bMKc) x^ ((bIAd) & (bIAta^)))'],\
+['a','many',None,'(z=many) & (y=2) & ((bIAz) x^ ((bNy) ed^ ((bNc) & (cAFy))))'],\
+['a','many|a',None,'(c=many|a) & (((bIAc) & (eIAf)) x^ ((bNd) & (eNg) & (dAFg))) & (f=few|a)'],\
+['n','material part',None,'(c=material part) & (e=sentient being) & (((bIGc) & (bOFd)) x^ ((bSz) & (dHWb) & (dIGe)))'],\
+['n','material whole',None,'(c=material whole) & (e=material part) & (((bIGc) & (bOFd)) x^ ((dIGe) & (bHWd)))'],\
+['r','materialize','MTL','(materialize=MTL) & (bMTL Tc) x^ ((b~EXN Td) & (bEXN Tc) & (cAd))'],\
+['r','means|r',None,'((bMNc BYd TOe Tg) x^ ((bCAd Tg) & (bDSf))) & (fb^(eEXPd Tg) t^ ((eBc Th) & (hSUTg)))'],\
+['as','meaningful',None,'(meaningful=significant)'],\
+['a','mental',None,'(c=mental) & ((bIAc) x^ (bTKd))'],\
+['aa','mental|a',None,'(c=mental) & ((bIAc) x^ ((eTKb) ed^ (bTKd)))'],\
+['a','mental|b',None,'(c=mental) & ((bIAc) x^ (dTKb))'],\
+['ns','moment|e',None,'(moment|e=event)'],\
+['n','moment|f (first)',None,'(z=moment) & (((bIGz) & (bIAf)) x^ ((cTb) & (dAb))) & (f=first)'],\
+['n','moment|l (last)',None,'(z=moment) & (((bIGz) & (bIAf)) x^ ((cTb) & (bAd))) & (f=last)'],\
+['a','morally contingent',None,'(b=morally contingent) & (c=painful) & (f=acceptable) & ((pIAb e) x^ ((zCRRp) & ((yIAc) ed^ (y~IAc)) & (vb^yAFx) & (vIAd) & (zCAUy) & (ub^vIAf) & (tb^xAFnt+y) & (sb^tIAf) & ((nt+y~IAc) ed^ (nt+yIAc)) & (eBu) & (eBs)))'],\
+['a','morally impossible',None,'(b=morally impossible) & (c=painful) & (d=unacceptable) & (f=acceptable) & ((pIAb e) x^ ((zCRRp) & (yIAc) & (vb^yAFx) & (vIAd e) & (zCAUy) & (ub^(vIAd e)) & (tb^xAFnt+y) & (sb^tIAf e) & ((nt+y~IAc) ed^ (nt+yIAc)) & (eBu) & (eBs)))'],\
+['a','morally necessary',None,'(b=morally necessary) & (c=painful) & (d=unacceptable) & (f=acceptable) & ((pIAb e) x^ ((zCRRp) & ((yIAc) ed^ (y~IAc)) & (vb^yAFx) & (vIAd) & (zCAUy) & (ub^vIAf) & (tb^xAFnt+y) & (sb^tIAd) & (nt+yIAc) & (eBu) & (eBs)))'],\
+['d','more',None,'(more...than) & ((bR mor c thn d Uf) x^ ((cNz Uf) & (dNy Uf) & (zAFy) & (bRc Uf) & (bRd Uf)))'],\
+['aa','mortal',None,'postponed'],\
+['r','move','MV','(bMV FRM c Td TOe Tf) x^ ((bINMc Td) & (bINMe Tf))'],\
+['','move|m','MOV','(bMOVc FRM d Te TOf Tg) x^ ((bHWh.c) & (((hBk Te) & (cINMd)) t^ (cINMf Tg)))'],\
+['','move|a','MVA','(bMVAc FRM d Te TOf Tg RLj) x^ ((bHWh.c) & (jINMk Te) & (jINMk Tg) & (((hBk Te) & (cINMd)) t^ (cINMf Tg)))'],\
+['na','murder',None,'postponed'],\
+['e','must|w',None,'(states=STT) & (c=absolutely true) & (((p must|w) & (bSTTp)) x^ ((bDSz) & (zb^pIAc)))'],\
+['n','narrow reality',None,'(d=reality) & ((b=narrow reality) x^ ((zId) t^ (zIGb)))'],\
+['a','natural|s (statement)',None,'(b=natural|s) & ((cIAb) x^ ((cHWd) & (dIAe) & (dIGf) & (jIGh) & (jIAg.k))) & (e=natural) & (f=subject) & (g=active) & (h=relation) & (k=non_spatio_temporal)'],\
+['ns','natural essence',None,'(natural essence = essence|n)'],\
+['na','natural kind ',None,'(c=natural kind) & ((bIGc) x^ ((dIGb) & (dIAe))) & (e=material)'],\
+['n','natural number',None,'(c=natural number) & ((bIGc) x^ ((zNb) & ((b=0) ed^ (bAF0))))'],\
+['aa','necessary',None,'(necessary = logically necessary)'],\
+['r','necessary physical condition','NC','(necessary physical condition=NC) & (g=possible worlds) & (h=reality) & (((bScTd) & (eScTf) & (pNCq GVr)) x^ ((pb^eSc) & (qb^bSc) & (fSUTz) & (zSUTd)  & (((rIh) & (pTd)) t^ ((qPy Tz) & (nt+qPx Tz))) & (((rIh) & (p~Td)) t^ (q~Po Tz)) & (pP mn g)))'],\
+['r','negation of','NEG','(is the negation of=NEG) & (b=contradictory) & ((pNEGq) x^ ((rb^p && q) & (rIAb)))'],\
+['e','never',None,'(never=nv) & ((p nv) x^ (p~To))'],\
+['ra','next to','NXT','next to: postponed'],\
+['ns','non actual relationship',None,'(non actual relationship=possible relationship)'],\
+['n','non_relationship',None,'(c=non_relationship) & ((bIGc) x^ (((dIGe) t^ (b~HWd)) & ((fIGg) t^ (b~HWf)))) & (g=relation) & (e=relatum)'],\
+['n','non_whole',None,'(c=non_whole) & ((bIGc) x^ ((dIGe) t^ (b~HWd))) & (e=thing)'],\
+['r','noun counterpart of','NCP','(is the noun counterpart of=NCP) & (is the adjective counterpart of=ACP) & ((bNCPc) x^ (cACP))'],\
+['ns','number|n',None,'(number|n=natural number)'],\
+['n','object|r',None,'(c=object|r) & (d=relation) & (e=noun) & ((bIGc) x^ ((zIGd) & (bIGe) & (bAWz)))'],\
+['n','object|n',None,'(c=object|n) & (d=relation) & (e=thing) & ((bIGc) x^ ((bIGe) & (b~IGd)))'],\
+['a','objective',None,'(b=objective) & (c=reality) & ((pIAb) x^ ((pPz) ed^ (pIc)))'],\
+['as','obligatory',None,'(obligatory=morally necessary)'],\
+['as','obligatory|l',None,'(obligatory|l=legally necessary)'],\
+['r','occur','OC','(occur=OC) & ((pOC) x^ ((p~Id Tb) & (pId Tc) & (cAb))) & (d=reality)'],\
+['ra','of|n','OFN','(((bOFNc) & (bIGd) & (cIGe)) x^ ((fHWb.c) & (fIGg))) & (g=root) & (d=noun) & (e=adjective)'],\
+['ra','of|v','OFV','(((bOFVc) & (bIGd) & (cIGe)) x^ ((fHWb.c) & (fIGg))) & (g=root) & (d=verb form) & (e=noun form)'],\
+['ra','of','OF','postponed'],\
+['r','of|a','OFA','(of|a=OFA) & (((bOFAc) & (dACPc)) x^ (bIAd))'],\
+['rs','of|c','OFC','(OFC = FLC)'],\
+['r','of|c|p','OFCP','(bOFCPc) x^ (cHCPb)'],\
+['r','of|f|a','OFFA','((bOFFAc) x^ (bIc)) & (bIGd) & (d=part|f)'],\
+['r','of|f|m','OFFM','((bOFFMc) x^ (bIGc)) & ((bOFFMc) t^ ((bIGd) & (cIGe))) & (d=familial part|a) & (e=concept)'],\
+['g','of|g','OFG','(of|g=OFG) & ((cOFGb) x^ ((bHc) ed^ (bOWNc) ed^ (bHWc)))'],\
+['r','of|i','OFI','(bOFIc) x^ (cHGCb)'],\
+['r','of|i|m','OFIM','((bOFIMc) x^ (cHIMb))'],\
+['r','of|m','OFM','(of|m=OFM) & (d=person) & ((bOFMc) x^ ((bSz) & (cHWb) & (cIGd)))'],\
+['r','of|p|w','OFPW','((bOFPWc) x^ (bPc)) & (bIGd) & (d=part|w)'],\
+['r','of|r','OFQ','(of|r=OFR) & (verbal counterpart=VCP) & (((R VCP b) & (The b OFR d)) x^ (d R))'],\
+['r','of|s','OFS','(of|s=OFS) & ((bOFSc) x^ (cHGb))'],\
+['r','of|s|p','OFSP','(bOFSPc) x^ (cHSPb)'],\
+['aa','omnipotent',None,'postponed'],\
+['r','on','ON','(on=ON) & ((bONc) x^ ((bABc) & (bNXTc)))'],\
+['ns','one|p',None,'(one|p = person)'],\
+['a','open|r',None,'(b=open|r) & ((pIAb) x^ ((pPc) & (nt+pPd) & (p~Ie) & (nt+p~Ie))) & (e=reality|t)'],\
+['r','opposite to','OPP','(opposite to=OPP) & ((bOPPc) x^ ((dFRAb) & (dFRAc))) & (dIGf) & (bIGg) & (cIGg) & (f=point) & (g=natural whole)'],\
+['r','outside of','OT','(outside of=OT) & ((bOTc) x^ ((b~INc) & (bSz)))'],\
+['ra','own','OWN','postponed'],\
+['r','own|i','OWI','(own|i=OWI) & ((bOWIc) t^ (cAIz))'],\
+['ra','owns','OWN','postponed'],\
+['n','pain',None,'(c=pain) & (((bIGc) & (bTOd)) x^ ((zb^bSSy) & (dHWb) & (d~DSz)))'],\
+['ns','part|d',None,'(part|d=property part)'],\
+['n','part|c',None,'(c=part|c) & ((bIGc) x^ ((dHWb) x^ (dCSEe)))'],\
+['ns','part|f',None,'(part|f=familial part)'],\
+['n','part|s',None,'(c=part|s) & ((bIGc) x^ (bINd))'],\
+['ns','part|s',None,'(part|s=physical spatial part)'],\
+['a','partially material|a (property)',None,'(b=partially material|a) & ((cIAb) x^ ((dHWf) & (fIGg) & (dIAc) & (dHWh) & (hIGk))) & ((cIGb) t^ (cIGe)) & (e=property) & (g=body|c) & (k=mind)'],\
+['','partially material|b (concept)',None,'(b=partially material|a) & ((cIAb) x^ ((dHWf) & (fIGg) & (dIGc) & (dHWh) & (hIGk))) & (g=body|c) & (k=mind)'],\
+['ns','partially spiritual',None,'(partially spiritual = partially material|b)'],\
+['r','participate','PRTC','(bPRTCc) x^ ((dCAUSc) x^ (dHWb))'],\
+['na','party',None,'postponed'],\
+['a','past',None,'(c=past) & (d=now) & ((bIAc) x^ (dAb))'],\
+['ns','past|e',None,'(past|e=entire past)'],\
+['n','period|d (discontiguous)',None,'(c=period|d) & ((bIGc) x^ ((bHWd) t^ (dIGe))) & (e=moment)'],\
+['n','period (contiguous)',None,'(c=period) & ((bIGc) x^ (((kAf) & (hAk)) x^ (bHWk)))'],\
+['as','permitted',None,'(permitted = morally contingent)'],\
+['as','permitted|l',None,'(permitted|l=legally contingent)'],\
+['n','person',None,'(c=person) & (d=personhood) & ((bIGc) x^ (bHd))'],\
+['n','personhood',None,'(c=personhood) & ((bHc) t^ ((bIGd) & (zTKw) & (zDSx) & (bHWz) & (bHWy) & (yIGe))) & (d=person) & (e=body|c)'],\
+['n','phenomenon',None,'(c=phenomenon) & (d=event) & ((bIGc) x^ ((bIGd) & (zIGb)))'],\
+['ns','phenomenon|e',None,'(phenomenon|e=event)'],\
+['n','phenomenon',None,'(phenomenon = thing)'],\
+['ra','phrase',None,'postponed'],\
+['a','physical|s',None,'(c=physical|s) & ((bIAc) x^ (((dHe) & (eIGg) & (dSf)) t^ (bHWf))) & (g=energy)'],\
+['r','physical contingent condition','CC','(contingent physical condition=CC) & (given=GV) & (e=reality) & (f=possible worlds) & (((bScTd) & (eScTf) & (pCCq GVr)) x^ ((pb^eSc) & (qb^bSc) & (fSUTz) & (zSUTd) & (((rIe) & (pTd)) t^ ((qPy Tz) & (nt+qP x Tz))) & (((rIe) & (p~Td)) t^ ((qPw Tz) & (nt+qPv Tz))) & (pP mn f) & (wNr) & (vNq) & (yNs) & (xNt) & (rAFq) & (tAFs)))'],\
+['n','physical law',None,'(c=physical law) & (d=situation) & ((bIGc) x^ ((bPo) & (bIGd)))'],\
+['n','physical relationship',None,'(z=physical relationship) & (y=subject) & (x=relationship) & ((bIGz) x^ ((bHVc) & (bIGx) & (cIGy) & (eHc) & (eSf)))'],\
+['n','physical spatial part',None,'(c=physical spatial part) & (((bIGc) & (bOFd)) x^ ((bSz) & (dSy) & (zINy)))'],\
+['n','physical spatial whole',None,'(c=physical spatial whole) & (((bIGc) & (bOFd)) x^ ((bSz) & (dSy) & (yINz)))'],\
+['n','physical temporal part',None,'(c=physical temporal part) & (((bIGc) & (bOFd)) x^ ((bTz) & (dTy) & (zDURy)))'],\
+['n','physical temporal whole',None,'(c=physical temporal whole) & (((bIGc) & (bOFd)) x^ ((bTz) & (dTy) & (yDURz)))'],\
+['a','physically contingent',None,'(b=physically contingent) & (c=relata) & (d=reality) & (((pSeTf) u+ (qIAb Tg)) x^ (((pSeTf) t^ ((qPx Tg) & (q~Pw Tg))) & (ySUTg) &  (gSUTf)))'],\
+['a','physically impossible',None,'(b=physically impossible) & (c=relata) & (d=reality) & (((pSeTf) u+ (qIAb Tg)) x^ (((pSeTf) t^ ((q~Po Tg) & (nt+qPo Tg))) & (zCRRq) & (z~Id Ty) & (ySUTg) & (gSUTf)))'],\
+['a','physically necessary',None,'(b=physically necessary) & (c=relata) & (d=reality) & (succeed|t=SUT) & (correspond=CRR) & (((pSeTf) u+ (qIAb Tg)) x^ (((pSeTf) t^ ((qPo Tg) & (nt+q~Po Tg) & (zId Ty))) & (zCRRq) & (ySUTg) & (gSUTf)))'],\
+['a','physically possible',None,'(b=physically possible) & (c=physically necessary) & (d=physically contingent) & ((pIAb) x^ ((pIAc) ed^ (pIAd)))'],\
+['ns','place',None,'(place=region)'],\
+['n','plan',None,'(c=plan) & ((bIGc) x^ ((bDSz) & (bBy))) & (zb^bCAUc) & (yb^zPx)'],\
+['n','pleasure',None,'(c=pleasure) & (((bIGc) & (bTOd)) x^ ((zb^bSSy) & (dHWb) & (bDSd)))'],\
+['r','plural counterpart','PCP','(plural counterpart=PCP) & (d=plural) & (e=singular) & (f=root word) & (((bIGd) & (bOFc)) x^ ((cIGe) & (bIGz) & (cIGz) & (zIGf) & (mny bEXV)) x^ (bPCPc))'],\
+['n','plural counterpart of',None,'(e=plural counterpart) & ((bPCPc) x^ ((bIGe) & (bOFc)))'],\
+['n','point|s',None,'(c=point|s) & (((bIGc)) t^ ((dLFb) & (bLFe) & (((zLFd) & (eLFz)) t^ (z=b))))'],\
+['a','positively infinite|g',None,'(c=positively infinite|g) & (((bIAc) & (bPCPd)) x^ (((zIGd) & (zNy)) t^ ((xIGd) & (xNw) & (wAFy))))'],\
+['a','potentially|o vague (of a physical object)',None,'(b=potentially|o) & ((cIAb) x^ (cIAd)) & (d=natural|o)'],\
+['a','potentially|p vague (of a property)',None,'(b=potentially|p) & (((cIAb) & (dIAc)) x^ (dIAe)) & (e=natural|o)'],\
+['a','potentially|r vague (of a relation)',None,'(b=potentially|r) & (((R IAb) & (cRd)) x^ ((cIAe) & (dIAe))) & (e=natural|o)'],\
+['a','potentially|v vague (of a statement)',None,'(b=potentially|v) & ((cIAb) x^ (cIAd)) & (d=natural|s)'],\
+['as','precise',None,'(precise = certain)'],\
+['a','predicable',None,'(c=predicable) & ((bIAc) & (bOFd)) x^ (fIAg)) & (b=Re) & (fb^dRe) & (g=consistent)'],\
+['n','predicate',None,'(c=predicate) & ((bIGc) x^ ((cHWd.e) & (dIGf) & (eIGg))) & (f=relation) & (g=object)'],\
+['r','predicates',None,'((bPRCc) x^ (cRd)) & (b=Rd)'],\
+['n','premise',None,'(c=premise) & (((bIGc) & (bFORd)) x^ (((eIGf) t^ (enf^b)) & (gHWb) & (gi^d)))'],\
+['a','present|a',None,'(c=present|a) & (d=present) & ((cACPd))'],\
+['r','prevent','PRV','(prevent=PRV) & ((bPRVc) x^ ((xCRRc) & ((bSzTy) t^ (x~Po Tw)) & (wSUTy)))'],\
+['n','probability',None,'(c=probability) & (g=ratio) & (h=possible worlds) & (f=reality) & (given=GV) & (((bIGc) & (bOFd GVe)) x^ ((eIf) t^ ((dPb h) & (bIGg))))'],\
+['a','probable',None,'(c=probable) & ((bIAc) x^ (jAFk)) & ((eHWd) x^ (bPd)) & ((gHWh) x^ (b~Ph)) & (gNj) & (eNk)'],\
+['n','proper name',None,'(c=proper name) & ((bIGc) x^ ((bIGd) & (bRFe) & (eIGf))) & (d=word) & (f=individual)'],\
+['n','property|o',None,'(c=property|o) & ((bIGc) x^ (zOWNb))'],\
+['n','property bearer',None,'(c=property bearer) & ((bIGc) x^ (bHz))'],\
+['n','property part',None,'(c=property part) & (((bIGc) & (bOFd)) x^ ((dHb) ed^ (dIAb)))'],\
+['ra','punish',None,'postponed'],\
+['a','purely material|c (concept|n)',None,'(b=purely material|c) & ((cIAb) x^ ((dHWf) & (dIGc) & (fIGg) & ((hIGk) t^ (d~HWh)))) & ((cIAb) t^ (cIGe)) & (e=concept|n) & (g=body|c) & (k=mind)'],\
+['n','putative mistake',None,'(d=putative mistake) & (e=reality) & (make=MK) & ((yb^cCAz) & (wb^yIe) & (((bMKc) & (cTOb) & (cIGd)) x^ ((bCAc Tw) & (zOC Tv) & (vSUTw) & ((yIe) ed^ ((yAIx) & (bHWx))) & (bBw) & (b~DSz))))'],\
+['e','putatively',None,'(putatively b TOc) x^ (cBb)'],\
+['n','quantity',None,'(c=quantity) & (((bIGc) & (bOFd) & (dPCPe)) x^ ((zIGe) & (zNb) & (zIAf) & (((yIGe) & (yNw)) t^ (w~AFb))))'],\
+['r','raise the probability of','RAS','(raise the probability of=RAS) & ((bRASc) x^ (bCASc))'],\
+['ra','ratio',None,'postponed'],\
+['a','real|c',None,'(c=real|c) & ((bIAc) x^ (bHCEd))'],\
+['as','real',None,'(real=actual)'],\
+['ns','real|s',None,'(real|s = physical|s)'],\
+['n','real group',None,'(c=real group) & (d=abstractspace) & (vb^(xIGb) e^ (xHw)) & ((bIGc) x^ ((zIGb) & (yIGb) & (vId)))'],\
+['ra','real time',None,'postponed'],\
+['es','really',None,'(really=actually)'],\
+['r','refer','RF','((bRFc) x^ ((mTn) t^ ((jTq) & (qAn))) & (db^bIAf) & (hb^cIAf) & (jb^kTKh) & (mb^kEXPd) & (f=extant)'],\
+['n','region|a',None,'(c=region|a) & ((bIGc) x^ (dINEb))'],\
+['n','region|n',None,'(c=region|n) & ((bIGc) x^ (dINMb))'],\
+['n','relation|n',None,'(bIGc) x^ ((dHWb.c) & (bIGe) & (cIGf) & (dIGh) & (dIAj))) & (e=noun) & (f=relation) & (h=word) & (j=root)'],\
+['na','relationship',None,'(c=relationship) & ((bIGc) x^ ((bIGd) ed^ (bIGe))) & ((bIGc) x^ (bTf)) & (d=explicit|e relationship|e) & (e=implicit|i relationship|i)'],\
+['rxd','resemble','RES','(b and|c cRES) x^ (bRSc)'],\
+['r','resembles','RS','((bRSc) x^ (((dHWe) x^ ((bIAe) & (cIAe))) & (dIAf))) & (f=many|a)'],\
+['a','respect|p',None,'postponed'],\
+['r','right|a of','RIG','(right|a of=RIG) & ((bRIGc) x^ ((bSz) & (cLFz)))'],\
+['r','right|b','RTE','(right|b of=RTE) & ((bRTEc) x^ ((cSz) & (zLFb)))'],\
+['r','right|m of','RGT','(right|m of=RGT) & ((bRGTc) x^ ((bSz) & (cSy) & (yLFz)))'],\
+['r','satisfy',None,'(((bSTSc) & (cIGd) & (c=Re)) x^ (bRe)) & (d=predicate)'],\
+['r','seem','SM','(seem=SM) & (z=reality) & ((bSM TOc) x^ ((zIGc) & (zBp) & (p~Iz)))'],\
+['rs','sense ',None,'(sense=EXP)'],\
+['ns','sentence|r',None,'(sentence|r=relationship)'],\
+['n','sentient being',None,'(sentient being = living being)'],\
+['d','seventy five percent',None,'((75% b R c) x^ (k=3*j)) & ((eHWg) x^ (gRc)) & ((hHWm) x^ (m~Rc)) & (gIGb) & (mIGb) & (hNj) & (eNk))'],\
+['r','share','SHR','(share=SHR) & ((b and|c cSHRd) x^ (((bHd) & (cHd)) ed^ ((bOWNd) & (cOWNd)) ed^ ((bHWd) & (cHWd))))'],\
+['a','significant',None,'(b=significant) & (c=grammatical) & ((pIAb) x^ ((pIAta^) & (pIAc)))'],\
+['r','similar to','SML','(similar to=SML) & (d=essence) & ((bSMLc) x^ ((bHz) & (zIGd) & (cH mn y) & (yIGz)))'],\
+['n','simple individual',None,'(c=simple individual) & ((bIGc) x^ ((bSz) & ((ySx) t^ (x~INz))))'],\
+['r','simultaneous with','SIM','(simultaneous with=SIM) & ((bSIMc) x^ ((bTz) & (cTz)))'],\
+['n','situation',None,'(b=situation) & (c=relationship) & (d=relata) & (have=HV) & ((pIGb) x^ ((pIGc) & (zIGd) & (pHVz) & (zSy)))'],\
+['ns','sort',None,'(sort=type)'],\
+['nub','space',None,'(b=space) x^ ((cSd) x^ (bHWd))'],\
+['ns','space|r ',None,'(space|r=region)'],\
+['ns','species ',None,'(species=kind)'],\
+['ns','state',None,'(state=property)'],\
+['r','state','STT','(state|s=STT) & ((bSTTc) x^ ((bCAUz) & (zRFc)))'],\
+['n','state of affairs',None,'(c=state of affairs) & ((bIGc) x^ ((bHWd) x^ ((dIAe) & (dIGf)))) & (f=fact)'],\
+['ns','statement',None,'(statement=relationship)'],\
+['rs','states',None,'(states = STT)'],\
+['r','stronger than','STR','(stronger than=STR) & (f=reality) & (zb^(eIf) u+ (dCAb)) & (yb^(eIf) u+ (dCAc)) & (((bSTRc GVe) & (dDSb) & (dDSc)) x^ ((zPx) & (yPw) & (wNv) & (xNu) & (uAFv)))'],\
+['ns','subgroup',None,'(subgroup=type)'],\
+['n','subject',None,'(c=subject) & (d=relation) & (e=noun) & ((bIGc) x^ ((zIGd) & (bIGe) & (zAWb)))'],\
+['a','succeeding',None,'(c=succeeding) & ((bIAc * d) x^ (bAd))'],\
+['a','succeeding|n',None,'(c=succeeding|n) & ((bIAc * d) x^ (bAFd))'],\
+['r','succeeds','SC','(succeeds=SC) & ((bSCc) x^ ((dNe) t^ ~((dAFc) & (bAFe))))'],\
+['r','succeeds|m','SCM','(succeed|m=SCM) & (bSCMc) x^ ((cIGd) & (bIGd) & (cMTL Te) & (bMTL Tf) & (fAe))'],\
+['r','succeeds|o','SUO','(succeed|o=SUO) & ((bSUOc) x^ ((cOC Td) & (bOC Te) & (bIGf) & (cIGf) & (eAd) & ((gIGf Th) t^ ~((eAh) & (hAd)))))'],\
+['r','succeeds|p','SCP','(succeed|p=SCP) & ((bSCPc ASCd) x^ ((c=d Te) & (b=d Tf) & (fAe) & ((g=d Th) t^ (h~CBTf e))))'],\
+['r','succeeds|s','SCD','(succeed|s=SCD) & ((bSCDc ASCd) x^ ((bIGd) & (cIGd) & (bSe) & (cSf) & (eDf) & ((gIGd) t^ ~((fDg) & (gDe)))))'],\
+['r','succeeds|t','SUT','(succeed|t=SUT) & ((bSUTc ASCd) x^ ((eTb) & (fTc) & (bAc) & ((gTh) t^ ~((bAh) & (hAc)))))'],\
+['r','succeeds|u','SCU','(succeed|u=SCU) & ((bSCUc) x^ ((dUTc Te) & (fUTb Tf) & ((f=d) ed^ (f~=d)) & (bIGg) & (cIGg) & (((hUTm Tj) & (mIGg)) t^ ~((fAj) & (jAe)))))'],\
+['as','supernatural',None,'(supernatural=divine)'],\
+['n','symbol',None,'(c=symbol) & ((bIGc) x^ (bRFz))'],\
+['a','teleologically contingent',None,'(b=teleologically contingent) & (((cDSd) & (pIAb c)) x^ (((c~CAUp Tx) t^ ((dPu Tw) & (d~Pv))) & ((cCAUp Tx) t^ ((dPz Tw) & (d~Py Tw)))))'],\
+['a','teleologically impossible',None,'(b=teleologically impossible) & (((cDSd) & (pIAb c)) x^ (((cCAUp Tx) t^ (d~Po Tw)) & ((c~CAUp Tx) t^ ((dPz Tw) & (d~Py Tw)))))'],\
+['a','teleologically necessary',None,'(b=teleologicallynecessary) & (((cDSd) & (pIAb c)) x^ (((c~CAUp Tx) t^ (d~Po Tw)) & ((cCAUp Tx) t^ ((dPz Tw) & (d~Py Tw)))))'],\
+['a','teleologically possible',None,'(b=teleologically possible) & (c=teleologically necessary) & (d=teleologically contingent) & ((pIAb) x^ ((pIAc) ed^ (pIAd)))'],\
+['r','tend toward','TD','postponed'],\
+['rs','think|t','TKT','(TKT = B)'],\
+['r','think|w','TKW','((bTKWc) x^ ((bHWd) & (dTKc)))'],\
+['nu','time',None,'(b=time) x^ ((eTd) x^ (bHWd))'],\
+['ra','took','TAK','postponed'],\
+['ns','trait ',None,'(trait=property)'],\
+['a','true',None,'(c=true) & ((bIAc) x^ ((bCRRd) & (dIe))) & ((bIAc) t^ (bIGf)) & (e=reality) & (f=non_meta_statement)'],\
+['n','truth value',None,'(c=truth value) & (e=truth) & (f=falsehood) & ((bIGc) x^ ((bc^e) & (bc^f)))'],\
+['r','try','TRY','(try=TRY) & (d=reality) & ((bTRYc) x^ ((uCRRc) & (bCAUy) & ((yId) t^ ((uPw) & (nt+uPv))) & (xb^yCAUc) & (bBx) & (bDSc)))'],\
+['n','type',None,'(c=type) & (((bIGc) & (bOFd)) x^ ((zIGb) t^ (zIGd)))'],\
+['a','unacceptable',None,'(b=unacceptable) & ((pIAb TO c) x^ ((zCRRp) & (yb^z~Po) & (cDSy)))'],\
+['as','uncertain',None,'(vague = uncertain)'],\
+['a','unique',None,'(c=unique) & ((bIAc) x^ ((dIGe) t^ (d~IGb))) & (e=thing)'],\
+['ra','universe',None,'postponed'],\
+['a','upper class',None,'(d=upper) & (c=class) & (f=abstract essence) & (((bIGc) & (bIAd) & (eIGb)) x^ (((zIGe) x^ (zHy)) & (yIGf) & (((xIGe) & (o~IGx)) t^ (xSw))))'],\
+['ra','utters','UT','postponed'],\
+['a','vague',None,'(b=vague) & (((cIAb) & (cTOd Tg)) x^ ((dTKe Tg) & (kAg) & (dTKm))) & (f=reality) & (g=now) & (eb^cIf) & (hb^d~TKe Tk) & (mb^hPj)'],\
+['a','vague|o (of a physical object)',None,'(b=vague|o) & (((cIAb) & (cTOd)) x^ ((d~KNe) & (fIAg))) & (e b^ fIGc) & (g=natural)'],\
+['a','vague|s (of a statement)',None,'(b=vague) & (((cIAb) & (cTOd)) x^ ((cIAe) & (d~KNc))) & (e=natural|s)'],\
+['na','vague pairs',None,'postponed'],\
+['r','variable space relation','D','(bDc) x^ ((bLFc) ed^ (bRTc) ed^ (bABc) ed^ (bBLc) ed^ (bFRc) ed^ (bBHc))'],\
+['r','violate','VIO','(violate=VIO) & (b=action) & ((pVIOq) x^ ((zDSy) & (yb^q~Po) & (pCRRq) & (pIb) & (pIGb)))'],\
+['n','void',None,'((b=void) x^ ((cIGz) t^ (c~Sb))) & (z=thing)'],\
+['ra','went','GO','(GO = MOV)'],\
+['rs','were|e',None,'(were|e = EX)'],\
+['r','were/would',None,'(((p were) t^ (q would)) x^ ((p~Ib) & (q~Ib) & ((pPc) t^ (qPc)))) & (b=reality)'],\
+['rs','while',None,'(while=DUR)'],\
+['ns','while|n ',None,'(while|n=period)'],\
+['aa','white',None,'postponed'],\
+['n','whole|l (living)',None,'(c=whole|l) & ((bIGc) x^ ((bHWd) t^ ((dIGe) ed^ (dIGf)))) & (e=mind) & (f=whole|m)'],\
+['ns','whole|m (material)',None,'(whole|m = body|c)'],\
+['n','whole|n (numerical)',None,'(c=whole|n) & ((bIGc) x^ ((bHWd) t^ (dIGe))) & (e=number)'],\
+['n','whole|s (spatial)',None,'(c=whole|s) & ((bIGc) x^ ((bHWd) t^ (dIGe))) & (e=point)'],\
+['ns','whole|t (temporal)',None,'(whole|t = period|d)'],\
+['ns','whole|v (verbal)',None,'(whole|v = word)'],\
+['rs','within',None,'(within = in|e)'],\
+['n','word',None,'(c=word) & ((bIGc) t^ (((bHWd) t^ (dIGe)) & (bIGf))) & (f=symbol) & (e=letter)'],\
+['ns','numbers|i',None,'(numbers|i = integer)'],\
+['na','7pm',None,'postponed'],\
+['na','apple',None,'postponed'],\
+['a','aristotelian|c',None,'(c=aristotelian|c) & (d=aristotle) & ((bIAc) x^ (bSMLd)) '],\
+['n','aristotelianness',None,'((b=aristotelianness) x^ (cHb)) & (c=Aristotle)'],\
+['ra','ate','ATE','postponed'],\
+['ra','ate from','ATF','postponed'],\
+['na','ball',None,'postponed'],\
+['ra','bark','BRK','postponed'],\
+['ra','barks','BRK','postponed'],\
+['na','beer',None,'postponed'],\
+['ra','born','BRN','postponed'],\
+['na','boy',None,'postponed'],\
+['ra','broke','BRK','postponed'],\
+['na','cake',None,'postponed'],\
+['na','car',None,'postponed'],\
+['na','casablanca',None,'postponed'],\
+['na','cat',None,'postponed'],\
+['aa','caught',None,'postponed'],\
+['n','chlorophyll',None,'(c=chlorophyll) & ((bIGc) t^ (b~IGd)) & (d=plastic)'],\
+['aa','cold',None,'postponed'],\
+['na','courtyard',None,'postponed'],\
+['ra','danced','DNC','postponed'],\
+['nc','dog',None,'(c=dog) & (d=doglike) & ((bIGc) x^ (bIAd))'],\
+['ac','doglike',None,'(c=dog) & (d=doglike) & ((bIAd) x^ ((bIGc) & (bHWe) & (bHWg) & (eIGh) & (gIGk))) & (k=mind) & (h=body|c)'],\
+['n','doglike|s',None,'(c=doglike|s) & (d=doglike) & ((bIAc) x^ ((eIAd) & (eSMLb)))'],\
+['na','dogness',None,'(c=dogness) & ((bHc) x^ (bIAd)) & (d=doglike)'],\
+['na','door',None,'postponed'],\
+['ra','drank','DRK','postponed'],\
+['ra','drink','DRK','postponed'],\
+['ra','drinks','DRK','postponed'],\
+['na','earth',None,'postponed'],\
+['ra','eat from','ATF','postponed'],\
+['ra','echolocate','ECH','postponed'],\
+['ra','echolocates','ECH','postponed'],\
+['na','eiffel tower',None,'(c=eiffel tower) & (d=artificial) & ((bIAc) t^ (bIAd))'],\
+['na','eye',None,'(c=eye) & (d=natural) & ((bIAc) t^ (bIAd))'],\
+['n','female',None,'(b=male) & (c=female) & ((dIAc) t^ (d~IAb))'],\
+['a','feminine',None,'(b=feminine) & (c=female) & ((dIAb) x^ (dIGc))'],\
+['a','feminine|s',None,'(b=feminine|s) & (c=female) & (((dIAb) & (eIGc)) x^ (dSMLe))'],\
+['n','flower',None,'(c=flower) & ((bIGc) t^ ((bHWd) & (dIGe))) & (e=chlorophyll)'],\
+['na','french',None,'postponed'],\
+['na','girl',None,'postponed'],\
+['aa','green',None,'postponed'],\
+['na','hamlet',None,'postponed'],\
+['na','head',None,'(e=natural) & (d=head) & ((bHd) t^ (bIAe))'],\
+['na','heaven',None,'postponed'],\
+['a','hirsute',None,'(c=hirsute) & (d=hairs) & ((bIAc SeTf) x^ (bHW mn dSeTf))'],\
+['na','home',None,'postponed'],\
+['na','house',None,'postponed'],\
+['n','hydrogen',None,'natural'],\
+['n','kennedy',None,'(b=kennedy) & ((cIGb) t^ (bIGd)) & (d=family)'],\
+['a','kennedy|a',None,'(b=kennedy|a) & (c=kennedy) & (((eIAb) & (fIGe)) x^ (fIGc))'],\
+['ra','kiss','KS','postponed'],\
+['ra','kissed','KS','postponed'],\
+['na','male',None,'(b=male) & (c=female) & ((dIAb) t^ (d~IAc))'],\
+['ra','love','LOV','postponed'],\
+['na','mammal',None,'postponed'],\
+['n','man',None,'(b=man) & ((cIGb) x^ ((cIGd) & (cIAe))) & (d=person) & (e=male)'],\
+['na','mars',None,'natural'],\
+['na','moon',None,'postponed'],\
+['na','movie',None,'postponed'],\
+['na','munich',None,'postponed'],\
+['na','nazi',None,'postponed'],\
+['na','north america',None,'postponed'],\
+['na','paris',None,'(c=paris) & (d=artificial) & ((bIGc) t^ (bIAd))'],\
+['n','pocketwatch',None,'postponed'],\
+['na','pyramid',None,'postponed'],\
+['na','rain',None,'postponed'],\
+['ra','raining','RAI','postponed'],\
+['ra','rains','RAI','postponed'],\
+['ra','reads','RD','postponed'],\
+['a','red',None,'(c=red) & ((bIAc) t^ (bINMd))'],\
+['n','redness',None,'(c=redness) & ((bHc) x^ (bIAd)) & (d=red)'],\
+['na','reptile',None,'postponed'],\
+['aa','rewarded',None,'postponed'],\
+['a','ridiculous',None,'postponed'],\
+['na','rocky mountains',None,'postponed'],\
+['na','round square',None,'postponed'],\
+['na','russian',None,'postponed'],\
+['ra','saw','SEE','postponed'],\
+['ra','see','SEE','postponed'],\
+['na','set theory',None,'postponed'],\
+['ra','shed','SHD','postponed'],\
+['ra','sleep','SLP','postponed'],\
+['ra','sleeps','SLP','postponed'],\
+['aa','smart',None,'postponed'],\
+['r','smell','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['r','smells','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['ra','speak','SPK','postponed'],\
+['na','speed limit',None,'postponed'],\
+['ra','spied on','SPD','postponed'],\
+['ra','spies on','SPD','postponed'],\
+['ra','spoke','SPK','postponed'],\
+['na','sprite',None,'(c=sprite) & (d=artificial) & ((bIAc) t^ (bIAd))'],\
+['ra','standing','STD','postponed'],\
+['ra','studied','STD','postponed'],\
+['n','table',None,'artificial'],\
+['na','table',None,'(c=table) & (d=artificial) & ((bIAc) t^ (bIAd))'],\
+['ra','talked','TLK','postponed'],\
+['ra','teach','TCH','postponed'],\
+['na','teacher',None,'postponed'],\
+['ra','teaches','TCH','postponed'],\
+['na','tear',None,'postponed'],\
+['ra','top',None,'postponed'],\
+['na','uk prime minister',None,'postponed'],\
+['na','us president',None,'postponed'],\
+['na','van',None,'postponed'],\
+['na','water',None,'postponed'],\
+['na','wine',None,'postponed'],\
+['n','woman',None,'(b=woman) & ((cIGb) t^ ((cIGd) & (cIAe))) & (d=person) & (e=female)'],\
+['ns','beers',None,'(beers=beer)'],\
+['ns','cars',None,'(cars=car)'],\
+['ns','cats',None,'(cats=cat)'],\
+['ns','concepts',None,'(concepts=concept)'],\
+['ns','dogs',None,'(dogs=dog)'],\
+['ns','eiffel towers',None,'(eiffel towers=eiffel tower)'],\
+['ns','eyes',None,'(eyes=eye)'],\
+['ns','girls',None,'(girls=girl)'],\
+['ns','groups',None,'(groups=group)'],\
+['ns','groups|c',None,'(groups|c=group|c)'],\
+['ns','hydrogens',None,'(hydrogens=hydrogen)'],\
+['ns','instances',None,'(instances=instance)'],\
+['ns','integers',None,'(integers=integer)'],\
+['ns','mammals',None,'(mammals=mammal)'],\
+['ns','members',None,'(members=part)'],\
+['ns','members|i',None,'(members|i=instance)'],\
+['ns','men',None,'(men=man)'],\
+['ns','minds',None,'(minds=mind)'],\
+['ns','moments',None,'(moments=moment)'],\
+['ns','moons',None,'(moons=moon)'],\
+['ns','parts',None,'(parts=part)'],\
+['ns','people',None,'(people=person)'],\
+['ns','points',None,'(points=point)'],\
+['ns','pyramids',None,'(pyramids=pyramid)'],\
+['ns','reptiles',None,'(reptiles=reptile)'],\
+['ns','russians',None,'(russians=russian)'],\
+['ns','tears',None,'(tears=tear)'],\
+['ns','thoughts',None,'(thoughts=thought)'],\
+['ns','us presidents',None,'(us presidents=us president)'],\
+['ns','wholes',None,'(wholes=whole)'],\
+['nu','ada',None,'((b=ada) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','aristotle',None,'((b=aristotle) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','diane',None,'((b=diane) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','jack',None,'((b=jack) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jessica',None,'((b=jessica) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','jfk',None,'((b=jfk) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jim',None,'((b=jim) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','julius caesar',None,'((b=julius caesar) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','kiera knightley',None,'((b=kiera knightley) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','leibniz',None,'((b=leibniz) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','marilyn',None,'((b=marilyn) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','plato',None,'((b=plato) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','russell',None,'((b=russell) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','socrates',None,'((b=socrates) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','xenothon',None,'((b=xenothon) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['ra','am|e','EX','(am=EX)'],\
+['ra','are|e','EX','(are|g=EX)'],\
+['ra','be|a','IA','(be|a=IA)'],\
+['r','belongs to','BLN','(bBLNc) x^ (cHWb)'],\
+['rbi','desires','DS','(desires=DS)'],\
+['ra','has','H','(has=H)'],\
+['rbi','have|w','HW','(have|w=HW)'],\
+['rbi','is|a ','IA','(is|a=IA)'],\
+['rbi','is|g ','IG','(is|g=IG)'],\
+['r','participated','PRTC','(bPRTCc) x^ ((dCAUSc) x^ (dHWb))'],\
+['r','participates','PRTC','(bPRTCc) x^ ((dCAUSc) x^ (dHWb))'],\
+['rai','think','TK','(think=TK)'],\
+['rai','thinks','TK','(thinks=TK)'],\
+['ra','was','=','(was = =)'],\
+['ra','was|a','IA','(was|a=IA)'],\
+['ra','was|g','IG','(was|g=IG)'],\
+['ra','was|e','EX','(was|e = EX)'],\
+['ns','whole|c (fallacious)',None,'(whole|c = concept|n)'],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['r','absorb|g','ADS','(bADSc) x^ ((b.eIGd) & (fINHh) & (bHWh) & (cCRCf) & (fIGg))) & (d=body|c) & (g=body|m)'],\
+['r','correspond','CRA','(bCRAc) x^ (((bEMh Td) & (eADc Tf) & (bSg Td)) t^ ((cSSj Tf) & (fSUTd))))'],\
+['r','correspond|b','CRB','(bCRBc) x^ (((dEMe Tf) & (gADe Th) & (dSb Tf)) t^ ((jSSc Tf) & (hSUTf))))'],\
+['r','correspond|c','CRC','(bCRCc) x^ (((bHWd) x^ (dINMe)) & ((cHWf) x^ (fINHg)) & ((bHWh) t^ ((hCRAj) & (cHWj))) & ((cHWk) t^ ((mCRAk) & (bHWm))))) '],\
+['r','experience','EXP','(bEXPc Tg) x^ ((bADSd Th) t^ ((bTKc Tg) & (cIf) & (gSUTh))) & (cb^dRe)'],\
+['r','in|h','INH','(bINHc) x^ ((bHWd) x^ ((dSSe) & (cHWe)))'],\
+['r','misinterpret','MSI','(bMSIc Tg) x^ ((bADSd Th) t^ ((bTKc Tg) & (c~If) & (gSUTh))) & (cb^dRe)'],\
+['r','think|d','TKD','(bTKDc) x^ (cId)'],\
+['n','body|m',None,'(c=body|m) & ((bIGc) x^ ((bHWd) t^ (dIGe))) & (e=particle|m)'],\
+['n','boson',None,'(c=boson) & ((bIGc) x^ (dEMb)) & ((bIGc) x^ (eADb)) & ((bIGc) t^ (bIGg)) & (g=particle)'],\
+['n','fermion',None,'(c=fermion) & ((bIGc) x^ (bEMd)) & ((bIGc) x^ (bADe)) & ((bIGc) t^ (bIGg)) & (g=particle)'],\
+['rs','perceive',None,'(perceive = absorb|g)'],\
+['r','hallucinate','HLC','(bHLCc Td) x^ ((bEMSe Tf) t^ ((bTKk Tg) & (gSUTf) & (cIAj) & (c~Ih))) & (j=natural|s) & (kb^cIh)'],\
+['r','emit|s','EMS','(bEMSc) x^ ((cHWd) x^ ((eEMd) & (bHWe)))'],\
+['rb','absorb','AD','(c=boson) & ((bIGc) x^ (eADb)) & ((eIGd) x^ (eADf)) & (d=fermion)'],\
+['rb','emit','EM','(c=fermion) & ((bIGc) x^ (bEMd)) & (e=boson) & ((dIGe) x^ (bEMd))'],\
+['n','subset',None,'(c=subset) & (((bIGc) & (bOFd)) x^ ((bHWe) t^ (dHWe)) & ((dHWf) t^ ((gPh) & (nt+gPj))) & (gb^bHWf)'],\
+['n','superset',None,'(c=superset) & (((bIGc) & (bOFd)) x^ ((dHWe) t^ (bHWe)) & ((bHWf) t^ ((gPh) & (nt+gPj))) & (gb^dHWf)'],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+[None,None,None,None]]
+    return dict2
+
+# hhh
+def small_dict(str1):
+
+    dict2= [['rbt','above','AB','((bIGc) x^ (dABb)) & ((bIGc) x^ (bABe)) & (c=point)'],\
+['rbt','after|n ','AF','((bIGc) x^ (dAFb)) & ((bIGc) x^ (bAFe)) & (c=number)'],\
+['rbt','after ','A','((bIGc) x^ (dAb)) & ((bIGc) x^ (bAe)) & (c=moment)'],\
+['rbi','are|a','IA','((bIAc) x^ (cIGd)) & ((bIAc) t^ (bIGe)) & ((bIAc) t^ (cIGf)) & (d=property) & (e=thing) & (f=adjective)'],\
+['rbi','are|g ','IG','((bIGc) x^ (cIGd)) & ((eIGf) x^ (eIGg)) & (d=concept|n) & (g=instance)'],\
+['rbis','at','S','((bIGc) x^ (dSb)) & ((dIGf) x^ (dSb)) & (c=point) & (f=particle) '],\
+['rbi','at|i ','AI','((dAIb) t^ (dIGc)) & ((bIGf) x^ (dAIb)) & (c=relationship) & (f=imagination) '],\
+['rbi','at|n ','N','((bIGc) x^ (dNb)) & ((eIGf) x^ ((eNh) & (hAFg))) & ((jIGk) x^ (mNg)) & ((nIGo) x^ (nNp)) & (f=whole) & (c=number) & (g=1) & (k=individual) & (p=0) & (o=contradiction) '],\
+['rbi','at|p ','P','((dPb) t^ (dIGc)) & ((bIGf) x^ (dPb)) & (c=relationship) & (f=possible world) '],\
+['rbit','at|t ','T','((dTb) t^ (dIGc)) & ((bIGf) x^ (dTb)) & (c=relationship) & (f=moment) '],\
+['rbi','desire','DS','((dDSb) t^ ((bIGc) & (bIAe))) & ((bIGf) x^ (dDSb)) & (c=relationship) & (f=mind) & (e=open|r)'],\
+['r','have','H','((bHc) x^ (cIGd)) & ((bHc) t^ (bIGe)) & ((bHc) t^ (cIGf)) & (d=property|n) & (e=thing) & (f=noun)'],\
+['rbi','has|w ','HW','((bIGc) x^ (bHWd)) & ((dIGe) x^ (bHWd)) & (d=whole) & (e=part)'],\
+['rbts','in front of','FR','((bIGc) x^ (dFRb)) & ((bIGc) x^ (bFRe)) & (c=point)'],\
+['rbts','left of','LF','((bIGc) x^ (dLFb)) & ((bIGc) x^ (bLFe)) & (c=point)'],\
+['rbi','think about','TK','((bTKd) t^ (dIGc)) & ((bIGf) x^ (bTKd)) & (c=relationship) & (f=mind) '],\
+['n','concept|n',None,'(c=concept|n) & ((bIGc) x^ (zIGb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','instance',None,'(c=instance) & ((bIGc) x^ (bIGd))'],\
+['n','integer',None,'(c=integer) & ((bIGc) x^ (bAFd)) & ((bIGc) x^ (eAFb)) & ((bIGc) x^ (fNb)) & ((bIGc) t^ (bIGg)) & (g=non_whole)'],\
+['n','mind',None,'(c=mind) & ((bIGc) t^ (bTKz))'],\
+['n','moment',None,'(c=moment) & ((bIGc) x^ (dTb)) & ((bIGc) x^ (bAh)) & ((bIGc) x^ (eAb)) & ((bIGc) t^ (bIGf)) & (f=non_whole)'],\
+['n','part',None,'(c=part) & ((bIGc) x^ (dHWb))'],\
+['n','part|p',None,'(c=part|p) & (((bIGc) & (bOFd)) x^ (dHWb))'],\
+['n','particle',None,'(c=particle) & ((bIGc) x^ (bSd)) & ((bIGd) x^ (hTg)) & ((bIGc) t^ (bIGf)) & (f=non_whole) & (g=now) & (hb^bSd)'],\
+['n','point',None,'(c=point) & ((bIGc) x^ (dSb)) & ((bIGc) x^ (eABb)) & ((bIGc) x^ (bABm)) & ((bIGc) x^ (fFRb)) & ((bIGc) x^ (bFRj)) & ((bIGc) x^ (gLFb)) & ((bIGc) x^ (bLFk)) & ((bIGc) t^ (bIGh)) & (h=non_whole)'],\
+['n','property',None,'(c=property) & ((bIGc) x^ (dIAb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['n','property|n',None,'(c=property|n) & ((bIGc) x^ (dHb)) & ((bIGc) t^ (bIGe)) & (e=non_whole)'],\
+['na','thing',None,'See atomic categories'],\
+['n','thought',None,'(c=thought) & ((bIGc) x^ (dTKb)) & ((bIGc) t^ (bIGe)) & ((bIGc) x^ (bAIf)) & (e=relationship)'],\
+['n','whole',None,'(c=whole) & ((bIGc) x^ (bHWd))'],\
+['na','plural form',None,'indefinable'],\
+['rai','relational variable','R','indefinable'],\
+['ns','set',None,'(set = whole)'],\
+['ns','class',None,'(class = concept|n)'],\
+['ns','concept|a',None,'(concept|a = property)'],\
+['r','exist','EX','(exist=EX) & ((bEX) x^ (bIAc)) & (c=extant)'],\
+['ns','group',None,'(group = whole)'],\
+['a','material',None,'(c=material) & (d=particle) & ((bIAc) x^ (bIGd))'],\
+['ns','number|i',None,'(number|i=integer)'],\
+['as','physical ',None,'(physical=material)'],\
+['ns','universal',None,'(universal = concept|n)'],\
+['rbt','is','=','(is = =)'],\
+['lb','then',None,'(then = i^)'],\
+['u','that|c',None,'(it IA p that q) x^ (qIAp)'],\
+['na','there',None,'(there EX b) x^ (bEX)'],\
+['na','this|n',None,'(this|n Rc) x^ (bRc)'],\
+['u','which',None,'(bRc which Qd) x^ ((bRc) & (cQd))'],\
+['u','who',None,'((bRc who Qd) x^ ((bRc) & (cQd) & (bIGe))) & (e=person)'],\
+['b','a|r',None,'redundant'],\
+['b','an|r',None,'redundant'],\
+['b','did',None,'redundant'],\
+['b','do',None,'redundant'],\
+['b','does',None,'redundant'],\
+['b','if',None,'redundant'],\
+['b','is|r',None,'redundant'],\
+['b','is|r',None,'redundant'],\
+['b','itself|r',None,'redundant'],\
+['b','of|r',None,'redundant'],\
+['b','on|r',None,'redundant'],\
+['b','same',None,'redundant'],\
+['dr','the|r',None,'redundant'],\
+['b','was|r',None,'redundant'],\
+['b','will|r',None,'redundant'],\
+['b','b^',None,'The symbol to the left of b^ is an abbreviation of the symbols on the right which are relationships'],\
+['r','=',None,'(b=c) means wherever we see b we may replace it with c and vice_versa'],\
+['ra','zzz',None,'(bzzzc) means we may not replace b with c and vice_versa'],\
+['b','nt+',None,'(nt+p t^ (pIGc)) & (c=relationship) & (qIAd) & (qb^p&nt+p) & (d=consistent)'],\
+['m','not',None,'~'],\
+['a','~',None,'(~p t^ (pIGc)) & (c=relationship) & (qIAd) & (qb^p&~p) & (d=contradictory)'],\
+['c','and|c',None,'(b and|c c R d) x^ (b.cRd)'],\
+['m','not|i',None,'(not|i = nt+)'],\
+['nu','2',None,'((b=2) x^ ((cAFb) & (bAFe))) & (c=3) & (e=1)'],\
+['ddi','a',None,'((a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=indefinite)'],\
+['ddi','a|a',None,'((a|a bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=general)'],\
+['ddi','any',None,'((any bRc) x^ (((zIGb) t^ (zRc)) & (zIAe) & (yIGb) & (yIAd))) & (d=particular) & (e=general)'],\
+['dt','any|n',None,'(b~R any|n c) x^ (bR no c)'],\
+['ds','every',None,'(every=any)'],\
+['dd','many|n',None,'(((many|n bRc) & (bOFPd) & (bIGe)) x^ ((zIGd) & (zRc) & (zIAg) & (yIGd) & (y~Rc) & (yIAg) & (yIAf) & (zIAf) & (yIAh) & (zIAh) & (y zzz z))) & (e=plural form) & (f=indefinite) & (g=many) & (h=particular)'],\
+['dd','many|o',None,'(((many|o bIGc) & (bOFPd) & (bIGe) & (cOFPf) & (cIGe)) x^ ((zIGf) & (zIGd) & (zIAd) & (yIGd) & (y~IGf) & (yIAd) & (zIAh) & (yIAh))) & (e=plural form) & (g=many) & (h=indefinite)'],\
+['dd','no',None,'(((no bRc) & (bIGy) & (bOFPd)) x^ ((xIAe) & (xIGd) & (zIAf) & ((zIGd) t^ (z~Rc)))) & (y=plural form) & (e=indefinite) & (f=general)'],\
+['d','no|s',None,'((no|s bRc) x^ (((zIGb) t^ (z~Rc)) & (yIGb) & (zIAe) & (yIAd))) & (d=indefinite) & (e=general)'],\
+['ddi','the',None,'((the bRc) x^ ((zRc) & (zIGb) & (zIAe))) & (e=definite)'],\
+['ws','anyone',None,'(anyone = any person)'],\
+['ws','anything',None,'(anything = any thing)'],\
+['ws','anything|a',None,'(anything|a = a|a thing)'],\
+['ws','everyone',None,'(everyone = any person)'],\
+['ws','nothing',None,'(nothing = no|s thing)'],\
+['ds','some',None,'(some=a)'],\
+['ds','some|o',None,'(some|o = many|o)'],\
+['ds','some|p',None,'(some|p = many|n)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something',None,'(something = a thing)'],\
+['ws','something|a',None,'(something|a = a|a thing)'],\
+['ds','that|d',None,'(that|d=the)'],\
+['ds','this',None,'(this=the)'],\
+['p','he',None,'(d=person) & (e=male) & ((he Rb) t^ ((cRb) & (cIAe) & (cIGd))) & (g=definite) & (h=particular)'],\
+['q','his',None,'((his bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=he)'],\
+['p','i',None,'(d=person) & ((i Rb) t^ ((iIGd) & (iIAg))) & (g=definite)'],\
+['p','it|p',None,'propositional it'],\
+['q','its|a',None,'(bR its|a c) t^ ((zIGc) & (bHMz) & (bRz))'],\
+['q','its|b',None,'((b R its|b c) t^ ((zIGd) & (bHMz) & (bRz))) & ((b R its|b c) t^ ((cOFPd) & (cIGe))) & (e=plural form)'],\
+['q','my',None,'((my bRc) t^ ((zRc) & (zIGb) & (iOWNz)))'],\
+['p','you',None,'(d=person) & ((you Rb) t^ ((cRb) & (cIGd) & (cIAg))) & (g=definite)'],\
+['q','your',None,'(e=person) & ((your bRc) t^ ((zRc) & (zIGb) & (dOWNz))) & (d=you)'],\
+['ra','about','ABT','postponed'],\
+['rc','as','AS','(as=AS) & (((bASc) & (dRb)) x^ (cRb))'],\
+['r','believe','B','(believe=B) & ((bBc) x^ (bTKd)) & ((bBc) t^ (bTKc)) & (e=true) & (db^cIAe)'],\
+['na','body|c',None,'(c=body|c) & ((bIGc) x^ ((bHWd) t^ (dIGe))) & (e=particle)'],\
+['ra','breaks','BRK','postponed'],\
+['na','causal role',None,'postponed'],\
+['ra','cause','CA','((pCAq) x^ ((bRc INMd Te) t^ ((fQg INMj Th) & (dCTGj) & (hSUTe)))) & (pb^bRc INMd) & (qb^fQg INMj)'],\
+['n','courage',None,'(b=courage) & ((cHb) x^ (cIAd)) & (d=courageous)'],\
+['na','courageous',None,'postponed'],\
+['aa','definite',None,'(definite = individual)'],\
+['rs','distinct from',None,'(distinct from = zzz)'],\
+['r','exists','EX','(exists=EX) & ((bEX) x^ (bIAc)) & (c=extant)'],\
+['n','familial part',None,'(c=familial part) & (((bIGc) & (bOFd)) x^ (bIGd))'],\
+['na','family',None,'postponed'],\
+['rs','from|b',None,'(from|b = born)'],\
+['r','has|c|r (causal role)','HCA','((bHCAc) x^ (bCAc)) & ((bHCAc) t^ (bHc))'],\
+['r','has|g|c','HGC','(cHGCb) x^ ((cHWe) t^ (eIGb))'],\
+['r','has|m','HM','(have|m=HM) & ((bHMc) x^ (cIGb))'],\
+['r','has|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['r','have|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['ra','have|w','HW','(c=body) &  (((bHWz) & (zIGc)) x^ (zSy))'],\
+['ratso','in','IN','((bINc) x^ ((bIGd) & (cHWb))) & (d=point)'],\
+['r','in|b','INB','((bINBc) x^ ((cHWb) & (bIGd))) & (d=moment)'],\
+['r','in|e','INE','(bINEc) x^ ((bSd) & (cHWd))'],\
+['r','in|m','INM','(bINMc) x^ ((bHWd) x^ ((dSe) & (cHWe)))'],\
+['nk','individual',None,'(b=individual) & ((cIGb) x^ (((dIGe) t^ (d~IGc)) & (cIAf) & ((d zzz c) x^ (d~IAf)))) & (e=thing)'],\
+['rs','inside',None,'(inside = INE)'],\
+['ra','is|e','EX','((bEX) x^ (bIAc)) & (c=extant)'],\
+['aa','large',None,'postponed'],\
+['ra','lives','LV','postponed'],\
+['na','logic',None,'postponed'],\
+['a','many',None,'(z=many) & (y=2) & ((bIAz) x^ ((bNy) ed^ ((bNc) & (cAFy))))'],\
+['a','mental',None,'(c=mental) & ((bIAc) x^ (bTKd))'],\
+['a','mental|b',None,'(c=mental) & ((bIAc) x^ (dTKb))'],\
+['na','murder',None,'postponed'],\
+['n','non_whole',None,'(c=non_whole) & ((bIGc) x^ ((dIGe) t^ (b~HWd))) & (e=thing)'],\
+['ra','of|p','OFP','(((bOFPc) & (bIGd) & (cIGe)) x^ ((fHWb.c) & (fIGg))) & (g=root) & (d=plural form) & (e=singular form)'],\
+['ra','of','OF','postponed'],\
+['r','of|i','OFI','(bOFIc) x^ (cHGCb)'],\
+['r','on','ON','(on=ON) & ((bONc) x^ ((bABc) & (bNXTc)))'],\
+['ns','one|p',None,'(one|p = person)'],\
+['ra','own','OWN','postponed'],\
+['ns','part|f',None,'(part|f=familial part)'],\
+['a','partially material|a (property)',None,'(b=partially material|a) & ((cIAb) x^ ((dHWf) & (fIGg) & (dIAc) & (dHWh) & (hIGk))) & ((cIGb) t^ (cIGe)) & (e=property) & (g=body|c) & (k=mind)'],\
+['na','party',None,'postponed'],\
+['n','person',None,'(c=person) & (d=personhood) & ((bIGc) x^ (bHd))'],\
+['n','personhood',None,'(c=personhood) & ((bHc) t^ ((bIGd) & (zTKw) & (zDSx) & (bHWz) & (bHWy) & (yIGe))) & (d=person) & (e=body|c)'],\
+['n','region|a',None,'(c=region|a) & ((bIGc) x^ (dINEb))'],\
+['nu','time',None,'(b=time) x^ ((eTd) x^ (bHWd))'],\
+['ra','took','TAK','postponed'],\
+['a','true',None,'(c=true) & ((bIAc) x^ (bIe)) & ((bIAc) t^ (bIGf)) & (e=reality) & (f=non_meta_statement)'],\
+['aa','white',None,'postponed'],\
+['ns','members',None,'(members = parts)'],\
+['ns','numbers|i',None,'(numbers|i = integers)'],\
+['ra','ate','ATE','postponed'],\
+['ra','ate from','ATF','postponed'],\
+['na','ball',None,'postponed'],\
+['ra','born','BRN','postponed'],\
+['na','boy',None,'postponed'],\
+['ra','broke','BRK','postponed'],\
+['na','cake',None,'postponed'],\
+['na','casablanca',None,'postponed'],\
+['na','cat',None,'postponed'],\
+['aa','caught',None,'postponed'],\
+['aa','cold',None,'postponed'],\
+['nc','dog',None,'(c=dog) & (d=doglike) & ((bIGc) x^ (bIAd))'],\
+['ac','doglike',None,'(c=dog) & (d=doglike) & ((bIAd) x^ ((bIGc) & (bHWe) & (bHWg) & (eIGh) & (gIGk))) & (k=mind) & (h=body|c)'],\
+['na','door',None,'postponed'],\
+['ra','drank','DRK','postponed'],\
+['ra','drink','DRK','postponed'],\
+['ra','drinks','DRK','postponed'],\
+['na','earth',None,'postponed'],\
+['ra','eat from','ATF','postponed'],\
+['na','girl',None,'postponed'],\
+['aa','green',None,'postponed'],\
+['na','hamlet',None,'postponed'],\
+['na','house',None,'postponed'],\
+['n','kennedy',None,'(b=kennedy) & ((cIGb) t^ (bIGd)) & (d=family)'],\
+['a','kennedy|a',None,'(b=kennedy|a) & (c=kennedy) & (((eIAb) & (fIGe)) x^ (fIGc))'],\
+['ra','kiss','KS','postponed'],\
+['ra','kissed','KS','postponed'],\
+['na','male',None,'(b=male) & (c=female) & ((dIAb) t^ (d~IAc))'],\
+['ra','love','LOV','postponed'],\
+['n','man',None,'(b=man) & ((cIGb) x^ ((cIGd) & (cIAe))) & (d=person) & (e=male)'],\
+['na','mars',None,'natural'],\
+['na','movie',None,'postponed'],\
+['na','munich',None,'postponed'],\
+['na','nazi',None,'postponed'],\
+['ra','reads','RD','postponed'],\
+['a','red',None,'(c=red) & ((bIAc) t^ (bINMd))'],\
+['n','redness',None,'(c=redness) & ((bHc) x^ (bIAd)) & (d=red)'],\
+['aa','rewarded',None,'postponed'],\
+['ra','saw','SEE','postponed'],\
+['ra','see','SEE','postponed'],\
+['na','set theory',None,'postponed'],\
+['ra','shed','SHD','postponed'],\
+['aa','smart',None,'postponed'],\
+['r','smell','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['r','smells','SME','((bSME) t^ (bIAc)) & (c=material)'],\
+['na','speed limit',None,'postponed'],\
+['ra','spied on','SPD','postponed'],\
+['ra','spies on','SPD','postponed'],\
+['ra','studied','STD','postponed'],\
+['ra','teach','TCH','postponed'],\
+['na','teacher',None,'postponed'],\
+['na','tear',None,'postponed'],\
+['na','van',None,'postponed'],\
+['na','water',None,'postponed'],\
+['n','woman',None,'(b=woman) & ((cIGb) t^ ((cIGd) & (cIAe))) & (d=person) & (e=female)'],\
+['nm','beers',None,'plural of beer'],\
+['ns','groups',None,'(groups = wholes)'],\
+['nm','instances',None,'plural of instance'],\
+['nm','integers',None,'plural of integer'],\
+['nm','minds',None,'plural of mind'],\
+['nm','moments',None,'plural of moment'],\
+['nm','parts',None,'plural of part'],\
+['nm','points',None,'plural of point'],\
+['nm','tears',None,'plural of tear'],\
+['nm','thoughts',None,'plural of thought'],\
+['nm','wholes',None,'plural of whole'],\
+['nu','ada',None,'((b=ada) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','aristotle',None,'((b=aristotle) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jessica',None,'((b=jessica) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','jfk',None,'((b=jfk) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','jim',None,'((b=jim) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','julius caesar',None,'((b=julius caesar) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','leibniz',None,'((b=leibniz) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','marilyn',None,'((b=marilyn) t^ ((bIGc) & (bIGd))) & (c=woman) & (d=individual)'],\
+['nu','plato',None,'((b=plato) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','russell',None,'((b=russell) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','socrates',None,'((b=socrates) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['nu','xenothon',None,'((b=xenothon) t^ ((bIGc) & (bIGd))) & (c=man) & (d=individual)'],\
+['ra','be|a','IA','(be|a=IA)'],\
+['rbi','desires','DS','(desires=DS)'],\
+['ra','has','H','(has=H)'],\
+['rbi','is|a ','IA','(is|a=IA)'],\
+['rbi','is|g ','IG','(is|g=IG)'],\
+['rai','think','TK','(think=TK)'],\
+['rai','thinks','TK','(thinks=TK)'],\
+['ra','was','=','(was = =)'],\
+['ra','was|a','IA','(was|a=IA)'],\
+['ra','was|g','IG','(was|g=IG)'],\
+['ns','whole|c (fallacious)',None,'(whole|c = concept|n)'],\
+[None,None,None,None]]
+
+    return dict2
 
 def populate_sentences(p):
     global result_data
@@ -8632,23 +10647,9 @@ def populate_sentences(p):
 
     return [test_sent,p]
 
-def repeat_relations(str1):
-    #this is for those definitions in which the same relation is related to two different
-    #general variables
-    a = ["group","x"]
-    b = ["member",'z']
-    c = ["no"+us,"y"]
-    d = ['no',"y"]
-    e = ['any',"y"]
-    f = ['personhood','y']
-
-    final_list = [a,b,c,d,e,f]
-    return final_list
-
 def get_result(post_data,archive_id=None,request=None):
     global ws,w4, result_data,p
-    p = 1
-    if not excel:
+    if not excel and not one_sent:
         if archive_id:
             ws = Define3.objects.filter(archives_id=archive_id)
         else:
@@ -8656,7 +10657,7 @@ def get_result(post_data,archive_id=None,request=None):
             ws = Define3.objects.filter(archives_id=archive.id)
 
 
-    if not excel and not mysql: #rajive fix mysql here
+    if not excel and not mysql and not one_sent:
         result_data = dict(post_data.iterlists())
         w4=[]
         index=0
@@ -8683,23 +10684,48 @@ def get_result(post_data,archive_id=None,request=None):
 
     global prop_name,plural_c,anaphora,definite, prop_var, ind_var
     global ant_cond,conditionals,candd,rel_conj,conc,prop_sent,sn,impl,denied
-    global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,p,affirmed
+    global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,affirmed
     global gen_var,definite2,cnjts,test_one,stp,strt,candd2,pn,embed,affneg
 
-    list1 = populate_sentences(p)
-    test_sent = list1[0]
-    p = list1[1]
-    words = build_dict('hey') # rajiv
-    st = time.time()
+    if one_sent: #ggg
+        str99 = 'co^ Russell has courage  % Russell is|a not courageous'
+        str99 = str99.lower()
+        list2 = tran_str(str99,1)
+        if len(list2[0]) == 1:
+            test_sent = [[[1,list2[0],1,list2[1]]]]
+        else:
+            test_sent = [[]]
+            for i in range(len(list2[0])):
+                if i == 0:
+                    test_sent[0].append([i + 1,list2[0][i],1,list2[1]])
+                else:
+                    test_sent[0].append([i+1,list2[0][i],None,None])
+        # ex_dict = small_dict('hey')
+        ex_dict = large_dict('hey')
+    elif temp17:
+        list1 = populate_sentences(p)
+        test_sent = list1[0]
+        p = list1[1]
+        ex_dict = large_dict('hey')
+    else:
+        list1 = populate_sentences(p)
+        test_sent = list1[0]
+        p = list1[1]
+        ex_dict = ""
+
+
+
+    words = build_dict(ex_dict)
     rep_rel = repeat_relations('hey')
+    st = time.time()
+    bb = st - tot_tim
 
     if stp == 0:
         stp = len(test_sent)
-#rajiv - use these numbers for the progress bar
-    if not excel:
+    if not excel and not one_sent:
         views.progressbar_send(request,0,100,0,1)
     for k in range(strt,stp):
-        if not excel:
+        if not excel and not one_sent:
             views.progressbar_send(request,strt,stp,k,1)
         if k == 37:
             bb = 7
@@ -8739,11 +10765,12 @@ def get_result(post_data,archive_id=None,request=None):
         id_num = test_sent[k][-1][0] + 1
         sn = id_num
         dummy = divide_sent(words, test_sent[k], idf_var,tot_sent,all_sent)
+        num_sent = len(all_sent)
         dummy = syn(tot_sent, all_sent, words,def_atoms)
         dummy = rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num)
         dummy = word_sub(idf_var,dv_nam, tot_sent, all_sent,words,id_num)
-        dummy = plurals(tot_sent,all_sent,words,dv_nam, idf_var)
-        dummy = define(tot_sent, all_sent,idf_var, dv_nam, words,rep_rel,identities,def_atoms)
+        dummy = define(tot_sent, all_sent,idf_var, dv_nam, words,rep_rel,identities,\
+                       def_atoms,num_sent)
         list2 = identity(all_sent,tot_sent,basic_objects,words,candd,candd2,\
                  conditionals,prop_sent,prop_name,id_num,identities,idf_var,test_sent[k][0][3])
         test_sent[k] = list2[0]
@@ -8751,7 +10778,7 @@ def get_result(post_data,archive_id=None,request=None):
         yy = ""
         if list2[1] == "False":
             yy = k+1
-            # break
+            break
         en1 = time.time()
         z = en1 - st1
         print str(k) + " - " + str("{0:.2f}".format(z))
@@ -8769,13 +10796,19 @@ def get_result(post_data,archive_id=None,request=None):
         views.save_result(result_data)
     else:
         return result_data
-if excel:
+
+if excel or one_sent or temp17:
     dummy = get_result('hey')
-    # st = time.time()
-    #wb4.save('../inference engine.xlsx')
-    # wb5.save('dictionary new 2.xlsx')
-    # en = time.time()
-    # print en-st
+    #himanshu fix here
+    st = time.time()
+    if excel:
+        wb4.save('../inference engine new.xlsx')
+    if one_sent:
+        wb4.save('../temp_proof.xlsx')
+    if words_used:
+        wb5.save('../dictionary last perfect.xlsx')
+    en = time.time()
+    print en-st
 elif mysql:
     dummy = get_result('hey')
 
