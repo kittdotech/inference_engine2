@@ -14,7 +14,8 @@ tot_tim = time.time()
 
 
 j = 2
-strt = 0
+proof_type = 'n' # if l then long proof showing decision procedure for instantiation
+strt = 0 # if n then proof type before may 1
 stp = 0
 if j == 1:
     django2 = False
@@ -130,6 +131,7 @@ equi = unichr(8660)
 ne = u"\u2260" # not equal
 
 sn = 1
+qn = 300 # numbers the property sent list
 pn = 400
 id_num=0
 
@@ -5088,6 +5090,7 @@ def findinlist(str1, list1, i, j, bool1 = False):
     else:
         return None
 
+
 def findposmd(str1,str2,list1,p,q,r):
 
     for i in range(len(list1)):
@@ -5096,12 +5099,19 @@ def findposmd(str1,str2,list1,p,q,r):
 
     return -1
 
-def findposinmd(str1,list1,p):
+def findposinmd(str1,list1,p,bool1=False):
 
     for i in range(len(list1)):
         if list1[i][p] == str1:
-            return i
-    return -1
+            if bool1:
+                return True
+            else:
+                return i
+
+    if bool1:
+        return False
+    else:
+        return -1
 
 def findposinlist(str1, list1,i):
     # this function takes a string, matches it to an element in the first dimension
@@ -5158,122 +5168,6 @@ def ismultidim(list1):
     else:
         return False
 
-
-def cat_atoms(j,i,list,members,basic_objects,str1,bo2,words,consq,rel,basic_cat):
-    # categorize atoms
-    global dv_nam,gen_var,cnjts,ind_var
-    atomic_relations = words[22]
-    subj = list[i][5]
-    relat = list[i][9]
-    obj = list[i][14]
-    sent = list[i][0]
-    bool2 = False
-    if j == 5:
-        x = 14
-    elif j == 14:
-        x = 5
-    else:
-        bool2 = True
-    if not bool2:
-        orelata = list[i][x] #opposite relata
-    else:
-        orelata = 1
-    #here we determine if the property is irrelevant for determining identity
-    bool1 = False
-    spec_prop = ["definite","indefinite",'general','particular']
-    if list[i][8] == None:
-        list[i][8] = ""
-    num = [5,14,18,22]
-    if subj == "p" and relat == "I" and obj == 'z' and j == 5:
-        bb = 8
-
-    bool3 = False
-    if relat == "J" and j == 5:
-        str6 = findinlist(list[i][14],dv_nam,0,1)
-        if str6 in spec_prop:
-            bool3 = True
-    bool4 = False
-    if relat == "I" and j == 5:
-        str6 = findinlist(list[i][14],dv_nam,0,1)
-        if str6 in basic_cat:
-            bool4 = True
-
-    is_con = True
-    if list[i][42] not in cnjts and list[i][53] != "an":
-        is_con = False
-
-    str5 = ""
-    str9 = ""
-    if str1 != "" and orelata in gen_var:
-        str5 = "ir"
-    elif bool3:
-        str5 = 'sp'
-    elif bool4:
-        str5 = "ir"
-    elif rel == 'ir':
-        str5 = "ir"
-    elif relat == "EX":
-        str5 = "ir"
-    elif j == 14 and relat == 'N':
-        str5 = 'ir'
-    elif not is_con:
-        str5 = 'ir'
-        str9 = "cn"
-        consq.append(sent)
-    elif (relat == "I" or relat == "J") and obj in gen_var:
-        str5 = 'ir'
-    # else:
-    #     for k in num:
-    #         if list[i][k] in gen_var or list[i][k] == None:
-    #             str5 = 'ir'
-    #         else:
-    #             str5 = ""
-    #             break
-
-    if list[i][14] == None:
-        str3 = ""
-    else:
-        str3 = list[i][14]
-    if str9 == "cn":
-        tilde = ""
-        sent = sent.replace("~","")
-        sent = sent.replace("  "," ")
-    else:
-        tilde = list[i][8]
-
-    #if an object occupies 2 positions of the A relation then it cannot be replaced with
-    # an object that occupies 1 position
-    u = ""
-    if relat == "A" or relat == "G":
-        u = 1
-
-    if j == 5:
-        if list[i][14] == None:
-            str7 = ""
-        elif list[i][14] in gen_var:
-            str7 = "@"
-        else:
-            str7 = list[i][14]
-
-        members.append([list[i][j],str1,sent,tilde + list[i][9] \
-            + str7,u,str5,list[i],list[i][14]])
-
-    else:
-        if list[i][5] in gen_var:
-            str7 = "@"
-        else:
-            str7 = list[i][5]
-
-        members.append([list[i][j],str1,sent,str7 + tilde \
-        + list[i][9],u,str5,list[i],list[i][5]])
-
-
-
-    if str1 != "":
-        if [list[i][j],str1] not in basic_objects:
-            basic_objects.append([list[i][j],str1])
-            bo2.append(list[i])
-    return
 
 def whole_exception(list1,str1):
 
@@ -5662,8 +5556,7 @@ def simple_id(tot_sent,all_sent,identities):
 
 def reflex(all_sent,j,tot_sent,prop_sent):
 
-    global sn
-    global pn
+    global sn,pn
     list1 = copy.deepcopy(all_sent[j])
     list1[8] = "~"
     str1 = "~" + all_sent[j][42]
@@ -5689,6 +5582,420 @@ def reflex(all_sent,j,tot_sent,prop_sent):
 
     return False
 
+
+def cat_err(all_sent,words,basic_objects,bo2,\
+        member_prop,not_id,property_sent,tot_sent):
+    #wwr
+    global qn
+    atomic = words[29]
+    members = []
+    non_id = []
+    used_var = []
+    str2 = ""
+    consq = []
+    for i in range(len(idf_var2)):
+        if idf_var2[i] not in idf_var:
+            used_var.append(idf_var2[i])
+        else:
+            if i > 26:
+                break
+
+    consistent = True
+    nw = []
+    basic_cat = ["moment","relationship","point","number","thought","imagination","group",\
+    "property","possible world","word","natural whole","mind",'matter','sensorium',\
+             'sensation']
+    ax_ent = ""
+    bool1 = False
+    num = [5,14,18,22]
+    listfa = []
+    reflex_found = False
+    spec_prop = ["indefinite","definite","general"]
+    j = -1
+    while j < (len(all_sent)) -1:
+        j += 1
+        if j == 13:
+            bb = 8
+        if all_sent[j][43] == "x":
+            all_sent[j][46] = [200]
+            all_sent[j][56] = [200]
+        relat = all_sent[j][9]
+        if relat == "J":
+            str6 = findinlist(all_sent[j][14],dv_nam,0,1)
+            if str6 in spec_prop:
+                all_sent[j][46] = [200]
+                all_sent[j][56] = [200]
+        if isatomic(all_sent[j],words) and all_sent[j][5] == all_sent[j][14] and \
+            all_sent[j][9] != "=" and all_sent[j][8] != "~":
+            consistent = reflex(all_sent,j,tot_sent,prop_sent)
+            if not consistent:
+                break
+
+        if all_sent[j][46] != "x":
+            if all_sent[j][9] == ne:
+                non_id.append([all_sent[j][0],all_sent[j][5],all_sent[j][14]])
+            else:
+                for p in num:
+                    if all_sent[j][p] != None and isvariable(all_sent[j][p]):
+                        if j == 13 and p == 14:
+                            bb = 8
+                        rel = ""
+                        if relat == "A" or (relat == 'T' and p == 14):
+                            kind = 'MOMENT'
+                        elif relat == "IR" and p == 5:
+                            kind = 'FACT'
+                        elif relat == 'AB' or relat == "L" or relat == 'AB' or (relat == 'S' and p == 14) \
+                                or (relat == 'WS' and p == 14):
+                            kind = 'POINT'
+                        elif relat == "G" or (relat == 'N' and p == 14):
+                            kind = 'NUMBER'
+                        elif relat == "M" and p == 5 or (relat == 'TK' and p == 14):
+                            kind = 'MENTAL RELATIONSHIP'
+                            rel = "ir"
+                        elif relat == "M" and p == 14:
+                            kind = 'IMAGINATION'
+                        elif relat == "I" and p == 14:
+                            kind = "NOUN CONCEPT"
+                        elif relat == "H" and p == 14:
+                            kind = "NOUN PROPERTY"
+                        elif relat == "J" and p == 14:
+                            kind = "ADJECTIVIAL PROPERTY"
+                        elif relat == "HE" and p == 5:
+                            kind = "PARTICLE"
+                        elif (relat == 'TK' and p == 14) or (relat == "M" and p == 5):
+                            kind = 'THOUGHT'
+                        elif relat == "HE" and p == 14:
+                            kind = "ENERGY"
+                        elif relat == "W" and p == 5:
+                            kind = "WHOLE"
+                        elif relat == 'P' and p == 14:
+                            kind = 'POSSIBLE WORLD'
+                        elif relat == "D" and p == 14:
+                            kind = 'POSSIBLE RELATIONSHIP'
+                        elif relat == 'AL' or (relat == 'WV' and p == 14):
+                            kind = 'LETTER'
+                        elif (relat == 'TK' or relat == "D") and p == 5:
+                            kind = 'MIND'
+                        elif relat == "S" and p == 5:
+                            kind = 'MATTER'
+                        elif relat == "O" and p == 14:
+                            kind = 'SENSORIUM'
+                        else:
+                            kind = ""
+                        if len(members) > 30:
+                            bb = 7
+                        if all_sent[j][8] == "~":
+                            kind = ""
+                        dummy = cat_atoms(p,j,all_sent,members,basic_objects,kind,bo2,words,consq,rel,basic_cat)
+    basic_objects2 = []
+    if consistent:
+        mem_var = []
+        basic_objects2 = copy.deepcopy(basic_objects)
+        basic_objects = sorted(basic_objects, key = operator.itemgetter(1,0))
+        has2groups = []
+        #if something is both matter and a natural whole then it is a natural whole
+        #remove blanks in the second dimension
+        i = -1
+        while i < len(basic_objects) -1:
+            i += 1
+            if basic_objects[i][0] in nw and basic_objects[i][1] == 'MATTER':
+                del basic_objects[i]
+                i -= 1
+        for i in range(len(members)):
+            if i == 13:
+                bb = 8
+            if members[i][0] == 'v':
+                pp = 7
+            if members[i][4] == 'general':
+                members[i][2] = members[i][2] + "*"
+            if members[i][1] == "":
+                group = find_group(members[i][2],all_sent,members[i][0],basic_objects)
+                if group == None:
+                    members[i][1] = 'THING'
+                else:
+                    if len(group[1]) > 1:
+                        if group not in has2groups:
+                            has2groups.append(group)
+                    group = group[1][0]
+                    members[i][1] = group
+                    # basic_objects.append([members[i][0],group])
+
+        for i in range(len(members)):
+            if members[i][0] == 'u':
+                pp = 7
+            p = findposinlist(members[i][0],has2groups,0)
+            if p > -1:
+                members[i][1] = has2groups[p][1][0]
+
+        members = sorted(members, key = operator.itemgetter(1,0))
+        list4 = []
+        list5 = []
+        list6 = []
+        list9 = []
+        irrel = []
+        senti = []
+        senti2 = []
+        gv_corr = []
+        spec_prop = []
+        str2 = ""
+        str4 = ""
+        dis_con = False
+        u = 0
+        if members != []:
+            for i in range(len(members)):
+                str1 = members[i][0]
+                str3 = members[i][1]
+                isirel = members[i][5]
+                if str1 == 'p':
+                    bb = 7
+                if i == 12:
+                    bb = 8
+
+                if str1 != str2 and str2 != "":
+                    senti3 = senti + senti2
+                    list5.append([str2,members[i-1][1],list4,irrel,spec_prop,senti3])
+                    qn += 1
+                    member_prop.append([str2,members[i-1][1],list6,list4,list9,irrel,u,qn,senti,senti2])
+                    u = 0 # number of positions a moment or a number occupies
+                    list4 = []
+                    list6 = []
+                    list9 = []
+                    irrel = []
+                    senti = []
+                    senti2 = []
+                    gv_corr = []
+                    spec_prop = []
+                    if "@" in members[i][3]:
+                        gv_corr.append([members[i][3],members[i][7]])
+                    if members[i][4] == 1:
+                        u += 1
+                    if members[i][1] != "":
+                        if isirel == "":
+                            senti.append(members[i][6])
+                            list4.append(members[i][2])
+                            list6.append(members[i][3])
+                        elif isirel == 'ir' or isirel == 'cn':
+                            senti2.append(members[i][6])
+                            irrel.append(members[i][2])
+                            list9.append(members[i][3])
+                        elif isirel == 'sp':
+                            spec_prop.append(members[i][2])
+                else:
+                    if "@" in members[i][3]:
+                        gv_corr.append([members[i][3],members[i][7]])
+                    if members[i][4] == 1:
+                        u += 1
+                    if members[i][1] != "":
+                        if isirel == "":
+                            senti.append(members[i][6])
+                            list4.append(members[i][2])
+                            list6.append(members[i][3])
+                        elif isirel == 'ir' or isirel == 'cn':
+                            senti2.append(members[i][6])
+                            irrel.append(members[i][2])
+                            list9.append(members[i][3])
+                        elif isirel == 'sp':
+                            spec_prop.append(members[i][2])
+                str2 = str1
+
+            if members[i][1] != "":
+                qn += 1
+                senti3 = senti + senti2
+                list5.append([str2,members[i-1][1],list4,irrel,spec_prop,senti3])
+                member_prop.append([str2,members[i-1][1],list6,list4,list9,irrel,u,qn,senti,senti2])
+
+            if has2groups != []:
+                for i in range(len(has2groups)):
+                    str1 = has2groups[i][0]
+                    list3 = []
+                    for m in range(len(list5)):
+                        if list5[m][0] == str1:
+                            break
+                    for j in range(1,len(has2groups[i][1])):
+                        str2 = has2groups[i][1][j].upper()
+                        list5.append([str1,str2,list5[m][2],list5[m][3],list5[m][4],list5[m][5]])
+                        member_prop.append([str1,str2,member_prop[m][2],member_prop[m][3],\
+                            member_prop[m][4],member_prop[m][5],member_prop[m][6],"",member_prop[m][8],member_prop[m][9]])
+            list5 = sorted(list5, key = operator.itemgetter(1,0))
+            member_prop = sorted(member_prop, key = operator.itemgetter(1,0))
+            # dummy = missing_variables(tot_sent,used_var,list5,never_used,all_sent,irrel,property_sent)
+            str3 = list5[0][1]
+            property_sent.append(["",str3,"","","","",""])
+            non_id2 = copy.deepcopy(non_id)
+            b = 0
+            for i in range(len(list5)):
+                str1 = list5[i][0] + " "
+                str4 = list5[i][1]
+                if i == 11:
+                    bb = 7
+                if str1 == 'n ':
+                    bb = 8
+                for k in range(2,5):
+                    str2 = ""
+                    str5 = ""
+                    if len(list5[i][2]) == 0 and k == 2:
+                        if list5[i][0] in gen_var:
+                            str2 = "[general]"
+                        elif list5[i][0] in definite2:
+                            str2 = "[definite]"
+                        elif list5[i][0] in ind_var:
+                            str2 = "[indefinite]"
+                    elif k == 4 and list5[i][4] != []:
+                        for s in range(len(list5[i][k])):
+                            if list5[i][k][s] != "":
+                                if str5 == "":
+                                    str5 =  " [" + list5[i][k][s]
+                                else:
+                                    str5 += " & " + list5[i][k][s]
+                        str2 += str5 + "]"
+                    else:
+                        if list5[i][k] != []:
+                            for s in range(len(list5[i][k])):
+                                if list5[i][k][s] != "":
+                                    if str2 == "":
+                                        str2 = list5[i][k][s]
+                                    else:
+                                        str2 += " & " + list5[i][k][s]
+                            if k == 3:
+                                str2 = " {" + str2 + "}"
+                    if k == 2 and str2 == "" and str1 in gen_var:
+                        str1 += "[general]"
+                    if str2 != "":
+                        str1 += str2
+
+                if str4 != str3:
+                    property_sent.append(["",str4,"","","","",""])
+                str3 = str4
+                b += 1
+                str7 = str(b) + "a"
+                if non_id2 != []:
+                    not_id = isnotid(list5[i][0],non_id2,property_sent)
+                property_sent.append([member_prop[i][7],str1,"","","","",""])
+
+            str1 = ""
+        not_id = []
+    bb = 8
+    list1 = [basic_objects2,member_prop,property_sent,not_id,tot_sent,consistent]
+
+    return list1
+
+
+def cat_atoms(j,i,list,members,basic_objects,str1,bo2,words,consq,rel,basic_cat):
+    # categorize atoms
+    global dv_nam,gen_var,cnjts,ind_var
+    atomic_relations = words[22]
+    subj = list[i][5]
+    relat = list[i][9]
+    obj = list[i][14]
+    sent = list[i][0]
+    bool2 = False
+    if list[i][42] == 'n':
+        x = 1
+    else:
+        bool2 = True
+    if not bool2:
+        orelata = list[i][x] #opposite relata
+    else:
+        orelata = 1
+    #here we determine if the property is irrelevant for determining identity
+    bool1 = False
+    spec_prop = ["definite","indefinite",'general','particular']
+    if list[i][8] == None:
+        list[i][8] = ""
+    num = [5,14,18,22]
+    if subj == "p" and relat == "I" and obj == 'z' and j == 5:
+        bb = 8
+
+    bool3 = False
+    if relat == "J" and j == 5:
+        str6 = findinlist(list[i][14],dv_nam,0,1)
+        if str6 in spec_prop:
+            bool3 = True
+    bool4 = False
+    if relat == "I" and j == 5:
+        str6 = findinlist(list[i][14],dv_nam,0,1)
+        if str6 in basic_cat:
+            bool4 = True
+
+    is_con = True
+    if list[i][42] not in cnjts and list[i][53] != "an":
+        is_con = False
+
+    str5 = ""
+    str9 = ""
+    if str1 != "" and orelata in gen_var:
+        str5 = "ir"
+    elif bool3:
+        str5 = 'sp'
+    elif bool4:
+        str5 = "ir"
+    elif rel == 'ir':
+        str5 = "ir"
+    elif relat == "EX":
+        str5 = "ir"
+    elif j == 14 and relat == 'N':
+        str5 = 'ir'
+    elif not is_con:
+        str5 = 'ir'
+        str9 = "cn"
+        consq.append(sent)
+    elif (relat == "I" or relat == "J") and obj in gen_var:
+        str5 = 'ir'
+    # else:
+    #     for k in num:
+    #         if list[i][k] in gen_var or list[i][k] == None:
+    #             str5 = 'ir'
+    #         else:
+    #             str5 = ""
+    #             break
+
+    if list[i][14] == None:
+        str3 = ""
+    else:
+        str3 = list[i][14]
+    if str9 == "cn":
+        tilde = ""
+        sent = sent.replace("~","")
+        sent = sent.replace("  "," ")
+    else:
+        tilde = list[i][8]
+
+    #if an object occupies 2 positions of the A relation then it cannot be replaced with
+    # an object that occupies 1 position
+    u = ""
+    if relat == "A" or relat == "G":
+        u = 1
+
+    if j == 5:
+        if list[i][14] == None:
+            str7 = ""
+        elif list[i][14] in gen_var:
+            str7 = "@"
+        else:
+            str7 = list[i][14]
+
+        members.append([list[i][j],str1,sent,tilde + list[i][9] \
+            + str7,u,str5,list[i],list[i][14]])
+
+    else:
+        if list[i][5] in gen_var:
+            str7 = "@"
+        else:
+            str7 = list[i][5]
+
+        members.append([list[i][j],str1,sent,str7 + tilde \
+        + list[i][9],u,str5,list[i],list[i][5]])
+
+
+
+    if str1 != "":
+        if [list[i][j],str1] not in basic_objects:
+            basic_objects.append([list[i][j],str1])
+            bo2.append(list[i])
+    return
+
+
+
 def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     prop_sent,prop_name,id_num,identities,idf_var,truth_value):
 
@@ -5704,8 +6011,10 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     disjuncts = []
     negat = []
     sent = []
-    qn = 300 # numbers the property sent list
     property_sent = []
+    if proof_type == "l":
+        pn = sn
+
     for i in range(len(tot_sent)):
         if tot_sent[i][2] != "":
             sent.append([tot_sent[i][0],tot_sent[i][2]])
@@ -5714,6 +6023,13 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     # dummy = quick_print([],tot_sent,[],1,0,1,0)
 
     consistent = plan(sent,prop_sent,candd,candd2,conditionals, prop_name,disjuncts,tot_sent,2,negat)
+
+    if proof_type == "l":
+
+        k = sn
+        g = sn
+        prop_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,1,conditionals)
+
 
     tv = True # tv = truth value
     if consistent and impl != nonseq:
@@ -5739,471 +6055,199 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                     d = findposinlist(str3,all_sent,42)
                     all_sent[d][53] = str9
 
-        atomic = words[29]
-        members = []
-        non_id = []
-        used_var = []
-        consq = []
-        for i in range(len(idf_var2)):
-            if idf_var2[i] not in idf_var:
-                used_var.append(idf_var2[i])
-            else:
-                if i > 26:
-                    break
+        bo2=[]
+        member_prop = []
+        not_id = []
 
-        nw = []
-        bo2 = []
-        basic_cat = ["moment","relationship","point","number","thought","imagination","group",\
-        "property","possible world","word","natural whole","mind",'matter','sensorium',\
-                 'sensation']
-        ax_ent = ""
-        bool1 = False
-        num = [5,14,18,22]
-        listfa = []
-        reflex_found = False
-        spec_prop = ["indefinite","definite","general"]
-        j = -1
-        while j < (len(all_sent)) -1:
-            j += 1
-            if j == 13:
-                bb = 8
-            if all_sent[j][43] == "x":
-                all_sent[j][46] = [200]
-                all_sent[j][56] = [200]
-            relat = all_sent[j][9]
-            if relat == "J":
-                str6 = findinlist(all_sent[j][14],dv_nam,0,1)
-                if str6 in spec_prop:
-                    all_sent[j][46] = [200]
-                    all_sent[j][56] = [200]
-            if isatomic(all_sent[j],words) and all_sent[j][5] == all_sent[j][14] and \
-                all_sent[j][9] != "=" and all_sent[j][8] != "~":
-                consistent = reflex(all_sent,j,tot_sent,prop_sent)
-                if not consistent:
-                    break
+        list1 = cat_err(all_sent,words,basic_objects,bo2,\
+                member_prop,not_id,property_sent,tot_sent)
+        basic_objects2 = list1[0]
+        member_prop = list1[1]
+        property_sent = list1[2]
+        not_id = list1[3]
+        tot_sent = list1[4]
+        consistent = list1[5]
+    if consistent:
+        consistent = axioms(basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
+                       prop_sent,member_prop,not_id)
 
-            if all_sent[j][46] != "x":
-                if all_sent[j][9] == ne:
-                    non_id.append([all_sent[j][0],all_sent[j][5],all_sent[j][14]])
-                else:
-                    for p in num:
-                        if all_sent[j][p] != None and isvariable(all_sent[j][p]):
-                            if j == 13 and p == 14:
-                                bb = 8
-                            rel = ""
-                            if relat == "A" or (relat == 'T' and p == 14):
-                                kind = 'MOMENT'
-                            elif relat == "IR" and p == 5:
-                                kind = 'FACT'
-                            elif relat == 'AB' or relat == "L" or relat == 'AB' or (relat == 'S' and p == 14) \
-                                    or (relat == 'WS' and p == 14):
-                                kind = 'POINT'
-                            elif relat == "G" or (relat == 'N' and p == 14):
-                                kind = 'NUMBER'
-                            elif relat == "M" and p == 5 or (relat == 'TK' and p == 14):
-                                kind = 'MENTAL RELATIONSHIP'
-                                rel = "ir"
-                            elif relat == "M" and p == 14:
-                                kind = 'IMAGINATION'
-                            elif relat == "I" and p == 14:
-                                kind = "NOUN CONCEPT"
-                            elif relat == "H" and p == 14:
-                                kind = "NOUN PROPERTY"
-                            elif relat == "J" and p == 14:
-                                kind = "ADJECTIVIAL PROPERTY"
-                            elif relat == "HE" and p == 5:
-                                kind = "PARTICLE"
-                            elif (relat == 'TK' and p == 14) or (relat == "M" and p == 5):
-                                kind = 'THOUGHT'
-                            elif relat == "HE" and p == 14:
-                                kind = "ENERGY"
-                            elif relat == "W" and p == 5:
-                                kind = "WHOLE"
-                            elif relat == 'P' and p == 14:
-                                kind = 'POSSIBLE WORLD'
-                            elif relat == "D" and p == 14:
-                                kind = 'POSSIBLE RELATIONSHIP'
-                            elif relat == 'AL' or (relat == 'WV' and p == 14):
-                                kind = 'LETTER'
-                            elif (relat == 'TK' or relat == "D") and p == 5:
-                                kind = 'MIND'
-                            elif relat == "S" and p == 5:
-                                kind = 'MATTER'
-                            elif relat == "O" and p == 14:
-                                kind = 'SENSORIUM'
-                            else:
-                                kind = ""
-                            if len(members) > 30:
-                                bb = 7
-                            if all_sent[j][8] == "~":
-                                kind = ""
-                            dummy = cat_atoms(p,j,all_sent,members,basic_objects,kind,bo2,words,consq,rel,basic_cat)
-
+        # end3
+        bb = 9
+        # if bb == 10:
         if consistent:
-            mem_var = []
-            basic_objects2 = copy.deepcopy(basic_objects)
-            basic_objects = sorted(basic_objects, key = operator.itemgetter(1,0))
-            has2groups = []
-            #if something is both matter and a natural whole then it is a natural whole
-            #remove blanks in the second dimension
-            i = -1
-            while i < len(basic_objects) -1:
-                i += 1
-                if basic_objects[i][0] in nw and basic_objects[i][1] == 'MATTER':
-                    del basic_objects[i]
-                    i -= 1
-            for i in range(len(members)):
-                if i == 13:
-                    bb = 8
-                if members[i][0] == 'v':
-                    pp = 7
-                if members[i][4] == 'general':
-                    members[i][2] = members[i][2] + "*"
-                if members[i][1] == "":
-                    group = find_group(members[i][2],all_sent,members[i][0],basic_objects)
-                    if group == None:
-                        members[i][1] = 'THING'
-                    else:
-                        if len(group[1]) > 1:
-                            if group not in has2groups:
-                                has2groups.append(group)
-                        group = group[1][0]
-                        members[i][1] = group
-                        # basic_objects.append([members[i][0],group])
+            bb = 8
+            # dummy = cjcnd(all_sent,conditionals,tot_sent) # this gathers all detached
+            # and attatched sentences
+            neg_embed = []
+            if embed != []:
 
-            for i in range(len(members)):
-                if members[i][0] == 'u':
-                    pp = 7
-                p = findposinlist(members[i][0],has2groups,0)
-                if p > -1:
-                    members[i][1] = has2groups[p][1][0]
-
-            members = sorted(members, key = operator.itemgetter(1,0))
-            list4 = []
-            list5 = []
-            list6 = []
-            list9 = []
-            irrel = []
-            senti = []
-            senti2 = []
-            gv_corr = []
-            spec_prop = []
-            member_prop = []
-            str2 = ""
-            str4 = ""
-            dis_con = False
-            u = 0
-            if members != []:
-                for i in range(len(members)):
-                    str1 = members[i][0]
-                    str3 = members[i][1]
-                    isirel = members[i][5]
-                    if str1 == 'p':
-                        bb = 7
-                    if str1 != str2 and str2 != "":
-                        senti3 = senti + senti2
-                        list5.append([str2,members[i-1][1],list4,irrel,spec_prop,senti3])
-                        qn += 1
-                        member_prop.append([str2,members[i-1][1],list6,list4,list9,irrel,u,qn,senti,senti2])
-                        u = 0 # number of positions a moment or a number occupies
-                        list4 = []
-                        list6 = []
-                        list9 = []
-                        irrel = []
-                        senti = []
-                        senti2 = []
-                        gv_corr = []
-                        spec_prop = []
-                        if "@" in members[i][3]:
-                            gv_corr.append([members[i][3],members[i][7]])
-                        if members[i][4] == 1:
-                            u += 1
-                        if members[i][1] != "":
-                            if isirel == "":
-                                senti.append(members[i][6])
-                                list4.append(members[i][2])
-                                list6.append(members[i][3])
-                            elif isirel == 'ir' or isirel == 'cn':
-                                senti2.append(members[i][6])
-                                irrel.append(members[i][2])
-                                list9.append(members[i][3])
-                            elif isirel == 'sp':
-                                spec_prop.append(members[i][2])
-                    else:
-                        if "@" in members[i][3]:
-                            gv_corr.append([members[i][3],members[i][7]])
-                        if members[i][4] == 1:
-                            u += 1
-                        if members[i][1] != "":
-                            if isirel == "":
-                                senti.append(members[i][6])
-                                list4.append(members[i][2])
-                                list6.append(members[i][3])
-                            elif isirel == 'ir' or isirel == 'cn':
-                                senti2.append(members[i][6])
-                                irrel.append(members[i][2])
-                                list9.append(members[i][3])
-                            elif isirel == 'sp':
-                                spec_prop.append(members[i][2])
-                    str2 = str1
-
-                if members[i][1] != "":
-                    qn += 1
-                    senti3 = senti + senti2
-                    list5.append([str2,members[i-1][1],list4,irrel,spec_prop,senti3])
-                    member_prop.append([str2,members[i-1][1],list6,list4,list9,irrel,u,qn,senti,senti2])
-
-                if has2groups != []:
-                    for i in range(len(has2groups)):
-                        str1 = has2groups[i][0]
-                        list3 = []
-                        for m in range(len(list5)):
-                            if list5[m][0] == str1:
-                                break
-                        for j in range(1,len(has2groups[i][1])):
-                            str2 = has2groups[i][1][j].upper()
-                            list5.append([str1,str2,list5[m][2],list5[m][3],list5[m][4],list5[m][5]])
-                            member_prop.append([str1,str2,member_prop[m][2],member_prop[m][3],\
-                                member_prop[m][4],member_prop[m][5],member_prop[m][6],"",member_prop[m][8],member_prop[m][9]])
-                list5 = sorted(list5, key = operator.itemgetter(1,0))
-                member_prop = sorted(member_prop, key = operator.itemgetter(1,0))
-                # dummy = missing_variables(tot_sent,used_var,list5,never_used,all_sent,irrel,property_sent)
-                str3 = list5[0][1]
-                property_sent.append(["",str3,"","","","",""])
-                non_id2 = copy.deepcopy(non_id)
-                b = 0
-                for i in range(len(list5)):
-                    str1 = list5[i][0] + " "
-                    str4 = list5[i][1]
-                    if i == 11:
-                        bb = 7
-                    if str1 == 'n ':
-                        bb = 8
-                    for k in range(2,5):
-                        str2 = ""
-                        str5 = ""
-                        if len(list5[i][2]) == 0 and k == 2:
-                            if list5[i][0] in gen_var:
-                                str2 = "[general]"
-                            elif list5[i][0] in definite2:
-                                str2 = "[definite]"
-                            elif list5[i][0] in ind_var:
-                                str2 = "[indefinite]"
-                        elif k == 4 and list5[i][4] != []:
-                            for s in range(len(list5[i][k])):
-                                if list5[i][k][s] != "":
-                                    if str5 == "":
-                                        str5 =  " [" + list5[i][k][s]
-                                    else:
-                                        str5 += " & " + list5[i][k][s]
-                            str2 += str5 + "]"
-                        else:
-                            if list5[i][k] != []:
-                                for s in range(len(list5[i][k])):
-                                    if list5[i][k][s] != "":
-                                        if str2 == "":
-                                            str2 = list5[i][k][s]
-                                        else:
-                                            str2 += " & " + list5[i][k][s]
-                                if k == 3:
-                                    str2 = " {" + str2 + "}"
-                        if k == 2 and str2 == "" and str1 in gen_var:
-                            str1 += "[general]"
-                        if str2 != "":
-                            str1 += str2
-
-                    if str4 != str3:
-                        property_sent.append(["",str4,"","","","",""])
-                    str3 = str4
-                    b += 1
-                    str7 = str(b) + "a"
-                    if non_id2 != []:
-                        not_id = isnotid(list5[i][0],non_id2,property_sent)
-                    property_sent.append([member_prop[i][7],str1,"","","","",""])
-
-                str1 = ""
-            not_id = []
-            consistent = axioms(basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
-                           prop_sent,member_prop,not_id)
-            # end3
-            bb = 9
-            # if bb == 10:
-            if consistent:
-                bb = 8
-                # dummy = cjcnd(all_sent,conditionals,tot_sent) # this gathers all detached
-                # and attatched sentences
-                neg_embed = []
-                if embed != []:
-
-                    list1 = []
-                    for i in range(len(embed)):
-                        for j in range(len(all_sent)):
-                            if (all_sent[j][5] == embed[i][42] or all_sent[j][14] == embed[i][42]) \
-                                and all_sent[j][8] == "~":
-                                    neg_embed.append(embed[i][42])
-                                    list1.append(embed[i])
-                    all_sent += list1
-                    list1 = []
-
-                rel_sent = [] # relevant sentence
-                rel_prop = [] # relevant propositions (sentence letters)
-                list5 = []
-                linked = []
-                remove_later = []
-                pot_id = [] # potential identity
-                conditionals2 = copy.deepcopy(conditionals)
-                for k in range(len(conditionals2)):
-                    if conditionals2[k][6] == "":
-                        list7 = conditionals2[k][0]
-                        conditionals2[k][0] = []
-                        conditionals2[k][0].append(list7)
-                    if conditionals2[k][7] == "":
-                        list7 = conditionals2[k][1]
-                        conditionals2[k][1] = []
-                        conditionals2[k][1].append(list7)
-
-                conjunc = ""
-                gen_var2 = [] #general variables
-                part_var = [] #particular variables
-                # for i in range(len(all_sent)):
-                #     dummy = find_gen(all_sent,gen_var2,i,part_var) #find general variables
-
-                for i in range(len(all_sent)):
-
-                    if i == 42:
-                        bb = 8
-                    if all_sent[i][8] == "~" or all_sent[i][42] in neg_embed:
-                        if all_sent[i][42] in cnjts:
-                        # if all_sent[i][42] in cnjts and all_sent[i][46] != "x":
-                            bool1 = False
-                            for j in range(len(all_sent)):
-                                if j == 10 and i == 18:
-                                    bb = 8
-
-                                if all_sent[j][42] not in cnjts and all_sent[j][46] != "x":
-                                    str1 = all_sent[i][42]
-                                    str2 = all_sent[j][42]
-                                    str1 = str1.replace("~","")
-                                    str2 = str2.replace("~","")
-                                    if str1 == str2:
-                                        rel_sent.append([all_sent[j][42],all_sent[j]])
-                                        remove_later.append(all_sent[j][42])
-                                    else:
-                                        a = len(pot_id)
-                                        dummy = instantiable(all_sent,j,i,pot_id,member_prop,True,linked,gen_var2)
-                                        if len(pot_id) > a:
-                                            bool1 = True
-                                            rel_sent.append([all_sent[j][42],all_sent[j]])
-                        else:
-                        # elif all_sent[i][46] != "x":
-                            all_sent[i][45] = str2
-                            rel_sent.append([all_sent[i][42],all_sent[i]])
-
-                orel_sent = copy.deepcopy(rel_sent) #original relevant sentence
-
-                if rel_sent != []:
-                    bool1 = False
-                    i = -1
-                    while i < (len(rel_sent))-1:
-                        i += 1
-                        str1 = rel_sent[i][0]
-                        k = -1
-                        while k < (len(conditionals2))-1:
-                            k += 1
-                            bool1 = False
-                            for q in range(0,2):
-                                if bool1:
-                                    break
-                                if q == 0:
-                                    r = 0
-                                    s = 1
-                                else:
-                                    r = 1
-                                    s = 0
-                                for m in range(len(conditionals2[k][r])):
-                                    bool3 = False
-                                    if conditionals2[k][r] != [""]:
-                                        str3 = conditionals2[k][r][m][1] + conditionals2[k][r][m][0]
-                                        if str1 == str3:
-                                            bool3 = True
-                                        elif not os(str3):
-                                            d = findposinlist(str3,all_sent,42)
-                                            if all_sent[d][53] == "an":
-                                                if not check_dimension(rel_sent,0,str3):
-                                                    rel_sent.append([str3,all_sent[d]])
-
-                                    if bool3:
-                                        str4 = findinlist(rel_sent[i],all_sent,42,46)
-                                        if str4 == "x":
-                                            del rel_sent[i]
-                                            i -= 1
-                                        if r == 0:
-                                            r = 1
-                                        else:
-                                            r = 0
-                                        for n in range(len(conditionals2[k][r])):
-                                            str12 = conditionals2[k][r][n][1] + conditionals2[k][r][n][0]
-                                            if os(str12):
-                                                if not check_dimension(rel_sent,0,str12) and str12 not in cnjts:
-                                                    d = findposinlist(str12,all_sent,42)
-                                                    rel_sent.append([str12,all_sent[d]])
-
-                                        del conditionals2[k]
-                                        bool1 = True
-                                        break
-
-                bool1 = False
-                kv_found = False
                 list1 = []
-                if remove_later != []:
-                    for i in range(len(remove_later)):
-                        d = findposinlist(remove_later[i],rel_sent,0)
-                        del rel_sent[d]
+                for i in range(len(embed)):
+                    for j in range(len(all_sent)):
+                        if (all_sent[j][5] == embed[i][42] or all_sent[j][14] == embed[i][42]) \
+                            and all_sent[j][8] == "~":
+                                neg_embed.append(embed[i][42])
+                                list1.append(embed[i])
+                all_sent += list1
+                list1 = []
 
-                #ignores time
-                j = -1
-                while j < (len(rel_sent)) -1:
-                    j += 1
-                    d = findposinlist(rel_sent[j][0],all_sent,42)
-                    if all_sent[d][46] != "x":
-                        for i in range(len(all_sent)):
-                            if i == 5 and j == 2:
+            rel_sent = [] # relevant sentence
+            rel_prop = [] # relevant propositions (sentence letters)
+            list5 = []
+            linked = []
+            remove_later = []
+            pot_id = [] # potential identity
+            conditionals2 = copy.deepcopy(conditionals)
+            for k in range(len(conditionals2)):
+                if conditionals2[k][6] == "":
+                    list7 = conditionals2[k][0]
+                    conditionals2[k][0] = []
+                    conditionals2[k][0].append(list7)
+                if conditionals2[k][7] == "":
+                    list7 = conditionals2[k][1]
+                    conditionals2[k][1] = []
+                    conditionals2[k][1].append(list7)
+
+            conjunc = ""
+            gen_var2 = [] #general variables
+            part_var = [] #particular variables
+            # for i in range(len(all_sent)):
+            #     dummy = find_gen(all_sent,gen_var2,i,part_var) #find general variables
+
+            for i in range(len(all_sent)):
+
+                if i == 42:
+                    bb = 8
+                if all_sent[i][8] == "~" or all_sent[i][42] in neg_embed:
+                    if all_sent[i][42] in cnjts:
+                    # if all_sent[i][42] in cnjts and all_sent[i][46] != "x":
+                        bool1 = False
+                        for j in range(len(all_sent)):
+                            if j == 10 and i == 18:
                                 bb = 8
-                            dummy = instantiable(all_sent,d,i,pot_id,member_prop,False,linked,gen_var2,embed_var)
 
-                candd2 = copy.deepcopy(candd)
-                candd = []
-                for i in range(len(conditionals)):
-                    candd.append([conditionals[i][2],conditionals[i][4],""])
-                added = False
+                            if all_sent[j][42] not in cnjts and all_sent[j][46] != "x":
+                                str1 = all_sent[i][42]
+                                str2 = all_sent[j][42]
+                                str1 = str1.replace("~","")
+                                str2 = str2.replace("~","")
+                                if str1 == str2:
+                                    rel_sent.append([all_sent[j][42],all_sent[j]])
+                                    remove_later.append(all_sent[j][42])
+                                else:
+                                    a = len(pot_id)
+                                    dummy = instantiable(all_sent,j,i,pot_id,member_prop,True,linked,gen_var2)
+                                    if len(pot_id) > a:
+                                        bool1 = True
+                                        rel_sent.append([all_sent[j][42],all_sent[j]])
+                    else:
+                        rel_sent.append([all_sent[i][42],all_sent[i]])
+
+            orel_sent = copy.deepcopy(rel_sent) #original relevant sentence
+
+            if rel_sent != []:
+                bool1 = False
+                i = -1
+                while i < (len(rel_sent))-1:
+                    i += 1
+                    str1 = rel_sent[i][0]
+                    k = -1
+                    while k < (len(conditionals2))-1:
+                        k += 1
+                        bool1 = False
+                        for q in range(0,2):
+                            if bool1:
+                                break
+                            if q == 0:
+                                r = 0
+                                s = 1
+                            else:
+                                r = 1
+                                s = 0
+                            for m in range(len(conditionals2[k][r])):
+                                bool3 = False
+                                if conditionals2[k][r] != [""]:
+                                    str3 = conditionals2[k][r][m][1] + conditionals2[k][r][m][0]
+                                    if str1 == str3:
+                                        bool3 = True
+                                    elif not os(str3):
+                                        d = findposinlist(str3,all_sent,42)
+                                        if all_sent[d][53] == "an":
+                                            if not check_dimension(rel_sent,0,str3):
+                                                rel_sent.append([str3,all_sent[d]])
+
+                                if bool3:
+                                    str4 = findinlist(rel_sent[i],all_sent,42,46)
+                                    if str4 == "x":
+                                        del rel_sent[i]
+                                        i -= 1
+                                    if r == 0:
+                                        r = 1
+                                    else:
+                                        r = 0
+                                    for n in range(len(conditionals2[k][r])):
+                                        str12 = conditionals2[k][r][n][1] + conditionals2[k][r][n][0]
+                                        if os(str12):
+                                            if not check_dimension(rel_sent,0,str12) and str12 not in cnjts:
+                                                d = findposinlist(str12,all_sent,42)
+                                                rel_sent.append([str12,all_sent[d]])
+
+                                    del conditionals2[k]
+                                    bool1 = True
+                                    break
+
+            bool1 = False
+            kv_found = False
+            list1 = []
+            if remove_later != []:
+                for i in range(len(remove_later)):
+                    d = findposinlist(remove_later[i],rel_sent,0)
+                    del rel_sent[d]
+
+            #ignores time
+            j = -1
+            while j < (len(rel_sent)) -1:
+                j += 1
+                d = findposinlist(rel_sent[j][0],all_sent,42)
+                if all_sent[d][46] != "x":
+                    for i in range(len(all_sent)):
+                        if i == 5 and j == 2:
+                            bb = 8
+                        dummy = instantiable(all_sent,d,i,pot_id,member_prop,False,linked,gen_var2,embed_var)
+
+            candd2 = copy.deepcopy(candd)
+            candd = []
+            for i in range(len(conditionals)):
+                candd.append([conditionals[i][2],conditionals[i][4],""])
+            added = False
+            if pot_id != []:
+                already_done = []
+                pot_id = remove_duplicates2d(pot_id,0,1)
+                # pot_id = fix_id(pot_id,rel_sent,all_sent,linked)
+                pot_id = areident(pot_id,member_prop,all_sent,dv_nam,tot_sent,candd2,not_id,\
+                            candd,prop_sent)
+
                 if pot_id != []:
-                    already_done = []
-                    pot_id = remove_duplicates2d(pot_id,0,1)
-                    # pot_id = fix_id(pot_id,rel_sent,all_sent,linked)
-                    pot_id = areident(pot_id,member_prop,all_sent,dv_nam,tot_sent,candd2,not_id,\
-                                candd,prop_sent)
+                    added = new_cond(pot_id,candd,conditionals,tot_sent,member_prop,\
+                        candd2,all_sent,orel_sent)
 
-                    if pot_id != []:
-                        added = new_cond(pot_id,candd,conditionals,tot_sent,member_prop,\
-                            candd2,all_sent,orel_sent)
-
-                if added:
-                    #we assume that 14 can be none and 18 full, but if 18 is none then the rest must also
-                    #be none
-                    list2 = []
-                    for i in range(len(conditionals)):
-                        list2.append(conditionals[i][4])
-                        for j in range(len(conditionals[i][38])):
-                            d = findposinlist(conditionals[i][38][j],candd2,1)
-                            if d > -1:
-                                #candd2 used here maybe
-                                # print "candd2 used"
-                                if candd2[d] not in candd:
-                                    candd.append(candd2[d])
-                    # st = time.time()
-                    consistent = statement_logic(prop_sent,conditionals,candd,candd2,disjuncts,0)
-                    # en = time.time()
-                    # print en-st
+            if added:
+                #we assume that 14 can be none and 18 full, but if 18 is none then the rest must also
+                #be none
+                list2 = []
+                for i in range(len(conditionals)):
+                    list2.append(conditionals[i][4])
+                    for j in range(len(conditionals[i][38])):
+                        d = findposinlist(conditionals[i][38][j],candd2,1)
+                        if d > -1:
+                            #candd2 used here maybe
+                            # print "candd2 used"
+                            if candd2[d] not in candd:
+                                candd.append(candd2[d])
+                # st = time.time()
+                consistent = statement_logic(prop_sent,conditionals,candd,candd2,disjuncts,0)
+                # en = time.time()
+                # print en-st
 
         if consistent and impl != nonseq and truth_value == "co":
             print "False: " + tot_sent[0][1]
@@ -6294,29 +6338,30 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 ######################
 
 
-
-    prop_sent = rearrange(prop_sent,tot_sent,consistent,impl,g)
+    prop_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent)
     tot_prop_sent.append(prop_sent)
     # end5
     list1 = [tot_sent,tv]
     return list1
 
 
-def rearrange(prop_sent,tot_sent,consistent,impl,g):
+def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,kind=0,conditionals=[]):
 
-    for i in range(len(prop_sent)):
-        if prop_sent[i][0] > 400 and prop_sent[i][0] != "":
-            prop_sent[i][0] = prop_sent[i][0] - g
-        if prop_sent[i][4] > 400 and prop_sent[i][4] != "":
-            prop_sent[i][4] = prop_sent[i][4] - g
-        if prop_sent[i][5] > 400 and prop_sent[i][5] != "":
-            prop_sent[i][5] = prop_sent[i][5] - g
-        if prop_sent[i][6] > 400 and prop_sent[i][6] != "":
-            prop_sent[i][6] = prop_sent[i][6] - g
-        if prop_sent[i][7] > 400 and prop_sent[i][7] != "":
-            prop_sent[i][7] = prop_sent[i][7] - g
+    if proof_type != "l":
 
-    prop_sent.sort()
+        for i in range(len(prop_sent)):
+            if prop_sent[i][0] > 400 and prop_sent[i][0] != "":
+                prop_sent[i][0] = prop_sent[i][0] - g
+            if prop_sent[i][4] > 400 and prop_sent[i][4] != "":
+                prop_sent[i][4] = prop_sent[i][4] - g
+            if prop_sent[i][5] > 400 and prop_sent[i][5] != "":
+                prop_sent[i][5] = prop_sent[i][5] - g
+            if prop_sent[i][6] > 400 and prop_sent[i][6] != "":
+                prop_sent[i][6] = prop_sent[i][6] - g
+            if prop_sent[i][7] > 400 and prop_sent[i][7] != "":
+                prop_sent[i][7] = prop_sent[i][7] - g
+
+        prop_sent.sort()
 
     i = -1
     list2 = []
@@ -6389,6 +6434,97 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g):
                 else:
                     break
 
+
+    if proof_type == 'l':
+        c = tot_sent[-1][0]
+        c += 2
+        nonstandard = []
+        standard_cj = []
+        standard_cd = []
+        j = findposinmd(c,prop_sent,0)
+        tot_sent.append(["","","","","","","","","",""])
+        tot_sent.append(["","_______________________","","","","","","","",""])
+        conditionals4 = copy.deepcopy(conditionals)
+        for i in range(j,len(prop_sent)):
+            if os(prop_sent[i][1]):
+                str1 = prop_sent[i][2] + findinlist(prop_sent[i][1],prop_name,0,2)
+                bool1 = False
+                for d in range(len(all_sent)):
+                    str3 = all_sent[d][42].replace("~","")
+                    if prop_sent[i][1] == str3:
+                        bool1 = True
+                        break
+                if bool1:
+                    standard_cj.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                    prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+                else:
+                    nonstandard.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                    prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+            else:
+                t = findposinmd(prop_sent[i][1],conditionals,4)
+                if prop_sent[i][0] == 32:
+                    bb = 8
+                if t > -1:
+                    if conditionals[t][37] == "":
+                        list2 = get_prop(prop_sent[i][1],True)
+                        conditionals[t][37] = list2[0]
+                        list3 = list2[1]
+                        str1 = list2[0]
+                    else:
+                        list3 = conditionals[t][38]
+                        str1 = conditionals[t][37]
+                else:
+                    list2 = get_prop(prop_sent[i][1],True)
+                    list3 = list2[1]
+                    str1 = list2[0]
+                bool1 = False
+                list4 = mainconn(prop_sent[i][1])
+                if list4[0] != "&":
+                    for d in range(len(list3)):
+                        str4 = list3[d].replace("~","")
+                        bool1 = False
+                        for e in range(len(all_sent)):
+                            str3 = all_sent[e][42].replace("~","")
+                            if str4 == str3:
+                                bool1 = True
+                                break
+
+                if bool1:
+                    d = findposinmd(prop_sent[i][1],conditionals4,4)
+                    if d > -1:
+                        del conditionals4[d]
+                    standard_cd.append([prop_sent[i][0],str1,"","",\
+                    prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
+                                     prop_sent[i][6],prop_sent[i][7]])
+                else:
+                    nonstandard.append([prop_sent[i][0],str1,"","",\
+                    prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
+                                     prop_sent[i][6],prop_sent[i][7]])
+        if conditionals4 != []:
+            for f in range(len(conditionals4)):
+                h = findposinlist(conditionals4[f][4],tot_sent,2)
+                str1 = tot_sent[h][1]
+                list2 = conditionals4[f][38]
+                bool1 = False
+                for d in range(len(list2)):
+                    str4 = list2[d].replace("~","")
+                    bool1 = False
+                    for e in range(len(all_sent)):
+                        str3 = all_sent[e][42].replace("~","")
+                        if str4 == str3:
+                            bool1 = True
+                            break
+                if bool1:
+                    standard_cd.append([conditionals4[f][2],str1,"",tot_sent[h][4],\
+                    tot_sent[h][5],tot_sent[h][6],tot_sent[h][7],\
+                                 tot_sent[h][8],""])
+
+
+
+
+        bb = 8
+
+
     if not consistent or impl == implies:
         list1 = []
         for i in range(len(prop_sent)-1,0,-1):
@@ -6442,6 +6578,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g):
         prop_sent = list2
 
     return prop_sent
+
 
 
 
@@ -6595,7 +6732,7 @@ def instantiable(all_sent,d,e,pot_id,member_prop,diff_nval,linked,gen_var2,embed
     temp_linked = []
     temp_linked2 = []
     one_before_zero = 0
-    if d == 18 and e == 6:
+    if d == 13 and e == 8:
         bb = 8
 
     if (diff_nval and all_sent[d][8] != all_sent[e][8]) or not diff_nval:
@@ -6861,6 +6998,7 @@ def new_cond(pot_id,candd,conditionals,tot_sent,member_prop,candd2,\
 
                 for h in range(len(pot_id)):
                     str2 = pot_id[h][1]
+
                     if str2 in osent:
                         if all_sent[g][9] == "J" and (all_sent[g][14] == gen or \
                             all_sent[g][14] == def_var or all_sent[g][14] == indef):
@@ -6891,6 +7029,7 @@ def new_cond(pot_id,candd,conditionals,tot_sent,member_prop,candd2,\
                                         new_list[s][q] = str1
                                         if s + 1 > most:
                                             most += 1
+
                 oprop = oprop.replace("~","")
                 greek_prop = findinlist(oprop,conversion,0,1)
                 ocond_prop = ocond_prop.replace(greek_prop,osent)
@@ -7489,18 +7628,31 @@ def get_conjuncts(str1, bool1 = False):
                     str3 = str2
                 elif str1[i-1:i] != "~" and str5 in subscripts:
                     str3 = str2 + str5
+                    str2 = str2 + str5
                 elif str1[i-1:i] == "~" and str5 in subscripts:
                     str3 = "~" + str2 + str5
+                    str2 = str2 + str5
+
             k = 1
             str3 = str3.strip()
             arr1.append(str3)
 
+
+
     return arr1
 
-def get_prop(str1):
+
+
+
+def get_prop(str1,recon=False):
 
     global subscripts
     arr1 = []
+
+    if recon:
+        greek = [unichr(945 + t) for t in range(50)]
+        gr_lst = []
+
     for i in range (len(str1)):
         str2 = str1[i:i+1]
         str5 = str1[i+1:i+2]
@@ -7518,8 +7670,37 @@ def get_prop(str1):
             elif str1[i-1:i] == "~" and str5 in subscripts:
                 str3 = "~" + str2 + str5
 
+            if recon:
+                if not findposinmd(str2,gr_lst,0,True):
+                    gr_lst.append([str2,greek[0]])
+                    del greek[0]
+
             str3 = str3.strip()
             arr1.append(str3)
+
+    if recon:
+        if str1[0] == "~":
+            i = 0
+        else:
+            i = -1
+        while i < len(str1)-1:
+            i += 1
+            str3 = str1[i:i+1]
+            if str3.islower():
+                str4 = str1[i+1:i+2]
+                if str4 in subscripts:
+                    str3 = str3+str4
+
+                str5 = findinlist(str3,gr_lst,0,1)
+                str1 = str1[:i] + str5 + str1[i+1:]
+
+        for i in range(len(gr_lst)):
+            str7 = gr_lst[i][1]
+            str8 = gr_lst[i][0]
+            str3 = findinlist(str8,prop_name,0,2)
+            str1 = str1.replace(str7,str3)
+        return [str1,arr1]
+
 
     return arr1
 
@@ -9435,9 +9616,9 @@ def get_result(post_data,archive_id=None,request=None):
         test_sent[k] = list2[0]
         tot_prop_name.append(prop_name)
         yy = ""
-        # if list2[1] == "False":
-        #     yy = k+1
-        #     break
+        if list2[1] == "False":
+            yy = k+1
+            break
         en1 = time.time()
         z = en1 - st1
         print str(k) + " - " + str("{0:.2f}".format(z))
@@ -9461,6 +9642,7 @@ if excel or one_sent or temp17:
     if excel:
         wb4.save('../inference engine new.xlsx')
     if one_sent:
+        pass
         wb4.save('../temp_proof.xlsx')
     if words_used:
         wb5.save('../dictionary last perfect.xlsx')
