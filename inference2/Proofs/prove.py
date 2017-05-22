@@ -10,14 +10,19 @@ from claims_new import pop_sent
 # from django_tools.middlewares import ThreadLocal
 # from inference2 import views
 tot_tim = time.time()
-
+st_log_tim = 0
+def_tim = 0
+inst_tim = 0
+# averaged .076 on 5.22 (proof type 'n'), .039 definitions, .004 statement logic
+# averaged .059 on 5.22 proof type 'n', .023 definitions, .004 statement
+# but just prior to that the speed was .066
 
 
 j = 2
-proof_type = 'n' # if l then long proof showing decision procedure for instantiation
+proof_type = 'p' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
 stp = 0
-print_to_doc = False
+print_to_doc = True
 if j == 1:
     django2 = False
     temp17 = False
@@ -105,6 +110,7 @@ candd2 = []
 rel_conj = []
 ind_var = []
 gen_var = []
+already_defined = []
 conc = []
 prop_sent = []
 tagged_nouns = []
@@ -981,7 +987,7 @@ def rel_pro_elim(all_sent,m,tot_sent,i,words,idf_var):
     dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
 
 def ande(all_sent,m,tot_sent,i,words,idf_var):
-
+    # this seperates a sentence with an 'and' coordinator into two
     all_sent[m][66] = None
     old_sent = all_sent[m][0]
     oldp = all_sent[m][42]
@@ -997,6 +1003,7 @@ def ande(all_sent,m,tot_sent,i,words,idf_var):
 def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
         def_atoms,num_sent):
 
+    zz = time.time()
     all_sent = remove_duplicates(all_sent,0)
     pronouns2 = copy.deepcopy(words[24])
     if "it" in pronouns2:
@@ -1028,7 +1035,7 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
     #unique objects which form a group, in the definiednum the relation is = but in the
     #definiens the IG relation appears
     unq_gr = ['time'] #unique group
-    global sn,anaphora,gen_var
+    global sn,anaphora,gen_var,def_tim
     bool1 = False
     once = False
     i_defined = False
@@ -1332,7 +1339,8 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
 # if we state that something is not a concept then we need to falisfy that
     dummy = concept(all_sent,tot_sent,dv_nam,definitions,posp)
     j = time.time()
-    j = j - h_tim
+    j = j - zz
+    def_tim += j
     #end7
     return
 
@@ -2250,7 +2258,10 @@ def rel_div(all_sent,m,tot_sent,i,pos,words,idf_var):
         list6.remove(i)
         list6.remove(c)
         if all_sent[m][8] != None:
-            list6.remove(8)
+            try:
+                list6.remove(8)
+            except ValueError:
+                bb = 8
         all_sent[m][46] = list6
         all_sent[m][i] = None
         all_sent[m][c] = None
@@ -2570,6 +2581,39 @@ def prop_type2(dfn_num,sent_num,paren_conn,paren_num):
                 return 'x'
 
 def prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con):
+    # conjunct within idisjunct within antecedent - cda
+    # idisjunct within a conjunct within antecedent - dca
+    # conjunct within idisjunct within consequent - cdq
+    # idisjunct within a conjunct within consequent - dcq
+    # conjunct within idisjunct within bic1 - cdb
+    # idisjunct within a conjunct within bic1 - dcb
+    # conjunct within idisjunct within bic2 - cdf
+    # idisjunct within a conjunct within bic2 - dcf
+
+    # conjunct within xdisjunct within antecedent - cxa
+    # xdisjunct within a conjunct within antecedent - xca
+    # conjunct within xdisjunct within consequent - cxq
+    # xdisjunct within a conjunct within consequent - xcq
+    # conjunct within xdisjunct within bic1 - cxb
+    # xdisjunct within a conjunct within bic1 - xcb
+    # conjunct within xdisjunct within bic2 - cxf
+    # xdisjunct within a conjunct within bic2 - xcf
+
+    # xdisjunct within antecedent - xa
+    # xdisjunct within consequent - xq
+    # xdisjunct within bic1
+    # xdisjunct within bic2
+    # conjunct within antecedent - ca
+    # conjunct within consequent - cq
+    # conjunct within bic1 - cb
+    # conjunct within bic2 - cf
+    # idisjunct within antecedent - da
+    # idisjunct within consequent - dq
+    # idisjunct within bic1 - db
+    # idisjunct within bic2 - df
+    # idisjunct - d
+    # xdisjunct - x
+
 
     global sn
     str2 = None
@@ -3086,7 +3130,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #this is for those determinatives which have negations in their definitions where
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","many"+un,'no']
-    if definiendum == "jim":
+    if definiendum == "point":
         bb = 7
     new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
@@ -3110,10 +3154,20 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     str1 = copy.copy(definition)
     #if bool1 is false then there is a series of conjuncts that need to be removed from
     # the definition
-    if kind == "" or kind == 'R':
-        def_info = find_sentences(definition,True)
+    temp_ad = []
+    ad = findposinmd(definiendum,already_defined,0)
+    if ad == -1:
+        already_df = False
+        if kind == "" or kind == 'R':
+            def_info = find_sentences(definition,True)
+        else:
+            def_info = find_sentences(definition)
+        temp_ad.append(definiendum)
+        temp_ad.append(def_info)
     else:
-        def_info = find_sentences(definition)
+        already_df = True
+        def_info = already_defined[ad][1]
+
     def_loc = def_info[7]
     def_num = def_info[4][def_loc][0]
     dfn_num = def_num + "2"
@@ -3246,6 +3300,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     not_many = False
     first_in_def = [def_num+"1",def_num + "11"]
     temp_plural = []
+    temp_te = []
     heir_num = []
     spec_var = ['y','x','w']
     rule_found = False
@@ -3301,6 +3356,9 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
         kind = "determinative"
         rule_found = True
     #as we loop through the sentences they must be in the definition which is the point of n
+
+
+    z = -1
     for i in range(len(def_info[0])):
         if i == 21:
             bb = 8
@@ -3309,185 +3367,208 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             rule = "DF " + definiendum
             rule_found = True
             def_con = iff
+            if already_df and kind == "":
+                break
+
         elif def_info[4][i][1] == conditional and not rule_found:
             def_con = conditional
             rule = "NC " + definiendum
             rule_found = True
+            if already_df and kind == "":
+                break
         bool3 = False
         if "=" in def_info[3][i] and n != def_num:
             bool3 = True
-        # if mini_e in def_info[3][i]:
-        #     bool3 = True
         if os(def_info[3][i]) == True and not bool3:
-        # if os(def_info[3][i]) == True and n == def_num:
-            temp_str = space_words(def_info[3][i])
-            temp_str = temp_str.replace("(","")
-            temp_str = temp_str.replace(")","")
-            telist7 = categorize_words(words,temp_str,idf_var,all_sent,1,False,"","",taken_out)
+            if not already_df:
+                temp_str = space_words(def_info[3][i])
+                temp_str = temp_str.replace("(","")
+                temp_str = temp_str.replace(")","")
+                telist7 = categorize_words(words,temp_str,idf_var,all_sent,1,False,"","",taken_out)
+                if kind != "":
+                    telist8 = copy.deepcopy(telist7)
+                    temp_te.append(telist8)
+            else:
+                z += 1
+                telist7 = copy.deepcopy(already_defined[ad][2][z])
+
+
             bool1 = False
             bool2 = False
             bb = 8
             # if bb == 9:
             #     pass
-            if telist7[9] == "n":
-                pass
-            else:
-                if kind == 'AS' and telist7[9] == 'R':
-                    telist7[9] = anaphora[0]
-                    if i == 6:
-                        telist7[5] = anaphora[1]
-                    str1 = build_sent(telist7)
-                elif kind != "" and kind != 'R' and telist7[9] == "R":
-                    telist7[42] = True
-                    if telist7[3] != None:
-                        temp_det = telist7[3]
-                        has_detrm = True
-                    else:
-                        has_detrm = False
-                    if ident_det:
-                        neg1 = telist7[8]
-                        if telist7[5] == 'b':
-                            bool1 = True
-                        if telist7[5] == 'z':
-                            bool2 = True
-                    str2 = ''
-                    for p in range(2,80):
-            # if the variable in the original definition is z,y,x,w then that must
-            # go into the new definition in its proper place
-                        if p == 46:
-                            bb = 8
-                        if telist7[p] in spec_var:
-                            str2 = idf_var[0]
-                            spec_var.remove(telist7[p])
-                            match_dv.append([telist7[p],str2])
-                            match_type.append(9)
-                            del idf_var[0]
-                        if p == j and str2 != "" and str2 != None:
-                            telist7[p] = str2
-                        elif p != 46 and p != 56:
-                            telist7[p] = all_sent[m][p]
-                            list1.append(all_sent[m][p])
+            if kind == 'AS' and telist7[9] == 'R':
+                telist7[9] = anaphora[0]
+                if i == 6:
+                    telist7[5] = anaphora[1]
+                str1 = build_sent(telist7)
+            elif kind != "" and kind != 'R' and telist7[9] == "R":
+                telist7[42] = True
+                if telist7[3] != None:
+                    temp_det = telist7[3]
+                    has_detrm = True
+                else:
+                    has_detrm = False
+                if ident_det:
+                    neg1 = telist7[8]
+                    if telist7[5] == 'b':
+                        bool1 = True
+                    if telist7[5] == 'z':
+                        bool2 = True
+                str2 = ''
 
-
-
-            #not many is the one negated determinative which is defined in this way and its
-            #negation is removed in the definiens
-                    if definiendum == 'not' + ui + ' ' + 'many' + ud:
-                        if all_sent[m][8] == 'not' + ui and def_info[4][i][0] not in first_in_def:
-                            telist7[8] = ""
-                            telist7[k] = 'exactly_one'
-                            str2 = findinlist(ovar,plural_c,0,1)
-                            telist7[j] = str2
-                        if def_info[4][i][0] in first_in_def:
-                            telist7[j] = ovar
-                            if all_sent[m][47] == 'not' + ui:
-                                telist7[47] = 'not' + ui
-                            elif all_sent[m][8] == 'not' + ui:
-                                telist7[8] = 'not' + ui
-                                telist7[47] = None
-                                not_many = True
-            #just in case the list has a tagged noun
-                    telist7[45] = all_sent[m][45]
-            # for the determinatives which have negations in their definition then we need
-            # to do something special
-                    list1 = new_categories(telist7,words,idf_var,all_sent,True)
-                    telist7[46] = list1[46]
-                    telist7[56] = list1[56]
-
-                    if ident_det:
-                        if j == 5 or j == 14:
-                            telist7[8] = neg1
-                        elif j == 18 and neg1 == "~":
-                            telist7[49] = neg1
-                        elif j == 22 and neg1 == "~":
-                            telist7[50] = neg1
-                        elif j == 26 and neg1 == "~":
-                            telist7[51] = neg1
-            # the determinatives which have an identity statement in them behave differently
-            # these are 'only' and 'anything except'
-                    if bool1:
-                        telist7[j] = ovar
-                    if has_detrm:
-                        telist7[k] = temp_det
-                    if definiendum == 'everything_except' + up and i == 13:
-                        telist7[8] = "~"
+                for p in range(2,80):
+        # if the variable in the original definition is z,y,x,w then that must
+        # go into the new definition in its proper place
+                    if p == 46:
+                        bb = 8
+                    if telist7[p] in spec_var:
+                        str2 = idf_var[0]
+                        spec_var.remove(telist7[p])
+                        match_dv.append([telist7[p],str2])
                         match_type.append(9)
-                        if 'y' in idf_var:
-                            telist7[j] = 'y'
-                            match_dv.append(['y','y'])
-                        else:
-                            telist7[j] = idf_var[0]
-                            match_dv.append(['y',idf_var[0]])
-                            new_var.append(idf_var[0])
-                            del idf_var[0]
-                    if (definiendum == 'all' and i == 4) or (definiendum == 'only' + up and i==9):
-                        telist7[j] = 'd'
-                        telist7[42] = None
+                        del idf_var[0]
+                    if p == j and str2 != "" and str2 != None:
+                        telist7[p] = str2
+                    elif p != 46 and p != 56:
+                        telist7[p] = all_sent[m][p]
+                        list1.append(all_sent[m][p])
 
-                    if definiendum == 'any' + un and i == 2:
-                        telist7[10] = "every"
-                    if bool2:
-                        str2 = findinlist("z",match_dv,0,1)
+
+
+                #not many is the one negated determinative which is defined in this way and its
+                #negation is removed in the definiens
+                if definiendum == 'not' + ui + ' ' + 'many' + ud:
+                    if all_sent[m][8] == 'not' + ui and def_info[4][i][0] not in first_in_def:
+                        telist7[8] = ""
+                        telist7[k] = 'exactly_one'
+                        str2 = findinlist(ovar,plural_c,0,1)
                         telist7[j] = str2
-            # if the sentence is first then we must restor the definiendum to it
-                    if def_info[4][i][0] in first_in_def and not not_many:
-                        telist7[k] = definiendum
-            # what this does is it puts the original variable back into the definiendum
-                        if kind != "pronoun":
-                            telist7[j] = ovar
-                    str1 = build_sent(telist7)
-                    sdefinition = sdefinition.replace(def_info[3][i],str1)
-                else:
-                    str1 = build_sent(telist7)
-        # if a def sent is part of the defiendum then it does not have to be added to the all
-        # all_sent list
-                if def_info[4][i][0][:-1] in first_in_def or def_info[4][i][0] in first_in_def:
-                    telist7[40] = True
-                else:
-                    telist7[40] = False
-                telist7[0] = str1
-                sent_num = def_info[4][i][0]
-                paren_num = def_info[4][i][0][:-1]
-                gparen_num = def_info[4][i][0][:-2]
-                paren_conn = findinlist(paren_num,def_info[4],0,1)
-                gparen_conn = findinlist(gparen_num,def_info[4],0,1)
+                    if def_info[4][i][0] in first_in_def:
+                        telist7[j] = ovar
+                        if all_sent[m][47] == 'not' + ui:
+                            telist7[47] = 'not' + ui
+                        elif all_sent[m][8] == 'not' + ui:
+                            telist7[8] = 'not' + ui
+                            telist7[47] = None
+                            not_many = True
+        #just in case the list has a tagged noun
+                telist7[45] = all_sent[m][45]
+        # for the determinatives which have negations in their definition then we need
+        # to do something special
+                list1 = new_categories(telist7,words,idf_var,all_sent,True)
+                telist7[46] = list1[46]
+                telist7[56] = list1[56]
 
-                #the dfn_num (definiens number) will always have three digits
-                # any sentence that is not a conjunct in the definiens should not be defined
+                if ident_det:
+                    if j == 5 or j == 14:
+                        telist7[8] = neg1
+                    elif j == 18 and neg1 == "~":
+                        telist7[49] = neg1
+                    elif j == 22 and neg1 == "~":
+                        telist7[50] = neg1
+                    elif j == 26 and neg1 == "~":
+                        telist7[51] = neg1
+        # the determinatives which have an identity statement in them behave differently
+        # these are 'only' and 'anything except'
+                if bool1:
+                    telist7[j] = ovar
+                if has_detrm:
+                    telist7[k] = temp_det
+                if definiendum == 'everything_except' + up and i == 13:
+                    telist7[8] = "~"
+                    match_type.append(9)
+                    if 'y' in idf_var:
+                        telist7[j] = 'y'
+                        match_dv.append(['y','y'])
+                    else:
+                        telist7[j] = idf_var[0]
+                        match_dv.append(['y',idf_var[0]])
+                        new_var.append(idf_var[0])
+                        del idf_var[0]
+                if (definiendum == 'all' and i == 4) or (definiendum == 'only' + up and i==9):
+                    telist7[j] = 'd'
+                    telist7[42] = None
 
-                if sent_num[:3] == dfn_num:
-                    if gparen_num != def_num and gparen_conn in detached:
-                        if gparen_conn == conditional and paren_num[-2] == "1":
-                            telist7[46] = [200]
-                        elif gparen_conn == iff:
-                            telist7[46] = [200]
-                    elif paren_num != def_num and paren_conn in detached:
-                        if sent_num[-1] == "1" and paren_conn == conditional:
-                            telist7[46] = [200]
-                        elif paren_conn == iff:
-                            telist7[46] = [200]
+                if definiendum == 'any' + un and i == 2:
+                    telist7[10] = "every"
+                if bool2:
+                    str2 = findinlist("z",match_dv,0,1)
+                    telist7[j] = str2
+        # if the sentence is first then we must restor the definiendum to it
+                if def_info[4][i][0] in first_in_def and not not_many:
+                    telist7[k] = definiendum
+        # what this does is it puts the original variable back into the definiendum
+                    if kind != "pronoun":
+                        telist7[j] = ovar
+                str1 = build_sent(telist7)
+                sdefinition = sdefinition.replace(def_info[3][i],str1)
+            else:
+                str1 = build_sent(telist7)
+# if a def sent is part of the defiendum then it does not have to be added to the all
+# all_sent list
+            if def_info[4][i][0][:-1] in first_in_def or def_info[4][i][0] in first_in_def:
+                telist7[40] = True
+            else:
+                telist7[40] = False
+            telist7[0] = str1
+            sent_num = def_info[4][i][0]
+            paren_num = def_info[4][i][0][:-1]
+            gparen_num = def_info[4][i][0][:-2]
+            paren_conn = findinlist(paren_num,def_info[4],0,1)
+            gparen_conn = findinlist(gparen_num,def_info[4],0,1)
 
-                telist7[68] = sent_num
-                if max_num == 0:
-                    max_num = len(sent_num)
-                elif len(sent_num) > max_num:
-                    max_num = len(sent_num)
+            #the dfn_num (definiens number) will always have three digits
+            # any sentence that is not a conjunct in the definiens should not be defined
 
-                # cnn_type = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
-                # #if the cnn_type is 'an' or bic1 or bic2 then we need not define it
-                # if cnn_type == 'an' or cnn_type == 'bic' or cnn_type == 'cn':
-                #      telist7[46] = 'x'
+            if sent_num[:3] == dfn_num:
+                if gparen_num != def_num and gparen_conn in detached:
+                    if gparen_conn == conditional and paren_num[-2] == "1":
+                        telist7[46] = [200]
+                    elif gparen_conn == iff:
+                        telist7[46] = [200]
+                elif paren_num != def_num and paren_conn in detached:
+                    if sent_num[-1] == "1" and paren_conn == conditional:
+                        telist7[46] = [200]
+                    elif paren_conn == iff:
+                        telist7[46] = [200]
 
-                if paren_conn == None:
-                    bb = 7
+            telist7[68] = sent_num
+            if max_num == 0:
+                max_num = len(sent_num)
+            elif len(sent_num) > max_num:
+                max_num = len(sent_num)
 
-                telist7[54] = str(sn) + "." + str(paren_num)
-                telist7[44] = def_info[6][i][1]
-                heir_num.append(def_info[4][i][0])
-                for s in range(0,3):
-                    telist7.append(None)
-                def_sent.append(telist7)
+            # cnn_type = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
+            # #if the cnn_type is 'an' or bic1 or bic2 then we need not define it
+            # if cnn_type == 'an' or cnn_type == 'bic' or cnn_type == 'cn':
+            #      telist7[46] = 'x'
 
+            if paren_conn == None:
+                bb = 7
+
+            telist7[54] = str(sn) + "." + str(paren_num)
+            telist7[44] = def_info[6][i][1]
+            heir_num.append(def_info[4][i][0])
+            for s in range(0,3):
+                telist7.append(None)
+            def_sent.append(telist7)
+    if not already_df:
+        if kind == "":
+            list9 = copy.deepcopy(def_sent)
+            temp_ad.append(list9)
+            tem_he_num = copy.deepcopy(heir_num)
+            temp_ad.append(tem_he_num)
+        else:
+            temp_ad.append(temp_te)
+        list10 = copy.deepcopy(temp_ad)
+        already_defined.append(list10)
+
+    if already_df and kind == "":
+        def_sent = copy.deepcopy(already_defined[ad][2])
+        heir_num = copy.deepcopy(already_defined[ad][3])
+    #ffd
     # the purpose of this is that the subject of the definiendum must match the subject
     # of the osent to be defined.  if its a relation then the object must also match
     if (kind == "" or kind == "R" or kind == 'AS'):
@@ -6365,7 +6446,9 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 ######################
 
 
-    prop_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2)
+    list3 = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2)
+    tot_sent = list3[0]
+    prop_sent = list3[1]
     tot_prop_sent.append(prop_sent)
     # end5
     list1 = [tot_sent,tv]
@@ -6461,6 +6544,7 @@ def rearrange_tot_sent(list5,list1,list2):
                     tot_sent[i][j+5] = g
             else:
                 break
+
     return tot_sent
 
 def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
@@ -6596,6 +6680,63 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,kind=0,\
 
 
         return tot_sent
+    else:
+        if not consistent or impl == implies:
+            list1 = []
+            for i in range(len(prop_sent)-1,0,-1):
+                if prop_sent[i][4] == "":
+                    break
+                if (i != len(prop_sent)-1 and prop_sent[i][0] in list1) or i == len(prop_sent)-1:
+                    for j in range(4,8):
+                        if prop_sent[i][j] == None or prop_sent[i][j] == "":
+                            break
+                        list1.append(prop_sent[i][j])
+            list1.append(prop_sent[-1][0])
+            list1.sort()
+            str1 = str(list1[0])
+            start = tot_sent[-1][0]
+            if start == "":
+                for i in range(len(tot_sent)-1,0,-1):
+                    if tot_sent[i][0] != "":
+                        start = tot_sent[i][0]
+                        break
+
+            bool1 = False
+            list3 = []
+            list2 = []
+            for i in range(len(prop_sent)):
+                if prop_sent[i][0] <= start:
+                    list2.append(prop_sent[i])
+                    list3.append([prop_sent[i][0],prop_sent[i][0]])
+                elif prop_sent[i][0] in list1:
+                    if not bool1:
+                        bool1 = True
+                        j = list3[-1][0]
+                    j += 1
+                    list3.append([prop_sent[i][0],j])
+                    prop_sent[i][0] = j
+                    list2.append(prop_sent[i])
+                    anc1 = prop_sent[i][4]
+                    nanc1 = findinlist(anc1,list3,0,1)
+                    list2[-1][4] = nanc1
+                    if prop_sent[i][5] != "" and prop_sent[i][5] != None:
+                        anc1 = prop_sent[i][5]
+                        nanc1 = findinlist(anc1,list3,0,1)
+                        list2[-1][5] = nanc1
+                        if prop_sent[i][6] != "" and prop_sent[i][6] != None:
+                            anc1 = prop_sent[i][6]
+                            nanc1 = findinlist(anc1,list3,0,1)
+                            list2[-1][6] = nanc1
+                            if prop_sent[i][7] != "" and prop_sent[i][7] != None:
+                                anc1 = prop_sent[i][7]
+                                nanc1 = findinlist(anc1,list3,0,1)
+                                list2[-1][7] = nanc1
+            prop_sent = list2
+
+    return [tot_sent,prop_sent]
+
+
+
 
 def add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent):
     # this adds new sentences to the tot_sent list
@@ -7729,8 +7870,11 @@ def get_prop(str1,recon=False,greek2=[]):
                         str6 = str3[1:]
                     else:
                         str6 = str3
-                    gr_lst.append([str6,greek[0]])
-                    del greek[0]
+                    if greek2 == []:
+                        greek2 = copy.deepcopy(greek)
+                    gr_lst.append([str6,greek2[0]])
+                    del greek2[0]
+
 
             str3 = str3.strip()
             arr1.append(str3)
@@ -7766,6 +7910,20 @@ def get_prop(str1,recon=False,greek2=[]):
 
     return arr1
 
+def isstandard(list1,all_sent):
+    # this determines whether or not a conditional is standard
+    for i in range(len(list1)):
+        if os(list1[i]):
+            for j in range(len(all_sent)):
+                bool1 = False
+                if all_sent[j][42][0] == "~":
+                    str1 = all_sent[j][42][1:]
+                    if str1 == list1[i]:
+                        bool1 = True
+                        break
+                return False
+    return True
+
 def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
 
     global sn
@@ -7777,10 +7935,27 @@ def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
         list7[2] = sn + 1
     else:
         list7[2] =  num
+
     list7[4] = str2
     list7[5] = ""
     list9 = []
     j = 0
+    if proof_type == 'o':
+        for i in range(len(def_info[0])):
+            def_info[0][i] = unenclose(def_info[0][i])
+        if def_info[4][0][1] == iff:
+            list7[3] = "e"
+        elif def_info[4][0][1] == conditional:
+            list7[3] = "c"
+        elif def_info[4][0][1] == xorr:
+            list7[3] = "x"
+        elif def_info[4][0][1] == idisj:
+            list7[3] = "d"
+        standard = isstandard(def_info[0])
+
+
+
+
     str2 = remove_outer_paren(str2)
     if mainc == iff:
         list7[3] = "e"
@@ -8101,7 +8276,7 @@ def modus_ponens(all_sent,conditionals, candd,candd2, prop_sent,kind):
 
     return True
 
-def disjunction_heirarchy(conditionals, str5,d,new_disj = False):
+def disjunction_heirarchy(conditionals,str5,d,new_disj = False):
 
     global prop_name
     global sn,pn
@@ -9095,10 +9270,10 @@ def extract_list(list1,d):
 
 def statement_logic(prop_sent,all_sent, conditionals, candd,candd2, disjuncts,kind="", conc="", impl=""):
 
-    global time1
-    st_log_tim = time.time()
+    global time1,st_log_tim
+    b = time.time()
     consistent = modus_ponens(all_sent,conditionals, candd,candd2, prop_sent,kind)
-    
+
     if consistent == False:
         return False
     if kind != 2:
@@ -9118,6 +9293,7 @@ def statement_logic(prop_sent,all_sent, conditionals, candd,candd2, disjuncts,ki
             dummy = finddisj(conditionals,disjuncts)
     c = time.time()
     d = c - b
+    st_log_tim += d
     return True
 
 def finddisj(conditionals,disjuncts, cate=""):
@@ -9666,7 +9842,7 @@ def get_result(post_data,archive_id=None,request=None):
                        def_atoms,num_sent)
         list2 = identity(all_sent,tot_sent,basic_objects,words,candd,candd2,\
                 conditionals,prop_sent,prop_name,id_num,identities,idf_var,\
-                test_sent[k][0][3],greek)
+                test_sent[k][0][3],greek2)
         if proof_type == "l":
             test_sent[k] = list2
         else:
@@ -9681,7 +9857,11 @@ def get_result(post_data,archive_id=None,request=None):
         print str(k) + " - " + str("{0:.2f}".format(z))
     en = time.time()
     g = (en-st)/(k+1)
-    print "average " + str("{0:.2f}".format(g))
+    m = def_tim/(k+1)
+    dd = st_log_tim/(k+1)
+    print "average " + str("{0:.3f}".format(g))
+    print "time used in definitions " + str("{0:.3f}".format(m))
+    print "time used in statement logic " + str("{0:.3f}".format(dd))
     dummy = print_sent_full(test_sent,p,tot_prop_name,words,yy)
     if django2:
         views.progressbar_send(request,0,100,100,2)

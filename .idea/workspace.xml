@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
     </list>
@@ -35,20 +36,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.3333333">
-              <caret line="9340" column="20" selection-start-line="9340" selection-start-column="12" selection-end-line="9340" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#34#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="last_perfect.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="52.77778">
-              <caret line="8414" column="8" selection-start-line="8414" selection-start-column="0" selection-end-line="8414" selection-end-column="8" />
+            <state vertical-scroll-proportion="-11.148149">
+              <caret line="3498" column="0" selection-start-line="3498" selection-start-column="0" selection-end-line="3498" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -59,11 +48,21 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="360.15833">
-              <caret line="9100" column="4" selection-start-line="9100" selection-start-column="4" selection-end-line="9100" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.4390244">
+              <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="temp.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -72,7 +71,7 @@
         <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2416" column="0" selection-start-line="2416" selection-start-column="0" selection-end-line="2416" selection-end-column="0" />
+              <caret line="1801" column="0" selection-start-line="1801" selection-start-column="0" selection-end-line="1801" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -161,9 +160,9 @@
         <option value="$PROJECT_DIR$/inference2/Proofs/ex_dict new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
+        <option value="$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
-        <option value="$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
       </list>
     </option>
@@ -207,7 +206,7 @@
     <panes />
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -482,7 +481,13 @@
       <option name="project" value="LOCAL" />
       <updated>1495441022381</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="put the all_sent list in the statement logic definition">
+      <created>1495449131011</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1495449131011</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -498,7 +503,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37768924" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2934363" sideWeight="0.48787448" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3828648" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37751004" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -552,14 +557,15 @@
     <MESSAGE value="major changes" />
     <MESSAGE value="finished add_stan_sent definition" />
     <MESSAGE value="printed sentences into 3 categories: nonstandard, standard attached and standard detached." />
-    <option name="LAST_COMMIT_MESSAGE" value="printed sentences into 3 categories: nonstandard, standard attached and standard detached." />
+    <MESSAGE value="put the all_sent list in the statement logic definition" />
+    <option name="LAST_COMMIT_MESSAGE" value="put the all_sent list in the statement logic definition" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="5824" />
+      <option name="time" value="5995" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -574,12 +580,7 @@
         <watch expression="importer.data['archives']" />
       </configuration>
       <configuration name="PythonConfigurationType">
-        <watch expression="cnjts" language="Python" />
-        <watch expression="prop_name" language="Python" />
-        <watch expression="gen_var" language="Python" />
-        <watch expression="qn" language="Python" />
-        <watch expression="prop_sent" language="Python" />
-        <watch expression="subscripts" language="Python" />
+        <watch expression="already_defined" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -912,10 +913,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="52.77778">
+          <caret line="8414" column="8" selection-start-line="8414" selection-start-column="0" selection-end-line="8414" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2416" column="0" selection-start-line="2416" selection-start-column="0" selection-end-line="2416" selection-end-column="0" />
+          <caret line="1801" column="0" selection-start-line="1801" selection-start-column="0" selection-end-line="1801" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -923,24 +931,15 @@
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3333333">
-          <caret line="9340" column="20" selection-start-line="9340" selection-start-column="12" selection-end-line="9340" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="52.77778">
-          <caret line="8414" column="8" selection-start-line="8414" selection-start-column="0" selection-end-line="8414" selection-end-column="8" />
+        <state vertical-scroll-proportion="-11.148149">
+          <caret line="3498" column="0" selection-start-line="3498" selection-start-column="0" selection-end-line="3498" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
@@ -949,8 +948,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="360.15833">
-          <caret line="9100" column="4" selection-start-line="9100" selection-start-column="4" selection-end-line="9100" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.4390244">
+          <caret line="12" column="14" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
