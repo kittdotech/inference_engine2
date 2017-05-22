@@ -14,10 +14,10 @@ tot_tim = time.time()
 
 
 j = 2
-proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 3 # if n then proof type before may 1
-stp = 8
-print_to_doc = True
+proof_type = 'n' # if l then long proof showing decision procedure for instantiation
+strt = 0 # if n then proof type before may 1
+stp = 0
+print_to_doc = False
 if j == 1:
     django2 = False
     temp17 = False
@@ -179,6 +179,7 @@ idf_var2.remove("l")
 idf_var3 = [unichr(122 - t) + l1 for t in range(25)]
 idf_var4 = [unichr(122 - t) + l2 for t in range(25)]
 idf_var2 = idf_var2 + idf_var3 + idf_var4
+greek = [unichr(945 + t) for t in range(50)]
 p = 1
 subscripts = [l1,l2,l3,l4]
 
@@ -993,7 +994,8 @@ def ande(all_sent,m,tot_sent,i,words,idf_var):
     list1 = new_categories(list1,words,idf_var,all_sent,True)
     dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
 
-def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,def_atoms,num_sent):
+def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
+        def_atoms,num_sent):
 
     all_sent = remove_duplicates(all_sent,0)
     pronouns2 = copy.deepcopy(words[24])
@@ -5288,7 +5290,7 @@ def axioms(list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,prop_
     if added:
         candd = get_rel_conj(candd,conditionals)
         conditionals5 = copy.deepcopy(conditionals)
-        consistent = statement_logic(prop_sent,conditionals5,candd,candd2,disjuncts,0)
+        consistent = statement_logic(prop_sent,all_sent,conditionals5,candd,candd2,disjuncts,0,all_sent)
 
         if consistent:
             bb = 8
@@ -5395,7 +5397,9 @@ def axioms2(pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
     tot_sent.append([sn,nax,naxp,"","SUB",e,sn-1,"",""])
     prop_sent.append([sn,naxp,"","","","","","","",""])
     list2 = mainconn(naxp)
-    list1 = prepare_iff_elim(naxp,list2[0],list2[1],sn,tot_sent)
+    enc_naxp = enclose(naxp)
+    def_info = find_sentences(enc_naxp)
+    list1 = prepare_iff_elim(def_info,naxp,all_sent,list2[0],list2[1],sn,tot_sent)
     list1[37] = nax
     conditionals.append(list1)
     sn += 1
@@ -5412,7 +5416,9 @@ def axioms2(pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
     tot_sent.append([sn,subst4,subst4p,"","SUB",sn-1,"","",""])
     prop_sent.append([sn,subst4p,"","","","","","","",""])
     list2 = mainconn(subst4p)
-    list1 = prepare_iff_elim(subst4p,list2[0],list2[1],sn,tot_sent)
+    enc_subst4p = enclose(subst4p)
+    def_info = find_sentences(enc_subst4p)
+    list1 = prepare_iff_elim(def_info,subst4p,all_sent,list2[0],list2[1],sn,tot_sent)
     list1[37] = subst4
     conditionals.append(list1)
     cnjts.append(sent2p)
@@ -6000,9 +6006,23 @@ def cat_atoms(j,i,list,members,basic_objects,str1,bo2,words,consq,rel,basic_cat)
     return
 
 
+def prepare_prop_type(def_info,all_sent):
+    # this determine whether an atomic sent in an attached sent is conjunctive,
+    # disjunctive, etc
+
+    for y in range(len(def_info[0])):
+        if os(def_info[0][y]):
+            def_con = def_info[4][y][1]
+            sent_num = def_info[4][y][0]
+            paren_num = def_info[4][y][0][:-1]
+            gparen_num = def_info[4][y][0][:-2]
+            paren_conn = findinlist(paren_num,def_info[4],0,1)
+            gparen_conn = findinlist(gparen_num,def_info[4],0,1)
+            str9 = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
+    return str9
 
 def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
-    prop_sent,prop_name,id_num,identities,idf_var,truth_value):
+    prop_sent,prop_name,id_num,identities,idf_var,truth_value,greek2):
 
     global sn,psent,impl,definite2,ind_var,gen_var,idf_var2,never_used,simple_id,cnjts,pn,affneg
 
@@ -6027,13 +6047,14 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
     # dummy = quick_print([],tot_sent,[],1,0,1,0)
 
-    consistent = plan(sent,prop_sent,candd,candd2,conditionals, prop_name,disjuncts,tot_sent,2,negat)
+    consistent = plan(sent,all_sent,prop_sent,candd,candd2,conditionals, prop_name,disjuncts,tot_sent,2,negat)
 
     if proof_type == "l":
 
         k = sn
         g = sn
-        tot_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,1,conditionals)
+        tot_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,\
+                greek2,1,conditionals)
 
         return tot_sent
 
@@ -6251,7 +6272,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                             if candd2[d] not in candd:
                                 candd.append(candd2[d])
                 # st = time.time()
-                consistent = statement_logic(prop_sent,conditionals,candd,candd2,disjuncts,0)
+                consistent = statement_logic(prop_sent,all_sent,conditionals,candd,candd2,disjuncts,0)
                 # en = time.time()
                 # print en-st
 
@@ -6344,7 +6365,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 ######################
 
 
-    prop_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent)
+    prop_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2)
     tot_prop_sent.append(prop_sent)
     # end5
     list1 = [tot_sent,tv]
@@ -6443,7 +6464,7 @@ def rearrange_tot_sent(list5,list1,list2):
     return tot_sent
 
 def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
-                tot_sent,conditionals,all_sent,consistent):
+                tot_sent,conditionals,all_sent,consistent,greek2):
 
     # this function divides all sentences into standard conjuncts, standard
     # conditionals and non standard sentences
@@ -6495,7 +6516,7 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
                     bb = 8
                 if t > -1:
                     if conditionals[t][37] == "":
-                        list2 = get_prop(prop_sent[i][1],True)
+                        list2 = get_prop(prop_sent[i][1],True,greek2)
                         conditionals[t][37] = list2[0]
                         list3 = list2[1]
                         str1 = list2[0]
@@ -6542,7 +6563,8 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
     return [conditionals,conditionals4]
 
 
-def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,kind=0,conditionals=[]):
+def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,kind=0,\
+              conditionals=[]):
 
     if proof_type != "l":
         prop_sent = subtract_400(prop_sent,g)
@@ -6562,7 +6584,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,kind=0,conditionals=
         standard_cj = []
         standard_cd = []
         list1 = build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
-                tot_sent,conditionals,all_sent,consistent)
+                tot_sent,conditionals,all_sent,consistent,greek2)
         if consistent:
             conditionals4 = list1[1]
             conditionals = list1[0]
@@ -6570,6 +6592,8 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,kind=0,conditionals=
                 dummy = put_premises_into_standard_list(tot_sent,conditionals4,\
                         standard_cd,all_sent)
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
+
+
 
         return tot_sent
 
@@ -7098,7 +7122,9 @@ def new_cond(pot_id,candd,conditionals,tot_sent,member_prop,candd2,\
                         list4[2] = ""
                         prop_sent.append(list4)
                         list2 = mainconn(str1p)
-                        list1 = prepare_iff_elim(str1p,list2[0],list2[1],sn)
+                        enc_str1p = enclose(str1p)
+                        def_info = find_sentences(enc_str1p)
+                        list1 = prepare_iff_elim(def_info,str1p,all_sent,list2[0],list2[1],sn)
                         list1[37] = str1
                         bool1 = check_dimension(conditionals,4,list1[4])
                         if not bool1:
@@ -7674,14 +7700,11 @@ def get_conjuncts(str1, bool1 = False):
 
 
 
-def get_prop(str1,recon=False):
+def get_prop(str1,recon=False,greek2=[]):
 
     global subscripts
     arr1 = []
-
-    if recon:
-        greek = [unichr(945 + t) for t in range(50)]
-        gr_lst = []
+    gr_lst = []
 
     for i in range (len(str1)):
         str2 = str1[i:i+1]
@@ -7743,7 +7766,7 @@ def get_prop(str1,recon=False):
 
     return arr1
 
-def prepare_iff_elim(str2, mainc, s, num = "",tot_sent = []):
+def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
 
     global sn
     if str2 == "r " + conditional + " s":
@@ -7816,7 +7839,7 @@ def islist(list1):
     else:
         return True
 
-def new_prop(prop_sent, str1, ng, asp, anc1, anc2, anc3 = None, anc4 = None, \
+def new_prop(all_sent,prop_sent, str1, ng, asp, anc1, anc2, anc3 = None, anc4 = None, \
              is_premise = False, num = "",ostring = ""):
 
     if ng == None:
@@ -7860,7 +7883,7 @@ def new_prop(prop_sent, str1, ng, asp, anc1, anc2, anc3 = None, anc4 = None, \
         None, None, None, None])
         return False
 
-def many_cond(candd,candd2, conditionals, kind, asp, anc2, f, g, r):
+def many_cond(all_sent,candd,candd2, conditionals, kind, asp, anc2, f, g, r):
 
     list1 = conditionals[g][f]
     del list1[0]
@@ -7879,7 +7902,7 @@ def many_cond(candd,candd2, conditionals, kind, asp, anc2, f, g, r):
     list2.append([candd[r][1],candd[r][2]])
     if list1 == []:
         cjct = conditionals[g][h]
-        dummy = new_prop_sent("", kind, asp, "",anc2, \
+        dummy = new_prop_sent(all_sent,"", kind, asp, "",anc2, \
                     conditionals,g,candd,candd2, conditionals[g][8], cjct)
         if dummy == False:
             return False
@@ -7902,7 +7925,7 @@ def many_cond(candd,candd2, conditionals, kind, asp, anc2, f, g, r):
                     conditionals[g][8].append(anc1)
                     if list1 == []:
                         cjct = conditionals[g][h]
-                        dummy = new_prop_sent("", kind, asp, "",anc2, \
+                        dummy = new_prop_sent(all_sent,"", kind, asp, "",anc2, \
                                     conditionals,g,candd,candd2, conditionals[g][8], cjct)
                         if dummy == False:
                             return False
@@ -7920,7 +7943,7 @@ def many_cond(candd,candd2, conditionals, kind, asp, anc2, f, g, r):
     conditionals[g][8] = ""
     return ""
 
-def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
+def modus_ponens(all_sent,conditionals, candd,candd2, prop_sent,kind):
 
     r = -1
     while r < len(candd) -1:
@@ -7977,7 +8000,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                                 else:
                                     str13 = "EE"
                                 if aconjunction != "" :
-                                    dummy = many_cond(candd,candd2, conditionals, "con", str13, \
+                                    dummy = many_cond(all_sent,candd,candd2, conditionals, "con", str13, \
                                                       anc2, f, g, r)
                                     if dummy == False:
                                         return False
@@ -7989,7 +8012,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                      # con indicates that the consequent of the conditional is to be detached
                      #                if len(conditionals) <= 4:
                      #                    bb = 7
-                                    dummy = new_prop_sent("", "con", \
+                                    dummy = new_prop_sent(all_sent,"", "con", \
                                         str13, anc1, anc2,conditionals,g,candd,candd2)
                                     if dummy == False:
                                         return False
@@ -7998,7 +8021,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                                     break
                             elif str8 != temp_nega and str12 == 'e':
                                 if kind != 2 and cconjunction != "":
-                                    dummy = new_prop_sent("~", "con", \
+                                    dummy = new_prop_sent(all_sent,"~", "con", \
                                                 "EN", anc1, anc2, conditionals,g,candd,candd2)
                                     if dummy == False:
                                         return False
@@ -8008,7 +8031,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                         elif f == 1 and temp1 == temp_con:
                             if str8 == temp_negc and str12 == 'e':
                                 if cconjunction == "":
-                                    dummy = new_prop_sent("", "ant", "EE", \
+                                    dummy = new_prop_sent(all_sent,"", "ant", "EE", \
                                         anc1, anc2, conditionals,g,candd,candd2)
                                     if dummy == False:
                                         return False
@@ -8016,7 +8039,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                                     g -= 1
                                     break
                                 else:
-                                    dummy = many_cond(candd,candd2, conditionals, "ant", "EE", \
+                                    dummy = many_cond(all_sent,candd,candd2, conditionals, "ant", "EE", \
                                                       anc2, f, g, r)
                                     if dummy == False:
                                         return False
@@ -8030,7 +8053,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                                         str13 = "MT"
                                     else:
                                         str13 = "EN"
-                                    dummy = new_prop_sent("~", "ant", \
+                                    dummy = new_prop_sent(all_sent,"~", "ant", \
                                                 str13, anc1, anc2, conditionals,g,candd,candd2)
                                     if dummy == False:
                                         return False
@@ -8046,7 +8069,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                                         s += 1
                                         if temp1 == conditionals[g][0][s][0] and \
                                             str8 != conditionals[g][0][s][1]:
-                                            dummy = new_prop_sent("~", "con", \
+                                            dummy = new_prop_sent(all_sent,"~", "con", \
                                             "EN", anc1, anc2, conditionals,g,candd,candd2)
                                             if dummy == False:
                                                 return False
@@ -8066,7 +8089,7 @@ def modus_ponens(conditionals, candd,candd2, prop_sent,kind):
                                                 str13 = "EN"
                                             else:
                                                 str13 = "MT"
-                                            dummy = new_prop_sent("~", "ant", \
+                                            dummy = new_prop_sent(all_sent,"~", "ant", \
                                             str13, anc1, anc2, conditionals,g,candd,candd2)
                                             if dummy == False:
                                                 return False
@@ -8172,7 +8195,7 @@ def proper_spacing(str1):
     str1 = str1.replace("&"," & ")
     return str1
 
-def iff_elim(prop_sent, conditionals,kind):
+def iff_elim(all_sent,prop_sent,conditionals,kind):
 
     new_sent = False
     no_contr = True
@@ -8316,18 +8339,18 @@ def iff_elim(prop_sent, conditionals,kind):
                 if conditionals[d][5] == "" or conditionals[d][5] == None:
                     str3 = "(" + str5 + ") & (" + str6 + ")"
                     str7 = iff + "E"
-                    no_contr = new_prop(prop_sent, str3, ng, str7, anc1, None, None, None)
+                    no_contr = new_prop(all_sent,prop_sent, str3, ng, str7, anc1, None, None, None)
 
                     if not no_contr:
                         return False
                     conditionals[d][2] = pn+1
                     conditionals[d][0] = [str1, ng1]
                     conditionals[d][1] = [str4, ng4]
-                    no_contr = new_prop(prop_sent,str5,"","&E",g,"")
+                    no_contr = new_prop(all_sent,prop_sent,str5,"","&E",g,"")
                     if not no_contr:
                         return False
                     list1[2] = pn + 1
-                    no_contr = new_prop(prop_sent,str6,"","&E",g,"")
+                    no_contr = new_prop(all_sent,prop_sent,str6,"","&E",g,"")
                     if not no_contr:
                         return False
                     conditionals[d][4] = str5
@@ -8335,18 +8358,18 @@ def iff_elim(prop_sent, conditionals,kind):
                     conditionals.append(list1)
                 else:
                     str3 = "(" + str5 + ") & (" + str6 + ")"
-                    no_contr = new_prop(prop_sent,str3,"~",iff + "E",g,"")
+                    no_contr = new_prop(all_sent,prop_sent,str3,"~",iff + "E",g,"")
                     if not no_contr:
                         return False
                     conditionals[d][3] = 'd'
                     conditionals[d][4] = str3
             elif new_sent:
-                no_contr = new_prop(prop_sent,conditionals[d][4],"",iff + "E",anc1,"")
+                no_contr = new_prop(all_sent,prop_sent,conditionals[d][4],"",iff + "E",anc1,"")
                 if not no_contr:
                     return False
     return True
 
-def material_implication(prop_sent, conditionals,kind):
+def material_implication(all_sent,prop_sent, conditionals,kind):
 
     for d in range(len(conditionals)):
         if d == 3:
@@ -8401,13 +8424,13 @@ def material_implication(prop_sent, conditionals,kind):
                                 break
 
                 str1 = bad_paren(str1)
-                no_contr = new_prop(prop_sent, str1, ng, conditional + "E", anc1,"")
+                no_contr = new_prop(all_sent,prop_sent, str1, ng, conditional + "E", anc1,"")
                 if not no_contr:
                     return False
                 if str1.find("~~") > -1:
                     str1 = str1.replace("~~","")
                     g = copy.copy(pn)
-                    no_contr = new_prop(prop_sent,str1, ng, "~~E", g,"")
+                    no_contr = new_prop(all_sent,prop_sent,str1, ng, "~~E", g,"")
                     if not no_contr:
                         return False
                 conditionals[d][2] = pn
@@ -8416,8 +8439,6 @@ def material_implication(prop_sent, conditionals,kind):
                 conditionals[d][5] = ng
 
     return True
-
-            # search for double negatives
 
 def bad_paren(str1):
 
@@ -8455,7 +8476,7 @@ def bad_paren(str1):
                 mstr = mstr.replace(ostr, nstr)
     return mstr
 
-def demorgan(prop_sent, conditionals, candd,candd2,kind,one_sent = False, str8 = "",anc1a = "",rule = "",conjt = []):
+def demorgan(all_sent,prop_sent,conditionals,candd,candd2,kind,one_sent = False, str8 = "",anc1a = "",rule = "",conjt = []):
 
     d = -1
     temp_bool = True
@@ -8586,13 +8607,13 @@ def demorgan(prop_sent, conditionals, candd,candd2,kind,one_sent = False, str8 =
                 str2 = bad_paren(str2)
             else:
                 str1 = bad_paren(str1)
-            no_contr = new_prop(prop_sent,str1,"","~(E",anc1,"")
+            no_contr = new_prop(all_sent,prop_sent,str1,"","~(E",anc1,"")
             if not no_contr:
                 return False
             if str1.find("~~") > -1:
                 str1 = str2
                 anc1 = copy.copy(pn)
-                no_contr = new_prop(prop_sent,str2,"","~~E",anc1,"")
+                no_contr = new_prop(all_sent,prop_sent,str2,"","~~E",anc1,"")
                 if not no_contr:
                     return False
             list2 = mainconn(str1)
@@ -8604,7 +8625,7 @@ def demorgan(prop_sent, conditionals, candd,candd2,kind,one_sent = False, str8 =
                 anc1 = copy.copy(pn)
                 for i in range(len(list3)):
                     list4 = tilde_removal2(list3[i])
-                    no_contr = new_prop(prop_sent,list4[0],list4[1],"&E",anc1,"")
+                    no_contr = new_prop(all_sent,prop_sent,list4[0],list4[1],"&E",anc1,"")
                     if not no_contr:
                         return False
                     list2 = mainconn(list3[i])
@@ -8656,18 +8677,18 @@ def unenclose(str1):
             list1.append(str2 + str4)
     return [str1,list1]
 
-def new_disjunct(str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1, anc2, \
+def new_disjunct(all_sent,str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1, anc2, \
             anc3 = None, anc4=None, kind = 0, rule = ""):
 
     global sn,pn
     list2 = mainconn(str1)
     if kind == 1:
         del conditionals[n]
-        dummy = new_prop(prop_sent, str1, ng, "&I", \
+        dummy = new_prop(all_sent,prop_sent, str1, ng, "&I", \
             anc1, anc2, anc3, anc4)
         return dummy
     elif kind == 2:
-        dummy = new_prop(prop_sent, str1, ng, "&I", \
+        dummy = new_prop(all_sent,prop_sent, str1, ng, "&I", \
             anc1, anc2, anc3, anc4)
         return dummy
     else:
@@ -8676,7 +8697,7 @@ def new_disjunct(str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1,
             str1 = remove_outer_paren(str1)
             list1 = tilde_removal2(str1)
             str1 = list1[0]
-            dummy = new_prop(prop_sent, str1, list1[1], rule + "E", \
+            dummy = new_prop(all_sent,prop_sent, str1, list1[1], rule + "E", \
             anc1, anc2)
             candd.append([pn,list1[0],list1[1]])
             conjt.append([pn,list1[0],list1[1]])
@@ -8684,13 +8705,13 @@ def new_disjunct(str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1,
         elif list2[0] == "&":
             del conditionals[n]
             str1 = remove_outer_paren(str1)
-            dummy = new_prop(prop_sent, str1, ng, rule + "E", \
+            dummy = new_prop(all_sent,prop_sent, str1, ng, rule + "E", \
             anc1, anc2)
             g = copy.copy(pn)
             list3 = get_conjuncts(str1)
             for i in range(len(list3)):
                 list4 = tilde_removal2(list3[i])
-                dummy = new_prop(prop_sent, list4[0], list4[1], "&E", g,"")
+                dummy = new_prop(all_sent,prop_sent, list4[0], list4[1], "&E", g,"")
                 if dummy == False:
                     return dummy
                 if list3[i].find(idisj) > -1:
@@ -8700,7 +8721,7 @@ def new_disjunct(str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1,
                     conjt.append([pn,list4[0],list4[1]])
             return True
         else:
-            dummy = new_prop(prop_sent, str1, ng, idisj + "E", \
+            dummy = new_prop(all_sent,prop_sent, str1, ng, idisj + "E", \
             anc1, anc2)
             if dummy == False:
                 return dummy
@@ -8712,7 +8733,7 @@ def new_disjunct(str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1,
             conditionals[n][2] = pn
             return True
 
-def xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,candd2,conjt,\
+def xorr_elim(all_sent,conditionals,n,i,parent,grandparent,whole_d,candd,candd2,conjt,\
               prop_sent,anc1,anc2,kind=0):
 
     str9 = ""
@@ -8748,7 +8769,7 @@ def xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,candd2,conjt,\
                     return consistent
             else:
                 list4 = tilde_removal(str9)
-                consistent = new_prop(prop_sent, list4[0],list4[1], xorr + "E", \
+                consistent = new_prop(all_sent,prop_sent, list4[0],list4[1], xorr + "E", \
                 anc1, anc2)
                 if consistent == False:
                     return consistent
@@ -8758,19 +8779,19 @@ def xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,candd2,conjt,\
                 str9 = grandparent.replace(parent,str9)
                 str9 = whole_d.replace(grandparent, str9)
                 str9 = bad_paren(str9)
-                dummy = new_prop(prop_sent,str9,"",xorr + "E",anc1,anc2)
+                dummy = new_prop(all_sent,prop_sent,str9,"",xorr + "E",anc1,anc2)
                 if str9.find("~~") > -1:
                     str9 = str9.replace("~~","")
-                    dummy = new_prop(prop_sent,str9,"","~~E",pn,"")
+                    dummy = new_prop(all_sent,prop_sent,str9,"","~~E",pn,"")
 
             else:
                 str9 = whole_d.replace(grandparent,str9)
                 str9 = bad_paren(str9)
-                dummy = new_prop(prop_sent,str9,"",xorr + "E",anc1,anc2)
+                dummy = new_prop(all_sent,prop_sent,str9,"",xorr + "E",anc1,anc2)
                 g = copy.copy(pn)
                 if str9.find("~~") > -1:
                     str9 = str9.replace("~~","")
-                    consistent = new_prop(prop_sent,str9,"","~~E",g,"")
+                    consistent = new_prop(all_sent,prop_sent,str9,"","~~E",g,"")
                     if consistent == False:
                         return consistent
                 dummy = disjunction_heirarchy(conditionals, str9,n, True)
@@ -8790,16 +8811,16 @@ def xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,candd2,conjt,\
 
     return consistent
 
-def xorr_elim2(str9,prop_sent,conditionals,candd,candd2,conjt,anc1,anc2):
+def xorr_elim2(all_sent,str9,prop_sent,conditionals,candd,candd2,conjt,anc1,anc2):
 
     str9 = bad_paren(str9)
-    consistent = new_prop(prop_sent, str9, "", xorr + "E", \
+    consistent = new_prop(all_sent,prop_sent, str9, "", xorr + "E", \
     anc1, anc2)
     if consistent == False:
         return False
     if str9.find("~~") > -1:
         str9 = str9.replace("~~","")
-        dummy = new_prop(prop_sent,str9,"","~~E",pn,"")
+        dummy = new_prop(all_sent,prop_sent,str9,"","~~E",pn,"")
         if dummy == False:
             return dummy
     list3 = get_conjuncts(str9)
@@ -8807,7 +8828,7 @@ def xorr_elim2(str9,prop_sent,conditionals,candd,candd2,conjt,anc1,anc2):
     for b in range(len(list3)):
         list4 = tilde_removal2(list3[b])
         list4[0] = remove_outer_paren(list4[0])
-        dummy = new_prop(prop_sent, list4[0], list4[1], "&E", g,"")
+        dummy = new_prop(all_sent,prop_sent, list4[0], list4[1], "&E", g,"")
         if dummy == False:
             return dummy
         if not os(list3[b]):
@@ -8823,7 +8844,7 @@ def xorr_elim2(str9,prop_sent,conditionals,candd,candd2,conjt,anc1,anc2):
             conjt.append([pn,list4[0],list4[1]])
     return True
 
-def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
+def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind = ""):
 
     bool1 = False
     bool2 = False
@@ -8906,7 +8927,7 @@ def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
 
                         elif str2 == str4 and str5 == "x":
 
-                            consistent = xorr_elim(conditionals,n,i,parent,grandparent,whole_d,candd,candd2,\
+                            consistent = xorr_elim(all_sent,conditionals,n,i,parent,grandparent,whole_d,candd,candd2,\
                                         conjt,prop_sent,anc1,anc2)
                             if consistent == False:
                                 return False
@@ -8942,7 +8963,7 @@ def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
                                                 if list1 == []:
                                                     str3 = build_sent_list2(list2)
                                                     if mc[0] == xorr:
-                                                        new_prop(prop_sent,str3,"","&I",anc1,anc3,anc4)
+                                                        new_prop(all_sent,prop_sent,str3,"","&I",anc1,anc3,anc4)
                                                         consistent = xorr_elim(conditionals,n,i,parent,\
                                                         grandparent,whole_d,candd,candd2,conjt,prop_sent,pn,anc2,1)
                                                         if consistent == False:
@@ -8951,15 +8972,15 @@ def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
                                             # if the conjunct is not embedded within another conjunct
                                             # then the disjunct is simply deleted
                                                         if whole_d == grandparent:
-                                                            dummy = new_disjunct(str3,"",n, prop_sent,\
+                                                            dummy = new_disjunct(all_sent,str3,"",n, prop_sent,\
                                                             conditionals,candd,candd2,conjt, anc1, anc3, anc4, anc5, 1)
                                                         else:
                                                             str8 = whole_d.replace(grandparent, parent2)
                                                             if str8.find("(") > -1 and str8.find(idisj) > -1:
                                                                 str8 = bad_paren(str8)
-                                                            dummy = new_disjunct(str3,"",n, prop_sent,\
+                                                            dummy = new_disjunct(all_sent,str3,"",n, prop_sent,\
                                                             conditionals,candd,candd2,conjt, anc1, "", anc3, anc4, 2)
-                                                            dummy = new_disjunct(str8,"",n, prop_sent,\
+                                                            dummy = new_disjunct(all_sent,str8,"",n, prop_sent,\
                                                             conditionals,candd,candd2,conjt, pn-1, anc2)
                                                             if dummy == False:
                                                                 return False
@@ -8990,7 +9011,7 @@ def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
                                                 str8 = whole_d.replace(grandparent, str9)
                                                 if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
                                                     str8 = bad_paren(str8)
-                                                dummy = new_disjunct(str8,"",n, prop_sent,\
+                                                dummy = new_disjunct(all_sent,str8,"",n, prop_sent,\
                                                         conditionals,candd,candd2,conjt, anc1, anc2,None,None,0,rule)
                                                 if dummy == False:
                                                     return False
@@ -9018,7 +9039,7 @@ def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
                             str8 = whole_d.replace(grandparent, str9)
                             if str8.find("(") > -1 and str8.find(idisj) > -1:
                                 str8 = bad_paren(str8)
-                            dummy = new_disjunct(str8,"",n,prop_sent, conditionals, candd,candd2,conjt,anc1, anc2, None, None,0,rule)
+                            dummy = new_disjunct(all_sent,str8,"",n,prop_sent, conditionals, candd,candd2,conjt,anc1, anc2, None, None,0,rule)
                             if dummy == False:
                                 return False
                             bool1 = True
@@ -9041,7 +9062,7 @@ def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
                                 str8 = whole_d.replace(parent, str9)
                                 if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
                                     str8 = bad_paren(str8)
-                                dummy = new_disjunct(str8,"",n,prop_sent,conditionals,\
+                                dummy = new_disjunct(all_sent,str8,"",n,prop_sent,conditionals,\
                                     candd,candd2,conjt, anc1,anc2,None,None,0,rule)
                                 if dummy == False:
                                     return False
@@ -9056,7 +9077,7 @@ def disjunction_elimination(prop_sent, conditionals, candd,candd2, kind = ""):
                                 str8 = whole_d.replace(parent, str5)
                                 if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
                                     str8 = bad_paren(str8)
-                                dummy = new_disjunct(str8,"",n,prop_sent,conditionals,\
+                                dummy = new_disjunct(all_sent,str8,"",n,prop_sent,conditionals,\
                                     candd,candd2,conjt, anc1,anc2,None,None,0,rule)
                                 if dummy == False:
                                     return False
@@ -9072,27 +9093,25 @@ def extract_list(list1,d):
         list2.append(list1[i][d])
     return list2
 
-def statement_logic(prop_sent, conditionals, candd,candd2, disjuncts,kind="", conc="", impl=""):
+def statement_logic(prop_sent,all_sent, conditionals, candd,candd2, disjuncts,kind="", conc="", impl=""):
 
     global time1
-    b = time.time()
-    consistent = modus_ponens(conditionals, candd,candd2, prop_sent,kind)
-    e = time.time()
-    f = e - b
-    time1 += f
+    st_log_tim = time.time()
+    consistent = modus_ponens(all_sent,conditionals, candd,candd2, prop_sent,kind)
+    
     if consistent == False:
         return False
     if kind != 2:
-        consistent = iff_elim(prop_sent,conditionals,kind)
+        consistent = iff_elim(all_sent,prop_sent,conditionals,kind)
         if consistent == False:
             return False
-        consistent = material_implication(prop_sent, conditionals,kind)
+        consistent = material_implication(all_sent,prop_sent, conditionals,kind)
         if consistent == False:
             return False
-        consistent = demorgan(prop_sent, conditionals, candd,candd2,kind)
+        consistent = demorgan(all_sent,prop_sent, conditionals, candd,candd2,kind)
         if consistent == False:
             return False
-        consistent = disjunction_elimination(prop_sent,conditionals,candd,candd2,kind)
+        consistent = disjunction_elimination(all_sent,prop_sent,conditionals,candd,candd2,kind)
         if consistent == False:
             return False
         if kind == 1:
@@ -9121,7 +9140,7 @@ def add_outer_paren(str1):
     str1 = remove_outer_paren(str1)
     return "(" + str1 + ")"
 
-def new_prop_sent(ng, kind, asp, anc1, anc2, conditionals,g,candd,candd2,list3 =[], cjct = ""):
+def new_prop_sent(all_sent,ng, kind, asp, anc1, anc2, conditionals,g,candd,candd2,list3 =[], cjct = ""):
 
     global prop_sent
     global sn,pn
@@ -9188,7 +9207,7 @@ def new_prop_sent(ng, kind, asp, anc1, anc2, conditionals,g,candd,candd2,list3 =
             pn += 1
             prop_sent.append([pn, "~" + str1, "~", asp, anc1, anc2, None, None, None, None, None,None, None, None, None])
             g = copy.copy(pn)
-            dummy = new_prop(prop_sent,str1,"","~~E",g, None)
+            dummy = new_prop(all_sent,prop_sent,str1,"","~~E",g, None)
             if dummy == False:
                 return False
             ng = ""
@@ -9201,13 +9220,15 @@ def new_prop_sent(ng, kind, asp, anc1, anc2, conditionals,g,candd,candd2,list3 =
         elif list2[0] != "" and ng == "~":
             str1 = add_outer_paren(str1)
         if bool1 == False:
-            dummy = new_prop(prop_sent,str1,ng,asp,anc1, anc2)
+            dummy = new_prop(all_sent,prop_sent,str1,ng,asp,anc1, anc2)
             if dummy == False:
                 return False
 
         candd.append([pn, str1, ng])
         if (list2[0] == iff or list2[0] == conditional) and ng != "~":
-            list3 = prepare_iff_elim(str1, list2[0],list2[1],pn)
+            enc_str1 = enclose(str1)
+            def_info = find_sentences(enc_str1)
+            list3 = prepare_iff_elim(def_info,str1,all_sent,list2[0],list2[1],pn)
             conditionals.append(list3)
         elif list2[0] == iff or list2[0] == conditional or list2[0] == idisj or list2[0] == xorr:
             list5 = [""] * 39
@@ -9225,24 +9246,26 @@ def new_prop_sent(ng, kind, asp, anc1, anc2, conditionals,g,candd,candd2,list3 =
             list5[5] = "~"
             list5[3] = 'd'
             conditionals.append(list5)
-            dummy = new_prop(prop_sent, str1, ng, asp, anc1, anc2)
+            dummy = new_prop(all_sent,prop_sent, str1, ng, asp, anc1, anc2)
             if dummy == False:
                 return False
         else:
             list1 = conditionals[g][h]
             str1 = remove_outer_paren(str1)
-            dummy = new_prop(prop_sent, str1, ng, asp, anc1, anc2)
+            dummy = new_prop(all_sent,prop_sent, str1, ng, asp, anc1, anc2)
             if dummy == False:
                 return False
             anc1 = copy.copy(pn)
             for i in range(len(list1)):
                 list2 = mainconn(list1[i][0])
-                dummy = new_prop(prop_sent, list1[i][0], list1[i][1], "&E", anc1, "")
+                dummy = new_prop(all_sent,prop_sent, list1[i][0], list1[i][1], "&E", anc1, "")
                 if dummy == False:
                     return False
                 candd.append([pn, list1[i][0], list1[i][1]])
                 if (list2[0] == conditional or list2[0] == iff) and list1[i][1] != "~":
-                    list4 = prepare_iff_elim(list1[i][0], list2[0],list2[1],pn)
+                    enc_str = enclose(list1[i][0])
+                    def_info = find_sentences(enc_str)
+                    list4 = prepare_iff_elim(def_info,list1[i][0],all_sent, list2[0],list2[1],pn)
                     conditionals.append(list4)
                 elif list2[0] != "":
                     list5 = [""] * 39
@@ -9272,7 +9295,7 @@ def oc(str1):
     else:
         return False
 
-def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_sent, kind = '',negat=[]):
+def plan(sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_sent, kind,negat):
 
     global conc
     global sn
@@ -9286,15 +9309,6 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
     impl = ""
     qq = 0
     nat_logic = False
-    # if the first sentence is just one letter then we're using statement logic
-    # if sent[0][1].find("(") > -1:
-    #     for j in range(len(sent[0][1])):
-    #         str2 = sent[0][1][j:j+1]
-    #         str3 = sent[0][1][j+1:j+2]
-    #         if (str2.islower() or str2.isupper()) and (str3.islower() or str3.isupper()):
-    #             nat_logic = True
-    #         if j > 8:
-    #             break
 
 
     for i in range(len(sent)):
@@ -9358,7 +9372,7 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
                 elif list1[4][0][1] != "&":
                     str3 = ""
                     if list1[4][0][1] != idisj and ng == "" and list1[4][0][1] != xorr:
-                        list7 = prepare_iff_elim(str2, list2[0], list2[1],sent[i][0],tot_sent)
+                        list7 = prepare_iff_elim(list1,str2,all_sent,list2[0],list2[1],sent[i][0],tot_sent)
                     else:
                         list7 = [""] * 39
                         list7[2] = sent[i][0]
@@ -9377,13 +9391,13 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
                         else:
                             temp_conditionals.append([sent[i][0], list5[0],list5[1]])
 
-            no_contr = new_prop(prop_sent,str2,ng,"",None,None,None,None,True,sent[i][0],ostring)
+            no_contr = new_prop(all_sent,prop_sent,str2,ng,"",None,None,None,None,True,sent[i][0],ostring)
             if not no_contr:
                 return False
 
     if conj_elim != []:
         for i in range(len(conj_elim)):
-            no_contr = new_prop(prop_sent,conj_elim[i][1],conj_elim[i][2],"&E",\
+            no_contr = new_prop(all_sent,prop_sent,conj_elim[i][1],conj_elim[i][2],"&E",\
                         conj_elim[i][0],None)
             if not no_contr:
                 return False
@@ -9401,7 +9415,7 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
             list2 = mainconn(str2)
 
             if list2[0] != idisj and ng == "" and list2[0] != "&" and list2[0] != xorr:
-                list7 = prepare_iff_elim(str2, list2[0], list2[1],pn+1,tot_sent)
+                list7 = prepare_iff_elim(list1,str2,all_sent,list2[0],list2[1],pn+1,tot_sent)
             else:
                 list7 = [""] * 39
                 list7[2] = pn + 1
@@ -9412,11 +9426,11 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
             conditionals.append(list7)
             if oc(str2):
                 candd.append([pn+1, str2,ng])
-            no_contr = new_prop(prop_sent, str2,ng,"&E",temp_conditionals[i][0], None)
+            no_contr = new_prop(all_sent,prop_sent, str2,ng,"&E",temp_conditionals[i][0], None)
             if not no_contr:
                 return False
 
-    consistent = statement_logic(prop_sent, conditionals, candd,candd2,disjuncts,kind,conc,impl)
+    consistent = statement_logic(prop_sent,all_sent, conditionals, candd,candd2,disjuncts,kind,conc,impl)
     return consistent
 
 def repeat_relations(str1):
@@ -9555,7 +9569,7 @@ def get_result(post_data,archive_id=None,request=None):
 
     global prop_name,plural_c,anaphora,definite, prop_var, ind_var
     global ant_cond,conditionals,candd,rel_conj,conc,prop_sent,sn,impl
-    global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var
+    global tagged_nouns,tagged_nouns2,dv_nam,basic_objects,idf_var,greek
     global gen_var,definite2,cnjts,test_one,stp,strt,candd2,pn,embed,affneg
 
     if one_sent: #ggg
@@ -9640,6 +9654,7 @@ def get_result(post_data,archive_id=None,request=None):
         def_atoms = []
         prop_var = copy.deepcopy(prop_var4)
         idf_var = copy.deepcopy(idf_var2)
+        greek2 = copy.deepcopy(greek)
         id_num = test_sent[k][-1][0] + 1
         sn = id_num
         dummy = divide_sent(words, test_sent[k], idf_var,tot_sent,all_sent)
@@ -9651,7 +9666,7 @@ def get_result(post_data,archive_id=None,request=None):
                        def_atoms,num_sent)
         list2 = identity(all_sent,tot_sent,basic_objects,words,candd,candd2,\
                 conditionals,prop_sent,prop_name,id_num,identities,idf_var,\
-                test_sent[k][0][3])
+                test_sent[k][0][3],greek)
         if proof_type == "l":
             test_sent[k] = list2
         else:
