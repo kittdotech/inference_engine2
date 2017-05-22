@@ -15,8 +15,9 @@ tot_tim = time.time()
 
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 0 # if n then proof type before may 1
-stp = 34
+strt = 3 # if n then proof type before may 1
+stp = 8
+print_to_doc = True
 if j == 1:
     django2 = False
     temp17 = False
@@ -112,6 +113,7 @@ dv_nam = []
 basic_objects = []
 result_data = {}
 cond_r = unichr(8835)
+const = u"\u2102" #consistency
 top = unichr(8868)
 bottom = unichr(8869)
 neg = unichr(172)
@@ -6438,74 +6440,106 @@ def rearrange_tot_sent(list5,list1,list2):
                     tot_sent[i][j+5] = g
             else:
                 break
-    return [tot_sent,j]
+    return tot_sent
 
 def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
-                tot_sent,conditionals,all_sent,j):
+                tot_sent,conditionals,all_sent,consistent):
 
     # this function divides all sentences into standard conjuncts, standard
     # conditionals and non standard sentences
+    # it also converts the prop_sent into
+    # nat sent and puts them into the tot sent list
+
     conditionals4 = copy.deepcopy(conditionals)
-    for i in range(j,len(prop_sent)):
-        if i == 7:
+    c = tot_sent[-1][0]
+    tot_sent.append(["","","","","","","","","",""])
+    tot_sent.append(["","_______________________","","","","","","","",""])
+
+    if not consistent:
+        d = len(prop_sent)-1
+    else:
+        d = len(prop_sent)
+
+    for i in range(d):
+        if i == 27:
             bb = 8
-        if os(prop_sent[i][1]):
-            str1 = prop_sent[i][2] + findinlist(prop_sent[i][1],prop_name,0,2)
-            bool1 = False
-            for d in range(len(all_sent)):
-                str3 = all_sent[d][42].replace("~","")
-                if prop_sent[i][1] == str3:
-                    bool1 = True
-                    break
-            if bool1:
-                standard_cj.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
-                prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+        if prop_sent[i][0] > c:
+            if prop_sent[i][1] == bottom:
+                tot_sent.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+            elif os(prop_sent[i][1]):
+                # try:
+                str1 = prop_sent[i][2] + findinlist(prop_sent[i][1],prop_name,0,2)
+                # except TypeError:
+                #     bb = 8
+                bool1 = False
+                for d in range(len(all_sent)):
+                    str3 = all_sent[d][42].replace("~","")
+                    if prop_sent[i][1] == str3:
+                        bool1 = True
+                        break
+                if consistent:
+                    if bool1:
+                        standard_cj.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+                    else:
+                        nonstandard.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+
+                tot_sent.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+
             else:
-                nonstandard.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
-                prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
-        else:
-            t = findposinmd(prop_sent[i][1],conditionals,4)
-            if prop_sent[i][0] == 32:
-                bb = 8
-            if t > -1:
-                if conditionals[t][37] == "":
+                t = findposinmd(prop_sent[i][1],conditionals,4)
+                if prop_sent[i][0] == 32:
+                    bb = 8
+                if t > -1:
+                    if conditionals[t][37] == "":
+                        list2 = get_prop(prop_sent[i][1],True)
+                        conditionals[t][37] = list2[0]
+                        list3 = list2[1]
+                        str1 = list2[0]
+                    else:
+                        list3 = conditionals[t][38]
+                        str1 = conditionals[t][37]
+                else:
+                    if i == 55:
+                        bb = 8
                     list2 = get_prop(prop_sent[i][1],True)
-                    conditionals[t][37] = list2[0]
                     list3 = list2[1]
                     str1 = list2[0]
-                else:
-                    list3 = conditionals[t][38]
-                    str1 = conditionals[t][37]
-            else:
-                list2 = get_prop(prop_sent[i][1],True)
-                list3 = list2[1]
-                str1 = list2[0]
-            bool1 = False
-            list4 = mainconn(prop_sent[i][1])
-            if list4[0] != "&":
-                for d in range(len(list3)):
-                    str4 = list3[d].replace("~","")
-                    bool1 = False
-                    for e in range(len(all_sent)):
-                        str3 = all_sent[e][42].replace("~","")
-                        if str4 == str3:
-                            bool1 = True
-                            break
+                bool1 = False
+                list4 = mainconn(prop_sent[i][1])
+                if list4[0] != "&":
+                    for d in range(len(list3)):
+                        str4 = list3[d].replace("~","")
+                        bool1 = False
+                        for e in range(len(all_sent)):
+                            str3 = all_sent[e][42].replace("~","")
+                            if str4 == str3:
+                                bool1 = True
+                                break
 
-            if bool1:
-                d = findposinmd(prop_sent[i][1],conditionals4,4)
-                if d > -1:
-                    del conditionals4[d]
-                standard_cd.append([prop_sent[i][0],str1,"","",\
-                prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
-                                 prop_sent[i][6],prop_sent[i][7]])
-            else:
-                nonstandard.append([prop_sent[i][0],str1,"","",\
-                prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
-                                 prop_sent[i][6],prop_sent[i][7]])
+                tot_sent.append([prop_sent[i][0],str1,"","",\
+                    prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
+                                     prop_sent[i][6],prop_sent[i][7]])
+                if consistent:
+                    if bool1:
+                        d = findposinmd(prop_sent[i][1],conditionals4,4)
+                        if d > -1:
+                            del conditionals4[d]
+                        standard_cd.append([prop_sent[i][0],str1,"","",\
+                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
+                                         prop_sent[i][6],prop_sent[i][7]])
+                    else:
+                        nonstandard.append([prop_sent[i][0],str1,"","",\
+                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
+                                         prop_sent[i][6],prop_sent[i][7]])
+
+    if not consistent:
+        tot_sent.append(prop_sent[-1])
 
     return [conditionals,conditionals4]
-
 
 
 def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,kind=0,conditionals=[]):
@@ -6522,33 +6556,27 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,kind=0,conditionals=
     tot_sent = list6[1]
 
     if rn_used:
-        list6 = rearrange_tot_sent(list5,list1,list2)
-        tot_sent = list6[0]
-        j = list6[1]
+        tot_sent = rearrange_tot_sent(list5,list1,list2)
     if proof_type == 'l':
-        c = tot_sent[-1][0]
-        c += 2
         nonstandard = []
         standard_cj = []
         standard_cd = []
-        j = findposinmd(c,prop_sent,0)
-        tot_sent.append(["","","","","","","","","",""])
-        tot_sent.append(["","_______________________","","","","","","","",""])
         list1 = build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
-                tot_sent,conditionals,all_sent,j)
-        conditionals4 = list1[1]
-        conditionals = list1[0]
-        if conditionals4 != []:
-            dummy = put_premises_into_standard_list(tot_sent,conditionals4,\
-                    standard_cd,all_sent)
-        dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
+                tot_sent,conditionals,all_sent,consistent)
+        if consistent:
+            conditionals4 = list1[1]
+            conditionals = list1[0]
+            if conditionals4 != []:
+                dummy = put_premises_into_standard_list(tot_sent,conditionals4,\
+                        standard_cd,all_sent)
+            dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
 
         return tot_sent
 
-
-
 def add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent):
     # this adds new sentences to the tot_sent list
+    tot_sent.append(["","","","","","","","","",""])
+    tot_sent.append(["","_______________________","","","","","","","",""])
     tot_sent.append(["","NONSTANDARD SENTENCES:","","","","","","","",""])
     for i in range(len(nonstandard)):
         tot_sent.append(nonstandard[i])
@@ -7673,8 +7701,12 @@ def get_prop(str1,recon=False):
                 str3 = "~" + str2 + str5
 
             if recon:
-                if not findposinmd(str2,gr_lst,0,True):
-                    gr_lst.append([str2,greek[0]])
+                if not findposinmd(str3,gr_lst,0,True):
+                    if str3[0] == "~":
+                        str6 = str3[1:]
+                    else:
+                        str6 = str3
+                    gr_lst.append([str6,greek[0]])
                     del greek[0]
 
             str3 = str3.strip()
@@ -7692,15 +7724,20 @@ def get_prop(str1,recon=False):
                 str4 = str1[i+1:i+2]
                 if str4 in subscripts:
                     str3 = str3+str4
-
                 str5 = findinlist(str3,gr_lst,0,1)
-                str1 = str1[:i] + str5 + str1[i+1:]
+                if str4 in subscripts:
+                   str1 = str1[:i] + str5 + str1[i+2:]
+                else:
+                    str1 = str1[:i] + str5 + str1[i+1:]
 
         for i in range(len(gr_lst)):
             str7 = gr_lst[i][1]
             str8 = gr_lst[i][0]
             str3 = findinlist(str8,prop_name,0,2)
+            #try:
             str1 = str1.replace(str7,str3)
+            #except TypeError:
+             #   bb = 8
         return [str1,arr1]
 
 
@@ -9261,7 +9298,7 @@ def plan(sent, prop_sent, candd,candd2, conditionals, prop_name, disjuncts,tot_s
 
 
     for i in range(len(sent)):
-        if i == 18:
+        if i == 8:
             bb = 7
         g = sent[i].count('(')
         h = sent[i].count(')')
@@ -9645,7 +9682,7 @@ if excel or one_sent or temp17:
     st = time.time()
     if excel:
         wb4.save('../inference engine new.xlsx')
-    if one_sent:
+    if print_to_doc:
         wb4.save('../temp_proof.xlsx')
     if words_used:
         wb5.save('../dictionary last perfect.xlsx')
