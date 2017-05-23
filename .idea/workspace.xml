@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/dictionary4.xlsx" afterPath="$PROJECT_DIR$/inference2/dictionary4.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -509,7 +509,14 @@
       <option name="project" value="LOCAL" />
       <updated>1495550811365</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="minor change to excel">
+      <created>1495551810669</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1495551810669</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -583,7 +590,8 @@
     <MESSAGE value="put the all_sent list in the statement logic definition" />
     <MESSAGE value="sped up the def_rn function" />
     <MESSAGE value="almost put all_sent into conditional[35] and [36]" />
-    <option name="LAST_COMMIT_MESSAGE" value="almost put all_sent into conditional[35] and [36]" />
+    <MESSAGE value="minor change to excel" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor change to excel" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
