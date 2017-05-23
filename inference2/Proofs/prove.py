@@ -7,22 +7,18 @@ import operator
 import sys
 from ex_dict_new import large_dict
 from claims_new import pop_sent
-# from django_tools.middlewares import ThreadLocal
-# from inference2 import views
+
 tot_tim = time.time()
-st_log_tim = 0
-def_tim = 0
-inst_tim = 0
 # averaged .076 on 5.22 (proof type 'n'), .039 definitions, .004 statement logic
 # averaged .059 on 5.22 proof type 'n', .023 definitions, .004 statement
 # but just prior to that the speed was .066
 
 
 j = 2
-proof_type = 'p' # if l then long proof showing decision procedure for instantiation
+proof_type = 'l' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
-stp = 0
-print_to_doc = True
+stp = 1
+print_to_doc = False
 if j == 1:
     django2 = False
     temp17 = False
@@ -118,6 +114,9 @@ tagged_nouns2 = []
 dv_nam = []
 basic_objects = []
 result_data = {}
+st_log_tim = 0
+def_tim = 0
+inst_tim = 0
 cond_r = unichr(8835)
 const = u"\u2102" #consistency
 top = unichr(8868)
@@ -2570,16 +2569,6 @@ def in_dv(list1,dv_nam):
         bool1 = check_dimension(dv_nam,1,list1[14])
         return bool1
 
-def prop_type2(dfn_num,sent_num,paren_conn,paren_num):
-
-    #the dfn_num (definiens number) will always have three digits
-    # any sentence that is not a conjunct in the definiens should not be defined
-
-    if sent_num[3] == dfn_num:
-        if paren_num != dfn_num:
-            if paren_conn != "&":
-                return 'x'
-
 def prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con):
     # conjunct within idisjunct within antecedent - cda
     # idisjunct within a conjunct within antecedent - dca
@@ -2601,8 +2590,8 @@ def prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con):
 
     # xdisjunct within antecedent - xa
     # xdisjunct within consequent - xq
-    # xdisjunct within bic1
-    # xdisjunct within bic2
+    # xdisjunct within bic1 - xb
+    # xdisjunct within bic2 - xf
     # conjunct within antecedent - ca
     # conjunct within consequent - cq
     # conjunct within bic1 - cb
@@ -2647,7 +2636,6 @@ def prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con):
     elif paren_conn == xorr and gparen_conn == conditional:
         print "you have not coded for this sentence type yet"
         sys.exit()
-
 
     return str1
 
@@ -3132,7 +3120,6 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     identical_det = ["only","anything_except","anyone_except","many"+un,'no']
     if definiendum == "point":
         bb = 7
-    new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
         def_used.append(definiendum)
 
@@ -3151,7 +3138,6 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     else:
         rr_var = 0
     detached = [conditional,iff,xorr,idisj]
-    str1 = copy.copy(definition)
     #if bool1 is false then there is a series of conjuncts that need to be removed from
     # the definition
     temp_ad = []
@@ -3173,7 +3159,6 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     dfn_num = def_num + "2"
     poss_str = ""
     ld = len(def_num)
-    list1 = []
     cnnan = []
     prop_con = []
     list1 = id_def(def_info,words,idf_var,all_sent)
@@ -3185,8 +3170,6 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     # for i in range(len(list1),g,-1):
     #     prop_con[i].append(1)
 
-    adj_sent = []
-    has_plural = list1[1]
     odef = all_sent[m][0]
     # we now must match the definite variables in the definition to the definite variables
     # already assigned
@@ -6087,20 +6070,6 @@ def cat_atoms(j,i,list,members,basic_objects,str1,bo2,words,consq,rel,basic_cat)
     return
 
 
-def prepare_prop_type(def_info,all_sent):
-    # this determine whether an atomic sent in an attached sent is conjunctive,
-    # disjunctive, etc
-
-    for y in range(len(def_info[0])):
-        if os(def_info[0][y]):
-            def_con = def_info[4][y][1]
-            sent_num = def_info[4][y][0]
-            paren_num = def_info[4][y][0][:-1]
-            gparen_num = def_info[4][y][0][:-2]
-            paren_conn = findinlist(paren_num,def_info[4],0,1)
-            gparen_conn = findinlist(gparen_num,def_info[4],0,1)
-            str9 = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
-    return str9
 
 def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     prop_sent,prop_name,id_num,identities,idf_var,truth_value,greek2):
@@ -6676,6 +6645,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,kind=0,\
                 dummy = put_premises_into_standard_list(tot_sent,conditionals4,\
                         standard_cd,all_sent)
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
+            conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
 
 
 
@@ -7910,19 +7880,156 @@ def get_prop(str1,recon=False,greek2=[]):
 
     return arr1
 
-def isstandard(list1,all_sent):
-    # this determines whether or not a conditional is standard
-    for i in range(len(list1)):
-        if os(list1[i]):
-            for j in range(len(all_sent)):
-                bool1 = False
-                if all_sent[j][42][0] == "~":
-                    str1 = all_sent[j][42][1:]
-                    if str1 == list1[i]:
-                        bool1 = True
-                        break
-                return False
-    return True
+
+def link_nat_sent_to_all_sent(list7,all_sent):
+    # this puts the all sent onto the conditional 32 list
+    list1 = []
+    def_info = list7[36]
+    for i in range(len(list7[38])):
+        bool1 = False
+        for j in range(len(all_sent)):
+            if all_sent[j][42] == list7[38][i]:
+                list2 = copy.deepcopy(all_sent[j])
+                j = findin1dlist(list7[38][i],def_info[0])
+                k = def_info[4][j][0]
+                list2[44] = k
+                list1.append(list2)
+                bool1 = True
+                list2 = ancestor_numbers(list2,k,def_info)
+                break
+        if not bool1:
+            str1 = list7[38][i]
+            if str1[0] == "~":
+                str1 = str1[1:]
+            str1 = findinlist(str1,prop_name,0,2)
+            print "sentence " + list7[38][i] + " - " + str1 + " was not found in the all sent list"
+            sys.exit()
+    list7[33] = list1
+    return list7
+
+def ancestor_numbers(list2,k,def_info):
+    # this determines the number and connective of the ancestors of a
+    # sent in the conditional
+    list2[53] = None
+    self_num = k[-1]
+    if len(k) == 4:
+        ggparen_num = k[0]
+        gparen_num = k[1]
+        paren_num = k[2]
+        ggparen_conn = findinlist(ggparen_num,def_info[4],0,1)
+        gparen_conn = findinlist(gparen_num,def_info[4],0,1)
+        paren_conn = findinlist(paren_num,def_info[4],0,1)
+        ggparen_conn = convert_con_to_letter(ggparen_conn,gparen_num)
+        gparen_conn = convert_con_to_letter(gparen_conn,paren_num)
+        paren_conn = convert_con_to_letter(paren_conn,self_num)
+        list2[45] = 4
+        list2[53] = paren_conn + gparen_conn + ggparen_conn
+
+    elif len(k) == 3:
+        gparen_num = k[0]
+        paren_num = k[1]
+        gparen_conn = findinlist(gparen_num,def_info[4],0,1)
+        paren_conn = findinlist(paren_num,def_info[4],0,1)
+        gparen_conn = convert_con_to_letter(gparen_conn,paren_num)
+        paren_conn = convert_con_to_letter(paren_conn,self_num)
+        list2[45] = 3
+        list2[53] = paren_conn + gparen_conn
+
+    elif len(k) == 2:
+        paren_num = k[0]
+        paren_conn = findinlist(paren_num,def_info[4],0,1)
+        paren_conn = convert_con_to_letter(paren_conn,self_num)
+        list2[45] = 2
+        list2[53] = paren_conn
+
+    elif len(k) == 5:
+        print "you have not coded for attached sentences with 5 generations yet"
+        sys.exit()
+
+    if list2[53] == None:
+        print "the number ancestor function is messed up"
+        sys.exit()
+    return list2
+
+
+
+def convert_con_to_letter(str1,str2):
+    # this converts a connective to a letter
+    if str1 == iff and str2 == '1':
+        return 'b'
+    elif str1 == iff and str2 == '2':
+        return 'f'
+    elif str1 == conditional and str2 == '1':
+        return 'a'
+    elif str1 == conditional and str2 == '2':
+        return 'q'
+    elif str1 == xorr:
+        return 'x'
+    elif str1 == idisj:
+        return 'd'
+    elif str1 == "&":
+        return 'c'
+    else:
+        print 'the convert con to letter function is messed up'
+        sys.exit()
+
+def put_nat_sent_in_cond2(list7):
+    # this puts in an all sent into 35 or 36 of the conditional list
+
+
+    for i in range(len(list7[33])):
+        prop_type = list7[33][i][53]
+        aq = prop_type[0]
+        self_type = prop_type[-1]
+
+        if aq == "a" or aq == 'b':
+            if self_type == 'd' or self_type == 'x' or self_type == 'c':
+                if list7[34] == None:
+                    list4 = [list7[33][i]]
+                    list7[34] = list4
+                else:
+                    list4 = list7[34][i]
+                    list4.append(list7[33][i])
+                    list7[34] = list4
+            elif self_type == 'a' or 'b':
+                list7[34] = list7[33][i]
+            
+        elif aq == 'q' or aq == 'f':
+            if self_type == 'd' or self_type == 'x' or self_type == 'c':
+                if list7[35] == None:
+                    list4 = [list7[33][i]]
+                    list7[35] = list4
+                else:
+                    list4 = list7[35][i]
+                    list4.append(list7[33][i])
+                    list7[35] = list4
+            elif self_type == 'a' or 'b':
+                list7[35] = list7[33][i]
+            
+
+    return list7
+
+def put_nat_sent_in_cond1(conditionals,all_sent):
+    # this unencloses the prop sent in the def into list
+
+    for i in range(len(conditionals)):
+        list7 = conditionals[i]
+        def_info = list7[36]
+        for i in range(len(def_info[0])):
+            def_info[0][i] = unenclose(def_info[0][i],True)
+        list7[36] = def_info
+        if def_info[4][0][1] == iff:
+            list7[3] = "e"
+        elif def_info[4][0][1] == conditional:
+            list7[3] = "c"
+        elif def_info[4][0][1] == xorr:
+            list7[3] = "x"
+        elif def_info[4][0][1] == idisj:
+            list7[3] = "d"
+        list7 = link_nat_sent_to_all_sent(list7,all_sent)
+        list7 = put_nat_sent_in_cond2(list7)
+        conditionals[i] = list7
+    return conditionals
 
 def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
 
@@ -7931,6 +8038,7 @@ def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
         bb = 8
 
     list7 = [""] * 39
+    list7[36] = def_info
     if num == "":
         list7[2] = sn + 1
     else:
@@ -7940,22 +8048,6 @@ def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
     list7[5] = ""
     list9 = []
     j = 0
-    if proof_type == 'o':
-        for i in range(len(def_info[0])):
-            def_info[0][i] = unenclose(def_info[0][i])
-        if def_info[4][0][1] == iff:
-            list7[3] = "e"
-        elif def_info[4][0][1] == conditional:
-            list7[3] = "c"
-        elif def_info[4][0][1] == xorr:
-            list7[3] = "x"
-        elif def_info[4][0][1] == idisj:
-            list7[3] = "d"
-        standard = isstandard(def_info[0])
-
-
-
-
     str2 = remove_outer_paren(str2)
     if mainc == iff:
         list7[3] = "e"
@@ -8828,7 +8920,7 @@ def demorgan(all_sent,prop_sent,conditionals,candd,candd2,kind,one_sent = False,
                     conditionals[d][4] = str1
     return True
 
-def unenclose(str1):
+def unenclose(str1,bool1=False):
 
     i = -1
     global subscripts
@@ -8850,7 +8942,10 @@ def unenclose(str1):
         elif str2.islower() and str3 == "~" and str4 in subscripts:
             str1 = str1[:i-2] + str3 + str2 + str4 + str1[i+3:]
             list1.append(str2 + str4)
-    return [str1,list1]
+    if not bool1:
+        return [str1,list1]
+    else:
+        return str1
 
 def new_disjunct(all_sent,str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1, anc2, \
             anc3 = None, anc4=None, kind = 0, rule = ""):
@@ -9803,7 +9898,6 @@ def get_result(post_data,archive_id=None,request=None):
         prop_name = []
         tot_sent = []
         all_sent = []
-        never_used = []
         plural_c = []
         embed = []
         pn = 400
@@ -9820,7 +9914,6 @@ def get_result(post_data,archive_id=None,request=None):
         ind_var = []
         rel_conj = []
         conc = []
-        psent = []
         identities = []
         prop_sent = []
         tagged_nouns = []

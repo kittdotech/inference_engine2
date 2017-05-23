@@ -17,6 +17,7 @@ j = 2
 proof_type = 'n' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
 stp = 0
+save_doc = False
 if j == 1:
     django2 = False
     temp17 = False
@@ -3082,7 +3083,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #this is for those determinatives which have negations in their definitions where
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","many"+un,'no']
-    if definiendum == "jim":
+    if definiendum == "part":
         bb = 7
     new_idf = []
     if definiendum not in def_used and not definiendum.isupper():
@@ -3326,6 +3327,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
             # if bb == 9:
             #     pass
             if telist7[9] == "n":
+                print 'hey man'
                 pass
             else:
                 if kind == 'AS' and telist7[9] == 'R':
@@ -3483,7 +3485,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
                 for s in range(0,3):
                     telist7.append(None)
                 def_sent.append(telist7)
-
+    #end8
     # the purpose of this is that the subject of the definiendum must match the subject
     # of the osent to be defined.  if its a relation then the object must also match
     if (kind == "" or kind == "R" or kind == 'AS'):
@@ -9641,8 +9643,7 @@ if excel or one_sent or temp17:
     st = time.time()
     if excel:
         wb4.save('../inference engine new.xlsx')
-    if one_sent:
-        pass
+    if save_doc:
         wb4.save('../temp_proof.xlsx')
     if words_used:
         wb5.save('../dictionary last perfect.xlsx')
