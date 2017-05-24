@@ -146,6 +146,12 @@ class AlgorithmAdmin(admin.ModelAdmin):
     empty_value_display = ""
     ordering = ("id",)
     list_per_page = 50
+
+
+class InstructionFileAdmin(admin.ModelAdmin):
+    list_display = ('data', 'file_type', 'color_type')
+    ordering = ("id",)
+    list_per_page = 50
 """
 class MyArchivesForm(admin.ModelAdmin):
     list_display = ('archives_date','algorithm')
@@ -156,5 +162,5 @@ admin.site.register(Define3, MyDefine)
 admin.site.register(Input, MyInput)
 admin.site.register(Archives, MyArchive)
 admin.site.register(Output, OutputAdmin)
-admin.site.register(InstructionFile)
+admin.site.register(InstructionFile, InstructionFileAdmin)
 admin.site.register(Algorithm, AlgorithmAdmin)
