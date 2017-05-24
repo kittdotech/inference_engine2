@@ -16,7 +16,7 @@ tot_tim = time.time()
 
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 5 # if n then proof type before may 1
+strt = 0 # if n then proof type before may 1
 stp = 0
 print_to_doc = False
 if j == 1:
@@ -6658,7 +6658,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
             conditionals = prepare_disjuncts(conditionals,greek2)
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
-
+            #ffd
 
 
         return tot_sent
@@ -8008,18 +8008,20 @@ def put_nat_sent_in_cond2(list7):
             print 'you have not coded for conditionals with more than 4 generations'
             sys.exit()
         earliest_conn = prop_type[-1]
-        if earliest_conn == 'a' or earliest_conn == 'b':
-            z = 34
-        elif earliest_conn == 'q' or earliest_conn == 'f':
+        if earliest_conn == 'q' or earliest_conn == 'f':
             z = 35
+        else:
+            z = 34
 
-        if generation == 2 or list7[z] == None:
+        if generation == 2 or list7[z] == "":
             list7[z] = list7[33][i]
         else:
             list8 = list7[z]
             if generation == 3:
-                list8.append(list7[33][i])
-                list7[z] = list8
+                if len(list8) > 35:
+                    list7[z] = [list8,list7[33][i]]
+                else:
+                    list8.append(list7[33][i])
             elif generation == 4:
                 # this code has not been tested
                 sibling = list7[33][i][43]

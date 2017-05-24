@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
+    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="disjunctions now get filled in conditionals[33]">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
     </list>
@@ -45,8 +45,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="6639" column="14" lean-forward="true" selection-start-line="6639" selection-start-column="14" selection-end-line="6639" selection-end-column="14" />
+            <state relative-caret-position="225">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -118,28 +118,47 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>all_sent</find>
-      <find>def put_nat</find>
-      <find>put_nat</find>
-      <find>def put_na</find>
-      <find>tot_sent.ap</find>
-      <find>tot_sent.app</find>
-      <find>prepare_iff</find>
-      <find>prepare_iff_elim(</find>
-      <find>conditionals.append</find>
       <find>list2</find>
       <find>conditionals.ap</find>
       <find>def put</find>
       <find>def put_pre</find>
-      <find>def prepar</find>
-      <find>plan(</find>
       <find>def prep</find>
-      <find>def rearr</find>
       <find>has_outer</find>
       <find>def rear</find>
+      <find>def rearr</find>
+      <find>e_iff_elim(</find>
+      <find>axioms2(</find>
+      <find>axioms(</find>
+      <find>new_cond(</find>
+      <find>plan(</find>
+      <find>new_prop_sent(</find>
+      <find>many_cond(</find>
+      <find>def rearran</find>
+      <find>def new_prop</find>
+      <find>def rearrange</find>
+      <find>put_nat</find>
+      <find>link_na</find>
+      <find>def prepare</find>
+      <find>rearrange(</find>
+      <find>def rearra</find>
+      <find>def prepar</find>
+      <find>def get_prop</find>
+      <find>cut_skel</find>
+      <find>ffd</find>
+      <find>def link</find>
+      <find>link_nat</find>
+      <find>def put_nat</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
+      <replace>e_iff_elim(greek2,</replace>
+      <replace>axioms2(greek2,</replace>
+      <replace>axioms(greek2,</replace>
+      <replace>new_cond(greek2,</replace>
+      <replace>new_prop_sent(greek2,</replace>
+      <replace>many_cond(greek2,</replace>
+      <replace>modus_ponens(greek2,</replace>
+      <replace>statement_logic(greek2,</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -550,7 +569,21 @@
       <option name="project" value="LOCAL" />
       <updated>1495551920862</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="conditionals[37] is never blank">
+      <created>1495620219383</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1495620219383</updated>
+    </task>
+    <task id="LOCAL-00017" summary="disjunctions now get filled in conditionals[33]">
+      <created>1495637385039</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1495637385039</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -626,41 +659,16 @@
     <MESSAGE value="almost put all_sent into conditional[35] and [36]" />
     <MESSAGE value="minor change to excel" />
     <MESSAGE value="minor change to excel 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor change to excel 2" />
+    <MESSAGE value="conditionals[37] is never blank" />
+    <MESSAGE value="disjunctions now get filled in conditionals[33]" />
+    <option name="LAST_COMMIT_MESSAGE" value="disjunctions now get filled in conditionals[33]" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>6751</line>
-          <option name="timeStamp" value="6073" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>6765</line>
-          <option name="timeStamp" value="6074" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>6615</line>
-          <option name="timeStamp" value="6076" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>6548</line>
-          <option name="timeStamp" value="6078" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>8115</line>
-          <option name="timeStamp" value="6085" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6087" />
+      <option name="time" value="6151" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1049,8 +1057,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="6639" column="14" lean-forward="true" selection-start-line="6639" selection-start-column="14" selection-end-line="6639" selection-end-column="14" />
+        <state relative-caret-position="225">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
