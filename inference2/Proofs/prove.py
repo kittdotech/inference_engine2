@@ -14,6 +14,7 @@ tot_tim = time.time()
 
 
 
+
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
@@ -6627,6 +6628,24 @@ def prepare_disjuncts(conditionals,greek2):
             conditionals[i][38] = list1[1]
     return conditionals
 
+def variable_type(conditionals):
+    #This determines whether variables in conditionals are general, or indefinite
+
+    general = []
+    indef = []
+    defn = []
+    num = [5,14,18,22]
+    for i in range(len(conditionals)):
+        for j in range(len(conditionals[i])):
+            pass
+
+
+
+
+
+
+
+
 def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
               conditionals=[]):
 
@@ -6658,6 +6677,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
             conditionals = prepare_disjuncts(conditionals,greek2)
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
+            var_type = variable_type(conditionals)
             #ffd
 
 
@@ -7900,6 +7920,7 @@ def link_nat_sent_to_all_sent(list7,all_sent):
     # this puts the all sent onto the conditional 32 list
     list1 = []
     def_info = list7[36]
+    ant = ['a','b','x','g']
     for i in range(len(list7[38])):
         bool1 = False
         for j in range(len(all_sent)):
@@ -7912,8 +7933,16 @@ def link_nat_sent_to_all_sent(list7,all_sent):
                 list2[45] = len(k)
                 bool1 = True
                 list2 = ancestor_numbers(list2,k,def_info)
-                list1.append(list2)
-                break
+                if list2[53][-1] in ant:
+                    if antecedent == []:
+                        antecedent = list2
+                    else:
+                        antecedent.append(list2)
+                else:
+                    if consequent == []:
+                        consequent = list2
+                    else:
+                        consequent.append(list2)
         if not bool1:
             str1 = list7[38][i]
             if str1[0] == "~":
@@ -7921,7 +7950,8 @@ def link_nat_sent_to_all_sent(list7,all_sent):
             str1 = findinlist(str1,prop_name,0,2)
             print "sentence " + list7[38][i] + " - " + str1 + " was not found in the all sent list"
             sys.exit()
-    list7[33] = list1
+    list7[34] = antecedent
+    list7[35] = consequent
     return list7
 
 def ancestor_numbers(list2,k,def_info):
@@ -7976,7 +8006,6 @@ def ancestor_numbers(list2,k,def_info):
     return list2
 
 
-
 def convert_con_to_letter(str1,str2):
     # this converts a connective to a letter
     if str1 == iff and str2 == '1':
@@ -7987,10 +8016,15 @@ def convert_con_to_letter(str1,str2):
         return 'a'
     elif str1 == conditional and str2 == '2':
         return 'q'
-    elif str1 == xorr:
+    elif str1 == xorr and str2 == '1':
         return 'x'
-    elif str1 == idisj:
+    elif str1 == xorr and str2 == '2':
+        return 'y'
+    elif str1 == idisj and str2 == '1':
         return 'd'
+    elif str1 == idisj and str2 == '2':
+        return 'g'
+
     elif str1 == "&":
         return 'c'
     else:
@@ -8069,7 +8103,6 @@ def put_nat_sent_in_cond1(conditionals,all_sent):
         elif def_info[4][0][1] == idisj:
             list7[3] = "d"
         list7 = link_nat_sent_to_all_sent(list7,all_sent)
-        list7 = put_nat_sent_in_cond2(list7)
         conditionals[i] = list7
     return conditionals
 

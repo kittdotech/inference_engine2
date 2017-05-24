@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="disjunctions now get filled in conditionals[33]">
+    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
     </list>
@@ -45,8 +45,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="235">
+              <caret line="6640" column="0" lean-forward="true" selection-start-line="6640" selection-start-column="0" selection-end-line="6640" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -118,7 +118,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>list2</find>
       <find>conditionals.ap</find>
       <find>def put</find>
       <find>def put_pre</find>
@@ -136,18 +135,19 @@
       <find>def rearran</find>
       <find>def new_prop</find>
       <find>def rearrange</find>
-      <find>put_nat</find>
       <find>link_na</find>
       <find>def prepare</find>
       <find>rearrange(</find>
-      <find>def rearra</find>
       <find>def prepar</find>
       <find>def get_prop</find>
       <find>cut_skel</find>
-      <find>ffd</find>
       <find>def link</find>
       <find>link_nat</find>
+      <find>put_nat</find>
+      <find>ffd</find>
       <find>def put_nat</find>
+      <find>def put_na</find>
+      <find>def rearra</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -583,7 +583,14 @@
       <option name="project" value="LOCAL" />
       <updated>1495637385039</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="finished put_nat_sent_in_cond2 function">
+      <created>1495639520574</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1495639520574</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -661,14 +668,15 @@
     <MESSAGE value="minor change to excel 2" />
     <MESSAGE value="conditionals[37] is never blank" />
     <MESSAGE value="disjunctions now get filled in conditionals[33]" />
-    <option name="LAST_COMMIT_MESSAGE" value="disjunctions now get filled in conditionals[33]" />
+    <MESSAGE value="finished put_nat_sent_in_cond2 function" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished put_nat_sent_in_cond2 function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6151" />
+      <option name="time" value="6153" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -681,12 +689,6 @@
         <watch expression="all_sent" language="Python" />
         <watch expression="request" language="Python" />
         <watch expression="importer.data['archives']" />
-      </configuration>
-      <configuration name="PythonConfigurationType">
-        <watch expression="already_defined" language="Python" />
-        <watch expression="prop_sent" language="Python" />
-        <watch expression="prop_name" language="Python" />
-        <watch expression="conditionals" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -1057,8 +1059,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state relative-caret-position="235">
+          <caret line="6640" column="0" lean-forward="true" selection-start-line="6640" selection-start-column="0" selection-end-line="6640" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
