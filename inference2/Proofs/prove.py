@@ -1,6 +1,5 @@
 from openpyxl import load_workbook
 from collections import Counter
-import timeit
 import copy
 import time
 import operator
@@ -16,8 +15,8 @@ tot_tim = time.time()
 
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 0 # if n then proof type before may 1
-stp = 1
+strt = 3 # if n then proof type before may 1
+stp = 0
 print_to_doc = False
 if j == 1:
     django2 = False
@@ -33,7 +32,8 @@ elif j == 2:
     temp17 = False
     one_sent = True
     bool1 = True
-    wb4 = load_workbook('../temp_proof.xlsx')
+    wb4 = load_workbook('/Users/kylefoley/PycharmProjects/inference_engine2/inference2/temp_proof.xlsx')
+    # wb4 = load_workbook('../temp_proof.xlsx')
     w4 = wb4.worksheets[0]
     mysql = False
     debug = False
@@ -344,17 +344,23 @@ def get_super(str1):
 
 
 
-def remove_outer_paren(str1):
+def remove_outer_paren(str1,bool1 = False):
 
     if str1 == "":
         return ""
     elif str1.count(")") == 0:
-        return str1
+        if not bool1:
+            return str1
+        else:
+            return False
 
     j = 0
     # on very rare occasions we will encounter strings of the following form ((p))
     if str1[0] != "(" and str1[-1] != ")":
-        return str1
+        if not bool1:
+            return str1
+        else:
+            return True
     if str1[:2] == "((" and str1[-2:] == "))":
         d = 2
     else:
@@ -371,8 +377,12 @@ def remove_outer_paren(str1):
                 break
             elif j == 0 and i + 1 == len(str1):
                 str1 = str1[1:len(str1) - 1]
-
-    return str1
+                if bool1:
+                    return True
+    if not bool1:
+        return str1
+    else:
+        return False
 
 
 def remove_redundant_paren(str1):
@@ -6535,11 +6545,11 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
         d = len(prop_sent)
 
     for i in range(d):
-        if i == 27:
+        if i == 29:
             bb = 8
         if prop_sent[i][0] > c:
             if prop_sent[i][1] == bottom:
-                tot_sent.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                tot_sent.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
             elif os(prop_sent[i][1]):
                 # try:
@@ -6554,13 +6564,13 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
                         break
                 if consistent:
                     if bool1:
-                        standard_cj.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                        standard_cj.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
                     else:
-                        nonstandard.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                        nonstandard.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
 
-                tot_sent.append([prop_sent[i][0],str1,prop_sent[i][2],"",\
+                tot_sent.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
 
             else:
@@ -6568,7 +6578,7 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
                 if prop_sent[i][0] == 32:
                     bb = 8
                 if t > -1:
-                    if conditionals[t][37] == "":
+                    if conditionals[t][37] == "" or conditionals[t][37] == None:
                         list2 = get_prop(prop_sent[i][1],True,greek2)
                         conditionals[t][37] = list2[0]
                         list3 = list2[1]
@@ -6594,7 +6604,7 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
                                 bool1 = True
                                 break
 
-                tot_sent.append([prop_sent[i][0],str1,"","",\
+                tot_sent.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                     prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
                                      prop_sent[i][6],prop_sent[i][7]])
                 if consistent:
@@ -6602,6 +6612,8 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
                         d = findposinmd(prop_sent[i][1],conditionals4,4)
                         if d > -1:
                             del conditionals4[d]
+                        if str1 == None:
+                            bb = 8
                         standard_cd.append([prop_sent[i][0],str1,"","",\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
                                          prop_sent[i][6],prop_sent[i][7]])
@@ -6629,6 +6641,11 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,kind=0,\
     list6 = put_nc_id_ax_df_into_list(list5,list1,list2,tot_sent)
     rn_used = list6[0]
     tot_sent = list6[1]
+    for i in range(len(conditionals)):
+        str1 = conditionals[i][37]
+        if (str1 == "" or str1 == None) and conditionals[i][3] != 'd':
+            print 'you failed to find a conditional in ' + str(i)
+
 
     if rn_used:
         tot_sent = rearrange_tot_sent(list5,list1,list2)
@@ -6645,7 +6662,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,kind=0,\
                 dummy = put_premises_into_standard_list(tot_sent,conditionals4,\
                         standard_cd,all_sent)
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
-            conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
+            # conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
 
 
 
@@ -6729,6 +6746,7 @@ def put_premises_into_standard_list(tot_sent,conditionals4,\
     # this puts standard conditionals which are in the premises into the
     # standard_cd list
     for f in range(len(conditionals4)):
+
         h = findposinlist(conditionals4[f][4],tot_sent,2)
         str1 = tot_sent[h][1]
         list2 = conditionals4[f][38]
@@ -6745,7 +6763,7 @@ def put_premises_into_standard_list(tot_sent,conditionals4,\
             standard_cd.append([conditionals4[f][2],str1,"","",tot_sent[h][4],\
             tot_sent[h][5],tot_sent[h][6],tot_sent[h][7],\
                          tot_sent[h][8],""])
-
+    return
 
 def cjcnd(all_sent,conditionals,tot_sent): # conjuncts and conditionals = cjcnd
 
@@ -7871,10 +7889,8 @@ def get_prop(str1,recon=False,greek2=[]):
             str7 = gr_lst[i][1]
             str8 = gr_lst[i][0]
             str3 = findinlist(str8,prop_name,0,2)
-            #try:
             str1 = str1.replace(str7,str3)
-            #except TypeError:
-             #   bb = 8
+
         return [str1,arr1]
 
 
@@ -7893,9 +7909,10 @@ def link_nat_sent_to_all_sent(list7,all_sent):
                 j = findin1dlist(list7[38][i],def_info[0])
                 k = def_info[4][j][0]
                 list2[44] = k
-                list1.append(list2)
+                list2[45] = len(k)
                 bool1 = True
                 list2 = ancestor_numbers(list2,k,def_info)
+                list1.append(list2)
                 break
         if not bool1:
             str1 = list7[38][i]
@@ -8044,11 +8061,9 @@ def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
     else:
         list7[2] =  num
 
+    str2 = remove_outer_paren(str2)
     list7[4] = str2
     list7[5] = ""
-    list9 = []
-    j = 0
-    str2 = remove_outer_paren(str2)
     if mainc == iff:
         list7[3] = "e"
     else:
@@ -8094,9 +8109,18 @@ def prepare_iff_elim(def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
                     list7[1] = list6
                     list7[7] = str9
 
-    list7[38] = get_prop(str2)
-    if tot_sent != []:
-        list7[37] = findinlist(str2,tot_sent,2,1)
+    list9 = get_prop(str2,True)
+    list7[38] = list9[1]
+    list7[37] = list9[0]
+    if list9[0] == None or list9[0] == "":
+        bb = 8
+
+    # if tot_sent != []:
+    #     str1 = findinlist(str2,tot_sent,2,1)
+    #     if str1 == None:
+    #
+    #         bb = 8
+    #     list7[37] = str1
     return list7
 
 def islist(list1):
@@ -8393,10 +8417,7 @@ def disjunction_heirarchy(conditionals,str5,d,new_disj = False):
     if conditionals == [] or new_disj:
         list2[2] = pn
     else:
-        try:
-            list2[2] = conditionals[d][2]
-        except IndexError:
-            bb = 8
+        list2[2] = conditionals[d][2]
     list2[5] = ""
     list2[4] = list1[0][0]# fix this
     sentences = []
@@ -9641,7 +9662,6 @@ def plan(sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name, disjun
                     list5[5] = ng
                     conditionals.append(list5)
                 elif list1[4][0][1] != "&":
-                    str3 = ""
                     if list1[4][0][1] != idisj and ng == "" and list1[4][0][1] != xorr:
                         list7 = prepare_iff_elim(list1,str2,all_sent,list2[0],list2[1],sent[i][0],tot_sent)
                     else:
@@ -9684,7 +9704,7 @@ def plan(sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name, disjun
                 str2 = temp_conditionals[i][1]
             ng = temp_conditionals[i][2]
             list2 = mainconn(str2)
-
+            no_contr = new_prop(all_sent, prop_sent, str2, ng, "&E", temp_conditionals[i][0], None)
             if list2[0] != idisj and ng == "" and list2[0] != "&" and list2[0] != xorr:
                 list7 = prepare_iff_elim(list1,str2,all_sent,list2[0],list2[1],pn+1,tot_sent)
             else:
@@ -9697,7 +9717,7 @@ def plan(sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name, disjun
             conditionals.append(list7)
             if oc(str2):
                 candd.append([pn+1, str2,ng])
-            no_contr = new_prop(all_sent,prop_sent, str2,ng,"&E",temp_conditionals[i][0], None)
+
             if not no_contr:
                 return False
 

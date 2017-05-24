@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/dictionary4.xlsx" afterPath="$PROJECT_DIR$/inference2/dictionary4.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,11 +45,21 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="180">
+              <caret line="6639" column="14" lean-forward="true" selection-start-line="6639" selection-start-column="14" selection-end-line="6639" selection-end-column="14" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="zipfile.py" pinned="false" current-in-tab="false">
+        <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/zipfile.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="761" column="0" lean-forward="false" selection-start-line="761" selection-start-column="0" selection-end-line="761" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -58,7 +68,7 @@
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="148380">
-              <caret line="9892" column="0" lean-forward="true" selection-start-line="9892" selection-start-column="0" selection-end-line="9892" selection-end-column="0" />
+              <caret line="9892" column="0" lean-forward="false" selection-start-line="9892" selection-start-column="0" selection-end-line="9892" selection-end-column="0" />
               <folding>
                 <element signature="e#1#35#0" expanded="true" />
               </folding>
@@ -110,6 +120,23 @@
     <findStrings>
       <find>all_sent</find>
       <find>def put_nat</find>
+      <find>put_nat</find>
+      <find>def put_na</find>
+      <find>tot_sent.ap</find>
+      <find>tot_sent.app</find>
+      <find>prepare_iff</find>
+      <find>prepare_iff_elim(</find>
+      <find>conditionals.append</find>
+      <find>list2</find>
+      <find>conditionals.ap</find>
+      <find>def put</find>
+      <find>def put_pre</find>
+      <find>def prepar</find>
+      <find>plan(</find>
+      <find>def prep</find>
+      <find>def rearr</find>
+      <find>has_outer</find>
+      <find>def rear</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -185,7 +212,7 @@
     <option name="x" value="809" />
     <option name="y" value="23" />
     <option name="width" value="631" />
-    <option name="height" value="865" />
+    <option name="height" value="796" />
   </component>
   <component name="ProjectReloadState">
     <option name="STATE" value="1" />
@@ -516,11 +543,18 @@
       <option name="project" value="LOCAL" />
       <updated>1495551810669</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="minor change to excel 2">
+      <created>1495551920862</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1495551920862</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="809" y="23" width="631" height="865" extended-state="0" />
+    <frame x="809" y="23" width="631" height="796" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23178808" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -531,7 +565,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37768924" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2934363" sideWeight="0.48787448" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20477387" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22420909" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -591,26 +625,42 @@
     <MESSAGE value="sped up the def_rn function" />
     <MESSAGE value="almost put all_sent into conditional[35] and [36]" />
     <MESSAGE value="minor change to excel" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor change to excel" />
+    <MESSAGE value="minor change to excel 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor change to excel 2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>7972</line>
-          <option name="timeStamp" value="6032" />
+          <line>6751</line>
+          <option name="timeStamp" value="6073" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>8029</line>
-          <option name="timeStamp" value="6035" />
+          <line>6765</line>
+          <option name="timeStamp" value="6074" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
+          <line>6615</line>
+          <option name="timeStamp" value="6076" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
+          <line>6548</line>
+          <option name="timeStamp" value="6078" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
+          <line>8115</line>
+          <option name="timeStamp" value="6085" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6036" />
+      <option name="time" value="6087" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -626,6 +676,9 @@
       </configuration>
       <configuration name="PythonConfigurationType">
         <watch expression="already_defined" language="Python" />
+        <watch expression="prop_sent" language="Python" />
+        <watch expression="prop_name" language="Python" />
+        <watch expression="conditionals" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -900,13 +953,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/zipfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="810" column="0" lean-forward="false" selection-start-line="810" selection-start-column="0" selection-end-line="810" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Python/2.7/site-packages/django/conf/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -986,17 +1032,25 @@
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="148380">
-          <caret line="9892" column="0" lean-forward="true" selection-start-line="9892" selection-start-column="0" selection-end-line="9892" selection-end-column="0" />
+          <caret line="9892" column="0" lean-forward="false" selection-start-line="9892" selection-start-column="0" selection-end-line="9892" selection-end-column="0" />
           <folding>
             <element signature="e#1#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/zipfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="761" column="0" lean-forward="false" selection-start-line="761" selection-start-column="0" selection-end-line="761" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state relative-caret-position="180">
+          <caret line="6639" column="14" lean-forward="true" selection-start-line="6639" selection-start-column="14" selection-end-line="6639" selection-end-column="14" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
