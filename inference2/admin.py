@@ -149,7 +149,7 @@ class AlgorithmAdmin(admin.ModelAdmin):
 
 
 class InstructionFileAdmin(admin.ModelAdmin):
-    list_display = ('id','data', 'file_type', 'color_type')
+    list_display = ('id','name', 'file_type', 'color_type')
     ordering = ("id",)
     list_per_page = 50
 """
