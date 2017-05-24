@@ -26,6 +26,7 @@ urlpatterns = [
         views.export_xlsx, name='export_xlsx'),
     url(r'^progress$', views.progress, name='progress'),
     url(r'^archives$', views.archives, name='archives'),
+    url(r'^files$', views.download_files, name='archives'),
     url(r'^archives/(?P<num>[0-9]+)$',
         views.assign_archives, name='assign_archives'),
     url(r'^archives/(?P<num>[0-9]+)/(?P<type>[a-z]+)$',

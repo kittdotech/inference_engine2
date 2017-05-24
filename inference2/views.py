@@ -50,7 +50,8 @@ def current_archive():
 
 def index(request, archive=None):
 
-    ins_file = InstructionFile.objects.all().order_by('-id').first()
+    ins_file = InstructionFile.objects.filter(
+        file_type='0').order_by('-id').first()
     if(ins_file):
         ins_file = '/' + str(ins_file.data)
     else:
@@ -181,6 +182,12 @@ def dictionary(request, archive=None):
         url_path = '/archives/{}/'.format(archive.id)
     dict = Define3.objects.filter(archives_id=archive.id)
     return render(request, "inference2/dict.html", {'result': dict, 'url_path': url_path})
+
+
+def download_files(request):
+    ins_files = InstructionFile.objects.filter(
+        file_type='1').order_by('-id')
+    return render(request, "inference2/files.html", {'ins_files': ins_files})
 
 
 def archives(request):

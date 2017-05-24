@@ -5,6 +5,20 @@ from django.db import models
 
 class InstructionFile(models.Model):
     data = models.FileField(upload_to='./static/inference2/')
+    FILE_TYPE_CHOICES = (
+        ('0', 'instruction'),
+        ('1', 'downloadable_file'),
+    )
+    COLOR_CHOICES = (
+        ('red', 'red'),
+        ('green', 'green'),
+        ('blue', 'blue'),
+        ('white', 'white'),
+    )
+    file_type = models.CharField(
+        max_length=1, choices=FILE_TYPE_CHOICES, default='0')
+    color_type = models.CharField(
+        max_length=10, choices=COLOR_CHOICES, default='white')
 
     def save(self, *args, **kwargs):
         super(InstructionFile, self).save(*args, **kwargs)
@@ -65,7 +79,8 @@ class Algorithm(models.Model):
     def validate_file_extension(value):
         from django.core.exceptions import ValidationError
         if not value.name.endswith('.py'):
-            raise ValidationError(u'Only files with py extenstion are supported.')
+            raise ValidationError(
+                u'Only files with py extenstion are supported.')
 
     name = models.CharField(max_length=200)
     data = models.FileField(upload_to='./inference2/Proofs/',
