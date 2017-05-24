@@ -4,6 +4,8 @@ from django.db import models
 
 
 class InstructionFile(models.Model):
+    name = models.CharField(
+        max_length=100, default='name')
     data = models.FileField(upload_to='./static/inference2/')
     FILE_TYPE_CHOICES = (
         ('0', 'instruction'),

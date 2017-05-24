@@ -2,7 +2,7 @@
 {% load extra_tags %}
 
 {% block content %}
-    <h1>Donload Files</h1>
+    <h1>Download Files</h1>
 
     <table class="table table-bordered">
         <thead>
@@ -14,7 +14,7 @@
         <tbody>
         {% for row in ins_files %}
 			<tr style="background:{{ row.color_type }} ">
-			    <td>{{ row.data }}</td>
+			    <td>{{ row.name }}</td>
 			    <td><a href="{{ row.data }}">Download</a></td>
 			</tr>
 		{% endfor %}
