@@ -17,7 +17,7 @@ tot_tim = time.time()
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
-stp = 0
+stp = 5
 print_to_doc = False
 if j == 1:
     django2 = False
@@ -5167,19 +5167,21 @@ def findposmd(str1,str2,list1,p,q,r):
 
     return -1
 
-def findposinmd(str1,list1,p,bool1=False):
-
+def findposinmd(str1,list1,p):
+    # this determines the position of an element in a multidimensional list
     for i in range(len(list1)):
         if list1[i][p] == str1:
-            if bool1:
-                return True
-            else:
-                return i
+            return i
+    return -1
 
-    if bool1:
-        return False
-    else:
-        return -1
+def isinmdlist(str1,list1,p):
+    # this determines whether or not an element is in a multidimensional list
+    for i in range(len(list1)):
+        if list1[i][p] == str1:
+            return True
+
+    return False
+
 
 def findposinlist(str1, list1,i):
     # this function takes a string, matches it to an element in the first dimension
@@ -6627,29 +6629,34 @@ def prepare_disjuncts(conditionals,greek2):
             conditionals[i][38] = list1[1]
     return conditionals
 
-def variable_type(conditionals):
-    #This determines whether variables in conditionals are general, or indefinite
+def attached_variables(conditionals):
+    #This determines whether non-definite variables are in the antecedent or consequent
 
-    general = []
-    indef = []
-    defn = []
     ant_pot = [] # potentially general or indefinite antecedent variables
     con_pot = []  # potentially general or indefinite consequent variables
     num = [5,14,18,22]
-    num2 = [35,36]
+    num2 = [34,35]
     for i in range(len(conditionals)):
-        for j in range(len(conditionals[i])):
-            for m in num2:
+        for m in num2:
+            for j in range(len(conditionals[i][m])):
                 for n in num:
-                    if conditionals[i][j][m][n]:
-                        str1 = conditionals[i][j][m][n]
-                        if str1 != "" and str1 != None:
-                            if not findposinmd(str1,dv_nam,True):
-                                if m == 35:
+                    str1 = conditionals[i][m][j][n]
+                    if str1 != "" and str1 != None:
+                        if not isinmdlist(str1,dv_nam,0):
+                            if m == 34:
+                                if str1 not in ant_pot:
                                     ant_pot.append(str1)
-                                else:
+                            else:
+                                if str1 not in con_pot:
                                     con_pot.append(str1)
 
+    return [ant_pot,con_pot]
+
+def variable_type(ant_pot,con_pot):
+    # this determines whether a variable is general or definite
+
+    general = []
+    indef = []
     i = -1
     while i < len(ant_pot) -1:
         i += 1
@@ -6665,10 +6672,7 @@ def variable_type(conditionals):
 
     indef = ant_pot + con_pot
 
-
-
-
-
+    return [general,indef]
 
 def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
               conditionals=[]):
@@ -6702,16 +6706,11 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
             conditionals = prepare_disjuncts(conditionals,greek2)
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
 
-            for i in range(len(conditionals)):
-                print conditionals[i][4]
-                for j in range(len(conditionals[i][34])):
-                    print 'ant: ' + conditionals[i][34][j][53] + " "+ conditionals[i][34][j][42]
-                for j in range(len(conditionals[i][35])):
-                    print 'con: ' + conditionals[i][35][j][53] + " "+ conditionals[i][35][j][42]
+            list1 = attached_variables(conditionals)
+            list1 = variable_type(list1[0],list1[1])
 
-            bb = 8
-            # var_type = variable_type(conditionals)
-            #ffd
+
+            # tot_sent = relevance(list1,conditionals,standard_cd)
 
 
         return tot_sent
@@ -7905,7 +7904,7 @@ def get_prop(str1,recon=False,greek2=[]):
                 str3 = "~" + str2 + str5
 
             if recon:
-                if not findposinmd(str3,gr_lst,0,True):
+                if not isinmdlist(str3,gr_lst,0):
                     if str3[0] == "~":
                         str6 = str3[1:]
                     else:

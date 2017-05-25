@@ -45,8 +45,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+            <state relative-caret-position="321">
+              <caret line="6659" column="10" lean-forward="true" selection-start-line="6659" selection-start-column="10" selection-end-line="6659" selection-end-column="10" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -118,9 +118,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>def put</find>
-      <find>def put_pre</find>
-      <find>def prep</find>
       <find>has_outer</find>
       <find>e_iff_elim(</find>
       <find>axioms2(</find>
@@ -148,6 +145,9 @@
       <find>def put_nat</find>
       <find>def rearr</find>
       <find>def rear</find>
+      <find>variable_ty</find>
+      <find>findposinmd</find>
+      <find>isinmdlist</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -160,6 +160,7 @@
       <replace>modus_ponens(greek2,</replace>
       <replace>statement_logic(greek2,</replace>
       <replace>consequent</replace>
+      <replace>isinmdlist</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -598,7 +599,14 @@
       <option name="project" value="LOCAL" />
       <updated>1495645952994</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="removed some bugs from latest updated function">
+      <created>1495712271472</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1495712271472</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -678,14 +686,22 @@
     <MESSAGE value="disjunctions now get filled in conditionals[33]" />
     <MESSAGE value="finished put_nat_sent_in_cond2 function" />
     <MESSAGE value="deleted put_nat_sent_in_cond2 function, put the function in link_nat_sent function" />
-    <option name="LAST_COMMIT_MESSAGE" value="deleted put_nat_sent_in_cond2 function, put the function in link_nat_sent function" />
+    <MESSAGE value="removed some bugs from latest updated function" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed some bugs from latest updated function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
+          <line>6709</line>
+          <option name="timeStamp" value="6163" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6163" />
+      <option name="time" value="6167" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -704,6 +720,7 @@
         <watch expression="prop_sent" language="Python" />
         <watch expression="prop_name" language="Python" />
         <watch expression="conditionals" language="Python" />
+        <watch expression="dv_nam" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -1074,8 +1091,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+        <state relative-caret-position="321">
+          <caret line="6659" column="10" lean-forward="true" selection-start-line="6659" selection-start-column="10" selection-end-line="6659" selection-end-column="10" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
