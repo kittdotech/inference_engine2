@@ -45,8 +45,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="6640" column="0" lean-forward="true" selection-start-line="6640" selection-start-column="0" selection-end-line="6640" selection-end-column="0" />
+            <state relative-caret-position="240">
+              <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -79,8 +79,8 @@
       <file leaf-file-name="pydevd.py" pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23310">
-              <caret line="1590" column="0" lean-forward="false" selection-start-line="1590" selection-start-column="0" selection-end-line="1590" selection-end-column="0" />
+            <state relative-caret-position="15">
+              <caret line="1014" column="0" lean-forward="false" selection-start-line="1014" selection-start-column="0" selection-end-line="1014" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -118,13 +118,10 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>conditionals.ap</find>
       <find>def put</find>
       <find>def put_pre</find>
       <find>def prep</find>
       <find>has_outer</find>
-      <find>def rear</find>
-      <find>def rearr</find>
       <find>e_iff_elim(</find>
       <find>axioms2(</find>
       <find>axioms(</find>
@@ -145,9 +142,12 @@
       <find>link_nat</find>
       <find>put_nat</find>
       <find>ffd</find>
-      <find>def put_nat</find>
       <find>def put_na</find>
       <find>def rearra</find>
+      <find>def variable</find>
+      <find>def put_nat</find>
+      <find>def rearr</find>
+      <find>def rear</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -159,6 +159,7 @@
       <replace>many_cond(greek2,</replace>
       <replace>modus_ponens(greek2,</replace>
       <replace>statement_logic(greek2,</replace>
+      <replace>consequent</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -590,7 +591,14 @@
       <option name="project" value="LOCAL" />
       <updated>1495639520574</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="deleted put_nat_sent_in_cond2 function, put the function in link_nat_sent function">
+      <created>1495645952994</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1495645952994</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -669,14 +677,15 @@
     <MESSAGE value="conditionals[37] is never blank" />
     <MESSAGE value="disjunctions now get filled in conditionals[33]" />
     <MESSAGE value="finished put_nat_sent_in_cond2 function" />
-    <option name="LAST_COMMIT_MESSAGE" value="finished put_nat_sent_in_cond2 function" />
+    <MESSAGE value="deleted put_nat_sent_in_cond2 function, put the function in link_nat_sent function" />
+    <option name="LAST_COMMIT_MESSAGE" value="deleted put_nat_sent_in_cond2 function, put the function in link_nat_sent function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6153" />
+      <option name="time" value="6163" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -689,6 +698,12 @@
         <watch expression="all_sent" language="Python" />
         <watch expression="request" language="Python" />
         <watch expression="importer.data['archives']" />
+      </configuration>
+      <configuration name="PythonConfigurationType">
+        <watch expression="already_defined" language="Python" />
+        <watch expression="prop_sent" language="Python" />
+        <watch expression="prop_name" language="Python" />
+        <watch expression="conditionals" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -1031,14 +1046,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23310">
-          <caret line="1590" column="0" lean-forward="false" selection-start-line="1590" selection-start-column="0" selection-end-line="1590" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="148380">
@@ -1057,10 +1064,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1014" column="0" lean-forward="false" selection-start-line="1014" selection-start-column="0" selection-end-line="1014" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="6640" column="0" lean-forward="true" selection-start-line="6640" selection-start-column="0" selection-end-line="6640" selection-end-column="0" />
+        <state relative-caret-position="240">
+          <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>

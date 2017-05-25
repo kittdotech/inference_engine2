@@ -14,7 +14,6 @@ tot_tim = time.time()
 
 
 
-
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
@@ -6634,12 +6633,37 @@ def variable_type(conditionals):
     general = []
     indef = []
     defn = []
+    ant_pot = [] # potentially general or indefinite antecedent variables
+    con_pot = []  # potentially general or indefinite consequent variables
     num = [5,14,18,22]
+    num2 = [35,36]
     for i in range(len(conditionals)):
         for j in range(len(conditionals[i])):
-            pass
+            for m in num2:
+                for n in num:
+                    if conditionals[i][j][m][n]:
+                        str1 = conditionals[i][j][m][n]
+                        if str1 != "" and str1 != None:
+                            if not findposinmd(str1,dv_nam,True):
+                                if m == 35:
+                                    ant_pot.append(str1)
+                                else:
+                                    con_pot.append(str1)
 
+    i = -1
+    while i < len(ant_pot) -1:
+        i += 1
+        j = -1
+        while j < len(ant_pot) - 1:
+            j += 1
+            if ant_pot[i] == con_pot[j]:
+                general.append(ant_pot[i])
+                del ant_pot[i]
+                i -= 1
+                del con_pot[j]
+                j -= 1
 
+    indef = ant_pot + con_pot
 
 
 
@@ -6677,7 +6701,16 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
             conditionals = prepare_disjuncts(conditionals,greek2)
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
-            var_type = variable_type(conditionals)
+
+            for i in range(len(conditionals)):
+                print conditionals[i][4]
+                for j in range(len(conditionals[i][34])):
+                    print 'ant: ' + conditionals[i][34][j][53] + " "+ conditionals[i][34][j][42]
+                for j in range(len(conditionals[i][35])):
+                    print 'con: ' + conditionals[i][35][j][53] + " "+ conditionals[i][35][j][42]
+
+            bb = 8
+            # var_type = variable_type(conditionals)
             #ffd
 
 
@@ -7920,7 +7953,10 @@ def link_nat_sent_to_all_sent(list7,all_sent):
     # this puts the all sent onto the conditional 32 list
     list1 = []
     def_info = list7[36]
-    ant = ['a','b','x','g']
+    ant = ['a','b','x','d']
+    con = ['f','q','y','g']
+    antecedent = []
+    consequent = []
     for i in range(len(list7[38])):
         bool1 = False
         for j in range(len(all_sent)):
@@ -7934,15 +7970,12 @@ def link_nat_sent_to_all_sent(list7,all_sent):
                 bool1 = True
                 list2 = ancestor_numbers(list2,k,def_info)
                 if list2[53][-1] in ant:
-                    if antecedent == []:
-                        antecedent = list2
-                    else:
-                        antecedent.append(list2)
+                    antecedent.append(list2)
+                elif list2[53][-1] in con:
+                    consequent.append(list2)
                 else:
-                    if consequent == []:
-                        consequent = list2
-                    else:
-                        consequent.append(list2)
+                    print 'you did not categorize the attached sentences correctly'
+                    sys.exit()
         if not bool1:
             str1 = list7[38][i]
             if str1[0] == "~":
@@ -7974,7 +8007,6 @@ def ancestor_numbers(list2,k,def_info):
         list2[47] = gparen_conn
         list2[48] = ggparen_conn
         list2[53] = paren_conn + gparen_conn + ggparen_conn
-
 
     elif len(k) == 3:
         gparen_num = k[0]
@@ -8031,59 +8063,6 @@ def convert_con_to_letter(str1,str2):
         print 'the convert con to letter function is messed up'
         sys.exit()
 
-def put_nat_sent_in_cond2(list7):
-    # this puts a member from list33 into list 34 or 35 of the conditional list
-    # according to whether or not the two lists are part of the same disjunction
-    # or conjunction
-    for i in range(len(list7[33])):
-        prop_type = list7[33][i][53]
-        generation = list7[33][i][45]
-        if generation > 4:
-            print 'you have not coded for conditionals with more than 4 generations'
-            sys.exit()
-        earliest_conn = prop_type[-1]
-        if earliest_conn == 'q' or earliest_conn == 'f':
-            z = 35
-        else:
-            z = 34
-
-        if generation == 2 or list7[z] == "":
-            list7[z] = list7[33][i]
-        else:
-            list8 = list7[z]
-            if generation == 3:
-                if len(list8) > 35:
-                    list7[z] = [list8,list7[33][i]]
-                else:
-                    list8.append(list7[33][i])
-            elif generation == 4:
-                # this code has not been tested
-                sibling = list7[33][i][43]
-                if len(list8) > 37:
-                    match_sibling = list8[43]
-                    if sibling == match_sibling:
-                        list9 = [list8,list7[33][i]]
-                        list7[z].append(list9)
-                    else:
-                        list7[z] = [list7[33][i],list8]
-                else:
-                    for j in range(len(list8)):
-                        if len(list8[j]) > 37:
-                            match_sibling = list8[j][43]
-                            if match_sibling == sibling:
-                                list9 = [list8[j], list7[33][i]]
-                                list8[j] = list9
-                                break
-                        else:
-                            match_sibling = list8[j][0][43]
-                            if match_sibling == sibling:
-                                list9 = list8[j]
-                                list9.append(list7[33][i])
-                                list8[j] = list9
-                                list7[z] = list8
-                                break
-
-    return list7
 
 def put_nat_sent_in_cond1(conditionals,all_sent):
     # this unencloses the prop sent in the def into list
