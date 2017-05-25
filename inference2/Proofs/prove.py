@@ -17,8 +17,8 @@ tot_tim = time.time()
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
-stp = 5
-print_to_doc = False
+stp = 7
+print_to_doc = True
 if j == 1:
     django2 = False
     temp17 = False
@@ -4776,17 +4776,19 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
         # if i == 2:
         #     break
         for j in range(len(test_sent[i])):
-            if len(test_sent[i][j]) == 7:
-                test_sent[i][j].append("")
-            elif len(test_sent[i][j]) == 6:
-                test_sent[i][j].append("")
-                test_sent[i][j].append("")
-            elif len(test_sent[i][j]) == 5:
-                test_sent[i][j].append("")
-                test_sent[i][j].append("")
-                test_sent[i][j].append("")
-            # elif len(test_sent[i][j]) == 4:
-            #     bb = 7
+            try:
+                if len(test_sent[i][j]) == 7:
+                    test_sent[i][j].append("")
+                elif len(test_sent[i][j]) == 6:
+                    test_sent[i][j].append("")
+                    test_sent[i][j].append("")
+                elif len(test_sent[i][j]) == 5:
+                    test_sent[i][j].append("")
+                    test_sent[i][j].append("")
+                    test_sent[i][j].append("")
+            except TypeError:
+                bb = 8
+
             if test_sent[i][j][7] != "" and test_sent[i][j][7] != None:
                 str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5]) + ',' +\
                        str(test_sent[i][j][6]) + ',' + str(test_sent[i][j][7])
@@ -6096,15 +6098,6 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
     consistent = plan(greek2,sent,all_sent,prop_sent,candd,candd2,conditionals, prop_name,disjuncts,tot_sent,2,negat)
 
-    if proof_type == "l":
-
-        k = sn
-        g = sn
-        tot_sent = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,\
-                greek2,conditionals)
-
-        return tot_sent
-
     tv = True # tv = truth value
     if consistent and impl != nonseq:
         tv = False
@@ -6141,14 +6134,23 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
         not_id = list1[3]
         tot_sent = list1[4]
         consistent = list1[5]
+
     if consistent:
         consistent = axioms(greek2,basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
                        prop_sent,member_prop,not_id)
 
         # end3
-        bb = 9
-        # if bb == 10:
         if consistent:
+            if proof_type == "l":
+                print 'instantiation used'
+                k = sn
+                g = sn
+                tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
+                                     greek2, conditionals)
+
+                return tot_sent
+
+
             bb = 8
             # dummy = cjcnd(all_sent,conditionals,tot_sent) # this gathers all detached
             # and attatched sentences
@@ -6411,14 +6413,37 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
 ######################
 
-
-    list3 = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2)
-    tot_sent = list3[0]
-    prop_sent = list3[1]
-    tot_prop_sent.append(prop_sent)
+    if proof_type == 'l':
+        tot_sent = rearrange2(prop_sent, tot_sent, consistent, impl, g, all_sent, greek2)
+        return tot_sent
+    else:
+        list3 = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2)
+        tot_sent = list3[0]
+        prop_sent = list3[1]
+        tot_prop_sent.append(prop_sent)
+        list1 = [tot_sent, tv]
+        return list1
     # end5
-    list1 = [tot_sent,tv]
-    return list1
+
+
+def rearrange2(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2):
+
+    list2 = []
+    list1 = []
+    list5 = []
+    list6 = put_nc_id_ax_df_into_list(list5,list1,list2,tot_sent)
+    rn_used = list6[0]
+    tot_sent = list6[1]
+
+    if rn_used:
+        tot_sent = rearrange_tot_sent(list5,list1,list2)
+    for i in range(len(tot_sent)-1,0,-1):
+        if tot_sent[i][4] != "":
+            break
+    list1 = build_standard_sent_list([], [], [], \
+        tot_sent, conditionals, all_sent, consistent, greek2,i)
+    return tot_sent
+
 
 def subtract_400(prop_sent,g):
     # this function renumbers numbers from 400 down to a more reasonable number
@@ -6514,7 +6539,7 @@ def rearrange_tot_sent(list5,list1,list2):
     return tot_sent
 
 def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
-                tot_sent,conditionals,all_sent,consistent,greek2):
+                tot_sent,conditionals,all_sent,consistent,greek2,c=0):
 
     # this function divides all sentences into standard conjuncts, standard
     # conditionals and non standard sentences
@@ -6522,7 +6547,8 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
     # nat sent and puts them into the tot sent list
 
     conditionals4 = copy.deepcopy(conditionals)
-    c = tot_sent[-1][0]
+    if c == 0:
+        c = tot_sent[-1][0]
     tot_sent.append(["","","","","","","","","",""])
     tot_sent.append(["","_______________________","","","","","","","",""])
 
@@ -6653,15 +6679,14 @@ def attached_variables(conditionals):
     return [ant_pot,con_pot]
 
 def variable_type(ant_pot,con_pot):
-    # this determines whether a variable is general or definite
-
+    # this determines whether a variable in an attached sentence
+    # is general or definite
     general = []
-    indef = []
     i = -1
     while i < len(ant_pot) -1:
         i += 1
         j = -1
-        while j < len(ant_pot) - 1:
+        while j < len(con_pot) - 1:
             j += 1
             if ant_pot[i] == con_pot[j]:
                 general.append(ant_pot[i])
@@ -6669,10 +6694,29 @@ def variable_type(ant_pot,con_pot):
                 i -= 1
                 del con_pot[j]
                 j -= 1
+                break
 
     indef = ant_pot + con_pot
 
     return [general,indef]
+
+def print_variables(list1,tot_sent):
+    # this prints out the variables within the tot_sent list, just above
+    # where it prints the attached sentences
+    general = list1[0]
+    indef = list1[1]
+    str1 = 'GENERAL VARIABLES: '
+    for i in range(len(general)):
+        str1 += general[i] + " "
+    str2 = 'INDEFINITE VARIABLES: '
+    for i in range(len(indef)):
+        str2 += indef[i] + " "
+    for i in range(len(tot_sent)-1,0,-1):
+        if len(tot_sent[i][1]) > 15:
+            if tot_sent[i][1][:13] == 'STANDARD ATTA':
+                tot_sent.insert(i,["",str1,"","","","","",""])
+                tot_sent.insert(i+1, ["", str2, "", "", "", "", "", ""])
+                return tot_sent
 
 def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
               conditionals=[]):
@@ -6708,7 +6752,11 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
             list1 = attached_variables(conditionals)
             list1 = variable_type(list1[0],list1[1])
+            tot_sent = print_variables(list1,tot_sent)
 
+
+
+            bb = 8
 
             # tot_sent = relevance(list1,conditionals,standard_cd)
 
@@ -6768,6 +6816,9 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
             prop_sent = list2
 
     return [tot_sent,prop_sent]
+
+
+
 
 
 

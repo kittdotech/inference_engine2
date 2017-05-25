@@ -45,8 +45,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="6659" column="10" lean-forward="true" selection-start-line="6659" selection-start-column="10" selection-end-line="6659" selection-end-column="10" />
+            <state relative-caret-position="312">
+              <caret line="6145" column="22" lean-forward="true" selection-start-line="6145" selection-start-column="22" selection-end-line="6145" selection-end-column="22" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -118,7 +118,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>has_outer</find>
       <find>e_iff_elim(</find>
       <find>axioms2(</find>
       <find>axioms(</find>
@@ -141,13 +140,14 @@
       <find>ffd</find>
       <find>def put_na</find>
       <find>def rearra</find>
-      <find>def variable</find>
       <find>def put_nat</find>
-      <find>def rearr</find>
-      <find>def rear</find>
       <find>variable_ty</find>
       <find>findposinmd</find>
       <find>isinmdlist</find>
+      <find>def variable</find>
+      <find>.insert</find>
+      <find>def rear</find>
+      <find>def rearr</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -606,7 +606,14 @@
       <option name="project" value="LOCAL" />
       <updated>1495712271472</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="built attached_variables function">
+      <created>1495715201904</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1495715201904</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -687,21 +694,22 @@
     <MESSAGE value="finished put_nat_sent_in_cond2 function" />
     <MESSAGE value="deleted put_nat_sent_in_cond2 function, put the function in link_nat_sent function" />
     <MESSAGE value="removed some bugs from latest updated function" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed some bugs from latest updated function" />
+    <MESSAGE value="built attached_variables function" />
+    <option name="LAST_COMMIT_MESSAGE" value="built attached_variables function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/inference2/Proofs/prove.py</url>
-          <line>6709</line>
-          <option name="timeStamp" value="6163" />
+          <line>4789</line>
+          <option name="timeStamp" value="6185" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6167" />
+      <option name="time" value="6200" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -719,8 +727,8 @@
         <watch expression="already_defined" language="Python" />
         <watch expression="prop_sent" language="Python" />
         <watch expression="prop_name" language="Python" />
-        <watch expression="conditionals" language="Python" />
         <watch expression="dv_nam" language="Python" />
+        <watch expression="tot_prop_sent" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -1091,8 +1099,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="6659" column="10" lean-forward="true" selection-start-line="6659" selection-start-column="10" selection-end-line="6659" selection-end-column="10" />
+        <state relative-caret-position="312">
+          <caret line="6145" column="22" lean-forward="true" selection-start-line="6145" selection-start-column="22" selection-end-line="6145" selection-end-column="22" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
