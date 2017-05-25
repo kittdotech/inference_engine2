@@ -15,10 +15,10 @@ tot_tim = time.time()
 
 
 j = 2
-proof_type = 'l' # if l then long proof showing decision procedure for instantiation
+proof_type = 'o' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
-stp = 7
-print_to_doc = True
+stp = 0
+print_to_doc = False
 if j == 1:
     django2 = False
     temp17 = False
@@ -639,7 +639,7 @@ def find_sentences(instring, cut_skel = False):
                     c += 1
 
                     temp_sent = instring[z: x + 1]
-                    if temp_sent == '(bIGc)':
+                    if temp_sent == '(bIc)':
                         pp = 7
                     otemp_sent = copy.copy(temp_sent)
 
@@ -1005,10 +1005,8 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
     if "it" in pronouns2:
         pronouns2.remove("it")
     pronouns = pronouns2
-    prop_con = [] # delete this after I'm sure I don't need it
-    p_sent = []
-    determinative = words[2]
     definitions = words[16]
+    relations = words[6]
     poss_pro = words[25]
     posp = words[28] #part of speech
     atomic_relations = words[22]
@@ -1032,15 +1030,11 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
     #definiens the IG relation appears
     unq_gr = ['time'] #unique group
     global sn,anaphora,gen_var,def_tim
-    bool1 = False
-    once = False
     i_defined = False
     def_sent = []
     al_def = [] #already defined
     numbers_def = []
     defined = []
-    last = ["many"+ua,"few"+ua]
-    # universal = ['every',"a","many"+un,"a"+ua]
     universal = ['every','no']
     indefinite = ['a',"many"+un,"a"+ua]
 
@@ -1048,37 +1042,34 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
     for i in range(len(dv_nam)):
         if i == 3:
             bb = 7
-        g = findposinlist(dv_nam[i][1],definitions,0)
-        if dv_nam[i][1] in atoms:
-            used_atoms.append(dv_nam[i][0])
-            str1 = findinlist(dv_nam[i][1],atoms2,0,1)
-            ua_relat.append(str1)
-        if g > -1:
-            list1 = [None] * 80
-            list1[5] = dv_nam[i][0]
-            list1[9] = '='
-            list1[14] = dv_nam[i][1]
-            str1 = build_sent(list1)
-            str2 = name_sent(str1)
-            list1[0] = str1
-            list1[42] = str2
-            list1[41] = 1
-            list1[46] = [200]
-            list1[56] = [200]
-            all_sent.append(list1)
-            # say you have the word 7 in your claim, then the code will define all numbers
-            # down to 0 if you do not have the following code
-            try:
-                str3 = int(dv_nam[i][1])
+        if not isinmdlist(dv_nam[i][1],relations,1):
+            g = findposinlist(dv_nam[i][1],definitions,0)
+            if dv_nam[i][1] in atoms:
+                used_atoms.append(dv_nam[i][0])
+                str1 = findinlist(dv_nam[i][1],atoms2,0,1)
+                ua_relat.append(str1)
+            if g > -1:
+                list1 = [None] * 80
+                list1[5] = dv_nam[i][0]
+                list1[9] = '='
+                list1[14] = dv_nam[i][1]
+                str1 = build_sent(list1)
+                str2 = name_sent(str1)
+                list1[0] = str1
+                list1[42] = str2
+                list1[41] = 1
+                list1[46] = [200]
+                list1[56] = [200]
+                all_sent.append(list1)
+                # say you have the word 7 in your claim, then the code will define all numbers
+                # down to 0 if you do not have the following code
                 numbers_def.append(dv_nam[i][1])
-            except ValueError:
-                pass
 
 
     num10 = [5,14,18,22,26,30,34,63,64,65] # pronouns
     num20 = [3,10,16,20,24,28,32] # determiners
     num30 = [69,70] # proper name possessive
-    num40 = [66] # and
+    # num40 = [66] # and
     num50 = [4,13,17,21,25,33] # adjective
     num60 = [35,36] # cia
     num70 = [59,60,61,62] # relative pronouns
@@ -1303,8 +1294,8 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
                     g = findposinlist(definiendum,definitions,0)
                     definition = definitions[g][1]
                     if definition == 'natural':
-                        definition = "(c'=" + definiendum + ") & (d'=natural_whole) & ((bIGc') " + conditional \
-                        + " (bIGd'))"
+                        definition = "(c'=" + definiendum + ") & (d'=natural_whole) & ((bIc') " + conditional \
+                        + " (bId'))"
                     pos = definitions[g][2]
                     circ = definitions[g][3]
                     circ2 = all_sent[m][43]
@@ -1711,8 +1702,8 @@ def remove_duplicates2d(list1,i,h):
             list2.append(list1[j])
     return list2
 
-def id_sent(list4,all_sent,irrel_group = [],h=0,embed_var=[]):
-    # this function turns the dv_nam into a string of conjuncts
+def id_sent(list4,all_sent,irrel_group,embed_var):
+    # this turns the dv_nam into a string of conjuncts
 
     global gen_var
     global ind_var
@@ -4882,9 +4873,6 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
 def build_dict(ex_dict):
 
     global excel
-    list1 = []
-    list4 = []
-    word_type = []
     detm = []
     relat = []
     srelat = []
@@ -4947,9 +4935,7 @@ def build_dict(ex_dict):
                 word = "true"
             if word == "false*":
                 word = "false"
-            # s = row[0].value
-            # str1 = row[2].value
-            # word = row[3].value
+
         elif one_sent:
             s=0
             str1 = ex_dict[i][0]
@@ -4968,8 +4954,6 @@ def build_dict(ex_dict):
             almost_done = True
         else:
             almost_done = False
-        # if "%" in word:
-        #     word = str(word)
         if str1 != None:
             if not isinstance(str1,(int,long)):
                 str1 = str1.strip()
@@ -4977,7 +4961,6 @@ def build_dict(ex_dict):
                 bb = 7
             elif word == 2:
                 bb = 7
-            str5 = copy.copy(str1)
 
             if isinstance(word,(int,long)):
                 word = str(word)
@@ -4989,8 +4972,6 @@ def build_dict(ex_dict):
             word = word.strip()
             definitions2.append([word,i])
             if excel:
-                # str3 = row[4].value
-                # defin = row[5].value
                 str3 = ws.cell(row=i,column=5).value
                 defin = ws.cell(row=i,column=6).value
             elif one_sent:
@@ -5034,7 +5015,6 @@ def build_dict(ex_dict):
                         triples.append([word1,word])
 
                 sec_let = sec_let[1:2]
-                thir_let = copy.copy(str1)
                 thir_let = str1[2:3]
                 if len(str1) > 4:
                     fif_let = str1[4:5]
@@ -5132,8 +5112,8 @@ def build_dict(ex_dict):
     syn_pairs.sort()
     relat.sort()
     atomic_relata.sort()
-    # relations.sort()
-    # relations2.sort()
+    relations.sort()
+    relations2.sort()
     words = [adj, cor, detm, adv, lcon, noun, relat, srelat, trelat, subo,\
             aux, negg, dnoun,syn_pairs,synon,det, definitions, det_pairs, relations, \
              relations2, particles, redundant,atomic_relations, atomic_relata, \
@@ -5396,7 +5376,7 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         rn_list.append(rn1)
     if pos1 == 5 and pos2 == 5:
         thing_var = obj2
-        oax = "(((b" + rel1 + "c) & (dIGe)) " + conditional + \
+        oax = "(((b" + rel1 + "c) & (dIe)) " + conditional + \
         " (b~" + rel2 + "d)) & (e=thing)"
         sent3 = "(" + sub1 + "~" + rel2 + thing_int + ")"
         subj4 = sub1
@@ -5404,7 +5384,7 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         oax_name = "AX." + rel1 + "." + rel2 + "." + "ss"
     elif pos1 == 5 and pos2 == 14:
         thing_var = sub2
-        oax = "(((b" + rel1 + "c) & (dIGe)) " + conditional + \
+        oax = "(((b" + rel1 + "c) & (dIe)) " + conditional + \
         " (d~" + rel2 + "b)) & (e=thing)"
         sent3 = "(" + thing_int + "~" + rel2 + sub1 + ")"
         subj4 = thing_int
@@ -5412,7 +5392,7 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         oax_name = "AX." + rel1 + "." + rel2 + "." + "so"
     elif pos1 == 14 and pos2 == 5:
         thing_var = obj2
-        oax = "(((b" + rel1 + "c) & (dIGe)) " + conditional + \
+        oax = "(((b" + rel1 + "c) & (dIe)) " + conditional + \
         " (c~" + rel2 + "d)) & (e=thing)"
         sent3 = "(" + obj1 + "~" + rel2 + thing_int + ")"
         subj4 = obj1
@@ -5420,7 +5400,7 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         oax_name = "AX." + rel1 + "." + rel2 + "." + "os"
     elif pos1 == 14 and pos2 == 14:
         thing_var = sub2
-        oax = "(((b" + rel1 + "c) & (dIGe)) " + conditional + \
+        oax = "(((b" + rel1 + "c) & (dIe)) " + conditional + \
         " (d~" + rel2 + "c)) & (e=thing)"
         sent3 = "(" + thing_int + "~" + rel2 + obj1 + ")"
         subj4 = thing_int
@@ -5530,17 +5510,6 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
 
 
 
-
-# (d'HWv) & (wIGd')
-# ((bHWc) & (dIGe)) > (d~IGb) & (e=thing)
-# (b>d) & (c>v) & (d>f) & (e>g)
-# (d' HW v) & (fIGe) > (f~IGd'))
-# (wIGe)
-# (fIGe)
-# (wIGe) , (wIGd') , (fIGe)
-# (f>g)
-# (w=g)
-# (f~IGd') > (w~IGd')
 
 def get_sent(all_sent,str1):
 
@@ -6082,7 +6051,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     dummy = remove_duplicates(all_sent,0)
     if identities != []:
         dummy = simple_id(tot_sent,all_sent,identities)
-    dv_list = id_sent(dv_nam,all_sent,irrel_group,1,embed_var)
+    dv_list = id_sent(dv_nam,all_sent,irrel_group,embed_var)
     tot_sent.insert(id_num-1,[id_num,dv_list[0],dv_list[1],"",'ID'])
     disjuncts = []
     negat = []
@@ -6145,10 +6114,11 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                 print 'instantiation used'
                 k = sn
                 g = sn
+                tv = "True"
                 tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
                                      greek2, conditionals)
 
-                return tot_sent
+                return [tot_sent,tv]
 
 
             bb = 8
@@ -6415,7 +6385,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
     if proof_type == 'l':
         tot_sent = rearrange2(prop_sent, tot_sent, consistent, impl, g, all_sent, greek2)
-        return tot_sent
+        return [tot_sent,tv]
     else:
         list3 = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2)
         tot_sent = list3[0]
@@ -6660,6 +6630,9 @@ def attached_variables(conditionals):
 
     ant_pot = [] # potentially general or indefinite antecedent variables
     con_pot = []  # potentially general or indefinite consequent variables
+    general = []
+    indef = []
+    defn = []
     num = [5,14,18,22]
     num2 = [34,35]
     for i in range(len(conditionals)):
@@ -6667,8 +6640,11 @@ def attached_variables(conditionals):
             for j in range(len(conditionals[i][m])):
                 for n in num:
                     str1 = conditionals[i][m][j][n]
-                    if str1 != "" and str1 != None:
-                        if not isinmdlist(str1,dv_nam,0):
+                    if str1 != "" and str1 != None and str1 != "i":
+                        if isinmdlist(str1,dv_nam,0):
+                            if str1 not in defn:
+                                defn.append(str1)
+                        else:
                             if m == 34:
                                 if str1 not in ant_pot:
                                     ant_pot.append(str1)
@@ -6676,7 +6652,19 @@ def attached_variables(conditionals):
                                 if str1 not in con_pot:
                                     con_pot.append(str1)
 
-    return [ant_pot,con_pot]
+
+        list1 = variable_type(ant_pot,con_pot)
+        general = quick_append(list1[0],general)
+        indef = quick_append(list1[1],indef)
+
+    return [general,indef,defn]
+
+def quick_append(list1,list2):
+
+    for i in range(len(list1)):
+        if list1[0] not in list2:
+            list2.append(list1[i])
+    return list2
 
 def variable_type(ant_pot,con_pot):
     # this determines whether a variable in an attached sentence
@@ -6705,17 +6693,35 @@ def print_variables(list1,tot_sent):
     # where it prints the attached sentences
     general = list1[0]
     indef = list1[1]
-    str1 = 'GENERAL VARIABLES: '
-    for i in range(len(general)):
-        str1 += general[i] + " "
-    str2 = 'INDEFINITE VARIABLES: '
-    for i in range(len(indef)):
-        str2 += indef[i] + " "
+    defn = list1[2]
+
+    str1 = ""
+    str2 = ""
+    str3 = ""
+    j = 0
+    if general != []:
+        str1 = 'GENERAL VARIABLES: '
+        for i in range(len(general)):
+            str1 += general[i] + " "
+    if indef != []:
+        j += 1
+        str2 = 'INDEFINITE VARIABLES: '
+        for i in range(len(indef)):
+            str2 += indef[i] + " "
+    if defn != []:
+        j += 1
+        str3 = 'DEFINITE VARIABLES: '
+        for i in range(len(defn)):
+            str3 += defn[i] + " "
+
     for i in range(len(tot_sent)-1,0,-1):
         if len(tot_sent[i][1]) > 15:
             if tot_sent[i][1][:13] == 'STANDARD ATTA':
                 tot_sent.insert(i,["",str1,"","","","","",""])
-                tot_sent.insert(i+1, ["", str2, "", "", "", "", "", ""])
+                if str2 != "":
+                    tot_sent.insert(i+j, ["", str2, "", "", "", "", "", ""])
+                if str3 != "":
+                    tot_sent.insert(i+j, ["", str3, "", "", "", "", "", ""])
                 return tot_sent
 
 def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
@@ -6749,16 +6755,10 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
             conditionals = prepare_disjuncts(conditionals,greek2)
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
-
             list1 = attached_variables(conditionals)
-            list1 = variable_type(list1[0],list1[1])
+            # list1 = variable_type(list1[0],list1[1])
             tot_sent = print_variables(list1,tot_sent)
-
-
-
-            bb = 8
-
-            # tot_sent = relevance(list1,conditionals,standard_cd)
+            # tot_sent = relevance(list1,conditionals,standard_cj,tot_sent)
 
 
         return tot_sent
@@ -6819,6 +6819,12 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
 
 
+
+def relevance(list1,conditionals,standard_cj,tot_sent):
+
+
+
+    bb = 8
 
 
 
@@ -10049,7 +10055,7 @@ def get_result(post_data,archive_id=None,request=None):
                 conditionals,prop_sent,prop_name,id_num,identities,idf_var,\
                 test_sent[k][0][3],greek2)
         if proof_type == "l":
-            test_sent[k] = list2
+            test_sent[k] = list2[0]
         else:
             test_sent[k] = list2[0]
             tot_prop_name.append(prop_name)
