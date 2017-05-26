@@ -13,12 +13,11 @@ tot_tim = time.time()
 # but just prior to that the speed was .066
 
 
-
 j = 2
-proof_type = 'o' # if l then long proof showing decision procedure for instantiation
-strt = 0 # if n then proof type before may 1
-stp = 0
-print_to_doc = False
+proof_type = 'l' # if l then long proof showing decision procedure for instantiation
+strt = 39 # if n then proof type before may 1
+stp = 40
+print_to_doc = True
 if j == 1:
     django2 = False
     temp17 = False
@@ -139,6 +138,8 @@ equi = unichr(8660)
 ne = u"\u2260" # not equal
 
 sn = 1
+instan_used = 0 # the number of times the instan function is used
+instan_time = 0 # measures the time used in instantiation
 qn = 300 # numbers the property sent list
 pn = 400
 id_num=0
@@ -1028,7 +1029,7 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
     ua_relat = [] #used atomic relations
     #unique objects which form a group, in the definiednum the relation is = but in the
     #definiens the IG relation appears
-    unq_gr = ['time'] #unique group
+    # unq_gr = ['time'] #unique group
     global sn,anaphora,gen_var,def_tim
     i_defined = False
     def_sent = []
@@ -1303,8 +1304,8 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
         #this prevents us from getting caught in an infinite loop.
                     if basic_molecule == 'b' and all_sent[m][9] == "I":
                         break
-                    if relat == "I" and definiendum in unq_gr:
-                        break
+                    # if relat == "I" and definiendum in unq_gr:
+                    #     break
                     if circ2 == 'c':
                         circ += circ2
                     if (relat == "J" and pos == 'a') or (relat == "I" and pos == 'n') or (relat == 'H' and pos == 'n') \
@@ -6044,7 +6045,8 @@ def cat_atoms(j,i,list,members,basic_objects,str1,bo2,words,consq,rel,basic_cat)
 def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     prop_sent,prop_name,id_num,identities,idf_var,truth_value,greek2):
 
-    global sn,psent,impl,definite2,ind_var,gen_var,idf_var2,never_used,simple_id,cnjts,pn,affneg
+    global sn,psent,impl,definite2,ind_var,gen_var,idf_var2,never_used
+    global instan_time,instan_used,simple_id,cnjts,pn,affneg
 
     irrel_group = []
     embed_var = []
@@ -6110,6 +6112,8 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
         # end3
         if consistent:
+            itime = time.time()
+            instan_used += 1
             if proof_type == "l":
                 print 'instantiation used'
                 k = sn
@@ -6290,7 +6294,9 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                             # print "candd2 used"
                             if candd2[d] not in candd:
                                 candd.append(candd2[d])
-                # st = time.time()
+                st = time.time()
+                hh = st - itime
+                instan_time += hh
                 consistent = statement_logic(greek2,prop_sent,all_sent,conditionals,candd,candd2,disjuncts,0)
                 # en = time.time()
                 # print en-st
@@ -6508,7 +6514,15 @@ def rearrange_tot_sent(list5,list1,list2):
 
     return tot_sent
 
-def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
+def build_standard_conditionals(conditionals):
+
+    standard_cd = []
+    for i in range(len(conditionals)):
+        standard_cd.append([conditionals[i][2],conditionals[i][37],"","","","",""])
+
+    return standard_cd
+
+def build_standard_sent_list(nonstandard,standard_cj,\
                 tot_sent,conditionals,all_sent,consistent,greek2,c=0):
 
     # this function divides all sentences into standard conjuncts, standard
@@ -6516,7 +6530,7 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
     # it also converts the prop_sent into
     # nat sent and puts them into the tot sent list
 
-    conditionals4 = copy.deepcopy(conditionals)
+
     if c == 0:
         c = tot_sent[-1][0]
     tot_sent.append(["","","","","","","","","",""])
@@ -6591,16 +6605,7 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
                     prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
                                      prop_sent[i][6],prop_sent[i][7]])
                 if consistent:
-                    if bool1:
-                        d = findposinmd(prop_sent[i][1],conditionals4,4)
-                        if d > -1:
-                            del conditionals4[d]
-                        if str1 == None:
-                            bb = 8
-                        standard_cd.append([prop_sent[i][0],str1,"","",\
-                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
-                                         prop_sent[i][6],prop_sent[i][7]])
-                    else:
+                    if not bool1:
                         nonstandard.append([prop_sent[i][0],str1,"","",\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],\
                                          prop_sent[i][6],prop_sent[i][7]])
@@ -6608,7 +6613,6 @@ def build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
     if not consistent:
         tot_sent.append(prop_sent[-1])
 
-    return [conditionals,conditionals4]
 
 def prepare_disjuncts(conditionals,greek2):
 
@@ -6688,12 +6692,19 @@ def variable_type(ant_pot,con_pot):
 
     return [general,indef]
 
+def get_id_sent(tot_sent):
+    # this function gets the list of identities
+    for i in range(len(tot_sent)):
+        if tot_sent[i][4] == "ID":
+            return [tot_sent[i][0],tot_sent[i][1],"","","",""]
+
 def print_variables(list1,tot_sent):
     # this prints out the variables within the tot_sent list, just above
     # where it prints the attached sentences
     general = list1[0]
     indef = list1[1]
     defn = list1[2]
+    identities = get_id_sent(tot_sent)
 
     str1 = ""
     str2 = ""
@@ -6704,22 +6715,24 @@ def print_variables(list1,tot_sent):
         for i in range(len(general)):
             str1 += general[i] + " "
     if indef != []:
-        j += 1
         str2 = 'INDEFINITE VARIABLES: '
         for i in range(len(indef)):
             str2 += indef[i] + " "
     if defn != []:
-        j += 1
         str3 = 'DEFINITE VARIABLES: '
         for i in range(len(defn)):
             str3 += defn[i] + " "
 
     for i in range(len(tot_sent)-1,0,-1):
         if len(tot_sent[i][1]) > 15:
-            if tot_sent[i][1][:13] == 'STANDARD ATTA':
-                tot_sent.insert(i,["",str1,"","","","","",""])
+            if tot_sent[i][1].startswith('STANDARD ATTA'):
+                tot_sent.insert(i,identities)
+                tot_sent.insert(i+1,["",str1,"","","","","",""])
                 if str2 != "":
-                    tot_sent.insert(i+j, ["", str2, "", "", "", "", "", ""])
+                    tot_sent.insert(i+2, ["", str2, "", "", "", "", "", ""])
+                    j = 3
+                else:
+                    j = 2
                 if str3 != "":
                     tot_sent.insert(i+j, ["", str3, "", "", "", "", "", ""])
                 return tot_sent
@@ -6744,19 +6757,16 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
         nonstandard = []
         standard_cj = []
         standard_cd = []
-        list1 = build_standard_sent_list(nonstandard,standard_cj,standard_cd,\
+        dummy = build_standard_sent_list(nonstandard,standard_cj,\
                 tot_sent,conditionals,all_sent,consistent,greek2)
         if consistent:
-            conditionals4 = list1[1]
-            conditionals = list1[0]
-            if conditionals4 != []:
-                dummy = put_premises_into_standard_list(tot_sent,conditionals4,\
-                        standard_cd,all_sent)
+
+            if conditionals != []:
+                standard_cd = build_standard_conditionals(conditionals)
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
             conditionals = prepare_disjuncts(conditionals,greek2)
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
             list1 = attached_variables(conditionals)
-            # list1 = variable_type(list1[0],list1[1])
             tot_sent = print_variables(list1,tot_sent)
             # tot_sent = relevance(list1,conditionals,standard_cj,tot_sent)
 
@@ -6844,30 +6854,6 @@ def add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent):
     tot_sent.append(["","STANDARD DETACHED SENTENCES:","","","","","","","",""])
     for i in range(len(standard_cj)):
         tot_sent.append(standard_cj[i])
-
-def put_premises_into_standard_list(tot_sent,conditionals4,\
-                    standard_cd,all_sent):
-    # this puts standard conditionals which are in the premises into the
-    # standard_cd list
-    for f in range(len(conditionals4)):
-
-        h = findposinlist(conditionals4[f][4],tot_sent,2)
-        str1 = tot_sent[h][1]
-        list2 = conditionals4[f][38]
-        bool1 = False
-        for d in range(len(list2)):
-            str4 = list2[d].replace("~","")
-            bool1 = False
-            for e in range(len(all_sent)):
-                str3 = all_sent[e][42].replace("~","")
-                if str4 == str3:
-                    bool1 = True
-                    break
-        if bool1:
-            standard_cd.append([conditionals4[f][2],str1,"","",tot_sent[h][4],\
-            tot_sent[h][5],tot_sent[h][6],tot_sent[h][7],\
-                         tot_sent[h][8],""])
-    return
 
 def cjcnd(all_sent,conditionals,tot_sent): # conjuncts and conditionals = cjcnd
 
@@ -10072,9 +10058,12 @@ def get_result(post_data,archive_id=None,request=None):
     g = (en-st)/(stp-strt)
     m = def_tim/(stp-strt)
     dd = st_log_tim/(stp-strt)
+    global instan_used,instan_time
+    ee = instan_time/instan_used
     print "average " + str("{0:.3f}".format(g))
     print "time used in definitions " + str("{0:.3f}".format(m))
     print "time used in statement logic " + str("{0:.3f}".format(dd))
+    print "time used in instantiation " + str("{0:.3f}".format(ee))
     dummy = print_sent_full(test_sent,p,tot_prop_name,words,yy)
     if django2:
         views.progressbar_send(request,0,100,100,2)
