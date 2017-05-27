@@ -17,8 +17,8 @@ tot_tim = time.time()
 
 j = 2 # was 90
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 93 # if n then proof type before may 1
-stp = 94
+strt = 0 # if n then proof type before may 1
+stp = 0
 print_to_doc = True
 if j == 1:
     django2 = False
@@ -5337,7 +5337,7 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         for i in range(len(tot_sent)):
             if tot_sent[i][4] == "ID":
                 tot_sent[i][2] += " & (" + thing_con + "= thing)"
-                dv_nam.append(thing_con,'thing')
+                dv_nam.append([thing_con,'thing'])
                 break
         del idf_var[0]
     else:
@@ -6375,6 +6375,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
     if proof_type == 'l':
         tot_sent = rearrange2(prop_sent, tot_sent, consistent, impl, g, all_sent, greek2)
+        tot_prop_sent.append(prop_sent)
         return [tot_sent,tv]
     else:
         list3 = rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2)
