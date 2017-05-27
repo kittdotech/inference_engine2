@@ -13,10 +13,12 @@ tot_tim = time.time()
 # but just prior to that the speed was .066
 
 
+
+
 j = 2
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 39 # if n then proof type before may 1
-stp = 40
+strt = 5 # if n then proof type before may 1
+stp = 6
 print_to_doc = True
 if j == 1:
     django2 = False
@@ -3107,7 +3109,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #this is for those determinatives which have negations in their definitions where
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","many"+un,'no']
-    if definiendum == "point":
+    if definiendum == "every":
         bb = 7
     if definiendum not in def_used and not definiendum.isupper():
         def_used.append(definiendum)
@@ -3267,11 +3269,8 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     sdefinition = def_info[8]
     def_sent = []
     rename = []
-    skel_string = def_info[5]
-    exception = []
     not_many = False
     first_in_def = [def_num+"1",def_num + "11"]
-    temp_plural = []
     temp_te = []
     heir_num = []
     spec_var = ['y','x','w']
@@ -6416,7 +6415,8 @@ def rearrange2(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2):
     for i in range(len(tot_sent)-1,0,-1):
         if tot_sent[i][4] != "":
             break
-    list1 = build_standard_sent_list([], [], [], \
+
+    list1 = build_standard_sent_list([], [], \
         tot_sent, conditionals, all_sent, consistent, greek2,i)
     return tot_sent
 
@@ -6629,7 +6629,31 @@ def prepare_disjuncts(conditionals,greek2):
             conditionals[i][38] = list1[1]
     return conditionals
 
-def attached_variables(conditionals):
+def get_detached(standard_cj,all_sent):
+    # This puts all natural detached sentences into a list
+
+    detached = []
+    for i in range(len(standard_cj)):
+
+        d = findposinmd(standard_cj[i][3] + standard_cj[i][2],all_sent,42)
+        if d > -1:
+            detached.append(all_sent[d])
+    return detached
+
+def get_detached_variables(detached):
+    # This puts in a list all abbreviations which appear in a detached sentence
+
+    num = [5,14,18,22]
+    detached_var = []
+    for i in range(len(detached)):
+        for j in num:
+            if isvariable(detached[i][j]):
+                if detached[i][j] not in detached_var:
+                    detached_var.append(detached[i][j])
+
+    return detached_var
+
+def attached_variables(conditionals,detached_var):
     #This determines whether non-definite variables are in the antecedent or consequent
 
     ant_pot = [] # potentially general or indefinite antecedent variables
@@ -6648,7 +6672,7 @@ def attached_variables(conditionals):
                         if isinmdlist(str1,dv_nam,0):
                             if str1 not in defn:
                                 defn.append(str1)
-                        else:
+                        elif str1 not in detached_var:
                             if m == 34:
                                 if str1 not in ant_pot:
                                     ant_pot.append(str1)
@@ -6763,10 +6787,19 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
             if conditionals != []:
                 standard_cd = build_standard_conditionals(conditionals)
+
             dummy = add_stan_sent(nonstandard,standard_cd,standard_cj,tot_sent)
+
             conditionals = prepare_disjuncts(conditionals,greek2)
+
+            detached = get_detached(standard_cj,all_sent)
+
+            detached_var = get_detached_variables(detached)
+
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
-            list1 = attached_variables(conditionals)
+
+            list1 = attached_variables(conditionals,detached_var)
+
             tot_sent = print_variables(list1,tot_sent)
             # tot_sent = relevance(list1,conditionals,standard_cj,tot_sent)
 
@@ -9517,6 +9550,9 @@ def new_prop_sent(greek2,all_sent,ng, kind, asp, anc1, anc2, conditionals,g,cand
     global prop_sent
     global sn,pn
     global impl
+
+    if pn == 61:
+        bb = 8
 
     if kind == 'con':
         h = 1

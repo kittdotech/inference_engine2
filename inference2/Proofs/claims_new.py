@@ -89,7 +89,7 @@ def pop_sent(str1):
 [[ 1,"I took Ada's ball",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
 [[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']],\
 [[ 1,"no point exists within a|a region|a",None,'co']],\
-[[ 1,"there is|e a group which has|m no members",None,'co']],\
+[[ 1,"there is|e a group which has|w no members",None,'co']],\
 [[ 1,"no mind is|a mental",None,'co']],\
 [[ 1,"I took a dog's ball",None,'co'],[ 2,"no dog owns a|a ball",None,'j']],\
 [[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']],\

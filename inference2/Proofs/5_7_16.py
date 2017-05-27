@@ -15,11 +15,11 @@ tot_tim = time.time()
 
 
 
-j = 2
-proof_type = 'o' # if l then long proof showing decision procedure for instantiation
-strt = 0 # if n then proof type before may 1
-stp = 0
-print_to_doc = False
+j = 2 # was 90
+proof_type = 'l' # if l then long proof showing decision procedure for instantiation
+strt = 90 # if n then proof type before may 1
+stp = 91
+print_to_doc = True
 if j == 1:
     django2 = False
     temp17 = False
@@ -4754,7 +4754,6 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
                     if word2 == def_used[i]:
                         ws.cell(row=j,column=1).value = 1
                     else:
-                        bool2 = False
                         break
 
     c = time.time()
@@ -4807,66 +4806,64 @@ def print_sent_full(test_sent,p,tot_prop_name,words,yy = ""):
                 result_data['text_'+str(p-1)+'_3']= str1
 
             p += 1
-        if proof_type == "l":
-            p += 2
-        else:
+
+        p += 1
+        o += 1
+        list1 = build_sent_name(tot_prop_name[o])
+        for j in range(len(list1)):
+            if excel or one_sent:
+                w4.cell(row=p,column=3).value = list1[j]
+            else:
+                result_data['text_'+str(p)+'_2']=list1[j]
             p += 1
-            o += 1
-            list1 = build_sent_name(tot_prop_name[o])
-            for j in range(len(list1)):
-                if excel or one_sent:
-                    w4.cell(row=p,column=3).value = list1[j]
-                else:
-                    result_data['text_'+str(p)+'_2']=list1[j]
-                p += 1
-            p += 1
+        p += 1
 
-            bool1 = False
-            if tot_prop_sent != []:
-                for j in range(len(tot_prop_sent[o])):
-                    if j == 8:
-                        bb = 7
-                    if not bool1 and tot_prop_sent[o][j][4] != "":
-                        if excel or one_sent:
-                            w4.cell(row=p,column=3).value = "____________________"
-                        else:
-                            result_data['text_'+str(p)+'_2']="____________________"
-
-                        bool1 = True
-                        p += 1
+        bool1 = False
+        if tot_prop_sent != []:
+            for j in range(len(tot_prop_sent[o])):
+                if j == 8:
+                    bb = 7
+                if not bool1 and tot_prop_sent[o][j][4] != "":
                     if excel or one_sent:
-                        w4.cell(row=p,column=2).value = tot_prop_sent[o][j][0]
-                        w4.cell(row=p,column=3).value = tot_prop_sent[o][j][2] + tot_prop_sent[o][j][1]
+                        w4.cell(row=p,column=3).value = "____________________"
                     else:
-                        result_data['text_'+str(p)+'_1']=tot_prop_sent[o][j][0]
-                        result_data['text_'+str(p)+'_2']=tot_prop_sent[o][j][2] + tot_prop_sent[o][j][1]
+                        result_data['text_'+str(p)+'_2']="____________________"
 
-                    str2 = ""
-                    if len(tot_prop_sent[o][j]) == 5:
-                        str2 = tot_prop_sent[o][j][3] + " " + str(tot_prop_sent[o][j][4])
-                    elif len(tot_prop_sent[o][j]) == 6:
-                        str2 = tot_prop_sent[o][j][3] + " " + str(tot_prop_sent[o][j][4]) + \
-                        "," + str(tot_prop_sent[o][j][5])
-                    else:
-
-                        if tot_prop_sent[o][j][4] != "":
-                            str2 = tot_prop_sent[o][j][3] + " " + str(tot_prop_sent[o][j][4])
-                        if tot_prop_sent[o][j][5] != "" and tot_prop_sent[o][j][5] != None:
-                            str2 += "," + str(tot_prop_sent[o][j][5])
-                        if tot_prop_sent[o][j][6] != "" and tot_prop_sent[o][j][6] != None:
-                            str2 += "," + str(tot_prop_sent[o][j][6])
-                        if len(tot_prop_sent[o][j]) > 7:
-                            if tot_prop_sent[o][j][7] != "" and tot_prop_sent[o][j][7] != None:
-                                str2 += "," + str(tot_prop_sent[o][j][7])
-
-                    if excel or one_sent:
-                        w4.cell(row=p,column=4).value = str2
-                    else:
-                        result_data['text_'+str(p)+'_3']= str2
-                    if excel and j+1 == len(tot_prop_sent[o]):
-                        w4.cell(row=p,column=5).value = 1
-
+                    bool1 = True
                     p += 1
+                if excel or one_sent:
+                    w4.cell(row=p,column=2).value = tot_prop_sent[o][j][0]
+                    w4.cell(row=p,column=3).value = tot_prop_sent[o][j][2] + tot_prop_sent[o][j][1]
+                else:
+                    result_data['text_'+str(p)+'_1']=tot_prop_sent[o][j][0]
+                    result_data['text_'+str(p)+'_2']=tot_prop_sent[o][j][2] + tot_prop_sent[o][j][1]
+
+                str2 = ""
+                if len(tot_prop_sent[o][j]) == 5:
+                    str2 = tot_prop_sent[o][j][3] + " " + str(tot_prop_sent[o][j][4])
+                elif len(tot_prop_sent[o][j]) == 6:
+                    str2 = tot_prop_sent[o][j][3] + " " + str(tot_prop_sent[o][j][4]) + \
+                    "," + str(tot_prop_sent[o][j][5])
+                else:
+
+                    if tot_prop_sent[o][j][4] != "":
+                        str2 = tot_prop_sent[o][j][3] + " " + str(tot_prop_sent[o][j][4])
+                    if tot_prop_sent[o][j][5] != "" and tot_prop_sent[o][j][5] != None:
+                        str2 += "," + str(tot_prop_sent[o][j][5])
+                    if tot_prop_sent[o][j][6] != "" and tot_prop_sent[o][j][6] != None:
+                        str2 += "," + str(tot_prop_sent[o][j][6])
+                    if len(tot_prop_sent[o][j]) > 7:
+                        if tot_prop_sent[o][j][7] != "" and tot_prop_sent[o][j][7] != None:
+                            str2 += "," + str(tot_prop_sent[o][j][7])
+
+                if excel or one_sent:
+                    w4.cell(row=p,column=4).value = str2
+                else:
+                    result_data['text_'+str(p)+'_3']= str2
+                if (excel or one_sent) and j+1 == len(tot_prop_sent[o]):
+                    w4.cell(row=p,column=5).value = 1
+
+                p += 1
             p += 3
     e = time.time()
     g = e - b
@@ -5449,7 +5446,6 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
     enc_naxp = enclose(naxp)
     def_info = find_sentences(enc_naxp)
     list1 = prepare_iff_elim(greek2,def_info,naxp,all_sent,list2[0],list2[1],sn,tot_sent)
-    list1[37] = nax
     conditionals.append(list1)
     sn += 1
     tot_sent.append([sn,sent4,sent4p,"","AY ENT","","","",""])
@@ -5468,7 +5464,6 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
     enc_subst4p = enclose(subst4p)
     def_info = find_sentences(enc_subst4p)
     list1 = prepare_iff_elim(greek2,def_info,subst4p,all_sent,list2[0],list2[1],sn,tot_sent)
-    list1[37] = subst4
     conditionals.append(list1)
     cnjts.append(sent2p)
     cnjts.append(sent4p)
@@ -6124,7 +6119,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                 tv = "True"
                 tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
                                      greek2, conditionals)
-
+                tot_prop_sent.append(prop_sent)
                 return [tot_sent,tv]
 
 
@@ -6407,15 +6402,8 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
 def rearrange2(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2):
 
-    list2 = []
-    list1 = []
-    list5 = []
-    list6 = put_nc_id_ax_df_into_list(list5,list1,list2,tot_sent)
-    rn_used = list6[0]
-    tot_sent = list6[1]
+    tot_sent = put_nc_id_ax_df_into_list(tot_sent)
 
-    if rn_used:
-        tot_sent = rearrange_tot_sent(list5,list1,list2)
     for i in range(len(tot_sent)-1,0,-1):
         if tot_sent[i][4] != "":
             break
@@ -6440,11 +6428,12 @@ def subtract_400(prop_sent,g):
             prop_sent[i][7] = prop_sent[i][7] - g
     return prop_sent
 
-def put_nc_id_ax_df_into_list(list5,list1,list2,tot_sent):
+def put_nc_id_ax_df_into_list(tot_sent):
     #this function takes out sentences proved by NC, AX, RN etc and
     #prepares to put them into new locations
-    list4 = []
-    list6 = []
+    list1 = []
+    list2 = []
+    list5 = []
     rn_used = False
     bool1 = False
 
@@ -6473,7 +6462,10 @@ def put_nc_id_ax_df_into_list(list5,list1,list2,tot_sent):
             list3 = copy.deepcopy(tot_sent[i])
             list2.append(list3)
 
-    return [rn_used,tot_sent]
+    if rn_used:
+        tot_sent = rearrange_tot_sent(list5, list1, list2)
+
+    return tot_sent
 
 def rearrange_tot_sent(list5,list1,list2):
     # this function puts the tot_sent into a better order
@@ -6645,28 +6637,57 @@ def get_detached(standard_cj,all_sent):
     return detached
 
 def get_detached_variables(detached):
-    # This puts in a list all abbreviations which appear in a detached sentence
+    # This categorizes all abbreviations which appear in a detached sentence
 
     num = [5,14,18,22]
-    detached_var = []
+    temp_list = []
+    indefinite_concept = findinlist("indefinite",dv_nam,1,0)
+    definite_concept = findinlist("definite", dv_nam, 1, 0)
+    general_concept = findinlist("general", dv_nam, 1, 0)
+    defn = []
+    indef = []
+    general = []
+
     for i in range(len(detached)):
         for j in num:
             if isvariable(detached[i][j]):
-                if detached[i][j] not in detached_var:
-                    detached_var.append(detached[i][j])
+                str1 = detached[i][j]
+                if str1 not in defn and str1 not in indef and str1 not in general:
+                    if isinmdlist(detached[i][j],dv_nam,0):
+                        defn.append(detached[i][j])
+                    elif detached[i][9] == 'J' and detached[i][14] == indefinite_concept:
+                        indef.append(detached[i][j])
+                    elif detached[i][9] == 'J' and detached[i][14] == definite_concept:
+                        defn.append(detached[i][j])
+                    elif detached[i][9] == 'J' and detached[i][14] == general_concept:
+                        general.append(detached[i][j])
+                    else:
+                        temp_list.append(detached[i][j])
 
-    return detached_var
+    indef = categorize_remaining_variables(indef,defn,temp_list)
 
-def attached_variables(conditionals,detached_var):
+    return [general,indef,defn]
+
+def categorize_remaining_variables(indef,defn,temp_list):
+    #this places the remaining variables in the indefinite list
+    for i in range(len(temp_list)):
+        if temp_list[i] not in defn:
+            if temp_list[i] not in indef:
+                indef.append(temp_list[i])
+    return indef
+
+def attached_variables(conditionals,detached_var,all_sent):
     #This determines whether non-definite variables are in the antecedent or consequent
 
     ant_pot = [] # potentially general or indefinite antecedent variables
     con_pot = []  # potentially general or indefinite consequent variables
     general = []
-    indef = []
-    defn = []
+    indef = detached_var[1]
+    defn = detached_var[2]
+    spec_var = detached_var[0]
     num = [5,14,18,22]
     num2 = [34,35]
+
     for i in range(len(conditionals)):
         for m in num2:
             for j in range(len(conditionals[i][m])):
@@ -6688,7 +6709,11 @@ def attached_variables(conditionals,detached_var):
         list1 = variable_type(ant_pot,con_pot)
         general = quick_append(list1[0],general)
         indef = quick_append(list1[1],indef)
-
+    # this is a bandaid, remove this later
+    if spec_var in defn:
+        defn.remove(spec_var)
+    if indef in defn:
+        indef.remove(spec_var)
     return [general,indef,defn]
 
 def quick_append(list1,list2):
@@ -6739,15 +6764,15 @@ def print_variables(list1,tot_sent):
     str3 = ""
     j = 0
     if general != []:
-        str1 = 'GENERAL VARIABLES: '
+        str1 = 'General Variables: '
         for i in range(len(general)):
             str1 += general[i] + " "
     if indef != []:
-        str2 = 'INDEFINITE VARIABLES: '
+        str2 = 'Indefinite Variables: '
         for i in range(len(indef)):
             str2 += indef[i] + " "
     if defn != []:
-        str3 = 'DEFINITE VARIABLES: '
+        str3 = 'Definite Variables: '
         for i in range(len(defn)):
             str3 += defn[i] + " "
 
@@ -6772,15 +6797,8 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
         prop_sent = subtract_400(prop_sent,g)
         prop_sent.sort()
 
-    list2 = []
-    list1 = []
-    list5 = []
-    list6 = put_nc_id_ax_df_into_list(list5,list1,list2,tot_sent)
-    rn_used = list6[0]
-    tot_sent = list6[1]
+    tot_sent = put_nc_id_ax_df_into_list(tot_sent)
 
-    if rn_used:
-        tot_sent = rearrange_tot_sent(list5,list1,list2)
     if proof_type == 'l':
         nonstandard = []
         standard_cj = []
@@ -6802,7 +6820,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
 
-            list1 = attached_variables(conditionals,detached_var)
+            list1 = attached_variables(conditionals,detached_var,all_sent)
 
             tot_sent = print_variables(list1,tot_sent)
             # tot_sent = relevance(list1,conditionals,standard_cj,tot_sent)
@@ -10080,11 +10098,8 @@ def get_result(post_data,archive_id=None,request=None):
         list2 = identity(all_sent,tot_sent,basic_objects,words,candd,candd2,\
                 conditionals,prop_sent,prop_name,id_num,identities,idf_var,\
                 test_sent[k][0][3],greek2)
-        if proof_type == "l":
-            test_sent[k] = list2[0]
-        else:
-            test_sent[k] = list2[0]
-            tot_prop_name.append(prop_name)
+        test_sent[k] = list2[0]
+        tot_prop_name.append(prop_name)
         yy = ""
         if list2[1] == "False":
             yy = k+1
