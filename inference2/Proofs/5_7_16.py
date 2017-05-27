@@ -17,8 +17,8 @@ tot_tim = time.time()
 
 j = 2 # was 90
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 90 # if n then proof type before may 1
-stp = 91
+strt = 94 # if n then proof type before may 1
+stp = 0
 print_to_doc = True
 if j == 1:
     django2 = False
@@ -1244,7 +1244,7 @@ def define(tot_sent,all_sent,idf_var,dv_nam,words,rep_rel,identities,\
             str1 = all_sent[m][i]
             if relat == 'B':
                 bb = 8
-            if m == 5:
+            if m == 7 and i == 14:
                 bb = 8
 
             if all_sent[m][43] != 'cc':
@@ -1968,10 +1968,8 @@ def divide_sent(words, list2, idf_var,tot_sent,all_sent):
 def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
 
     relations = words[6]
-    pos = words[28]
     doubles = words[31]
     doubles.sort()
-    bool1 = False
     for j in range(len(all_sent)):
         i = -1
         while i < len(all_sent[j])-3:
@@ -2000,7 +1998,6 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
             str2 = findinlist(str3,relations,0,1)
 
             if str2 != None:
-                bool1 = True
                 g = findposinlist(str3,dv_nam,0)
                 if g == -1:
                     dv_nam.append([str3,str2])
@@ -2060,7 +2057,6 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                 elif j == 49:
                     if all_sent[i][16] == "a":
                         all_sent[i][16] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
                     elif all_sent[i][16] == "every":
@@ -2070,7 +2066,6 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                         rule = "DE ~ every"
                     elif all_sent[i][16] in cat:
                         all_sent[i][16] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][18]
                     elif all_sent[i][15] == ne:
@@ -2081,7 +2076,6 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                 elif j == 50:
                     if all_sent[i][20] == "a":
                         all_sent[i][20] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
                     elif all_sent[i][20] == "every":
@@ -2091,13 +2085,11 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                         rule = "DE ~ every"
                     elif all_sent[i][20] in cat:
                         all_sent[i][20] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][22]
                 elif j == 51:
                     if all_sent[i][24] == "a":
                         all_sent[i][24] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
                     elif all_sent[i][24] == "every":
@@ -2107,13 +2099,11 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                         rule = "DE ~ every"
                     elif all_sent[i][24] in cat:
                         all_sent[i][24] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][26]
                 elif j == 52:
                     if all_sent[i][28] == "a":
                         all_sent[i][28] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ a"
                     elif all_sent[i][28] == "every":
@@ -2123,12 +2113,10 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
                         rule = "DE ~ every"
                     elif all_sent[i][28] in cat:
                         all_sent[i][28] = 'every'
-                        bool1 = True
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][30]
                 if bool1:
                     all_sent[i][j] = None
-                    bool1 = False
                     all_sent[i][46].remove(j)
 
 
@@ -2136,7 +2124,6 @@ def rel_repl(all_sent,tot_sent,words,dv_nam,idf_var,id_num):
             new_sent = build_sent(all_sent[i])
             newp = name_sent(new_sent)
             dummy = new_sentence2(old_sent,oldp,new_sent,newp,tot_sent,rule,"")
-            bool2 = False
             all_sent[i][0] = new_sent
             all_sent[i][42] = newp
             dummy = new_categories(all_sent[i],words,idf_var,all_sent)
@@ -3109,7 +3096,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     #this is for those determinatives which have negations in their definitions where
     #the sentences has an R variable
     identical_det = ["only","anything_except","anyone_except","many"+un,'no']
-    if definiendum == "every":
+    if definiendum == "property"+un:
         bb = 7
     if definiendum not in def_used and not definiendum.isupper():
         def_used.append(definiendum)
@@ -4958,7 +4945,7 @@ def build_dict(ex_dict):
         if str1 != None:
             if not isinstance(str1,(int,long)):
                 str1 = str1.strip()
-            if word == 'in' + ub:
+            if word == 'non_whole':
                 bb = 7
             elif word == 2:
                 bb = 7
@@ -4988,7 +4975,8 @@ def build_dict(ex_dict):
             if defin == 'redundant':
                 redundant.append(word)
             if defin != None and defin.find("E.g.") == -1 and defin.find("EXP") == -1 \
-                    and defin != 'redundant' and word != "." and defin.find("e.g.") == -1:
+                    and defin != 'redundant' and word != "." and defin.find("e.g.") == -1\
+                    and str1 != "":
                 if word != None:
                     word = word.strip()
                 if str3 != None:
@@ -6676,7 +6664,7 @@ def categorize_remaining_variables(indef,defn,temp_list):
                 indef.append(temp_list[i])
     return indef
 
-def attached_variables(conditionals,detached_var,all_sent):
+def attached_variables(conditionals,detached_var):
     #This determines whether non-definite variables are in the antecedent or consequent
 
     ant_pot = [] # potentially general or indefinite antecedent variables
@@ -6697,7 +6685,7 @@ def attached_variables(conditionals,detached_var,all_sent):
                         if isinmdlist(str1,dv_nam,0):
                             if str1 not in defn:
                                 defn.append(str1)
-                        elif str1 not in detached_var:
+                        elif str1 not in defn and str1 not in indef:
                             if m == 34:
                                 if str1 not in ant_pot:
                                     ant_pot.append(str1)
@@ -6719,7 +6707,7 @@ def attached_variables(conditionals,detached_var,all_sent):
 def quick_append(list1,list2):
 
     for i in range(len(list1)):
-        if list1[0] not in list2:
+        if list1[i] not in list2:
             list2.append(list1[i])
     return list2
 
@@ -6820,7 +6808,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
             conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
 
-            list1 = attached_variables(conditionals,detached_var,all_sent)
+            list1 = attached_variables(conditionals,detached_var)
 
             tot_sent = print_variables(list1,tot_sent)
             # tot_sent = relevance(list1,conditionals,standard_cj,tot_sent)

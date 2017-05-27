@@ -511,7 +511,7 @@ def large_dict(str1):
 ['r','has|c|p','HCP','(bHCPc) x^ ((bWc) x^ (bCSEd))'],\
 ['r','has|c|r (causal role)','HCA','((bHCAc) x^ (bCAc)) & ((bHCAc) t^ (bHc))'],\
 ['ra','has|e (corpse)','HA','has|c=HA, c=matter, d=dead ((bHAz) & (zIc)) x^ ((zSy) & (bOWNz) & (zJd))'],\
-['r','has|g|c','HGC','(cHGCb) x^ ((cWe) t^ (eIb))'],\
+['r','has|g|c','HGC','(cHGCb) x^ ((bWe) t^ (eIc))'],\
 ['r','has|i','HI','((bHIc) x^ (((bWc) ed^ (bHc)) & (cJd))) & (d=intrinsic)'],\
 ['r','has|i|m','HIM','((bHIMc) x^ (cMb))'],\
 ['r','has|m','HM','(have|m=HM) & ((bHMc) x^ (cIb))'],\
@@ -522,7 +522,7 @@ def large_dict(str1):
 ['r','has|p|j','HCD','(has|p|j = HCD) & ((bHCDc) x^ (((bTKWr) & (rCRRq) & (qPh) & (To)) t^ ((qTg) & (gAo))) & (qb^bRu INSm)'],\
 ['r','has|p|e','HCE','(bHCEc) x^ ((bHCBc) ed^ (bHCDc))'],\
 ['','have|b','HB','((bHBc) x^ ((bWc) & (cId))) & (d=body|c)'],\
-['r','have|g|c','HGC','(cHGCb) x^ ((cWe) t^ (eIb))'],\
+['r','have|g|c','HGC','(cHGCb) x^ ((bWe) t^ (eIc))'],\
 ['rxd','have|i|c (... in common|r)','HCM','(b and|c c HCM d) x^ ((bJd) & (cJd))'],\
 ['rs','have|o ',None,'(have|o=own)'],\
 ['r','have|p|n','HPN','((bHPNc) x^ (cRFb)) & ((bHPNc) t^ ((bId) & (cIe))) & (d=individual) & (e=proper name)'],\
@@ -567,7 +567,7 @@ def large_dict(str1):
 ['ratso','in|d','IND','((bINDc) t^ (((bWd) & (dIe)) x^ (cWd))) & (e=point)'],\
 ['r','in|e','INE','(bINEc) x^ ((bSd) & (cWd))'],\
 ['r','in|g','ING','(c=relationship) & (in|g=ING) & ((bINGp) x^ (((bAWz) ed^ (zAWb)) & (pWb) & (pIc)))'],\
-['r','in|m','INM','(bINMc) x^ ((bWd) x^ ((dSe) & (cWe)))'],\
+['r','in|m','INM','(bINMc) x^ (((bWd) x^ ((dSe) & (cWe))) & (bWf) & (fSg) & (hWg))'],\
 ['r','in|s','INS','(bINSc) x^ ((bWd) & (dINMc))'],\
 ['r','in|r','INR','(in|r=INR) & ((bINRc) x^ ((bSd) & (dINc)))'],\
 ['rs','in|p','INP','(in|s = is|g)'],\

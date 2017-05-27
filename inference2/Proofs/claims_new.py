@@ -93,5 +93,5 @@ def pop_sent(str1):
 [[ 1,"no mind is|a mental",None,'co']],\
 [[ 1,"I took a dog's ball",None,'co'],[ 2,"no dog owns a|a ball",None,'j']],\
 [[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']],\
-[[ 1,"There is|e a region|a which is|g not a group of|i points",None,'co']]]
+[[ 1,"The|r property|n redness is|a red",None,'co']]]
     return sent
