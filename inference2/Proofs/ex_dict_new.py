@@ -578,7 +578,7 @@ def large_dict(str1):
 ['aa','indefinite|a',None,'postponed'],\
 ['a','indeterminate',None,'(b=indeterminate) & (((pJb) & ((p=q) ed^ (p=r))) x^ ((qNz) & (rNy) & (xNw) & (pNv) & (wGy) & (zGw) & ((vGw) ed^ (wGv))))'],\
 ['a','indexical',None,'postponed'],\
-['nk','individual',None,'(b=individual) & ((cIb) x^ (((dIe) t^ (d~Ic)) & (cJf) & ((d zzz c) x^ (d~Jf)))) & (e=thing)'],\
+['nk','individual',None,'(b=individual) & ((cIb) x^ ((dIe) t^ (d~Ic)))'],\
 ['as','individual|p',None,'(individual|p=particular)'],\
 ['ns','individual essence',None,'(individual essence=essence|i)'],\
 ['n','individual essence',None,'(individual essence = essence|i)'],\

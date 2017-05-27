@@ -17,8 +17,8 @@ tot_tim = time.time()
 
 j = 2 # was 90
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 94 # if n then proof type before may 1
-stp = 0
+strt = 93 # if n then proof type before may 1
+stp = 94
 print_to_doc = True
 if j == 1:
     django2 = False
@@ -95,6 +95,9 @@ affneg = []
 anaphora = ""
 impl = ""
 time1 = 0
+band_aid_axiom = "" # the sentence x is a thing in axioms is getting placed
+# in the standard_cj list because the counting of premises is messed up
+# this is a temporary fix for that problem
 definite = []
 psent = []
 definite2 = []
@@ -2213,13 +2216,6 @@ def rel_div(all_sent,m,tot_sent,i,pos,words,idf_var):
         d = 20
         c = 22
 
-    # elif i == 23:
-    #     a = 22
-    #     c = 26
-    # elif i == 31:
-    #     a = 30
-    #     c = 34
-
     list1[8] = all_sent[m][8]
     list1[3] = all_sent[m][3]
     list1[5] = all_sent[m][a]
@@ -2235,10 +2231,7 @@ def rel_div(all_sent,m,tot_sent,i,pos,words,idf_var):
         list6.remove(i)
         list6.remove(c)
         if all_sent[m][8] != None:
-            try:
-                list6.remove(8)
-            except ValueError:
-                bb = 8
+            list6.remove(8)
         all_sent[m][46] = list6
         all_sent[m][i] = None
         all_sent[m][c] = None
@@ -2248,7 +2241,6 @@ def rel_div(all_sent,m,tot_sent,i,pos,words,idf_var):
         dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,1)
     elif genre == 2:
         dummy = new_sent_prelim(old_sent,oldp,all_sent,list1,m,rule,tot_sent,2,list3)
-        genre = 1
 
 
 
@@ -4504,7 +4496,7 @@ def dec_pro(decision,list3,pronouns):
     num70 = [59,60,61,62] # relative pronouns
     num80 = [62,61,60,7] # that-c
     num90 = [69,70] # possessives
-    num100 = [15,19] # RDA,RDB
+    num100 = [15,19] # # ,RDB
     num110 = [5,63,64] # there
     num120 = [3,10,16,20,24,28,32] # every, many-n
     list2 = list3[46]
@@ -5336,7 +5328,7 @@ def axioms(greek2,list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sen
 def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
             candd,candd2,conditionals,all_sent,member_prop,not_id,prop_sent):
 
-    global dv_nam,idf_var,sn,cnjts
+    global dv_nam,idf_var,sn,cnjts,band_aid_axiom
 
     rn_list = []
     thing_con = findinlist('thing',dv_nam,1,0)
@@ -5345,6 +5337,7 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         for i in range(len(tot_sent)):
             if tot_sent[i][4] == "ID":
                 tot_sent[i][2] += " & (" + thing_con + "= thing)"
+                dv_nam.append(thing_con,'thing')
                 break
         del idf_var[0]
     else:
@@ -5403,16 +5396,17 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
     nax = "(" + sent1 + " & " + sent2 + ") " + conditional \
         + " " + sent3
     rename = build_sent_list(rn_list)
-    ax_enti = "(" + thing_var + "I" + thing_con + ")"
+    # ax_enti = "(" + thing_var + "I" + thing_con + ")"
     subst1 = "(" + thing_var + mini_c + thing_int + ")"
-    sent4 = "(" + thing_var + "I" + thing_con + ")"
+    #sent4 = "(" + thing_var + "I" + thing_con + ")"
     subst4 = sent5 + " " + conditional + " " + sent3a
 
     sent1p = name_sent(sent1)
     sent2p = name_sent(sent2)
+    #all_sent = add_thing_sent_to_all_sent(all_sent,sent2,sent2p,thing_int,thing_con)
     sent3p = name_sent(sent3)
     sent3ap = name_sent(sent3a)
-    sent4p = name_sent(sent4)
+    #sent4p = name_sent(sent4)
     sent5p = name_sent(sent5)
     naxp = "(" + sent1p + " & " + sent2p + ") " + conditional \
         + " " + sent3p
@@ -5435,11 +5429,12 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
     def_info = find_sentences(enc_naxp)
     list1 = prepare_iff_elim(greek2,def_info,naxp,all_sent,list2[0],list2[1],sn,tot_sent)
     conditionals.append(list1)
+    #sn += 1
+    #tot_sent.append([sn,sent4,sent4p,"","AY ENT","","","",""])
+    #candd.append([sn,sent4p,""])
+    #prop_sent.append([sn,sent4p,"","","","","","","",""])
     sn += 1
-    tot_sent.append([sn,sent4,sent4p,"","AY ENT","","","",""])
-    candd.append([sn,sent4p,""])
-    prop_sent.append([sn,sent4p,"","","","","","","",""])
-    sn += 1
+    band_aid_axiom = sent2p
     tot_sent.append([sn,sent2,sent2p,"","AY ENT","","","",""])
     prop_sent.append([sn,sent2p,"","","","","","","",""])
     candd.append([sn,sent2p,""])
@@ -5454,7 +5449,6 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
     list1 = prepare_iff_elim(greek2,def_info,subst4p,all_sent,list2[0],list2[1],sn,tot_sent)
     conditionals.append(list1)
     cnjts.append(sent2p)
-    cnjts.append(sent4p)
 
     #if the required sentences are not conjuncts then we must add them to the all sent list
     if sent5p not in cnjts or sent1p not in cnjts:
@@ -5483,19 +5477,23 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         all_sent.append(list3)
         list5 = [thing_int,"THING",[],[],[],[],[],"",[],[]]
         member_prop.append(list5)
-        list4 = copy.deepcopy(list3)
-        list4[5] = thing_var
-        list4[0] = sent4
-        list4[42] = sent4p
         not_id.append([thing_int,thing_var])
-        all_sent.append(list4)
         return False
     else:
         return True
 
 
+def add_thing_sent_to_all_sent(all_sent,sent2,sent2p,thing_int,thing_con):
 
+    list1 = [None] * 80
+    list1[0] = sent2
+    list1[42] = sent2p
+    list1[5] = thing_int
+    list1[9] = "I"
+    list1[14] = thing_con
+    all_sent.append(list1)
 
+    return all_sent
 
 
 def get_sent(all_sent,str1):
@@ -6513,9 +6511,11 @@ def build_standard_sent_list(nonstandard,standard_cj,\
     # conditionals and non standard sentences
     # it also converts the prop_sent into
     # nat sent and puts them into the tot sent list
-
+    global band_aid_axiom
 
     if c == 0:
+        if band_aid_axiom == 0:
+            band_aid_axiom = 1500
         c = tot_sent[-1][0]
     tot_sent.append(["","","","","","","","","",""])
     tot_sent.append(["","_______________________","","","","","","","",""])
@@ -6526,9 +6526,9 @@ def build_standard_sent_list(nonstandard,standard_cj,\
         d = len(prop_sent)
 
     for i in range(d):
-        if i == 29:
+        if i == 43:
             bb = 8
-        if prop_sent[i][0] > c:
+        if prop_sent[i][0] > c or prop_sent[i][1] == band_aid_axiom:
             if prop_sent[i][1] == bottom:
                 tot_sent.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
