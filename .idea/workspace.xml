@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/dictionary4.xlsx" afterPath="$PROJECT_DIR$/inference2/dictionary4.xlsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/claims.py" afterPath="$PROJECT_DIR$/inference2/Proofs/claims.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/claims_new.py" afterPath="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" afterPath="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,8 +38,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="19" lean-forward="false" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+            <state relative-caret-position="156">
+              <caret line="6109" column="0" lean-forward="false" selection-start-line="6109" selection-start-column="0" selection-end-line="6109" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -45,9 +50,11 @@
       <file leaf-file-name="temp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9858" column="20" lean-forward="true" selection-start-line="9858" selection-start-column="20" selection-end-line="9858" selection-end-column="20" />
-              <folding />
+            <state relative-caret-position="222">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#34#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -55,8 +62,8 @@
       <file leaf-file-name="ex_dict_new.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="580" column="70" lean-forward="false" selection-start-line="580" selection-start-column="70" selection-end-line="580" selection-end-column="70" />
+            <state relative-caret-position="8715">
+              <caret line="581" column="56" lean-forward="false" selection-start-line="581" selection-start-column="56" selection-end-line="581" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -65,8 +72,18 @@
       <file leaf-file-name="claims_new.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="65" column="52" lean-forward="false" selection-start-line="65" selection-start-column="43" selection-end-line="65" selection-end-column="52" />
+            <state relative-caret-position="464">
+              <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="claims.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="448">
+              <caret line="96" column="15" lean-forward="false" selection-start-line="96" selection-start-column="15" selection-end-line="96" selection-end-column="15" />
               <folding />
             </state>
           </provider>
@@ -75,8 +92,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="3879" column="12" lean-forward="true" selection-start-line="3879" selection-start-column="12" selection-end-line="3879" selection-end-column="110" />
+            <state relative-caret-position="58080">
+              <caret line="3879" column="12" lean-forward="false" selection-start-line="3879" selection-start-column="12" selection-end-line="3879" selection-end-column="110" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -96,22 +113,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>arrange(</find>
-      <find>build_stan</find>
-      <find>def new_prop</find>
-      <find>ex_dict</find>
-      <find>nonstandard</find>
-      <find>skel_strin</find>
-      <find>skel_string</find>
-      <find>def iden</find>
-      <find>no</find>
       <find>every</find>
       <find>region</find>
       <find>skel_str</find>
       <find>def put_</find>
       <find>def axioms2(</find>
       <find>def axioms2</find>
-      <find>def rearr</find>
       <find>def rear</find>
       <find>axioms(</find>
       <find>time</find>
@@ -122,10 +129,20 @@
       <find>_variables(</find>
       <find>INM</find>
       <find>fir_</find>
-      <find>individua</find>
-      <find>indivi</find>
       <find>RDA</find>
       <find>axioms2(</find>
+      <find>tot_prop_sent.a</find>
+      <find>individua</find>
+      <find>indivi</find>
+      <find>statement_</find>
+      <find>state</find>
+      <find>statement_lo</find>
+      <find>kind</find>
+      <find>disjunction_he</find>
+      <find>pn</find>
+      <find>def rearr</find>
+      <find>def iden</find>
+      <find>def ident</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -189,19 +206,19 @@
         <option value="$PROJECT_DIR$/inference2/Proofs/manipulate_word.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/last_perfect.py" />
         <option value="$PROJECT_DIR$/inference_engine2/perfect on 5.1.17.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/claims.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/perfect on 5.1.17.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/claims new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/ex_dict new.py" />
         <option value="$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/complexity.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/ex_dict.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/claims.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
       </list>
     </option>
   </component>
@@ -212,9 +229,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="721" />
+    <option name="x" value="755" />
     <option name="y" value="23" />
-    <option name="width" value="719" />
+    <option name="width" value="668" />
     <option name="height" value="820" />
   </component>
   <component name="ProjectReloadState">
@@ -661,11 +678,18 @@
       <option name="project" value="LOCAL" />
       <updated>1495911161948</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="minor glitches in previous committ">
+      <created>1495911610433</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1495911610433</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="721" y="23" width="719" height="820" extended-state="0" />
+    <frame x="755" y="23" width="668" height="820" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23178808" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -676,7 +700,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29602888" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24071527" sideWeight="0.48787448" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2942743" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27296937" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -750,14 +774,15 @@
     <MESSAGE value="changed a word in claims file, fixed categorize variables function" />
     <MESSAGE value="fixed INM definition, non_wholes now define" />
     <MESSAGE value="changed def of individual, some of the sentences when using the axioms were not being put in the standard_cj list" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed def of individual, some of the sentences when using the axioms were not being put in the standard_cj list" />
+    <MESSAGE value="minor glitches in previous committ" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor glitches in previous committ" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6351" />
+      <option name="time" value="6359" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -779,6 +804,7 @@
         <watch expression="tot_prop_sent" language="Python" />
         <watch expression="sn" language="Python" />
         <watch expression="band_aid_axiom" language="Python" />
+        <watch expression="pn" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -1056,13 +1082,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="12" column="1" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/perfect on 3.1.17/last_perfect.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1081,9 +1100,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1095">
           <caret line="73" column="20" lean-forward="false" selection-start-line="73" selection-start-column="20" selection-end-line="73" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1091,15 +1107,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9858" column="20" lean-forward="true" selection-start-line="9858" selection-start-column="20" selection-end-line="9858" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1107,14 +1114,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="53">
           <caret line="234" column="35" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="1072" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="3879" column="12" lean-forward="true" selection-start-line="3879" selection-start-column="12" selection-end-line="3879" selection-end-column="110" />
+        <state relative-caret-position="58080">
+          <caret line="3879" column="12" lean-forward="false" selection-start-line="3879" selection-start-column="12" selection-end-line="3879" selection-end-column="110" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
@@ -1129,26 +1135,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims_new.py">
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="65" column="52" lean-forward="false" selection-start-line="65" selection-start-column="43" selection-end-line="65" selection-end-column="52" />
+        <state relative-caret-position="8715">
+          <caret line="581" column="56" lean-forward="false" selection-start-line="581" selection-start-column="56" selection-end-line="581" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py">
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="580" column="70" lean-forward="false" selection-start-line="580" selection-start-column="70" selection-end-line="580" selection-end-column="70" />
+        <state relative-caret-position="448">
+          <caret line="96" column="15" lean-forward="false" selection-start-line="96" selection-start-column="15" selection-end-line="96" selection-end-column="15" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="464">
+          <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="19" lean-forward="false" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+        <state relative-caret-position="156">
+          <caret line="6109" column="0" lean-forward="false" selection-start-line="6109" selection-start-column="0" selection-end-line="6109" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>

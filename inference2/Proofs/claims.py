@@ -10,7 +10,6 @@ def pop_sent(str1):
 [[ 1,"I love anything which is|r about logic",None,'co'],[ 2,"Set Theory is|r about logic",None,'j'],[ 3,"I do not love set theory",None,'j']],\
 [[ 1,"no green man from|b cold mars, lives on|r Earth",None,'co'],[ 2,"Jim is|g a|r green man born on|r Mars",None,'j'],[ 3,"Jim lives on|r Earth",None,'j']],\
 [[ 1,"Every green man from|b Mars drinks",None,'co'],[ 2,"Jim is|g a|r green man born on|r Mars",None,'j'],[ 3,"Jim does not drink",None,'j']],\
-#[[ 1,"Every boy kissed every girl",None,'co'],[ 2,"Jim is|g a|r boy",None,'j'],[ 3,"Jessica is|g a|r girl",None,'j'],[ 4,"Jim did not kiss Jessica",None,'j']],\
 [[ 1,"Everyone who spies on Leibniz, will|r be|a rewarded",None,'co'],[ 2,"Russell spied on Leibniz",None,'j'],[ 3,"Russell was|a not rewarded",None,'j']],\
 [[ 1,"Everyone who spies on a|a nazi in Munich, will|r be|a rewarded",None,'co'],[ 2,"Russell spied on a nazi in Munich",None,'j'],[ 3,"Russell was|a not rewarded",None,'j']],\
 [[ 1,"Anyone who breaks the speed limit, will|r be|a caught",None,'co'],[ 2,"Marilyn broke the speed limit",None,'j'],[ 3,"Marilyn was|a not caught",None,'j']],\
@@ -33,10 +32,7 @@ def pop_sent(str1):
 [[ 1,"Some|p thoughts think something",None,'co']],\
 [[ 1,"Some|p thoughts smell",None,'co']],\
 [[ 1,"Some|p thoughts desire something",None,'co']],\
-[[ 1,"Some|p minds do not think something",None,'co']],\
-[[ 1,"There is|e a region|a which is|g not a group of|i points",None,'co']],\
 [[ 1,"Plato has|t the same teacher as Xenothon",None,'co'],[ 2,"Xenothon does not have|t a teacher",None,'j']],\
-[[ 1,"The|r property|n redness is|a red",None,'co']],\
 [[ 1,"b has|c|r causal role c",None,'co'],[ 2,"Causal role c is|g not a|r property|n",None,'j']],\
 [[ 1,"A universal is|r not distinct from its|a instance",None,'co']],\
 [[ 1,"There is|e a universal which is|r not distinct from its|a instances",None,'co']],\
@@ -90,9 +86,12 @@ def pop_sent(str1):
 [[ 1,"I took the dog's ball",None,'co'],[ 2,"the dog does not own a ball",None,'j']],\
 [[ 1,"the dog's ball is|a red",None,'co'],[ 2,"the dog does not own a ball",None,'j']],\
 [[ 1,"Ada's ball is|a red",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
-[[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']]]
+[[ 1,"I took Ada's ball",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
+[[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']],\
+#[[ 1,"no point exists within a|a region|a",None,'co']],\
+[[ 1,"there is|e a group which has|w no members",None,'co']],\
+[[ 1,"no mind is|a mental",None,'co']],\
+[[ 1,"I took a dog's ball",None,'co'],[ 2,"no dog owns a|a ball",None,'j']],\
+[[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']],\
+[[ 1,"The|r property|n redness is|a red",None,'co']]]
     return sent
-
-
-
-

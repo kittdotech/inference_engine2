@@ -15,10 +15,10 @@ tot_tim = time.time()
 
 
 
-j = 2 # was 90
+j = 2 # was 39
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 0 # if n then proof type before may 1
-stp = 0
+strt = 43 # if n then proof type before may 1
+stp = 44
 print_to_doc = True
 if j == 1:
     django2 = False
@@ -6043,8 +6043,8 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     negat = []
     sent = []
     property_sent = []
-    if proof_type == "l":
-        pn = sn
+    # if proof_type == "l":
+    #     pn = sn
 
     for i in range(len(tot_sent)):
         if tot_sent[i][2] != "":
@@ -6054,28 +6054,43 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     consistent = plan(greek2,sent,all_sent,prop_sent,candd,candd2,conditionals, prop_name,disjuncts,tot_sent,2,negat)
 
     tv = True # tv = truth value
+
+    if proof_type == "l" and consistent:
+        instan_used += 1
+        k = sn
+        g = sn
+        tv = "True"
+        tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
+                             greek2, conditionals)
+        # tot_prop_sent.append(prop_sent)
+        # return [tot_sent, tv]
+
+
+
     if consistent and impl != nonseq:
         tv = False
     elif impl == nonseq and consistent:
         tv = False
     if not tv:
-        for i in range(len(conditionals)):
-            str3 = conditionals[i][4]
-            str3 = enclose(str3)
-            def_info = find_sentences(str3)
-            for y in range(len(def_info[0])):
-                if os(def_info[0][y]):
-                    def_con = def_info[4][y][1]
-                    sent_num = def_info[4][y][0]
-                    paren_num = def_info[4][y][0][:-1]
-                    gparen_num = def_info[4][y][0][:-2]
-                    paren_conn = findinlist(paren_num,def_info[4],0,1)
-                    gparen_conn = findinlist(gparen_num,def_info[4],0,1)
-                    str9 = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
-                    list2 = unenclose(def_info[3][y])
-                    str3 = list2[0]
-                    d = findposinlist(str3,all_sent,42)
-                    all_sent[d][53] = str9
+
+        if proof_type != "l":
+            for i in range(len(conditionals)):
+                str3 = conditionals[i][4]
+                str3 = enclose(str3)
+                def_info = find_sentences(str3)
+                for y in range(len(def_info[0])):
+                    if os(def_info[0][y]):
+                        def_con = def_info[4][y][1]
+                        sent_num = def_info[4][y][0]
+                        paren_num = def_info[4][y][0][:-1]
+                        gparen_num = def_info[4][y][0][:-2]
+                        paren_conn = findinlist(paren_num,def_info[4],0,1)
+                        gparen_conn = findinlist(gparen_num,def_info[4],0,1)
+                        str9 = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
+                        list2 = unenclose(def_info[3][y])
+                        str3 = list2[0]
+                        d = findposinlist(str3,all_sent,42)
+                        all_sent[d][53] = str9
 
         bo2=[]
         member_prop = []
@@ -6091,22 +6106,21 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
         consistent = list1[5]
 
     if consistent:
+        print 'axioms used'
         consistent = axioms(greek2,basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
                        prop_sent,member_prop,not_id)
 
         # end3
+
+        if proof_type == "l":
+            tot_prop_sent.append(prop_sent)
+            return [tot_sent, tv]
+
+
         if consistent:
             itime = time.time()
             instan_used += 1
-            if proof_type == "l":
-                print 'instantiation used'
-                k = sn
-                g = sn
-                tv = "True"
-                tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
-                                     greek2, conditionals)
-                tot_prop_sent.append(prop_sent)
-                return [tot_sent,tv]
+
 
 
             bb = 8
@@ -8376,7 +8390,6 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
         temp1 = temp1.replace(" ","")
         temp1 = remove_outer_paren(temp1)
         g = -1
-        bool1 = False
         while g < len(conditionals) -1:
             g += 1
             if g == 2 and r==16:
@@ -8425,8 +8438,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                         break
                                 else:
                      # con indicates that the consequent of the conditional is to be detached
-                     #                if len(conditionals) <= 4:
-                     #                    bb = 7
+                     #
                                     dummy = new_prop_sent(greek2,all_sent,"", "con", \
                                         str13, anc1, anc2,conditionals,g,candd,candd2)
                                     if dummy == False:
@@ -8435,6 +8447,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                     g -= 1
                                     break
                             elif str8 != temp_nega and str12 == 'e':
+                                # if cconjunction != "":
                                 if kind != 2 and cconjunction != "":
                                     dummy = new_prop_sent(greek2,all_sent,"~", "con", \
                                                 "EN", anc1, anc2, conditionals,g,candd,candd2)
@@ -8463,6 +8476,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                         g -= 1
                                         break
                             elif str8 != temp_negc:
+                                # if aconjunction != "":
                                 if kind != 2 and aconjunction != "":
                                     if str12 == 'c':
                                         str13 = "MT"
@@ -8477,6 +8491,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                     break
                         elif f == 0 and temp1 != temp_ant and \
                                 aconjunction != "" and str12 == 'e':
+                            # if cconjunction != "":
                             if kind != 2 and cconjunction != "":
                                 s = -1
                                 if conditionals != []:
@@ -8494,6 +8509,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
 
                         elif f == 1 and temp1 != temp_con and cconjunction != "":
                             if kind != 2 and aconjunction != "":
+                            # if aconjunction != "":
                                 s = -1
                                 if conditionals != []:
                                     while s < len(conditionals[g][1]) -1:
@@ -8891,7 +8907,6 @@ def bad_paren(str1):
 def demorgan(all_sent,prop_sent,conditionals,candd,candd2,kind,one_sent = False, str8 = "",anc1a = "",rule = "",conjt = []):
 
     d = -1
-    temp_bool = True
     rop = False
     if one_sent:
         d = len(conditionals) - 2
@@ -8921,8 +8936,6 @@ def demorgan(all_sent,prop_sent,conditionals,candd,candd2,kind,one_sent = False,
                     print "you are caught in an infinite loop in the \
                     demorgan function"
                     sys.exit()
-
-                bool2 = False
                 str2 = str1[i:i+2]
                 if str2 == "~(":
                     s += 1
@@ -9060,7 +9073,6 @@ def demorgan(all_sent,prop_sent,conditionals,candd,candd2,kind,one_sent = False,
                     dummy = disjunction_heirarchy(conditionals,str1,0,True)
                     return
                 else:
-                    #dummy = disjunction_heirarchy(conditionals,str1,0,True)
                     conditionals[d][2] = pn
                     conditionals[d][4] = str1
     return True
@@ -9722,8 +9734,6 @@ def plan(greek2,sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name,
     conj_elim = []
     temp_conditionals = []
     list4 = []
-    str3 = ""
-    str1 = ""
     conc = ""
     impl = ""
     qq = 0
@@ -10103,7 +10113,10 @@ def get_result(post_data,archive_id=None,request=None):
     m = def_tim/(stp-strt)
     dd = st_log_tim/(stp-strt)
     global instan_used,instan_time
-    ee = instan_time/instan_used
+    if instan_used != 0:
+        ee = instan_time/instan_used
+    else:
+        ee = 0
     print "average " + str("{0:.3f}".format(g))
     print "time used in definitions " + str("{0:.3f}".format(m))
     print "time used in statement logic " + str("{0:.3f}".format(dd))

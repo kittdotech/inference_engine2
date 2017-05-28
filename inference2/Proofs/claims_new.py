@@ -1,9 +1,6 @@
 def pop_sent(str1):
     sent = [[[ 1,"A group does not have|w any|n members",None,'co']],\
-[[ 1,"A region|a is|g not a group of|i points",None,'co']],\
 [[ 1,"no mind thinks something|a",None,'co']],\
-[[ 1,"There is|e a point which thinks some|p thoughts",None,'co']],\
-[[ 1,"There is|e a mind which thinks no thoughts",None,'co']],\
 [[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
 [[ 1,"I saw everyone who drank something|a in the van",None,'co'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I did not see Leibniz",None,'j']],\
 [[ 1,"I love nothing which is|r about murder",None,'co'],[ 2,"Hamlet is|r about murder",None,'j'],[ 3,"I love Hamlet",None,'j']],\
@@ -18,6 +15,41 @@ def pop_sent(str1):
 [[ 1,"Every woman at|p the party drank",None,'co'],[ 2,"Jessica was|g a|r woman at|p the party",None,'j'],[ 3,"Jessica did not drink",None,'j']],\
 [[ 1,"no part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a white",None,'j']],\
 [[ 1,"I love everyone who reads Leibniz",None,'co'],[ 2,"Russell reads Leibniz",None,'j'],[ 3,"I do not love Russell",None,'j']],\
+[[ 1,"There is|e a moment which does not exist in|b time",None,'co']],\
+[[ 1,"2 is|g not a|r number|i",None,'co']],\
+[[ 1,"There is|e a whole|c which is|g an|r individual",None,'co']],\
+[[ 1,"There is|e a whole which is|g an|r individual",None,'ta']],\
+[[ 1,"my dog drank some water",None,'co'],[ 2,"I do not own a dog",None,'j']],\
+[[ 1,"I saw my dog",None,'co'],[ 2,"I do not own a dog",None,'j']],\
+[[ 1,"I saw your dog",None,'co'],[ 2,"you do not own a dog",None,'j']],\
+[[ 1,"your dog drank some water",None,'co'],[ 2,"you do not own a dog",None,'j']],\
+[[ 1,"I saw his dog",None,'co'],[ 2,"he does not own a dog",None,'j']],\
+[[ 1,"his dog drank some water",None,'co'],[ 2,"he does not own a dog",None,'j']],\
+[[ 1,"I took the dog's ball",None,'co'],[ 2,"the dog does not own a ball",None,'j']],\
+[[ 1,"the dog's ball is|a red",None,'co'],[ 2,"the dog does not own a ball",None,'j']],\
+[[ 1,"Ada's ball is|a red",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
+[[ 1,"I took Ada's ball",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
+[[ 1,"there is|e a group which has|w no members",None,'co']],\
+[[ 1,"no mind is|a mental",None,'co']],\
+[[ 1,"I took a dog's ball",None,'co'],[ 2,"no dog owns a|a ball",None,'j']],\
+[[ 1,"The|r property|n redness is|a red",None,'co']],\
+[[ 1,"Plato has|t the same teacher as Xenothon",None,'co'],[ 2,"Xenothon does not have|t a teacher",None,'j']],\
+[[ 1,"Doglike is|g not a|r partially material|a concept|a",None,'co']],\
+[[ 1,"I did not shed any|n tears",None,'co'],[ 2,"I shed a tear",None,'j']],\
+[[ 1,"There is|e a thought which smells",None,'co']],\
+[[ 1,"There is|e a thought which desires something",None,'co']],\
+[[ 1,"There is|e a mind which is|a not mental",None,'co']],\
+[[ 1,"There is|e a thought which is|g a|r group",None,'co']],\
+[[ 1,"There is|e a number|i which is|a physical",None,'co']],\
+[[ 1,"There is|e a mind which smells",None,'co']],\
+[[ 1,"There is|e a point which smells",None,'co']],\
+[[ 1,"There is|e a thought which is|a physical",None,'co']],\
+[[ 1,"There is|e a moment which is|a physical",None,'co']],\
+[[ 1,"JFK is|g a|r kennedy",None,'co'],[ 2,"JFK is|g not part|f of the kennedy|a family",None,'j']],\
+[[ 1,"Something is|g a|r b",None,'co'],[ 2,"b is|g not a|r class",None,'j']],\
+[[ 1,"A region|a is|g not a group of|i points",None,'co']],\
+[[ 1,"There is|e a point which thinks some|p thoughts",None,'co']],\
+[[ 1,"There is|e a mind which thinks no thoughts",None,'co']],\
 [[ 1,"I saw the man who drank some|p beers at|p the party",None,'co'],[ 2,"no one|p drank some|p beers at|p the party",None,'j']],\
 [[ 1,"Some|p minds smell",None,'co']],\
 [[ 1,"Some|p points smell",None,'co']],\
@@ -32,66 +64,32 @@ def pop_sent(str1):
 [[ 1,"Some|p thoughts think something",None,'co']],\
 [[ 1,"Some|p thoughts smell",None,'co']],\
 [[ 1,"Some|p thoughts desire something",None,'co']],\
-[[ 1,"Plato has|t the same teacher as Xenothon",None,'co'],[ 2,"Xenothon does not have|t a teacher",None,'j']],\
 [[ 1,"b has|c|r causal role c",None,'co'],[ 2,"Causal role c is|g not a|r property|n",None,'j']],\
 [[ 1,"A universal is|r not distinct from its|a instance",None,'co']],\
 [[ 1,"There is|e a universal which is|r not distinct from its|a instances",None,'co']],\
 [[ 1,"The concept|n cat is|g itself|r a|r cat",None,'co']],\
 [[ 1,"Julius Caesar is|g a|r number|i",None,'co']],\
-[[ 1,"There is|e a moment which does not exist in|b time",None,'co']],\
-[[ 1,"2 is|g not a|r number|i",None,'co']],\
 [[ 1,"Dog is|g not a|r concept|n",None,'co']],\
 [[ 1,"Point is|g a|r partially material|a concept|n",None,'co']],\
 [[ 1,"This dog is|g a|r concept|n",None,'co']],\
 [[ 1,"Thought is|g a|r partially material|a concept|n",None,'co']],\
 [[ 1,"Something exists inside of|r a point",None,'co']],\
-[[ 1,"Doglike is|g not a|r partially material|a concept|a",None,'co']],\
 [[ 1,"There is|e a point which is|a physical",None,'co']],\
 [[ 1,"There is|e a number|i which smells",None,'co']],\
 [[ 1,"There is|e a thought which is|a not mental|b",None,'co']],\
 [[ 1,"There is|e a thought which is|g a|r moment",None,'co']],\
 [[ 1,"There is|e a thought which thinks something",None,'co']],\
 [[ 1,"There is|e a mind which does not think anything|a",None,'co']],\
-[[ 1,"There is|e a thought which smells",None,'co']],\
-[[ 1,"There is|e a thought which desires something",None,'co']],\
-[[ 1,"There is|e a mind which is|a not mental",None,'co']],\
-[[ 1,"There is|e a thought which is|g a|r group",None,'co']],\
-[[ 1,"There is|e a number|i which is|a physical",None,'co']],\
-[[ 1,"There is|e a mind which smells",None,'co']],\
-[[ 1,"There is|e a point which smells",None,'co']],\
-[[ 1,"There is|e a thought which is|a physical",None,'co']],\
-[[ 1,"There is|e a moment which is|a physical",None,'co']],\
-[[ 1,"JFK is|g a|r kennedy",None,'co'],[ 2,"JFK is|g not part|f of the kennedy|a family",None,'j']],\
-[[ 1,"Something is|g a|r b",None,'co'],[ 2,"b is|g not a|r class",None,'j']],\
-[[ 1,"There is|e a whole|c which is|g an|r individual",None,'co']],\
-[[ 1,"There is|e a whole which is|g an|r individual",None,'ta']],\
 [[ 1,"I have a point",None,'co']],\
 [[ 1,"Plato has|t the same teacher as Xenothon",None,'co'],[ 2,"That|d teacher is Socrates",None,'j'],[ 3,"Socrates does not teach Xenothon",None,'j']],\
 [[ 1,"I saw the same movie as you",None,'co'],[ 2,"That|d movie was Casablanca",None,'j'],[ 3,"I did not see Casablanca",None,'j']],\
 [[ 1,"Leibniz and|c aristotle ate from the same cake",None,'co'],[ 2,"This|n was that|d cake",None,'j'],[ 3,"Leibniz did not eat from this|n",None,'j']],\
 [[ 1,"The door is|a not large",None,'co'],[ 2,"The door which is|a green is|a large",None,'j']],\
 [[ 1,"If Leibniz and|c Aristotle studied logic then Leibniz studied logic",None,'ta']],\
-[[ 1,"I did not shed any|n tears",None,'co'],[ 2,"I shed a tear",None,'j']],\
 [[ 1,"Russell is|g not a|r man",None,'co']],\
 [[ 1,"Russell has the|r property courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"I think that|c it|p is|a true that|c you are|a smart",None,'co'],[ 2,"I do not believe that|c you are|a smart",None,'j']],\
 [[ 1,"This cat is|g not a|r cat",None,'co']],\
-[[ 1,"my dog drank some water",None,'co'],[ 2,"I do not own a dog",None,'j']],\
-[[ 1,"I saw my dog",None,'co'],[ 2,"I do not own a dog",None,'j']],\
-[[ 1,"I saw your dog",None,'co'],[ 2,"you do not own a dog",None,'j']],\
-[[ 1,"your dog drank some water",None,'co'],[ 2,"you do not own a dog",None,'j']],\
-[[ 1,"I saw his dog",None,'co'],[ 2,"he does not own a dog",None,'j']],\
-[[ 1,"his dog drank some water",None,'co'],[ 2,"he does not own a dog",None,'j']],\
-[[ 1,"I took the dog's ball",None,'co'],[ 2,"the dog does not own a ball",None,'j']],\
-[[ 1,"the dog's ball is|a red",None,'co'],[ 2,"the dog does not own a ball",None,'j']],\
-[[ 1,"Ada's ball is|a red",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
-[[ 1,"I took Ada's ball",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
-[[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']],\
-#[[ 1,"no point exists within a|a region|a",None,'co']],\
-[[ 1,"there is|e a group which has|w no members",None,'co']],\
-[[ 1,"no mind is|a mental",None,'co']],\
-[[ 1,"I took a dog's ball",None,'co'],[ 2,"no dog owns a|a ball",None,'j']],\
-[[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']],\
-[[ 1,"The|r property|n redness is|a red",None,'co']]]
+[[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']]]
     return sent
