@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/claims.py" afterPath="$PROJECT_DIR$/inference2/Proofs/claims.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" afterPath="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/dictionary4.xlsx" afterPath="$PROJECT_DIR$/inference2/dictionary4.xlsx" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,42 +35,10 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="553" column="16" lean-forward="true" selection-start-line="553" selection-start-column="16" selection-end-line="553" selection-end-column="16" />
+            <state relative-caret-position="325">
+              <caret line="6865" column="0" lean-forward="true" selection-start-line="6865" selection-start-column="0" selection-end-line="6865" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
-                <marker date="1496085748000" expanded="true" signature="354293:354354" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="354293:355094" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="354293:355230" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="354737:354868" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="355259:355516" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="355264:355372" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="355545:358157" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="355723:356890" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="355747:356890" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="355951:356132" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="356298:356890" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="356416:356597" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="356463:356537" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="356900:358131" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="356928:358131" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="357154:357335" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="357523:358131" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="357647:357828" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="357694:357768" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="358281:358509" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="358382:358509" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="358560:358910" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="358661:358889" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="358925:359281" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="359025:359151" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="359189:359258" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="359587:360464" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="359601:360112" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="360220:360356" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="360263:360356" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="360481:360605" ph="..." />
-                <marker date="1496085748000" expanded="true" signature="360615:360724" ph="..." />
               </folding>
             </state>
           </provider>
@@ -148,13 +113,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>every</find>
-      <find>region</find>
-      <find>skel_str</find>
-      <find>def put_</find>
       <find>def axioms2(</find>
       <find>def axioms2</find>
-      <find>def rear</find>
       <find>axioms(</find>
       <find>time</find>
       <find>ccc</find>
@@ -178,6 +138,11 @@
       <find>def rearr</find>
       <find>def iden</find>
       <find>def ident</find>
+      <find>def put_nc</find>
+      <find>put_nc</find>
+      <find>put_nat</find>
+      <find>link_nat</find>
+      <find>def rear</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -720,7 +685,14 @@
       <option name="project" value="LOCAL" />
       <updated>1495911610433</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="unenclose function is only called from find_sentences function now">
+      <created>1496085999153</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1496085999153</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -821,7 +793,8 @@
     <MESSAGE value="fixed INM definition, non_wholes now define" />
     <MESSAGE value="changed def of individual, some of the sentences when using the axioms were not being put in the standard_cj list" />
     <MESSAGE value="minor glitches in previous committ" />
-    <option name="LAST_COMMIT_MESSAGE" value="minor glitches in previous committ" />
+    <MESSAGE value="unenclose function is only called from find_sentences function now" />
+    <option name="LAST_COMMIT_MESSAGE" value="unenclose function is only called from find_sentences function now" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1222,42 +1195,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="553" column="16" lean-forward="true" selection-start-line="553" selection-start-column="16" selection-end-line="553" selection-end-column="16" />
+        <state relative-caret-position="325">
+          <caret line="6865" column="0" lean-forward="true" selection-start-line="6865" selection-start-column="0" selection-end-line="6865" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
-            <marker date="1496085748000" expanded="true" signature="354293:354354" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="354293:355094" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="354293:355230" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="354737:354868" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="355259:355516" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="355264:355372" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="355545:358157" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="355723:356890" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="355747:356890" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="355951:356132" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="356298:356890" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="356416:356597" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="356463:356537" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="356900:358131" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="356928:358131" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="357154:357335" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="357523:358131" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="357647:357828" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="357694:357768" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="358281:358509" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="358382:358509" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="358560:358910" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="358661:358889" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="358925:359281" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="359025:359151" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="359189:359258" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="359587:360464" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="359601:360112" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="360220:360356" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="360263:360356" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="360481:360605" ph="..." />
-            <marker date="1496085748000" expanded="true" signature="360615:360724" ph="..." />
           </folding>
         </state>
       </provider>

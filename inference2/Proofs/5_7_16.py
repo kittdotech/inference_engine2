@@ -14,7 +14,7 @@ tot_tim = time.time()
 
 #right now type o renders 33,35,36 as false
 j = 2 # was 35
-proof_type = 'o' # if l then long proof showing decision procedure for instantiation
+proof_type = 'l' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
 stp = 0
 print_to_doc = False
@@ -6862,7 +6862,7 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
             detached_var = get_detached_variables(detached)
 
-            conditionals = put_nat_sent_in_cond1(conditionals,all_sent)
+            conditionals = link_nat_sent_to_all_sent(conditionals,all_sent)
 
             list1 = attached_variables(conditionals,detached_var)
 
@@ -8096,75 +8096,77 @@ def get_prop(str1,recon=False,greek2=[]):
     return arr1
 
 
-def link_nat_sent_to_all_sent(list7,all_sent):
-    # this puts the all sent onto the conditional 32 list
-    list1 = []
-    def_info = list7[36]
+def link_nat_sent_to_all_sent(conditionals,all_sent):
+    # this takes the sentences in 37 and puts them into list 34,35,33 etc
     ant = ['a','b','x','d']
     con = ['f','q','y','g']
-    antecedent = []
-    consequent = []
     third_disjunct = 'd3'
     fourth_disjunct = 'd4'
     fifth_disjunct = 'd5'
     sixth_disjunct = 'd6'
-    third_d = []
-    fourth_d = []
-    fifth_d = []
-    sixth_d = []
 
-    for i in range(len(list7[38])):
-        bool1 = False
-        for j in range(len(all_sent)):
-            str1 = list7[38][i]
-            truth_value = ""
-            if str1[0] == "~":
-                str1 = str1[1:]
-                truth_value = "~"
-            str2 = all_sent[j][42]
-            if str2[0] == "~":
-                str2 = str2[1:]
-            if str1 == str2:
-                list2 = copy.deepcopy(all_sent[j])
-                o = findin1dlist(list7[38][i],def_info[3])
-                if def_info[4][o][0] == None:
-                    bb = 8
+    for m in range(len(conditionals)):
+        list7 = conditionals[m]
+        antecedent = []
+        consequent = []
+        third_d = []
+        fourth_d = []
+        fifth_d = []
+        sixth_d = []
+        def_info = list7[36]
 
-                k = def_info[4][o][0]
-                list2[8] = truth_value
-                list2[43] = k[:-1]
-                list2[44] = k
-                list2[45] = len(k)
-                bool1 = True
-                list2 = ancestor_numbers(list2,k,def_info)
-                if list2[53][-1] in ant:
-                    antecedent.append(list2)
-                elif list2[53][-1] in con:
-                    consequent.append(list2)
-                elif list2[53] == third_disjunct:
-                    third_d.append(list2)
-                elif list2[53] == fourth_disjunct:
-                    fourth_d.append(list2)
-                elif list2[53] == fifth_disjunct:
-                    fifth_d.append(list2)
-                elif list2[53] == sixth_disjunct:
-                    sixth_d.append(list2)
-                else:
-                    print 'you did not categorize the attached sentences correctly'
-                    sys.exit()
-        if not bool1:
-            str1 = findinlist(str1,prop_name,0,2)
-            print "sentence " + list7[38][i] + " - " + str1 + " was not found in the all sent list"
-            sys.exit()
-    list7[34] = antecedent
-    list7[35] = consequent
-    list7[33] = third_disjunct
-    list7[32] = fourth_disjunct
-    list7[31] = fifth_disjunct
-    list7[30] = sixth_disjunct
+        for i in range(len(list7[38])):
+            bool1 = False
+            for j in range(len(all_sent)):
+                str1 = list7[38][i]
+                truth_value = ""
+                if str1[0] == "~":
+                    str1 = str1[1:]
+                    truth_value = "~"
+                str2 = all_sent[j][42]
+                if str2[0] == "~":
+                    str2 = str2[1:]
+                if str1 == str2:
+                    list2 = copy.deepcopy(all_sent[j])
+                    o = findin1dlist(list7[38][i],def_info[3])
+                    if def_info[4][o][0] == None:
+                        bb = 8
 
+                    k = def_info[4][o][0]
+                    list2[8] = truth_value
+                    list2[43] = k[:-1]
+                    list2[44] = k
+                    list2[45] = len(k)
+                    bool1 = True
+                    list2 = ancestor_numbers(list2,k,def_info)
+                    if list2[53][-1] in ant:
+                        antecedent.append(list2)
+                    elif list2[53][-1] in con:
+                        consequent.append(list2)
+                    elif list2[53] == third_disjunct:
+                        third_d.append(list2)
+                    elif list2[53] == fourth_disjunct:
+                        fourth_d.append(list2)
+                    elif list2[53] == fifth_disjunct:
+                        fifth_d.append(list2)
+                    elif list2[53] == sixth_disjunct:
+                        sixth_d.append(list2)
+                    else:
+                        print 'you did not categorize the attached sentences correctly'
+                        sys.exit()
+            if not bool1:
+                str1 = findinlist(str1,prop_name,0,2)
+                print "sentence " + list7[38][i] + " - " + str1 + " was not found in the all sent list"
+                sys.exit()
+        list7[34] = antecedent
+        list7[35] = consequent
+        list7[33] = third_disjunct
+        list7[32] = fourth_disjunct
+        list7[31] = fifth_disjunct
+        list7[30] = sixth_disjunct
+        conditionals[m] = list7
 
-    return list7
+    return conditionals
 
 def ancestor_numbers(list2,k,def_info):
     # this determines the number and connective of the ancestors of a
@@ -8250,25 +8252,6 @@ def convert_con_to_letter(str1,str2):
     else:
         print 'the convert con to letter function is messed up'
         # sys.exit()
-
-
-def put_nat_sent_in_cond1(conditionals,all_sent):
-    # this unencloses the prop sent in the def into list
-
-    for i in range(len(conditionals)):
-        list7 = conditionals[i]
-        def_info = list7[36]
-        if def_info[4][0][1] == iff:
-            list7[3] = "e"
-        elif def_info[4][0][1] == conditional:
-            list7[3] = "c"
-        elif def_info[4][0][1] == xorr:
-            list7[3] = "x"
-        elif def_info[4][0][1] == idisj:
-            list7[3] = "d"
-        list7 = link_nat_sent_to_all_sent(list7,all_sent)
-        conditionals[i] = list7
-    return conditionals
 
 def prepare_iff_elim(greek2,def_info,str2,all_sent,mainc,s,num = "",tot_sent = []):
 
