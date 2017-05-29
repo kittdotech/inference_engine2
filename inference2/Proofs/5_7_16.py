@@ -12,14 +12,12 @@ tot_tim = time.time()
 # averaged .059 on 5.22 proof type 'n', .023 definitions, .004 statement
 # but just prior to that the speed was .066
 
-
-
-
-j = 2 # was 39
-proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 43 # if n then proof type before may 1
-stp = 44
-print_to_doc = True
+#right now type o renders 33,35,36 as false
+j = 2 # was 35
+proof_type = 'o' # if l then long proof showing decision procedure for instantiation
+strt = 0 # if n then proof type before may 1
+stp = 0
+print_to_doc = False
 if j == 1:
     django2 = False
     temp17 = False
@@ -541,17 +539,32 @@ def enclose(str1):
             i += 3
     return str1
 
+def is_natural_language(sentence,i):
+    # this determines if the sentence is natural or an abbreviation
+    if sentence[i+1] == "~":
+        if sentence[i+3] in subscripts and sentence[i+4] == ")":
+            return True
+        elif sentence[i+3] == ")":
+            return True
+    else:
+        if sentence[i+2] in subscripts and sentence[i+3] == ")":
+            return True
+        elif sentence[i+2] == ")":
+            return True
+    return False
 
-def find_sentences(instring, cut_skel = False):
+def find_sentences(sentence):
 
-    if instring == None:
+    global subscripts
+    if sentence == None:
         return
-
-    g = instring.count('(')
-    h = instring.count(')')
+    g = sentence.count('(')
+    h = sentence.count(')')
     if g != h:
-        print 'wrong number of parentheses in sentence:' + instring
+        print 'wrong number of parentheses in sentence:' + sentence
         sys.exit()
+    if sentence.startswith("(~g)"):
+        bb = 8
     marker = False
     il = -1
     total = -1
@@ -567,34 +580,34 @@ def find_sentences(instring, cut_skel = False):
     # appearance
     skel_nam = []
     sent_num = []
-    if instring.find("~(") > -1:
-        instring = instring.replace("~(", "(!")
-    if instring.find(implies) > -1:
+    if sentence.find("~(") > -1:
+        sentence = sentence.replace("~(", "(!")
+    if sentence.find(implies) > -1:
         str2 = implies
-    elif instring.find(nonseq) > -1:
+    elif sentence.find(nonseq) > -1:
         str2 = nonseq
-    str3 = mainconn(instring)
-    instring = instring.strip()
+    str3 = mainconn(sentence)
+    sentence = sentence.strip()
     str4 = str3[0]
     f = str3[1]
     id_num = []
     id_num.append(["1",str4,f])
-    sent_num.append([1, '1', instring, str4,f])
+    sent_num.append([1, '1', sentence, str4,f])
     str21 = ""
     p = 947
+    unenclose_at_end = False
     connectives = ["&", idisj, iff, conditional, nonseq, implies,xorr]
     arr1 = []
     mini_c2 = mini_c + neg
-    instring2 = copy.copy(instring)
-    prt = copy.copy(instring)
-    list1 = mainconn(instring)
+    sentence2 = copy.copy(sentence)
+    prt = copy.copy(sentence)
     more_num = [unichr(945 + x) for x in range(24)]
-    if os(instring) == False:
-        temp_string = mainconn(instring)
+    if os(sentence) == False:
+        temp_string = mainconn(sentence)
 
-        if instring.find(implies) > -1:
+        if sentence.find(implies) > -1:
             str1 = implies
-        elif instring.find(nonseq) > -1:
+        elif sentence.find(nonseq) > -1:
             str1 = nonseq
         else:
             if temp_string == iff:
@@ -604,16 +617,16 @@ def find_sentences(instring, cut_skel = False):
             elif temp_string == "&":
                 str1 = "cj"
 
-        sent1.append(instring)
+        sent1.append(sentence)
         neg_value.append("")
         sent_type2.append(str1)
-        wneg.append(instring)
+        wneg.append(sentence)
         skel_nam.append(None)
 
     j = 0
     n = 0
-    for i in range(0, len(instring)):
-        str1 = instring[i:(i + 1)]
+    for i in range(0, len(sentence)):
+        str1 = sentence[i:(i + 1)]
         for o in connectives:
             if str1 == o:
                 j += 1
@@ -625,31 +638,33 @@ def find_sentences(instring, cut_skel = False):
             break
 
         e = 0
-        l = len(instring)
+        l = len(sentence)
         x = -1
         while x < l - 1:
             x += 1
-            temp_string = instring[x: x + 1]
-            if instring[x: x + 1] == "(":
+            temp_string = sentence[x:x+1]
+            if sentence[x:x+1] == "(":
+                if not unenclose_at_end:
+                    unenclose_at_end = is_natural_language(sentence,x)
 
                 if marker == False:
                     z = x
                     marker = True
 
                 total += 1
-            elif instring[x: x + 1] == ")":
+            elif sentence[x: x + 1] == ")":
                 total -= 1
                 if total == -1:
                     marker = False
                     e += 1
                     c += 1
 
-                    temp_sent = instring[z: x + 1]
+                    temp_sent = sentence[z: x + 1]
                     if temp_sent == '(bIc)':
                         pp = 7
                     otemp_sent = copy.copy(temp_sent)
 
-                    if (len(instring) - len(temp_sent)) > 2:
+                    if (len(sentence) - len(temp_sent)) > 2:
                         if temp_sent in prt and temp_sent in str21 and prt != str21:
                             prtnum = findinlist(str21,sent_num,2,1,False)
                             numb = prtnum + "1"
@@ -730,8 +745,8 @@ def find_sentences(instring, cut_skel = False):
                         else:
                             skel_nam.append(None)
                     else:
-                        instring = instring[1:len(instring) - 1]
-                        l = len(instring)
+                        sentence = sentence[1:len(sentence) - 1]
+                        l = len(sentence)
                         x = -1
                         c -= - 1
                         e -= - 1
@@ -749,8 +764,8 @@ def find_sentences(instring, cut_skel = False):
                     str21 = sent1[w]
                     if not os(str21) and w != 0:
                         if str21 not in arr1:
-                            instring = str21
-                            arr1.append(instring)
+                            sentence = str21
+                            arr1.append(sentence)
                             break
 
     for i in range(len(sent1)):
@@ -766,7 +781,7 @@ def find_sentences(instring, cut_skel = False):
             m = i
             break
 
-    sdefinition = cut_def([sent1,id_num],instring2)
+    sdefinition = cut_def([sent1,id_num],sentence2)
     str1 = copy.copy(sdefinition)
     for i in range(len(wneg)):
         if os(wneg[i]):
@@ -776,6 +791,11 @@ def find_sentences(instring, cut_skel = False):
     # skel_string = remove_outer_paren(skel_string)
     if skel_string.find("(!") > -1:
         skel_string = skel_string.replace("(!","~(")
+
+    if unenclose_at_end:
+        for i in range(len(sent1)):
+            sent1[i] = unenclose(sent1[i])
+            wneg[i] = unenclose(wneg[i])
 
     output[0] = sent1
     output[1] = neg_value
@@ -3114,10 +3134,7 @@ def def_rn(defined,al_def,definition, definiendum,e, tot_sent,  dv_nam, idf_var,
     ad = findposinmd(definiendum,already_defined,0)
     if ad == -1:
         already_df = False
-        if kind == "" or kind == 'R':
-            def_info = find_sentences(definition,True)
-        else:
-            def_info = find_sentences(definition)
+        def_info = find_sentences(definition)
         temp_ad.append(definiendum)
         temp_ad.append(def_info)
     else:
@@ -5316,7 +5333,8 @@ def axioms(greek2,list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sen
     if added:
         candd = get_rel_conj(candd,conditionals)
         conditionals5 = copy.deepcopy(conditionals)
-        consistent = statement_logic(greek2,prop_sent,all_sent,conditionals5,candd,candd2,disjuncts,0,all_sent)
+        consistent = statement_logic(greek2,prop_sent,all_sent,conditionals5,\
+                                     candd,candd2,disjuncts,0,all_sent)
 
         if consistent:
             bb = 8
@@ -6051,7 +6069,11 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
             sent.append([tot_sent[i][0],tot_sent[i][2]])
             negat.append(tot_sent[i][3])
 
-    consistent = plan(greek2,sent,all_sent,prop_sent,candd,candd2,conditionals, prop_name,disjuncts,tot_sent,2,negat)
+
+    consistent = plan(greek2,sent,all_sent,prop_sent,candd,candd2,conditionals, \
+                      prop_name,disjuncts,tot_sent,2,negat)
+
+
 
     tv = True # tv = truth value
 
@@ -6062,6 +6084,8 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
         tv = "True"
         tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
                              greek2, conditionals)
+        # consistent = statement_logic(greek2, prop_sent, all_sent, conditionals, \
+        #                              candd, candd2, disjuncts, 0, all_sent)
         # tot_prop_sent.append(prop_sent)
         # return [tot_sent, tv]
 
@@ -6087,8 +6111,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
                         paren_conn = findinlist(paren_num,def_info[4],0,1)
                         gparen_conn = findinlist(gparen_num,def_info[4],0,1)
                         str9 = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
-                        list2 = unenclose(def_info[3][y])
-                        str3 = list2[0]
+                        str3 = def_info[0][y]
                         d = findposinlist(str3,all_sent,42)
                         all_sent[d][53] = str9
 
@@ -6106,7 +6129,6 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
         consistent = list1[5]
 
     if consistent:
-        print 'axioms used'
         consistent = axioms(greek2,basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
                        prop_sent,member_prop,not_id)
 
@@ -6388,7 +6410,7 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 ######################
 
     if proof_type == 'l':
-        tot_sent = rearrange2(prop_sent, tot_sent, consistent, impl, g, all_sent, greek2)
+        tot_sent = rearrange2(prop_sent, tot_sent, consistent, impl, g, all_sent, greek2,conditionals)
         tot_prop_sent.append(prop_sent)
         return [tot_sent,tv]
     else:
@@ -6401,10 +6423,12 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
     # end5
 
 
-def rearrange2(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2):
+def rearrange2(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,conditionals):
 
-    tot_sent = put_nc_id_ax_df_into_list(tot_sent)
-
+    list1 = put_nc_id_ax_df_into_list(tot_sent)
+    tot_sent = list1[0]
+    new_numbers = list1[1]
+    conditionals = renumber_conditionals(conditionals,new_numbers)
     for i in range(len(tot_sent)-1,0,-1):
         if tot_sent[i][4] != "":
             break
@@ -6464,9 +6488,10 @@ def put_nc_id_ax_df_into_list(tot_sent):
             list2.append(list3)
 
     if rn_used:
-        tot_sent = rearrange_tot_sent(list5, list1, list2)
-
-    return tot_sent
+        list7 = rearrange_tot_sent(list5, list1, list2)
+        return list7
+    else:
+        return [tot_sent,[]]
 
 def rearrange_tot_sent(list5,list1,list2):
     # this function puts the tot_sent into a better order
@@ -6509,7 +6534,7 @@ def rearrange_tot_sent(list5,list1,list2):
             else:
                 break
 
-    return tot_sent
+    return [tot_sent,list1]
 
 def build_standard_conditionals(conditionals):
 
@@ -6541,7 +6566,7 @@ def build_standard_sent_list(nonstandard,standard_cj,\
         d = len(prop_sent)
 
     for i in range(d):
-        if i == 43:
+        if i == 11:
             bb = 8
         if prop_sent[i][0] > c or prop_sent[i][1] == band_aid_axiom:
             if prop_sent[i][1] == bottom:
@@ -6619,9 +6644,6 @@ def prepare_disjuncts(conditionals,greek2):
         if conditionals[i][0] == "":
             str1 = enclose(conditionals[i][4])
             def_info = find_sentences(str1)
-            for j in range(len(def_info[3])):
-                str2 = unenclose(def_info[3][j],True)
-                def_info[3][j] = str2
             conditionals[i][36] = def_info
             list1 = get_prop(conditionals[i][4],True,greek2)
             conditionals[i][37] = list1[0]
@@ -6793,6 +6815,21 @@ def print_variables(list1,tot_sent):
                     tot_sent.insert(i+j, ["", str3, "", "", "", "", "", ""])
                 return tot_sent
 
+def renumber_conditionals(conditionals,new_numbers):
+    # this gives conditionals their proper number according to the new
+    #numbering system as arrived at in the rearrange_tot_sent function
+
+    if new_numbers == []:
+        return conditionals
+    for i in range(len(conditionals)):
+        for j in range(len(new_numbers)):
+            if conditionals[i][2] < 400:
+                if conditionals[i][2] == new_numbers[j][0]:
+                    conditionals[i][2] = new_numbers[j][1]
+
+    return conditionals
+
+
 def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
               conditionals=[]):
 
@@ -6800,7 +6837,11 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
         prop_sent = subtract_400(prop_sent,g)
         prop_sent.sort()
 
-    tot_sent = put_nc_id_ax_df_into_list(tot_sent)
+    list1 = put_nc_id_ax_df_into_list(tot_sent)
+    tot_sent = list1[0]
+    new_numbers = list1[1]
+
+    conditionals = renumber_conditionals(conditionals,new_numbers)
 
     if proof_type == 'l':
         nonstandard = []
@@ -7301,7 +7342,6 @@ def new_cond(greek2,pot_id,candd,conditionals,tot_sent,member_prop,candd2,\
             ocond2 = conditionals2[i][4]
             res = convert(conditionals2[i])
             ocond_prop = res[0]
-            oconditional = res[0]
             ncond_prop = []
             nprop = []
             for s in range(0,maxm):
@@ -7319,7 +7359,6 @@ def new_cond(greek2,pot_id,candd,conditionals,tot_sent,member_prop,candd2,\
                 if osent == None:
                     bb = 8
                 g = findposinlist(oprop,all_sent,42)
-                nsent = copy.copy(osent)
                 if g == -1:
                     print "one of your sentences is missing from the all_sent list"
                 new_list = []
@@ -7843,7 +7882,7 @@ def check_dimension2d(list1, i,j, str1):
 ## The following functions are for statement logic
 
 
-def name_conditional(list1,nat_logic = True):
+def name_conditional(list1):
 
     # when using this function the list1 must be outputted from find_sentences
     # and you must use the 0th element since those sentences do not have negation signs
@@ -7924,6 +7963,14 @@ def is_conjunction(str1):
     else:
         return False
 
+
+def get_sentence_abbreviations(list1):
+    # this extracts the sentence abbreviations from a complex attached sentence
+    list2 = []
+    for i in range(len(list1)):
+        if os(list1[i]):
+            list2.append(list1[i])
+    return list2
 
 def get_conjuncts(str1, bool1 = False):
     # remove outparent if true
@@ -8057,13 +8104,34 @@ def link_nat_sent_to_all_sent(list7,all_sent):
     con = ['f','q','y','g']
     antecedent = []
     consequent = []
+    third_disjunct = 'd3'
+    fourth_disjunct = 'd4'
+    fifth_disjunct = 'd5'
+    sixth_disjunct = 'd6'
+    third_d = []
+    fourth_d = []
+    fifth_d = []
+    sixth_d = []
+
     for i in range(len(list7[38])):
         bool1 = False
         for j in range(len(all_sent)):
-            if all_sent[j][42] == list7[38][i]:
+            str1 = list7[38][i]
+            truth_value = ""
+            if str1[0] == "~":
+                str1 = str1[1:]
+                truth_value = "~"
+            str2 = all_sent[j][42]
+            if str2[0] == "~":
+                str2 = str2[1:]
+            if str1 == str2:
                 list2 = copy.deepcopy(all_sent[j])
                 o = findin1dlist(list7[38][i],def_info[3])
+                if def_info[4][o][0] == None:
+                    bb = 8
+
                 k = def_info[4][o][0]
+                list2[8] = truth_value
                 list2[43] = k[:-1]
                 list2[44] = k
                 list2[45] = len(k)
@@ -8073,18 +8141,29 @@ def link_nat_sent_to_all_sent(list7,all_sent):
                     antecedent.append(list2)
                 elif list2[53][-1] in con:
                     consequent.append(list2)
+                elif list2[53] == third_disjunct:
+                    third_d.append(list2)
+                elif list2[53] == fourth_disjunct:
+                    fourth_d.append(list2)
+                elif list2[53] == fifth_disjunct:
+                    fifth_d.append(list2)
+                elif list2[53] == sixth_disjunct:
+                    sixth_d.append(list2)
                 else:
                     print 'you did not categorize the attached sentences correctly'
                     sys.exit()
         if not bool1:
-            str1 = list7[38][i]
-            if str1[0] == "~":
-                str1 = str1[1:]
             str1 = findinlist(str1,prop_name,0,2)
             print "sentence " + list7[38][i] + " - " + str1 + " was not found in the all sent list"
             sys.exit()
     list7[34] = antecedent
     list7[35] = consequent
+    list7[33] = third_disjunct
+    list7[32] = fourth_disjunct
+    list7[31] = fifth_disjunct
+    list7[30] = sixth_disjunct
+
+
     return list7
 
 def ancestor_numbers(list2,k,def_info):
@@ -8156,12 +8235,21 @@ def convert_con_to_letter(str1,str2):
         return 'd'
     elif str1 == idisj and str2 == '2':
         return 'g'
+    elif str1 == idisj and str2 == '3':
+        return 'd3'
+    elif str1 == idisj and str2 == '4':
+        return 'd4'
+    elif str1 == idisj and str2 == '5':
+        return 'd5'
+    elif str1 == idisj and str2 == '6':
+        return 'd6'
+
 
     elif str1 == "&":
         return 'c'
     else:
         print 'the convert con to letter function is messed up'
-        sys.exit()
+        # sys.exit()
 
 
 def put_nat_sent_in_cond1(conditionals,all_sent):
@@ -8170,9 +8258,6 @@ def put_nat_sent_in_cond1(conditionals,all_sent):
     for i in range(len(conditionals)):
         list7 = conditionals[i]
         def_info = list7[36]
-        for m in range(len(def_info[3])):
-            def_info[3][m] = unenclose(def_info[3][m],True)
-        list7[36] = def_info
         if def_info[4][0][1] == iff:
             list7[3] = "e"
         elif def_info[4][0][1] == conditional:
@@ -8189,8 +8274,6 @@ def prepare_iff_elim(greek2,def_info,str2,all_sent,mainc,s,num = "",tot_sent = [
 
     global sn
 
-
-
     list7 = [""] * 39
     list7[36] = def_info
     if num == "":
@@ -8199,7 +8282,7 @@ def prepare_iff_elim(greek2,def_info,str2,all_sent,mainc,s,num = "",tot_sent = [
         list7[2] =  num
 
     str2 = remove_outer_paren(str2)
-    if str2 == "n " + iff + " d"+l1:
+    if str2 == "k " + iff + " z":
         bb = 8
     list7[4] = str2
     list7[5] = ""
@@ -8254,12 +8337,6 @@ def prepare_iff_elim(greek2,def_info,str2,all_sent,mainc,s,num = "",tot_sent = [
     if list9[0] == None or list9[0] == "":
         bb = 8
 
-    # if tot_sent != []:
-    #     str1 = findinlist(str2,tot_sent,2,1)
-    #     if str1 == None:
-    #
-    #         bb = 8
-    #     list7[37] = str1
     return list7
 
 def islist(list1):
@@ -8276,6 +8353,9 @@ def new_prop(all_sent,prop_sent, str1, ng, asp, anc1, anc2, anc3 = None, anc4 = 
         ng = ""
     global sn,pn
     global cnjts
+
+    if str1 == "k" and ng == "~":
+        bb = 8
 
     if os(str1):
         cnjts.append(ng+str1)
@@ -8384,11 +8464,11 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
         str1 = candd[r][1]
         if str1 == 'l':
             bb = 8
-        str8 = candd[r][2]
+        detach_sent_truth_val = candd[r][2]
         anc1 = candd[r][0]
-        temp1 = copy.copy(str1)
-        temp1 = temp1.replace(" ","")
-        temp1 = remove_outer_paren(temp1)
+        temp_detach_sent = copy.copy(str1)
+        temp_detach_sent = temp_detach_sent.replace(" ","")
+        temp_detach_sent = remove_outer_paren(temp_detach_sent)
         g = -1
         while g < len(conditionals) -1:
             g += 1
@@ -8400,19 +8480,19 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                 if str12 != 'd':
                     anc2 = conditionals[g][2]
                     if conditionals[g][6] == "":
-                        aconjunction = ""
+                        antec_conjunct = ""
                         temp_ant = conditionals[g][0][0]
                         temp_nega = conditionals[g][0][1]
                     else:
-                        aconjunction = conditionals[g][6]
+                        antec_conjunct = conditionals[g][6]
                         temp_ant = conditionals[g][0][0][0]
                         temp_nega = conditionals[g][0][0][1]
                     if conditionals[g][7] == "":
-                        cconjunction = ""
+                        conseq_conjunct = ""
                         temp_con = conditionals[g][1][0]
                         temp_negc = conditionals[g][1][1]
                     else:
-                        cconjunction = conditionals[g][7]
+                        conseq_conjunct = conditionals[g][7]
                         temp_con = conditionals[g][1][0][0]
                         temp_negc = conditionals[g][1][0][1]
                     temp_ant = temp_ant.replace(" ","")
@@ -8421,13 +8501,13 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                     temp_con = remove_outer_paren(temp_con)
 
                     for f in range(0,2):
-                        if f == 0 and temp1 == temp_ant:
-                            if str8 == temp_nega:
+                        if f == 0 and temp_detach_sent == temp_ant:
+                            if detach_sent_truth_val == temp_nega:
                                 if str12 == 'c':
                                     str13 = "MP"
                                 else:
                                     str13 = "EE"
-                                if aconjunction != "" :
+                                if antec_conjunct != "" :
                                     dummy = many_cond(greek2,all_sent,candd,candd2, conditionals, "con", str13, \
                                                       anc2, f, g, r)
                                     if dummy == False:
@@ -8446,9 +8526,9 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                     del conditionals[g]
                                     g -= 1
                                     break
-                            elif str8 != temp_nega and str12 == 'e':
-                                # if cconjunction != "":
-                                if kind != 2 and cconjunction != "":
+                            elif detach_sent_truth_val != temp_nega and str12 == 'e':
+                                if conseq_conjunct != "":
+                                #if kind != 2 and conseq_conjunct != "":
                                     dummy = new_prop_sent(greek2,all_sent,"~", "con", \
                                                 "EN", anc1, anc2, conditionals,g,candd,candd2)
                                     if dummy == False:
@@ -8456,9 +8536,12 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                     del conditionals[g]
                                     g -= 1
                                     break
-                        elif f == 1 and temp1 == temp_con:
-                            if str8 == temp_negc and str12 == 'e':
-                                if cconjunction == "":
+                                else:
+                                    bb = 8
+
+                        elif f == 1 and temp_detach_sent == temp_con:
+                            if detach_sent_truth_val == temp_negc and str12 == 'e':
+                                if conseq_conjunct == "":
                                     dummy = new_prop_sent(greek2,all_sent,"", "ant", "EE", \
                                         anc1, anc2, conditionals,g,candd,candd2)
                                     if dummy == False:
@@ -8475,9 +8558,9 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                         del conditionals[g]
                                         g -= 1
                                         break
-                            elif str8 != temp_negc:
-                                # if aconjunction != "":
-                                if kind != 2 and aconjunction != "":
+                            elif detach_sent_truth_val != temp_negc:
+                                if antec_conjunct != "":
+                                #if kind != 2 and antec_conjunct != "":
                                     if str12 == 'c':
                                         str13 = "MT"
                                     else:
@@ -8489,16 +8572,20 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                     del conditionals[g]
                                     g -= 1
                                     break
-                        elif f == 0 and temp1 != temp_ant and \
-                                aconjunction != "" and str12 == 'e':
-                            # if cconjunction != "":
-                            if kind != 2 and cconjunction != "":
+                                else:
+                                    bb = 8
+                                
+                        elif f == 0 and temp_detach_sent != temp_ant and \
+                                antec_conjunct != "" and str12 == 'e':
+                            if conseq_conjunct != "":
+                            #if kind != 2 and conseq_conjunct != "":
                                 s = -1
                                 if conditionals != []:
                                     while s < len(conditionals[g][0]) -1:
                                         s += 1
-                                        if temp1 == conditionals[g][0][s][0] and \
-                                            str8 != conditionals[g][0][s][1]:
+                                        if temp_detach_sent == conditionals[g][0][s][0] and \
+                                            detach_sent_truth_val != conditionals[g][0][s][1]:
+
                                             dummy = new_prop_sent(greek2,all_sent,"~", "con", \
                                             "EN", anc1, anc2, conditionals,g,candd,candd2)
                                             if dummy == False:
@@ -8506,16 +8593,19 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                             del conditionals[g]
                                             g -= 1
                                             break
+                            else:
+                                bb = 8
 
-                        elif f == 1 and temp1 != temp_con and cconjunction != "":
-                            if kind != 2 and aconjunction != "":
-                            # if aconjunction != "":
+                        elif f == 1 and temp_detach_sent != temp_con and conseq_conjunct != "":
+                            #if kind != 2 and antec_conjunct != "":
+                            if antec_conjunct != "":
                                 s = -1
                                 if conditionals != []:
                                     while s < len(conditionals[g][1]) -1:
                                         s += 1
-                                        if temp1 == conditionals[g][1][s][0] and \
-                                            str8 != conditionals[g][1][s][1]:
+                                        if temp_detach_sent == conditionals[g][1][s][0] and \
+                                            detach_sent_truth_val != conditionals[g][1][s][1]:
+
                                             if str12 == 'e':
                                                 str13 = "EN"
                                             else:
@@ -8539,15 +8629,12 @@ def disjunction_heirarchy(conditionals,str5,d,new_disj = False):
 
     if d > len(conditionals)-1:
         return
+    if iff in str5 or conditional in str5:
+        return
 
     str5 = enclose(str5)
-    list1 = find_sentences(str5, False)
+    list1 = find_sentences(str5)
     mainc = list1[4][0][1]
-
-    for i in range(len(list1[0])):
-        list2 = unenclose(list1[0][i])
-        list1[0][i] = list2[0]
-
     list2 = [""] * 39
     n = 7
     if mainc == xorr:
@@ -8887,10 +8974,7 @@ def bad_paren(str1):
             str1 = str1[:i-2] + str1[i-1:i+1] + str1[i+2:]
 
     str1 = enclose(str1)
-    list1 = find_sentences(str1, False)
-    for i in range(len(list1[3])):
-        list2 = unenclose(list1[3][i])
-        list1[3][i] = list2[0]
+    list1 = find_sentences(str1)
     mstr = list1[3][0]
     for i in range(1, len(list1[3])):
         if list1[4][i][1] != "":
@@ -9077,11 +9161,13 @@ def demorgan(all_sent,prop_sent,conditionals,candd,candd2,kind,one_sent = False,
                     conditionals[d][4] = str1
     return True
 
-def unenclose(str1,bool1=False):
-
+def unenclose(str1):
+    # this removes ( ) from around a sentence abbreviation
     i = -1
     global subscripts
-    list1 = []
+    if "(" not in str1:
+        return str1
+
     while i < len(str1)-1:
         i += 1
         str2 = str1[i:i+1]
@@ -9089,20 +9175,14 @@ def unenclose(str1,bool1=False):
         str4 = str1[i+1:i+2]
         if str2.islower() and str3 != "~" and str4 not in subscripts:
             str1 = str1[:i-1] + str2 + str1[i+2:]
-            list1.append(str2)
         elif str2.islower() and str3 == "~" and str4 not in subscripts:
             str1 = str1[:i-2] + str3 + str2 + str1[i+2:]
-            list1.append(str2)
         if str2.islower() and str3 != "~" and str4 in subscripts:
             str1 = str1[:i-1] + str2 + str4 + str1[i+3:]
-            list1.append(str2 + str4)
         elif str2.islower() and str3 == "~" and str4 in subscripts:
             str1 = str1[:i-2] + str3 + str2 + str4 + str1[i+3:]
-            list1.append(str2 + str4)
-    if not bool1:
-        return [str1,list1]
-    else:
-        return str1
+
+    return str1
 
 def new_disjunct(all_sent,str1, ng, n, prop_sent, conditionals, candd,candd2,conjt, anc1, anc2, \
             anc3 = None, anc4=None, kind = 0, rule = ""):
@@ -9317,7 +9397,8 @@ def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind
                     bool2 = False
                     break
                 i += 1
-                if conj not in conditionals[n][38]:
+                if conj not in conditionals[n][38] and iff not in conditionals[n][4]\
+                        and conditional not in conditionals[n][4]:
                     break
                 else:
                     if conditionals[n][i] == "":
@@ -9535,14 +9616,14 @@ def statement_logic(greek2,prop_sent,all_sent, conditionals, candd,candd2, disju
         consistent = material_implication(all_sent,prop_sent, conditionals,kind)
         if consistent == False:
             return False
-        consistent = demorgan(all_sent,prop_sent, conditionals, candd,candd2,kind)
-        if consistent == False:
-            return False
-        consistent = disjunction_elimination(all_sent,prop_sent,conditionals,candd,candd2,kind)
-        if consistent == False:
-            return False
-        if kind == 1:
-            dummy = finddisj(conditionals,disjuncts)
+    consistent = demorgan(all_sent,prop_sent, conditionals, candd,candd2,kind)
+    if consistent == False:
+        return False
+    consistent = disjunction_elimination(all_sent,prop_sent,conditionals,candd,candd2,kind)
+    if consistent == False:
+        return False
+    if kind == 1:
+        dummy = finddisj(conditionals,disjuncts)
     c = time.time()
     d = c - b
     st_log_tim += d
@@ -9733,12 +9814,9 @@ def plan(greek2,sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name,
     global rel_conj
     conj_elim = []
     temp_conditionals = []
-    list4 = []
     conc = ""
     impl = ""
     qq = 0
-    nat_logic = False
-
 
     for i in range(len(sent)):
         if i == 8:
@@ -9748,16 +9826,16 @@ def plan(greek2,sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name,
         if g != h:
             print 'wrong number of parentheses in sentence:' + sent[i]
             sys.exit()
-        if nat_logic == False:
-            sent[i][1] = enclose(sent[i][1])
+
+        sent[i][1] = enclose(sent[i][1])
         if sent[i][1].find("!") > -1:
             qq += 1
         else:
             if sent[i][1].count("(") != sent[i][1].count(")"):
                 print "line " + str(sent[i][0]) + " does not have the right number \
                                              of parentheses"
-            if nat_logic == False:
-                sent[i][1] = remove_outer_paren(sent[i][1])
+
+            sent[i][1] = remove_outer_paren(sent[i][1])
             ostring = copy.copy(sent[i][1])
             nstring = proper_spacing(ostring)
 
@@ -9770,18 +9848,11 @@ def plan(greek2,sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name,
                 else:
                     ng = negat[i]
                     str2 = sent[i][1]
-                if nat_logic:
-                    list3[0] = simple_sent_name(list3[0],list4[0])
                 candd.append([sent[i][0], str2, ng])
             else:
-                list1 = find_sentences(ostring, True)
-                if not nat_logic:
-                    list6 = unenclose(list1[0][0])
-                    sent[i][1] = list6[0]
-                else:
-                    list6 = name_conditional(list1,nat_logic)
-                    list6[0] = proper_spacing(list6[0])
-                str2 = list6[0]
+                list1 = find_sentences(ostring)
+                sent[i][1] = list1[0][0]
+                str2 = list1[0][0]
                 if kind == "":
                     list4 = tilde_removal2(str2)
                     ng = list4[1]
@@ -9811,7 +9882,7 @@ def plan(greek2,sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name,
                     if oc(str2):
                         candd.append([sent[i][0], str2,ng])
                 else:
-                    list3 = get_conjuncts(list6[0])
+                    list3 = get_sentence_abbreviations(list1[0])
                     for j in range(len(list3)):
                         list5 = tilde_removal2(list3[j])
                         if os(list3[j]):
@@ -9833,15 +9904,10 @@ def plan(greek2,sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name,
 
     if temp_conditionals != []:
         for i in range(len(temp_conditionals)):
-            if nat_logic:
-                list1 = find_sentences(temp_conditionals[i][1], True)
-                list6 = name_conditional(list1)
-                str2 = list6[0]
-            else:
-                str2 = temp_conditionals[i][1]
-                str2 = remove_outer_paren(str2)
-                str3 = enclose(str2)
-                list1 = find_sentences(str3)
+            str2 = temp_conditionals[i][1]
+            str2 = remove_outer_paren(str2)
+            str3 = enclose(str2)
+            list1 = find_sentences(str3)
                 #ffd
             ng = temp_conditionals[i][2]
             list2 = mainconn(str2)
