@@ -90,6 +90,6 @@ def pop_sent(str1):
 [[ 1,"Russell has the|r property courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"I think that|c it|p is|a true that|c you are|a smart",None,'co'],[ 2,"I do not believe that|c you are|a smart",None,'j']],\
-[[ 1,"This cat is|g not a|r cat",None,'co']],\
-[[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']]]
+[[ 1,"This cat is|g not a|r cat",None,'co']]]
+# [[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']]]
     return sent
