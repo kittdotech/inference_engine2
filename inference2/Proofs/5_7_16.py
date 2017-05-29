@@ -15,9 +15,9 @@ tot_tim = time.time()
 
 #right now type o renders 33,35,36 as false
 j = 2 # was 35
-proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 2 # if n then proof type before may 1
-stp = 3
+proof_type = 'o' # if l then long proof showing decision procedure for instantiation
+strt = 5 # if n then proof type before may 1
+stp = 0
 print_to_doc = True
 if j == 1:
     django2 = False
@@ -8425,7 +8425,10 @@ def many_cond(greek2,all_sent,candd,candd2, conditionals, kind, asp, anc2, f, g,
                     del list1[j]
                     j -= 1
                     list2.append([str1, ng])
+                    # try:
                     conditionals[g][8].append(anc1)
+                    # except AttributeError:
+                    #     bb = 8
                     if list1 == []:
                         cjct = conditionals[g][h]
                         consistent = new_prop_sent(greek2,all_sent,"", kind, asp, "",anc2, \
@@ -8441,11 +8444,12 @@ def many_cond(greek2,all_sent,candd,candd2, conditionals, kind, asp, anc2, f, g,
             # the point of having blank returns is because if it returns true
             # then we need to subtract the conditional counter, here g, by 1
                     conditionals[g][8] = ""
-                    return [True,conditionals]
+                    return ["",conditionals]
     conditionals[g] = original_conditional
     conditionals[g][f] = list1
     conditionals[g][8] = ""
-    return [True,conditionals]
+    #by returning a blank we do not delete the conditional in modus ponens
+    return ["",conditionals]
 
 def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
 
@@ -8467,7 +8471,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
         g = -1
         while g < len(conditionals) -1:
             g += 1
-            if g == 2 and r==44:
+            if g == 4 and r==13:
                 bb = 7
             if conditionals[g][0] != "":
 
@@ -9466,12 +9470,15 @@ def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind
                             while f < len(list1) -1:
                                 mc = mainconn(grandparent)
                                 f += 1
-                                for e in range(len(candd)):
+
+                                for e in range(len(candd)): #bbb
                                     anc5 = candd[e][0]
             # since it's too hard to program, if the sibling is a disjunct then we just
             # ignore this
+
                                     if list1[f][0].find(idisj) > -1 or list1[f][0].find(xorr) > -1:
                                         break
+
                                     else:
                                         if candd[e][1] == list1[f][0]:
                                             if candd[e][2] == list1[f][1]:
