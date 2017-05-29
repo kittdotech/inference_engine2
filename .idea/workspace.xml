@@ -35,8 +35,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="6865" column="0" lean-forward="true" selection-start-line="6865" selection-start-column="0" selection-end-line="6865" selection-end-column="0" />
+            <state relative-caret-position="177">
+              <caret line="8447" column="0" lean-forward="false" selection-start-line="8447" selection-start-column="0" selection-end-line="8447" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -92,8 +92,8 @@
       <file leaf-file-name="prove.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="-225">
+              <caret line="8499" column="9" lean-forward="false" selection-start-line="8499" selection-start-column="0" selection-end-line="8499" selection-end-column="9" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -113,25 +113,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>def axioms2(</find>
-      <find>def axioms2</find>
-      <find>axioms(</find>
-      <find>time</find>
-      <find>ccc</find>
-      <find>HGC</find>
-      <find>def rel_re</find>
-      <find>def def_r</find>
-      <find>_variables(</find>
-      <find>INM</find>
-      <find>fir_</find>
-      <find>RDA</find>
-      <find>axioms2(</find>
-      <find>tot_prop_sent.a</find>
-      <find>individua</find>
       <find>indivi</find>
       <find>statement_</find>
       <find>state</find>
-      <find>statement_lo</find>
       <find>kind</find>
       <find>disjunction_he</find>
       <find>pn</find>
@@ -142,7 +126,23 @@
       <find>put_nc</find>
       <find>put_nat</find>
       <find>link_nat</find>
+      <find>def modu</find>
+      <find>conj</find>
+      <find>get</find>
+      <find>def disj</find>
+      <find>disjunction</find>
+      <find>def new_prop</find>
+      <find>new_disjunct</find>
+      <find>disjunction_h</find>
+      <find>def disjunct</find>
+      <find>def disju</find>
+      <find>def disjunc</find>
+      <find>statement</find>
+      <find>statement_lo</find>
+      <find>iff_elim(</find>
+      <find>def disjun</find>
       <find>def rear</find>
+      <find>def modus</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -160,6 +160,7 @@
       <replace>General Variables</replace>
       <replace>Indefinite Variables</replace>
       <replace>Definite Variables</replace>
+      <replace>def_info</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -692,12 +693,18 @@
       <option name="project" value="LOCAL" />
       <updated>1496085999153</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="deleted the put_nat_sent function">
+      <created>1496086609337</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1496086609337</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="771" y="23" width="668" height="820" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23178808" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -707,7 +714,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29602888" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24071527" sideWeight="0.48787448" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27296937" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27296937" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -769,7 +776,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="hey" />
     <MESSAGE value="- changed to | in action" />
     <MESSAGE value="major changes" />
     <MESSAGE value="finished add_stan_sent definition" />
@@ -794,14 +800,22 @@
     <MESSAGE value="changed def of individual, some of the sentences when using the axioms were not being put in the standard_cj list" />
     <MESSAGE value="minor glitches in previous committ" />
     <MESSAGE value="unenclose function is only called from find_sentences function now" />
-    <option name="LAST_COMMIT_MESSAGE" value="unenclose function is only called from find_sentences function now" />
+    <MESSAGE value="deleted the put_nat_sent function" />
+    <option name="LAST_COMMIT_MESSAGE" value="deleted the put_nat_sent function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py</url>
+          <line>8447</line>
+          <option name="timeStamp" value="6415" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6359" />
+      <option name="time" value="6416" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1139,20 +1153,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1014" column="0" lean-forward="false" selection-start-line="1014" selection-start-column="0" selection-end-line="1014" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1193,10 +1198,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-225">
+          <caret line="8499" column="9" lean-forward="false" selection-start-line="8499" selection-start-column="0" selection-end-line="8499" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="6865" column="0" lean-forward="true" selection-start-line="6865" selection-start-column="0" selection-end-line="6865" selection-end-column="0" />
+        <state relative-caret-position="177">
+          <caret line="8447" column="0" lean-forward="false" selection-start-line="8447" selection-start-column="0" selection-end-line="8447" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
