@@ -16,9 +16,9 @@ tot_tim = time.time()
 #right now type o renders 33,35,36 as false
 j = 2 # was 35
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
-strt = 0 # if n then proof type before may 1
-stp = 85
-print_to_doc = True
+strt = 35 # if n then proof type before may 1
+stp = 36
+print_to_doc = False
 if j == 1:
     django2 = False
     temp17 = False
@@ -5182,7 +5182,7 @@ def findposinlist(str1, list1,i):
     else:
         return -1
 
-def two_elements_in_list(list1,stri,strj,i,j):
+def two_elements_are_in_list(list1,stri,strj,i,j):
 
     for k in range(len(list1)):
         if list1[k][i] == stri and list1[k][j] == strj:
@@ -5250,11 +5250,13 @@ def axioms(greek2,list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sen
            member_prop,not_id):
 
     already_done = []
+    use_statement_logic = False
     global dv_nam,sn,cnjts
-    added = False
     used_ax = []
     list2 = extract_list(list1,0)
     for i in range(len(list2)):
+        if use_statement_logic:
+            break
         str1 = list2[i]
         if str1 not in already_done:
             already_done.append(str1)
@@ -5281,8 +5283,9 @@ def axioms(greek2,list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sen
 
                     if len(conjuncts) == 1 and len(list3) >= 1:
                         for k in range(len(conjuncts)):
+                            if use_statement_logic:
+                                break
                             for j in range(len(list3)):
-                                added = True
                                 pos1 = conjuncts[k][1]
                                 pos2 = list3[j][1]
                                 rel1 = conjuncts[k][0][9]
@@ -5292,11 +5295,13 @@ def axioms(greek2,list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sen
                                 sub2 = list3[j][0][5]
                                 obj2 = list3[j][0][14]
                                 osec_sent = list3[j][0][0]
-                                done = axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
+                                use_statement_logic = axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
                                         candd,candd2,conditionals,all_sent,member_prop,not_id,prop_sent)
+                                if use_statement_logic:
+                                    break
+
 
                     elif len(conjuncts) == 2:
-                        added = True
                         pos1 = conjuncts[0][1]
                         pos2 = conjuncts[1][1]
                         rel1 = conjuncts[0][0][9]
@@ -5306,19 +5311,22 @@ def axioms(greek2,list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sen
                         sub2 = conjuncts[1][0][5]
                         obj2 = conjuncts[1][0][14]
                         osec_sent = conjuncts[1][0][0]
-                        done = axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
+                        use_statement_logic = axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
                                 candd,candd2,conditionals,all_sent,member_prop,not_id,prop_sent)
+                        if use_statement_logic:
+                            break
 
                     elif len(conjuncts) > 2:
                         y = 0
                         for n in range(y,g-1):
+                            if use_statement_logic:
+                                break
                             y += 1
                             h = y
                             while h < g:
                                 j = h
                                 h += 1
                                 k = n
-                                added = True
                                 pos1 = conjuncts[k][1]
                                 pos2 = conjuncts[j][1]
                                 rel1 = conjuncts[k][0][9]
@@ -5328,10 +5336,14 @@ def axioms(greek2,list1,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sen
                                 sub2 = conjuncts[j][0][5]
                                 obj2 = conjuncts[j][0][14]
                                 osec_sent = conjuncts[j][0][0]
-                                done = axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
-                                        candd,candd2,conditionals,all_sent,member_prop,not_id,prop_sent)
+                                use_statement_logic = axioms2(greek2,pos1,pos2,\
+                                    rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,used_ax,\
+                                    candd,candd2,conditionals,all_sent,member_prop,not_id,prop_sent)
+                                if use_statement_logic:
+                                    break
 
-    if added:
+
+    if use_statement_logic:
         candd = get_rel_conj(candd,conditionals)
         conditionals5 = copy.deepcopy(conditionals)
         list1 = statement_logic(greek2,prop_sent,all_sent,conditionals5,\
@@ -5464,6 +5476,10 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
     list1 = prepare_iff_elim(greek2,def_info,subst4p,all_sent,list2[0],list2[1],sn,tot_sent)
     conditionals.append(list1)
     cnjts.append(sent2p)
+    if two_elements_are_in_list(candd,sent1p,"",1,2) and two_elements_are_in_list(candd,sent5p,"",1,2):
+        use_statement_logic = True
+    else:
+        use_statement_logic = False
 
     #if the required sentences are not conjuncts then we must add them to the all sent list
     if sent5p not in cnjts or sent1p not in cnjts:
@@ -5495,7 +5511,7 @@ def axioms2(greek2,pos1,pos2,rel1,rel2,sub1,obj1,sub2,obj2,osec_sent,tot_sent,us
         not_id.append([thing_int,thing_var])
         return False
     else:
-        return True
+        return use_statement_logic
 
 
 def add_thing_sent_to_all_sent(all_sent,sent2,sent2p,thing_int,thing_con):
@@ -6075,13 +6091,9 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
 
     tv = True # tv = truth value
 
-    if proof_type == "l" and consistent:
-        instan_used += 1
-        k = sn
-        g = sn
-        tv = "True"
-        tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
-                             greek2, conditionals)
+    # if proof_type == "l" and consistent:
+
+
         # consistent = statement_logic(greek2, prop_sent, all_sent, conditionals, \
         #                              candd, candd2, disjuncts, 0, all_sent)
         # tot_prop_sent.append(prop_sent)
@@ -6134,6 +6146,14 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
         # end3
 
         if proof_type == "l":
+            k = sn
+            g = sn
+            tv = "True"
+            tot_sent = rearrange(prop_sent, tot_sent, consistent, impl, g, all_sent, \
+                                 greek2, conditionals)
+
+
+
             tot_prop_sent.append(prop_sent)
             return [tot_sent, tv]
 
@@ -6591,7 +6611,7 @@ def build_standard_sent_list(nonstandard,standard_cj,\
                 if consistent:
                     if bool1:
                         standard_cj.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
-                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
+                        prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7],""])
                     else:
                         nonstandard.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
@@ -6656,17 +6676,25 @@ def prepare_disjuncts(conditionals,greek2):
     return conditionals
 
 def get_detached(standard_cj,all_sent):
-    # This puts all natural detached sentences into a list
+    # This puts all natural detached sentences into the 8th member of the
+    # standard_cj list
 
-    detached = []
     for i in range(len(standard_cj)):
+        bool1 = False
+        for j in range(len(all_sent)):
+            str1 = all_sent[j][42].replace("~","")
+            if standard_cj[i][2] == str1:
+                list1 = copy.deepcopy(all_sent[j])
+                list1[8] = standard_cj[i][3]
+                standard_cj[i][9] = list1
+                bool1 = True
+                break
+        if not bool1:
+            print 'a detached sentence is missing from the all sent list'
+            sys.exit()
+    return standard_cj
 
-        d = findposinmd(standard_cj[i][3] + standard_cj[i][2],all_sent,42)
-        if d > -1:
-            detached.append(all_sent[d])
-    return detached
-
-def get_detached_variables(detached):
+def get_detached_variables(standard_cj):
     # This categorizes all abbreviations which appear in a detached sentence
 
     num = [5,14,18,22]
@@ -6678,21 +6706,21 @@ def get_detached_variables(detached):
     indef = []
     general = []
 
-    for i in range(len(detached)):
+    for i in range(len(standard_cj)):
         for j in num:
-            if isvariable(detached[i][j]):
-                str1 = detached[i][j]
+            if isvariable(standard_cj[i][9][j]):
+                str1 = standard_cj[i][9][j]
                 if str1 not in defn and str1 not in indef and str1 not in general:
-                    if isinmdlist(detached[i][j],dv_nam,0):
-                        defn.append(detached[i][j])
-                    elif detached[i][9] == 'J' and detached[i][14] == indefinite_concept:
-                        indef.append(detached[i][j])
-                    elif detached[i][9] == 'J' and detached[i][14] == definite_concept:
-                        defn.append(detached[i][j])
-                    elif detached[i][9] == 'J' and detached[i][14] == general_concept:
-                        general.append(detached[i][j])
+                    if isinmdlist(standard_cj[i][9][j],dv_nam,0):
+                        defn.append(standard_cj[i][9][j])
+                    elif standard_cj[i][9][9] == 'J' and standard_cj[i][9][14] == indefinite_concept:
+                        indef.append(standard_cj[i][9][j])
+                    elif standard_cj[i][9][9] == 'J' and standard_cj[i][9][14] == definite_concept:
+                        defn.append(standard_cj[i][9][j])
+                    elif standard_cj[i][9][9] == 'J' and standard_cj[i][9][14] == general_concept:
+                        general.append(standard_cj[i][9][j])
                     else:
-                        temp_list.append(detached[i][j])
+                        temp_list.append(standard_cj[i][9][j])
 
     indef = categorize_remaining_variables(indef,defn,temp_list)
 
@@ -6863,16 +6891,16 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
             conditionals = prepare_disjuncts(conditionals,greek2)
 
-            detached = get_detached(standard_cj,all_sent)
+            standard_cj = get_detached(standard_cj,all_sent)
 
-            detached_var = get_detached_variables(detached)
+            detached_var = get_detached_variables(standard_cj)
 
             conditionals = link_nat_sent_to_all_sent(conditionals,all_sent)
 
-            list1 = attached_variables(conditionals,detached_var)
+            variable_type = attached_variables(conditionals,detached_var)
 
-            tot_sent = print_variables(list1,tot_sent)
-            # tot_sent = relevance(list1,conditionals,standard_cj,tot_sent)
+            tot_sent = print_variables(variable_type,tot_sent)
+            tot_sent = relevance(variable_type,conditionals,standard_cj,tot_sent)
 
 
         return tot_sent
@@ -6934,8 +6962,10 @@ def rearrange(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,\
 
 
 
-def relevance(list1,conditionals,standard_cj,tot_sent):
+def relevance(variable_type,conditionals,standard_cj,tot_sent):
 
+    for i in range(len(standard_cj)):
+        pass
 
 
     bb = 8
@@ -7176,9 +7206,9 @@ def instantiable(all_sent,d,e,pot_id,member_prop,diff_nval,linked,gen_var2,embed
                 #     if one_before_zero == 0:
                 #         if pot_id != []:
                 #             for t in range(len(temp)):
-                #                 bool1 = two_elements_in_list(pot_id,temp[t][0],temp[t][1],0,1)
+                #                 bool1 = two_elements_are_in_list(pot_id,temp[t][0],temp[t][1],0,1)
                 #                 if not bool1:
-                #                     bool2 = two_elements_in_list(pot_id,temp[t][1],temp[t][0],0,1)
+                #                     bool2 = two_elements_are_in_list(pot_id,temp[t][1],temp[t][0],0,1)
                 #                     if bool2:
                 #                         one_before_zero = True
                 #                         break
@@ -9932,13 +9962,17 @@ def plan(greek2,sent,all_sent, prop_sent, candd,candd2, conditionals, prop_name,
                     if oc(str2):
                         candd.append([sent[i][0], str2,ng])
                 else:
-                    list3 = get_conjuncts(str2)
+                    list3 = get_conjuncts(str2) # ggg
                     for j in range(len(list3)):
                         list5 = tilde_removal2(list3[j])
                         if os(list3[j]):
-                            conj_elim.append([sent[i][0],list5[0],list5[1]])
+                            if not two_elements_are_in_list(conj_elim, list5[0], list5[1], 1, 2):
+                                conj_elim.append([sent[i][0],list5[0],list5[1]])
                         else:
-                            temp_conditionals.append([sent[i][0], list5[0],list5[1]])
+                            if not two_elements_are_in_list(temp_conditionals,list5[0],list5[1],1,2):
+                                temp_conditionals.append([sent[i][0], list5[0],list5[1]])
+                            else:
+                                bb = 8
 
             no_contr = new_prop(all_sent,prop_sent,str2,ng,"",None,None,None,None,True,sent[i][0],ostring)
             if not no_contr:
