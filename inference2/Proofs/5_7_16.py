@@ -15,9 +15,9 @@ tot_tim = time.time()
 
 #right now type o renders 33,35,36 as false
 j = 2 # was 35
-proof_type = 'o' # if l then long proof showing decision procedure for instantiation
-strt = 5 # if n then proof type before may 1
-stp = 0
+proof_type = 'l' # if l then long proof showing decision procedure for instantiation
+strt = 0 # if n then proof type before may 1
+stp = 85
 print_to_doc = True
 if j == 1:
     django2 = False
@@ -6127,9 +6127,10 @@ def identity(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,\
         consistent = list1[5]
 
     if consistent:
-        consistent = axioms(greek2,basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
+        list44 = axioms(greek2,basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
                        prop_sent,member_prop,not_id)
-
+        consistent = list44[0]
+        conditionals = list44[1]
         # end3
 
         if proof_type == "l":
@@ -6434,7 +6435,7 @@ def rearrange2(prop_sent,tot_sent,consistent,impl,g,all_sent,greek2,conditionals
             break
 
     list1 = build_standard_sent_list([], [], \
-        tot_sent, conditionals, all_sent, consistent, greek2,i)
+        tot_sent, conditionals, all_sent, True, greek2,i)
     return tot_sent
 
 
@@ -6573,10 +6574,14 @@ def build_standard_sent_list(nonstandard,standard_cj,\
                 tot_sent.append([prop_sent[i][0],str1,prop_sent[i][1],prop_sent[i][2],\
                         prop_sent[i][3],prop_sent[i][4],prop_sent[i][5],prop_sent[i][6],prop_sent[i][7]])
             elif os(prop_sent[i][1]):
-                # try:
-                str1 = prop_sent[i][2] + findinlist(prop_sent[i][1],prop_name,0,2)
-                # except TypeError:
-                #     bb = 8
+
+                if "~" in prop_sent[i][1]:
+                    str7 = prop_sent[i][1][1:]
+                    #this is for sentences of the form ~~p
+                    str1 = "~" + prop_sent[i][2] + findinlist(str7, prop_name, 0, 2)
+                else:
+                    str1 = prop_sent[i][2] + findinlist(prop_sent[i][1],prop_name,0,2)
+
                 bool1 = False
                 for d in range(len(all_sent)):
                     str3 = all_sent[d][42].replace("~","")
@@ -7355,10 +7360,15 @@ def new_cond(greek2,pot_id,candd,conditionals,tot_sent,member_prop,candd2,\
             for j in range(len(conditionals2[i][38])):
 
                 oprop = conditionals2[i][38][j] #old proposition (sentence letter)
-                osent = findinlist(oprop,all_sent,42,0)
+                if oprop[0] == "~":
+                    temp_oprop = oprop[1:]
+                else:
+                    temp_oprop = oprop
+
+                osent = findinlist(temp_oprop,all_sent,42,0)
                 if osent == None:
                     bb = 8
-                g = findposinlist(oprop,all_sent,42)
+                g = findposinlist(temp_oprop,all_sent,42)
                 if g == -1:
                     print "one of your sentences is missing from the all_sent list"
                 new_list = []
@@ -8438,7 +8448,7 @@ def many_cond(greek2,all_sent,candd,candd2, conditionals, kind, asp, anc2, f, g,
                         else:
                             return [True,conditionals]
                     else:
-                        conditionals[g][8] = None
+                        #conditionals[g][8] = None
                         break
                 elif str1 == str2 and ng != neg2:
             # the point of having blank returns is because if it returns true
@@ -8471,7 +8481,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
         g = -1
         while g < len(conditionals) -1:
             g += 1
-            if g == 4 and r==13:
+            if g == 2 and r==44:
                 bb = 7
             if conditionals[g][0] != "":
 
@@ -8569,6 +8579,7 @@ def modus_ponens(greek2,all_sent,conditionals, candd,candd2, prop_sent,kind):
                                         str13 = "EN"
                                     consistent = new_prop_sent(greek2,all_sent,"~", "ant", \
                                                 str13, anc1, anc2, conditionals,g,candd,candd2)
+
                                     if not consistent:
                                         return [False,conditionals]
                                     del conditionals[g]
@@ -8631,12 +8642,9 @@ def disjunction_heirarchy(conditionals,str5,d,new_disj = False):
     if iff in str5 or conditional in str5:
         return conditionals
 
-    if conditionals[d][36] == "":
-        str5 = enclose(str5)
-        def_info = find_sentences(str5)
-    else:
-        def_info = conditionals[d][36]
 
+    str5 = enclose(str5)
+    def_info = find_sentences(str5)
     mainc = def_info[4][0][1]
     list2 = [""] * 39
     n = 7
@@ -9379,8 +9387,8 @@ def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind
     i = -1
     conjt = copy.deepcopy(candd)
     if kind == 2:
-        list1 = []
-        rel_conj = finddisj(conditionals,list1,1)
+        list11 = []
+        rel_conj = finddisj(conditionals,list11,1)
 
     while i < len(conjt) -1:
         i += 1
@@ -9465,9 +9473,9 @@ def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind
                             list2.append([conj,str2])
                             anc3 = ""
                             anc4 = ""
-                            list1 = conditionals[n][i][4]
+                            list11 = conditionals[n][i][4]
                             f = -1
-                            while f < len(list1) -1:
+                            while f < len(list11) -1:
                                 mc = mainconn(grandparent)
                                 f += 1
 
@@ -9476,19 +9484,18 @@ def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind
             # since it's too hard to program, if the sibling is a disjunct then we just
             # ignore this
 
-                                    if list1[f][0].find(idisj) > -1 or list1[f][0].find(xorr) > -1:
+                                    if list11[f][0].find(idisj) > -1 or list11[f][0].find(xorr) > -1:
                                         break
-
                                     else:
-                                        if candd[e][1] == list1[f][0]:
-                                            if candd[e][2] == list1[f][1]:
-                                                list2.append([list1[f][0],list1[f][1]])
+                                        if candd[e][1] == list11[f][0]:
+                                            if candd[e][2] == list11[f][1]:
+                                                list2.append([list11[f][0],list11[f][1]])
                                                 if len(list2) == 2:
                                                     anc3 = anc5
                                                 elif len(list2) == 3:
                                                     anc4 = anc5
-                                                del list1[f]
-                                                if list1 == []:
+                                                del list11[f]
+                                                if list11 == []:
                                                     str3 = build_sent_list2(list2)
                                                     if mc[0] == xorr:
                                                         new_prop(all_sent,prop_sent,str3,"","&I",anc1,anc3,anc4)
@@ -9527,7 +9534,7 @@ def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind
                                                     f -= 1
                                                     break
 
-                                            elif candd[e][2] != list1[f][1]:
+                                            elif candd[e][2] != list11[f][1]:
                                                 mc = mainconn(grandparent)
                                                 if mc[0] == idisj:
                                                     rule = idisj
@@ -9552,7 +9559,7 @@ def disjunction_elimination(all_sent,prop_sent, conditionals, candd,candd2, kind
                                                 if not consistent:
                                                     return [False,conditionals]
                                                 else:
-                                                    list1 = []
+                                                    list11 = []
                                                     bool1 = True
                                                     bool2 = True
                                                     n = 0
@@ -10162,7 +10169,7 @@ def get_result(post_data,archive_id=None,request=None):
     for k in range(strt,stp):
         if not excel and not one_sent:
             views.progressbar_send(request,strt,stp,k,1)
-        if k == 37:
+        if k == 20:
             bb = 7
         st1 = time.time()
         prop_name = []
