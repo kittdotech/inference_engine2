@@ -667,10 +667,10 @@ def find_sentences(sentence):
 
                     if (len(sentence) - len(temp_sent)) > 2:
                         if temp_sent in prt and temp_sent in str21 and prt != str21:
-                            prtnum = findinlist(str21,sent_num,2,1,False)
+                            prtnum = findinlist(str21,sent_num,2,1)
                             numb = prtnum + "1"
                         elif temp_sent in prt:
-                            prtnum = findinlist(prt,sent_num,2,1,False)
+                            prtnum = findinlist(prt,sent_num,2,1)
                             numb = prtnum + "1"
                         else:
                             prtnum = ""
@@ -4654,7 +4654,7 @@ def syn(tot_sent, all_sent, words,def_atoms):
                             all_sent[m] = list2
                         else:
                             all_sent[m][i] = syn_pairs[j][1]
-                        u = findinlist(str5,tot_sent,1,0,True)
+                        u = findposinlist(str5,tot_sent,1)
                         if u == -1:
                             bool1 = True
                             str5v = name_sent(syn_pairs[j][2])
@@ -5123,21 +5123,15 @@ def build_dict(ex_dict):
     return words
 
 
-def findinlist(str1, list1, i, j, bool1 = False):
+def findinlist(str1, list1, i, j):
     # this function takes a string, matches it to an element in the first dimension
     # of the list, then returns the matching second element
 
     for d in range(len(list1)):
             if str1 == list1[d][i]:
                 str2 = list1[d][j]
-                if bool1:
-                    return d
-                else:
-                    return str2
-    if bool1:
-        return -1
-    else:
-        return None
+                return str2
+    return None
 
 
 def findposmd(str1,str2,list1,p,q,r):
@@ -5644,14 +5638,14 @@ def reflex(all_sent,j,tot_sent,prop_sent):
 
 
 def search_for_category_errors(all_sent,words,basic_objects,bo2,\
-        member_prop,not_id,property_sent,tot_sent):
-    #wwr
+        member_prop,not_id,property_sent,tot_sent,standard_cj,\
+            variable_type,conditionals):
+
     global qn
     atomic = words[29]
     members = []
     non_id = []
     used_var = []
-    str2 = ""
     consq = []
     for i in range(len(idf_var2)):
         if idf_var2[i] not in idf_var:
@@ -5665,88 +5659,78 @@ def search_for_category_errors(all_sent,words,basic_objects,bo2,\
     basic_cat = ["moment","relationship","point","number","thought","imagination","group",\
     "property","possible world","word","natural whole","mind",'matter','sensorium',\
              'sensation']
-    ax_ent = ""
-    bool1 = False
     num = [5,14,18,22]
-    listfa = []
-    reflex_found = False
-    spec_prop = ["indefinite","definite","general"]
+    spec_prop = ["indefinite","definite"]
     j = -1
     while j < (len(all_sent)) -1:
         j += 1
         if j == 13:
             bb = 8
-        if all_sent[j][43] == "x":
-            all_sent[j][46] = [200]
-            all_sent[j][56] = [200]
         relat = all_sent[j][9]
         if relat == "J":
             str6 = findinlist(all_sent[j][14],dv_nam,0,1)
             if str6 in spec_prop:
                 all_sent[j][46] = [200]
                 all_sent[j][56] = [200]
-        if isatomic(all_sent[j],words) and all_sent[j][5] == all_sent[j][14] and \
+        if all_sent[j][5] == all_sent[j][14] and \
             all_sent[j][9] != "=" and all_sent[j][8] != "~":
             consistent = reflex(all_sent,j,tot_sent,prop_sent)
             if not consistent:
                 break
 
-        if all_sent[j][46] != "x":
-            if all_sent[j][9] == ne:
-                non_id.append([all_sent[j][0],all_sent[j][5],all_sent[j][14]])
-            else:
-                for p in num:
-                    if all_sent[j][p] != None and isvariable(all_sent[j][p]):
-                        if j == 13 and p == 14:
-                            bb = 8
-                        rel = ""
-                        if relat == "A" or (relat == 'T' and p == 14):
-                            kind = 'MOMENT'
-                        elif relat == "IR" and p == 5:
-                            kind = 'FACT'
-                        elif relat == 'AB' or relat == "L" or relat == 'AB' or (relat == 'S' and p == 14) \
-                                or (relat == 'WS' and p == 14):
-                            kind = 'POINT'
-                        elif relat == "G" or (relat == 'N' and p == 14):
-                            kind = 'NUMBER'
-                        elif relat == "M" and p == 5 or (relat == 'TK' and p == 14):
-                            kind = 'MENTAL RELATIONSHIP'
-                            rel = "ir"
-                        elif relat == "M" and p == 14:
-                            kind = 'IMAGINATION'
-                        elif relat == "I" and p == 14:
-                            kind = "NOUN CONCEPT"
-                        elif relat == "H" and p == 14:
-                            kind = "NOUN PROPERTY"
-                        elif relat == "J" and p == 14:
-                            kind = "ADJECTIVIAL PROPERTY"
-                        elif relat == "HE" and p == 5:
-                            kind = "PARTICLE"
-                        elif (relat == 'TK' and p == 14) or (relat == "M" and p == 5):
-                            kind = 'THOUGHT'
-                        elif relat == "HE" and p == 14:
-                            kind = "ENERGY"
-                        elif relat == "W" and p == 5:
-                            kind = "WHOLE"
-                        elif relat == 'P' and p == 14:
-                            kind = 'POSSIBLE WORLD'
-                        elif relat == "D" and p == 14:
-                            kind = 'POSSIBLE RELATIONSHIP'
-                        elif relat == 'AL' or (relat == 'WV' and p == 14):
-                            kind = 'LETTER'
-                        elif (relat == 'TK' or relat == "D") and p == 5:
-                            kind = 'MIND'
-                        elif relat == "S" and p == 5:
-                            kind = 'MATTER'
-                        elif relat == "O" and p == 14:
-                            kind = 'SENSORIUM'
-                        else:
-                            kind = ""
-                        if len(members) > 30:
-                            bb = 7
-                        if all_sent[j][8] == "~":
-                            kind = ""
-                        dummy = cat_atoms(p,j,all_sent,members,basic_objects,kind,bo2,words,consq,rel,basic_cat)
+        
+        if all_sent[j][9] == ne:
+            non_id.append([all_sent[j][0],all_sent[j][5],all_sent[j][14]])
+        else:
+            for p in num:
+                if all_sent[j][p] != None and isvariable(all_sent[j][p]):
+                    if j == 13 and p == 14:
+                        bb = 8
+                    rel = ""
+                    if relat == "A" or (relat == 'T' and p == 14):
+                        kind = 'MOMENT'
+                    elif relat == "IR" and p == 5:
+                        kind = 'FACT'
+                    elif relat == 'AB' or relat == "L" or relat == 'AB' or (relat == 'S' and p == 14):
+                        kind = 'POINT'
+                    elif relat == "G" or (relat == 'N' and p == 14):
+                        kind = 'NUMBER'
+                    elif relat == "M" and p == 5 or (relat == 'TK' and p == 14):
+                        kind = 'MENTAL RELATIONSHIP'
+                        rel = "ir"
+                    elif relat == "M" and p == 14:
+                        kind = 'IMAGINATION'
+                    elif relat == "I" and p == 14:
+                        kind = "NOUN CONCEPT"
+                    elif relat == "H" and p == 14:
+                        kind = "NOUN PROPERTY"
+                    elif relat == "J" and p == 14:
+                        kind = "ADJECTIVIAL PROPERTY"
+                    elif relat == "HE" and p == 5:
+                        kind = "PARTICLE"
+                    elif (relat == 'TK' and p == 14) or (relat == "M" and p == 5):
+                        kind = 'THOUGHT'
+                    elif relat == "HE" and p == 14:
+                        kind = "ENERGY"
+                    elif relat == "W" and p == 5:
+                        kind = "WHOLE"
+                    elif relat == 'P' and p == 14:
+                        kind = 'POSSIBLE WORLD'
+                    elif relat == "D" and p == 14:
+                        kind = 'POSSIBLE RELATIONSHIP'
+                    elif relat == 'AL':
+                        kind = 'LETTER'
+                    elif (relat == 'TK' or relat == "D") and p == 5:
+                        kind = 'MIND'
+                    elif relat == "S" and p == 5:
+                        kind = 'MATTER'
+                    elif relat == "O" and p == 14:
+                        kind = 'SENSORIUM'
+                    else:
+                        kind = ""
+                    if all_sent[j][8] == "~":
+                        kind = ""
+                    dummy = categorize_property_bearers(p,j,all_sent,members,basic_objects,kind,bo2,words,consq,rel,basic_cat)
     basic_objects2 = []
     if consistent:
         mem_var = []
@@ -5940,8 +5924,8 @@ def search_for_category_errors(all_sent,words,basic_objects,bo2,\
     return list1
 
 
-def cat_atoms(j,i,list,members,basic_objects,str1,bo2,words,consq,rel,basic_cat):
-    # categorize atoms
+def categorize_property_bearers(j,i,list,members,basic_objects,str1,bo2,words,consq,rel,basic_cat):
+
     global dv_nam,gen_var,cnjts,ind_var
     atomic_relations = words[22]
     subj = list[i][5]
@@ -6090,21 +6074,25 @@ def instantiate(all_sent,tot_sent,basic_objects,words,candd,candd2,conditionals,
     tot_sent = list1[0]
     conditionals = list1[1]
     standard_cj = list1[2]
+    variable_type = list1[3]
     
-    return [tot_sent,True]
+
 
     bo2=[]
     member_prop = []
     not_id = []
 
     list1 = search_for_category_errors(all_sent,words,basic_objects,bo2,\
-            member_prop,not_id,property_sent,tot_sent)
+            member_prop,not_id,property_sent,tot_sent,standard_cj,\
+                variable_type,conditionals)
     basic_objects2 = list1[0]
     member_prop = list1[1]
     property_sent = list1[2]
     not_id = list1[3]
     tot_sent = list1[4]
     consistent = list1[5]
+
+    return [tot_sent, True]
 
     list1 = axioms(greek2,basic_objects2,bo2,disjuncts,tot_sent,candd,candd2,conditionals,all_sent,\
                    prop_sent,member_prop,not_id)
@@ -6574,38 +6562,153 @@ def rearrange(tot_sent,consistent,all_sent,greek2,conditionals):
 
     tot_sent = print_variables(variable_type,tot_sent)
 
-    standard_cj = get_detached_predicates(variable_type,standard_cj)
+    list1 = get_detached_predicates(variable_type,standard_cj) # list1[1] = standard_cj
 
-    conditionals = get_attached_predicates(variable_type,conditionals)
+    list1 = get_attached_predicates(variable_type,conditionals,list1[1]) # list1[1] = objects
 
-    #tot_sent = determine_relevance(standard_cj,conditionals,tot_sent)
+    # tot_sent = print_object_properties(objects,tot_sent)
 
-    return [tot_sent,conditionals,standard_cj]
+    #tot_sent = determine_relevance(list1[0],conditionals,tot_sent)
+
+    return [tot_sent,conditionals,standard_cj,variable_type]
+
+
+
 
 
 
 def get_detached_predicates(variable_type,standard_cj):
     # this makes a list of the detached definite predicates
-
+    objects = []
     indef = variable_type[1]
     for i in range(len(standard_cj)):
         subj = standard_cj[i][9][5]
+        relat = standard_cj[i][9][9]
         obj = standard_cj[i][9][14]
+        t_value = standard_cj[i][9][8]
+        s_variable_kind = 'defn'
+        o_variable_kind = 'defn'
         if subj in indef:
             subj = ""
+            s_variable_kind = 'indef'
         if obj in indef:
             obj = ""
-        standard_cj[i][10] = subj+standard_cj[i][9][9]+obj
+            o_variable_kind = 'indef'
+        standard_cj[i][10] = subj + relat + obj
+        if relat == "I":
+            kind = findinlist(obj, dv_nam, 0, 1)
+        else:
+            kind = get_class(relat, 5)
+        objects = get_object_properties(standard_cj[i][9][5],objects,s_variable_kind,\
+                    t_value + relat+obj,kind)
+        if isvariable(obj):
+            kind = get_class(relat, 14)
+            objects = get_object_properties(standard_cj[i][9][14], objects, \
+                    o_variable_kind,subj + t_value + relat, kind)
 
-    return standard_cj
 
-def get_attached_predicates(variable_type,conditionals):
+    return [standard_cj,objects]
+
+def get_general_object_properties(str1,objects,variable_kind,property,kind,sent_kind,\
+                sent_num):
+    # this builds a list of object properties
+
+    uninformative_properties = ["I","J","H"] # these are properties all objects have
+    d = findposinmd(str1,objects,0)
+    if d == -1:
+        objects.append([str1,variable_kind,[kind],[property,sent_kind,sent_num]])
+    else:
+        for i in range(len(objects)):
+            if objects[i][0] == str1:
+                list_kind = objects[i][2]
+                list_properties = objects[i][3]
+                if kind not in list_kind:
+                    list_kind.append(kind)
+                if property not in uninformative_properties:
+                    list1 = [property,sent_kind,sent_num]
+                    list_properties.append(list1)
+                objects[i] = [str1,variable_kind,list_kind,list_properties]
+                break
+    return objects
+
+
+def get_object_properties(str1,objects,variable_kind,property,kind):
+    # this builds a list of object properties
+
+    uninformative_properties = ["I","J","H"] # these are properties all objects have
+    d = findposinmd(str1,objects,0)
+    if d == -1:
+        objects.append([str1,variable_kind,[kind],[property]])
+    else:
+        for i in range(len(objects)):
+            if objects[i][0] == str1:
+                list_kind = objects[i][2]
+                list_properties = objects[i][3]
+                if kind not in list_kind:
+                    list_kind.append(kind)
+                if property not in list_properties and property \
+                    not in uninformative_properties:
+                    list_properties.append(property)
+                objects[i] = [str1,variable_kind,list_kind,list_properties]
+                break
+    return objects
+
+def get_class(relat,p):
+    # this determines what class or category an object belongs to
+
+    if relat == "A" or (relat == 'T' and p == 14):
+        kind = 'MOMENT'
+    elif relat == "IR" and p == 5:
+        kind = 'FACT'
+    elif relat == 'AB' or relat == "L" or relat == 'AB' or (relat == 'S' and p == 14):
+        kind = 'POINT'
+    elif relat == "G" or (relat == 'N' and p == 14):
+        kind = 'NUMBER'
+    elif relat == "M" and p == 5 or (relat == 'TK' and p == 14):
+        kind = 'MENTAL RELATIONSHIP'
+    elif relat == "M" and p == 14:
+        kind = 'IMAGINATION'
+    elif relat == "I" and p == 14:
+        kind = "NOUN CONCEPT"
+    elif relat == "H" and p == 14:
+        kind = "NOUN PROPERTY"
+    elif relat == "J" and p == 14:
+        kind = "ADJECTIVIAL PROPERTY"
+    elif relat == "HE" and p == 5:
+        kind = "PARTICLE"
+    elif (relat == 'TK' and p == 14) or (relat == "M" and p == 5):
+        kind = 'THOUGHT'
+    elif relat == "HE" and p == 14:
+        kind = "ENERGY"
+    elif relat == "W" and p == 5:
+        kind = "WHOLE"
+    elif relat == 'P' and p == 14:
+        kind = 'POSSIBLE WORLD'
+    elif relat == "D" and p == 14:
+        kind = 'POSSIBLE RELATIONSHIP'
+    elif relat == 'AL':
+        kind = 'LETTER'
+    elif (relat == 'TK' or relat == "D") and p == 5:
+        kind = 'MIND'
+    elif relat == "S" and p == 5:
+        kind = 'MATTER'
+    elif relat == "O" and p == 14:
+        kind = 'SENSORIUM'
+    else:
+        kind = ""
+
+    return kind
+
+
+def get_attached_predicates(variable_type,conditionals,objects):
     # this makes a list of the attached definite predicates
 
     defn = variable_type[2]
+    gen = variable_type[0]
     num = [34,35,32,31,30,29]
     for i in range(len(conditionals)):
         list3 = []
+        cond_num = str(conditionals[i][2]) + "." # conditional number
         for j in num:
             list1 = []
             list2 = []
@@ -6615,21 +6718,56 @@ def get_attached_predicates(variable_type,conditionals):
                     obj = conditionals[i][j][k][14]
                     relat = conditionals[i][j][k][9]
                     t_value = conditionals[i][j][k][8]
+                    sent_kind = conditionals[i][j][k][46]
+                    sent_num = cond_num+conditionals[i][j][k][43]
+                    s_variable_kind = 'defn'
+                    o_variable_kind = 'defn'
                     if subj not in defn:
+                        if subj in gen:
+                            s_variable_kind = 'gen'
+                        else:
+                            s_variable_kind = 'indef'
                         subj = ""
                     if obj not in defn:
+                        if obj in gen:
+                            o_variable_kind = 'gen'
+                        else:
+                            o_variable_kind = 'indef'
                         obj = ""
                     str1 = subj + relat + obj
                     str2 = subj + t_value + relat + obj
                     list1.append(str1)
                     list2.append(str2)
                     list3.append(str1)
+                    if relat == "I":
+                        kind = findinlist(obj,dv_nam,0,1)
+                    else:
+                        kind = get_class(relat, 5)
+                    if s_variable_kind == 'gen':
+                        objects = get_general_object_properties(conditionals[i][j][k][5], \
+                            objects, s_variable_kind, t_value+relat+obj, \
+                            kind,sent_kind,sent_num)
+                    else:
+                        objects = get_object_properties(conditionals[i][j][k][5],\
+                            objects,s_variable_kind,t_value+relat+obj, kind)
+
+                    if isvariable(obj):
+                        kind = get_class(relat, 14)
+                        if o_variable_kind == 'gen':
+                            objects = get_general_object_properties(conditionals[i][j][k][5], \
+                                objects, s_variable_kind,t_value+relat+obj, \
+                                kind, sent_kind, sent_num)
+                        else:
+                            objects = get_object_properties(conditionals[i][j][k][14], objects, \
+                                o_variable_kind,subj+t_value+relat, kind)
+
+
                 conditionals[i][j+10] = copy.deepcopy(list1)
             else:
                 break
         conditionals[i][46] = copy.deepcopy(list3)
 
-    return conditionals
+    return [conditionals,objects]
 
 def determine_relevance(standard_cj,conditionals,tot_sent):
     # this determines which sentences are relevant
@@ -7550,50 +7688,6 @@ def arentident(jobj, iobj,non_id):
             return True
     return False
 
-def new_sentence(tot_sent,  old_list, list1, list2, list3, quant, rule,conn = iff,anc1 = "",anc2 = ""):
-
-    global prop_name,psent,sn
-    if old_list[0] == None:
-        old_sent = build_sent(old_list)
-        old_prop = findinlist(old_sent2, prop_name, 1,0)
-    else:
-        old_sent = old_list[0]
-        old_prop = old_list[42]
-
-    if list1[0] == None:
-        str1 = build_sent(list1)
-    else:
-        str1 = list1[0]
-    str1v = name_sent(str1)
-    list1[0] = str1
-    list1[42] = str1v
-    if quant == 2:
-        str2 = build_sent(list2)
-        str2v = name_sent(str2)
-    if list3 != "":
-        str3 = build_sent(list3)
-        str3v = name_sent(str3)
-        list3[0] = str3
-        print 'you have not coded for three new sentences yet'
-        sys.exit()
-    if quant == 1:
-        str1 = old_sent + ' ' + conn + ' ' + str1
-        str1v = old_prop + ' ' + conn + ' ' + str1v
-    elif quant == 2:
-        str1 = '(' + old_sent + ' & ' + str2 + ') ' + conditional + ' ' + str1
-        str1v = '(' + old_prop + ' & ' + str2v + ') ' + conditional + ' ' + str1v
-    elif quant == 3:
-        str1 = '(' + old_sent + ' & ' + str2 + " & " + str3 + ') ' + conditional + ' ' + str1
-        str1v = '(' + old_prop + ' & ' + str2v + "& " + str3v + ') ' + conditional + ' ' + str1v
-
-    g = findinlist(str1,tot_sent,2,0,True)
-    if g == -1 and quant != 3:
-        sn += 1
-        tot_sent.append([sn, str1, str1v, "", rule, anc1, anc2,"",""])
-
-
-
-
 def check_dimension(list1, i, str1,bool1 = False,k=0):
 
     if not bool1:
@@ -8395,7 +8489,7 @@ def disjunction_heirarchy(conditionals,str5,d,new_disj = False):
             n += 1
             # str1 = findinlist(def_info[0][i],prop_name,1,0)
             str2 = def_info[4][i][0][:-1]
-            g = findinlist(str2,def_info[4],0,1,True)
+            g = findposinlist(str2,def_info[4],0)
             parent = def_info[0][g]
             if def_info[4][g][1] == "&":
                 list3[2] = 'c'
@@ -8405,7 +8499,7 @@ def disjunction_heirarchy(conditionals,str5,d,new_disj = False):
                 list3[2] = 'd'
             if len(str2) > 1:
                 str3 = def_info[4][i][0][:-2]
-                g = findinlist(str3,def_info[4],0,1,True)
+                g = findposinlist(str3,def_info[4],0)
                 gparent = def_info[0][g]
             else:
                 gparent = parent
@@ -8725,7 +8819,7 @@ def bad_paren(str1):
             mc = list1[4][i][1]
             ostr = list1[3][i]
             str2 = list1[4][i][0][:-1]
-            prcnt = findinlist(str2,list1[4],0,1,False)
+            prcnt = findinlist(str2,list1[4],0,1)
             if mc == prcnt:
                 nstr = remove_outer_paren(ostr)
                 nstr = remove_outer_paren(nstr)

@@ -238,14 +238,14 @@ def large_dict(str1):
 ['dt','any|n',None,'(b~R any|n c) x^ (bR no c)'],\
 ['d','anyone except',None,'((anyone except bRc) x^ ((anything except bRc) & (bId))) & (d=person)'],\
 ['d','anything except',None,'(anything except bRc) x^ (((z=~b) t^ (zRc)) & (b~Rc))'],\
-['d','every',None,'((every bRc) x^ (((zIb) t^ (zRc)) & (zJe) & (yIb) & (yJd))) & (d=particular) & (e=general)'],\
+['d','every',None,'(every bRc) x^ ((zIb) t^ (zRc))'],\
 ['','every (different)',None,'((every b R different|b c) x^ ((dIb) t^ ((dRe) & (dRf) & (d~Rg))) & (((mIb) & (jIb) & (kIc)) t^ ((m~Rk) v+ (j~Rk)))) & (h=indefinite) & (e.f.gJh) & (e.f.gIc)'],\
 ['d','everything except|p',None,'((everything except|p bRc) x^ (((z~Ib) t^ (zRc)) & ((yIb) t^ (y~Rc)))'],\
 ['dd','few',None,'postponed'],\
 ['dd','many|d',None,'((many|d bRc) x^ ((zRc) & (zIb) & (zJe))) & (e=many)'],\
 ['dd','many|n',None,'((many|n bRc) x^ ((zIb) & (zRc) & (zJg) & (yIb) & (y~Rc) & (yJg) & (y zzz z))) & (g=many)'],\
 ['dd','many|s',None,'(many|s bRc) x^ ((zIb) & (zRc) & (zJd) & (yIb) & (y~Rc) & (yJd))'],\
-['dd','no',None,'((no bRc) x^ (((zIb) t^ (z~Rc)) & (zJe) & (yIb) & (yJd))) & (d=particular) & (e=general)'],\
+['dd','no',None,'(no bRc) x^ ((zIb) t^ (z~Rc))'],\
 ['d','no one except',None,'((no one except bRc) x^ ((only bRc) & (bId))) & (d=person)'],\
 ['dd','only',None,'(only bRc) x^ (((z=~b) t^ (z~Rc)) & (bRc))'],\
 ['ddi','the',None,'((the bRc) x^ ((zRc) & (zIb) & (zJe))) & (e=definite)'],\
