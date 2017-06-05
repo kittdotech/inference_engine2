@@ -231,7 +231,7 @@ def large_dict(str1):
 ['dd','zero',None,'(bR zero c) x^ ((b~Rc) & (cN0))'],\
 ['dd','zero',None,'(zero = no)'],\
 ['ddi','a',None,'((a bRc) x^ ((zRc) & (zIb) & (zJe))) & (e=indefinite)'],\
-['ddi','a|a',None,'((a|a bRc) x^ ((zRc) & (zIb) & (zJe))) & (e=general)'],\
+['ddi','a|a',None,'(a|a bRc) x^ ((zRc) & (zIb))'],\
 ['di','all',None,'(all = every)'],\
 ['ds','another',None,'(another bRc) x^ ((zRc) & (zIb))'],\
 ['ds','any',None,'(any = every)'],\
@@ -368,7 +368,7 @@ def large_dict(str1):
 ['r','between|p','BTW','(between=BTW) & ((bBTWc_d) x^ (((bGc) & (dGb)) ed^ ((dGb) & (cGb))))'],\
 ['r','between|a','BTA','(bBTAc_d) x^ ((eIf) t^ ~((cRe) & (eRd))) & ((R=L) ed^ (R=AB) ed^ (R=F)) & (f=thing)'],\
 ['rs','between|t ',None,'(between|t=CBT)'],\
-['na','body|c',None,'(c=body|c) & ((bIc) x^ ((bWd) t^ (dIe))) & (e=particle)'],\
+['na','body|c',None,'(c=body|c) & ((bIc) x^ (((bWd) t^ (dIe)) & (bWf))) & (e=particle)'],\
 ['n','boundary',None,'(c=boundary) & (((bIc) & (dHb)) x^ (dINb))'],\
 ['rs','break',None,'(break=VIO)'],\
 ['ra','breaks','BRK','postponed'],\

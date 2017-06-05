@@ -2,7 +2,7 @@ def pop_sent(str1):
     sent = [[[ 1,"A group does not have|w any|n members",None,'co']],\
 [[ 1,"no mind thinks something|a",None,'co']],\
 [[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
-[[ 1,"I saw everyone who drank something|a in the van",None,'co'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I did not see Leibniz",None,'j']],\
+[[ 1,"I saw everyone who drank something in the van",None,'co'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I did not see Leibniz",None,'j']],\
 [[ 1,"I love nothing which is|r about murder",None,'co'],[ 2,"Hamlet is|r about murder",None,'j'],[ 3,"I love Hamlet",None,'j']],\
 [[ 1,"I love anything which is|r about logic",None,'co'],[ 2,"Set Theory is|r about logic",None,'j'],[ 3,"I do not love set theory",None,'j']],\
 [[ 1,"no green man from|b cold mars, lives on|r Earth",None,'co'],[ 2,"Jim is|g a|r green man born on|r Mars",None,'j'],[ 3,"Jim lives on|r Earth",None,'j']],\
