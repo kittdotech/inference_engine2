@@ -26,7 +26,7 @@ j = 2 # was 35
 proof_type = 'l' # if l then long proof showing decision procedure for instantiation
 strt = 0 # if n then proof type before may 1
 stp = 10
-print_to_doc = False
+print_to_doc = True
 if j == 1:
     django2 = False
     temp17 = False
@@ -6440,8 +6440,6 @@ def attached_variables(conditionals,detached_var):
                             elif str1 not in defn:
                                 potentially_general.append([str1,sent_type,sent_num,sibling_num])
 
-
-
     potentially_general = sorted(potentially_general,key=operator.itemgetter(0,2))
     potentially_mixed = sorted(potentially_mixed, key=operator.itemgetter(0, 2))
     list1 = variable_type(potentially_general)
@@ -6449,21 +6447,10 @@ def attached_variables(conditionals,detached_var):
     indef_attach = list1[1]
     list1 = variable_type(potentially_mixed)
     mixed = list1[0]
-    indef_attach = quick_append(list1[1],indef_attach)
+    indef = quick_append(list1[1],indef)
 
     return [general,mixed,defn,indef_attach,indef]
 
-
-
-#
-# def remove_general_var_from_other_lists(general,indef,defn):
-#
-#     for i in range(len(general)):
-#         if general[i] in defn:
-#             defn.remove(general[i])
-#         if general[i] in indef:
-#             indef.remove(general[i])
-#     return [general,indef,defn]
 
 def quick_append(list1,list2):
 
@@ -6663,16 +6650,16 @@ def print_object_properties(object_properties,tot_sent):
 
     for i in object_properties:
         list1 = [""] * 9
-        str1 = i[0] + " "
+        str1 = i[0] + "  "
 
         for j in range(len(i[2])):
-            str1 += " " + i[2][j]
+            str1 += "  " + i[2][j]
 
         for j in range(len(i[3])):
-            if i[1] == 'agen':
-                str1 +=  " " + i[3][j][0] + " " + i[3][j][1] + " " + i[3][j][2]
+            if isinstance(i[3][j],list):
+                str1 +=  "  [" + i[3][j][0] + " " + i[3][j][1] + " " + i[3][j][2] + "]"
             else:
-                str1 += " " + i[3][j]
+                str1 += "  " + i[3][j]
         list1[1] = str1
         tot_sent.append(list1)
 
@@ -6711,26 +6698,21 @@ def get_detached_predicates(variable_type,standard_cj):
         if obj == None:
             obj = ""
         t_value = standard_cj[i][9][8]
-        s_variable_kind = 'defn'
-        o_variable_kind = 'defn'
-        if subj in indef:
-            subj = ""
-            s_variable_kind = 'indef'
-        if obj in indef:
-            obj = ""
-            o_variable_kind = 'indef'
-
+        s_variable_kind = get_quick_variable_type(subj,variable_type)
+        o_variable_kind = get_quick_variable_type(obj,variable_type)
         detached_predicates.append([subj + relat + obj,t_value,standard_cj[i][9][42]])
         if relat == "I":
             kind = findinlist(obj, dv_nam, 0, 1)
+            skind = kind_exception(kind)
         else:
-            kind = get_class(relat, 5)
+            skind = get_class(relat, 5)
+        okind = get_class(relat,14)
         object_properties = get_object_properties(standard_cj[i][9][5],object_properties,s_variable_kind,\
-                    t_value + relat+obj,kind)
+                    t_value + relat+obj,skind)
         if isvariable(standard_cj[i][9][14]):
             kind = get_class(relat, 14)
             object_properties = get_object_properties(standard_cj[i][9][14], object_properties, \
-                    o_variable_kind,subj + t_value + relat, kind)
+                    o_variable_kind,subj + t_value + relat, okind)
 
 
     return [detached_predicates,object_properties]
@@ -6806,10 +6788,10 @@ def get_class(relat,p):
         kind = "property" + un
     elif relat == "J" and p == 14:
         kind = "property"
-    # elif relat == "W" and p == 5:
-    #     kind = "whole"
-    # elif relat == "W" and p == 14:
-    #     kind = 'part'
+    elif relat == "W" and p == 5:
+        kind = "thing"
+    elif relat == "W" and p == 14:
+        kind = 'thing'
     elif relat == 'P' and p == 14:
         kind = 'possible world'
     elif relat == "D" and p == 14:
@@ -6823,72 +6805,68 @@ def get_class(relat,p):
     elif relat == "O" and p == 14:
         kind = 'sensorium'
     else:
-        kind = ""
+        kind = "thing"
 
     return kind
 
 
 def get_attached_predicates(variable_type,conditionals,object_properties):
     # this makes a list of the attached definite predicates
+    # and also adds to the list of object properties
 
-    defn = variable_type[2]
-    gen = variable_type[0]
     num = [34,35,32,31,30,29]
     attached_predicates = []
     temp_list = []
+
     for i in range(len(conditionals)):
         cond_num = str(conditionals[i][2]) + "." # conditional number
         for j in num:
             if conditionals[i][j] != []:
                 for k in range(len(conditionals[i][j])):
                     subj = conditionals[i][j][k][5]
+                    if subj == 'w':
+                        bb = 8
                     obj = conditionals[i][j][k][14]
                     if obj == None:
                         obj = ""
                     relat = conditionals[i][j][k][9]
                     t_value = conditionals[i][j][k][8]
-                    sent_kind = conditionals[i][j][k][46]
+                    sent_kind = conditionals[i][j][k][53]
                     sent_num = cond_num+conditionals[i][j][k][43]
-                    s_variable_kind = 'defn'
-                    o_variable_kind = 'defn'
-                    if subj not in defn:
-                        if subj in gen:
-                            s_variable_kind = 'agen'
-                        else:
-                            s_variable_kind = 'indef'
+                    s_variable_kind = get_quick_variable_type(subj,variable_type)
+                    o_variable_kind = get_quick_variable_type(obj,variable_type)
+                    if s_variable_kind == 'indefinite attach' or s_variable_kind == 'agen':
                         subj = ""
-                    if obj not in defn:
-                        if obj in gen:
-                            o_variable_kind = 'agen'
-                        else:
-                            o_variable_kind = 'indef'
+                    if o_variable_kind == 'indefinite attach' or o_variable_kind == 'agen':
                         obj = ""
+
                     str1 = subj + relat + obj
                     if t_value == "~":
                         temp_list.append([str1,t_value,conditionals[i][2]])
                     else:
                         attached_predicates.append([str1,t_value,conditionals[i][2]])
                     if relat == "I":
-                        kind = findinlist(obj,dv_nam,0,1)
+                        skind = findinlist(obj,dv_nam,0,1)
+                        skind = kind_exception(skind)
                     else:
-                        kind = get_class(relat, 5)
-                    if s_variable_kind == 'agen':
+                        skind = get_class(relat, 5)
+                    if s_variable_kind == 'agen' or s_variable_kind == 'indef detach':
                         object_properties = get_general_object_properties(conditionals[i][j][k][5], \
                             object_properties, s_variable_kind, t_value+relat+obj, \
-                            kind,sent_kind,sent_num)
+                            skind,sent_kind,sent_num)
                     else:
                         object_properties = get_object_properties(conditionals[i][j][k][5],\
-                            object_properties,s_variable_kind,t_value+relat+obj, kind)
+                            object_properties,s_variable_kind,t_value+relat+obj, skind)
 
                     if isvariable(obj):
-                        kind = get_class(relat, 14)
-                        if o_variable_kind == 'agen':
-                            object_properties = get_general_object_properties(conditionals[i][j][k][5], \
-                                object_properties, s_variable_kind,t_value+relat+obj, \
-                                kind, sent_kind, sent_num)
+                        okind = get_class(relat, 14)
+                        if o_variable_kind == 'agen' or o_variable_kind == 'indef detach':
+                            object_properties = get_general_object_properties(conditionals[i][j][k][14], \
+                                object_properties, o_variable_kind,t_value+relat+obj, \
+                                okind, sent_kind, sent_num)
                         else:
                             object_properties = get_object_properties(conditionals[i][j][k][14], object_properties, \
-                                o_variable_kind,subj+t_value+relat, kind)
+                                o_variable_kind,subj+t_value+relat, okind)
 
             else:
                 break
@@ -6896,8 +6874,51 @@ def get_attached_predicates(variable_type,conditionals,object_properties):
     for i in temp_list:
         attached_predicates.insert(0,i)
     object_properties = sorted(object_properties, key=operator.itemgetter(1))
+    object_properties = purge_thing_from_properties(object_properties)
 
     return [attached_predicates,object_properties]
+
+
+def purge_thing_from_properties(object_properties):
+    # if an object belongs to a class more specific than 'thing' then
+    # we need not state that it belongs to the class 'thing'
+
+    for object_property in object_properties:
+        if 'thing' in object_property[2] and len(object_property[2]) > 1:
+            object_property[2].remove("thing")
+    return object_properties
+
+def kind_exception(str1):
+    # since everything belongs to the class 'whole' or 'part' these are not
+    # genuine classes
+
+    exceptions = ['whole','part']
+    if str1 in exceptions:
+        return 'thing'
+    return str1
+
+def get_quick_variable_type(variable, variable_type):
+    # this tells us what type a certain variable is after we already know what it is
+
+    if variable == "":
+        return ""
+    defn = variable_type[2]
+    gen = variable_type[0]
+    mixed = variable_type[1]
+    indef_attach = variable_type[3]
+    indef_detach = variable_type[4]
+
+    if variable in gen:
+        return 'agen'
+    elif variable in defn:
+        return 'definite'
+    elif variable in mixed:
+        return 'mixed'
+    elif variable in indef_attach:
+        return 'indef attach'
+    elif variable in indef_detach:
+        return 'indef detach'
+
 
 def determine_relevance(detached_predicates,attached_predicates):
     # this determines which sentences are relevant

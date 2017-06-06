@@ -4,8 +4,6 @@
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/claims_new.py" afterPath="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" afterPath="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
     </list>
@@ -37,8 +35,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="6641" column="0" lean-forward="true" selection-start-line="6641" selection-start-column="0" selection-end-line="6641" selection-end-column="0" />
+            <state relative-caret-position="414">
+              <caret line="6834" column="56" lean-forward="false" selection-start-line="6834" selection-start-column="56" selection-end-line="6834" selection-end-column="56" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -110,20 +108,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>find_gen(</find>
-      <find>fix_id(</find>
-      <find>axioms(</find>
-      <find>areiden</find>
-      <find>rearrange</find>
-      <find>eee</find>
-      <find>def get_deta</find>
-      <find>def get</find>
       <find>def_rn(</find>
       <find>a|a</find>
       <find>def change</find>
       <find>uniq_obj</find>
       <find>change_var</find>
-      <find>def rearra</find>
       <find>def rearrange</find>
       <find>def deter</find>
       <find>insert</find>
@@ -133,12 +122,21 @@
       <find>def rear</find>
       <find>def rearran</find>
       <find>def attached_v</find>
-      <find>def get_att</find>
       <find>def get_ge</find>
       <find>def print</find>
       <find>def get_at</find>
-      <find>def rearr</find>
       <find>def detac</find>
+      <find>defn</find>
+      <find>gen</find>
+      <find>def rearra</find>
+      <find>def get_att</find>
+      <find>object_proper</find>
+      <find>def rearr</find>
+      <find>islist</find>
+      <find>isinstance</find>
+      <find>get_object</find>
+      <find>attached_pred</find>
+      <find>detached_pred</find>
       <find>def get_det</find>
     </findStrings>
     <replaceStrings>
@@ -756,7 +754,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496233998820</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="put variables into 5 categories: definite, general, mixed, indefinite attached and indefinite detached">
+      <created>1496697091599</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1496697091599</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TodoView">
@@ -832,7 +837,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="almost put all_sent into conditional[35] and [36]" />
     <MESSAGE value="minor change to excel" />
     <MESSAGE value="minor change to excel 2" />
     <MESSAGE value="conditionals[37] is never blank" />
@@ -857,14 +861,27 @@
     <MESSAGE value="revised get_detached function" />
     <MESSAGE value="deleted the old method of instantation" />
     <MESSAGE value="working on categorizing objects" />
-    <option name="LAST_COMMIT_MESSAGE" value="working on categorizing objects" />
+    <MESSAGE value="put variables into 5 categories: definite, general, mixed, indefinite attached and indefinite detached" />
+    <option name="LAST_COMMIT_MESSAGE" value="put variables into 5 categories: definite, general, mixed, indefinite attached and indefinite detached" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py</url>
+          <line>6827</line>
+          <option name="timeStamp" value="6692" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py</url>
+          <line>6878</line>
+          <option name="timeStamp" value="6693" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6678" />
+      <option name="time" value="6696" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1250,8 +1267,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="6641" column="0" lean-forward="true" selection-start-line="6641" selection-start-column="0" selection-end-line="6641" selection-end-column="0" />
+        <state relative-caret-position="414">
+          <caret line="6834" column="56" lean-forward="false" selection-start-line="6834" selection-start-column="56" selection-end-line="6834" selection-end-column="56" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
