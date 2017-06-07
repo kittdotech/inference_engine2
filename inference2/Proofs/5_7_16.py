@@ -6682,41 +6682,51 @@ def determine_if_same_class(object_properties):
     i = -1
     while object_properties[i+1][1] == 'agen':
         i += 1
+        gen_var = object_properties[i][0]
         general_groups = object_properties[i][2]
         general_properties = object_properties[i][3]
+        general_numbers = object_properties[i][5]
         for object_property in object_properties:
             if object_property[1] != 'agen':
                 for group in object_property[2]:
                     if group in general_groups:
+                        partic_var = object_property[0]
                         predicates = object_property[3]
                         instantiations = instantiate2(predicates,general_properties,\
-                                        instantiations)
+                            instantiations,general_numbers,gen_var,partic_var)
 
 
-    return
+    return instantiations
 
 
 
-def instantiate2(predicates,general_properties,instantiations):
+def instantiate2(predicates,general_properties,instantiations,general_numbers,\
+            gen_var,partic_var):
     # this determines a particular object has all the predicates of the
     # general object
 
     sentences = []
     for j in range(len(general_properties)):
-        for k in range(len(general_properties[j][0])):
-            temp_list = copy.deepcopy(general_properties[j][0])
-            gen_prop = general_properties[j][0][k]
-            if general_properties[j][1] not in sentences:
-                for predicate in predicates:
-                    if gen_prop in predicate:
-                        temp_list.remove(gen_prop)
-                        if temp_list == []:
-                            sentences.append(general_properties[j][1])
-                            break
+        if general_numbers != []:
+            for k in range(len(general_properties[j][0])):
+                temp_list = copy.deepcopy(general_properties[j][0])
+                gen_prop = general_properties[j][0][k]
+                if general_properties[j][1] not in sentences:
+                    for predicate in predicates:
+                        if gen_prop in predicate:
+                            temp_list.remove(gen_prop)
+                            if temp_list == []:
+                                sentences.append(general_properties[j][1])
+                                general_numbers.remove(general_properties[j][1])
+                                break
 
+    if sentences != []:
+        if general_numbers == []:
+            instantiations.append([gen_var,partic_var,[]])
+        else:
+            instantiations.append([gen_var,partic_var,sentences])
 
-
-
+    return instantiations
 
 def rearrange_general_object_properties(object_properties):
     # rearrange the object properties of the general objects so as to make it
@@ -6729,9 +6739,12 @@ def rearrange_general_object_properties(object_properties):
         list2 = []
         properties = object_properties[i][3]
         j = 0
+        sentence_numbers = []
         while j < len(properties)-1:
             sent_type = properties[j][1][-1]
             sent_num = properties[j][3]
+            if sent_num not in sentence_numbers:
+                sentence_numbers.append(sent_num)
             if j+1 < len(properties):
                 next_sent_num = properties[j + 1][3]
                 next_sent_type = properties[j + 1][1][-1]
@@ -6754,8 +6767,12 @@ def rearrange_general_object_properties(object_properties):
                 j += 1
         if j < len(properties):
             list2.append([[properties[j][0]],properties[j][3]])
+            sent_num = properties[j][3]
+            if sent_num not in sentence_numbers:
+                sentence_numbers.append(sent_num)
 
         object_properties[i][3] = list2
+        object_properties[i][5] = sentence_numbers
 
     return object_properties
 
@@ -6797,9 +6814,9 @@ def get_general_object_properties(str1,object_properties,variable_kind,property,
         return object_properties
     if d == -1:
         if kind == "":
-            object_properties.append([str1, variable_kind, [], [[property, sent_kind, sent_num,cond_num]],""])
+            object_properties.append([str1, variable_kind, [], [[property, sent_kind, sent_num,cond_num]],"",""])
         else:
-            object_properties.append([str1,variable_kind,[kind],[[property, sent_kind, sent_num,cond_num]],""])
+            object_properties.append([str1,variable_kind,[kind],[[property, sent_kind, sent_num,cond_num]],"",""])
     else:
         for i in range(len(object_properties)):
             if object_properties[i][0] == str1:
@@ -6810,7 +6827,7 @@ def get_general_object_properties(str1,object_properties,variable_kind,property,
                 if property not in uninformative_properties:
                     list1 = [property,sent_kind,sent_num,cond_num]
                     list_properties.append(list1)
-                object_properties[i] = [str1,variable_kind,list_kind,list_properties,""]
+                object_properties[i] = [str1,variable_kind,list_kind,list_properties,"",""]
                 break
     return object_properties
 
