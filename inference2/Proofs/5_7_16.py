@@ -16,9 +16,9 @@ tot_tim = time.time()
 
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
-strt = 0  # if n then proof type before may 1
+strt = 9  # if n then proof type before may 1
 stp = 37
-print_to_doc = True
+print_to_doc = False
 if j == 1:
     django2 = False
     temp17 = False
@@ -188,6 +188,7 @@ idf_var2 = idf_var2 + idf_var3 + idf_var4
 greek = [unichr(945 + t) for t in range(50)]
 p = 1
 subscripts = [l1, l2, l3, l4]
+alpha = unichr(945)
 
 if excel:
     wb4 = load_workbook('../inference engine new.xlsx')
@@ -5991,7 +5992,7 @@ def categorize_property_bearers(j, i, list, members, basic_object_properties, st
 
 
 def instantiate(all_sent, tot_sent, basic_object_properties, words, candd, candd2, conditionals, \
-                prop_sent, prop_name, id_num, identities, truth_value, greek2):
+                prop_sent, prop_name, id_num, identities, truth_value, greek2,idf_var):
     global sn, psent, impl, definite2, ind_var, gen_var, idf_var2, never_used
     global instan_time, instan_used, simple_id, cnjts, pn, affneg
 
@@ -6016,7 +6017,7 @@ def instantiate(all_sent, tot_sent, basic_object_properties, words, candd, candd
     consistent = list1[0]
     conditionals = list1[1]
 
-    list1 = rearrange(tot_sent, consistent, all_sent, greek2, conditionals)
+    list1 = rearrange(tot_sent, consistent, all_sent, greek2, conditionals,idf_var)
 
     tot_sent = list1[0]
     consistent = list1[1]
@@ -6534,7 +6535,7 @@ def renumber_conditionals(conditionals, new_numbers):
     return conditionals
 
 
-def rearrange(tot_sent, consistent, all_sent, greek2, conditionals):
+def rearrange(tot_sent, consistent, all_sent, greek2, conditionals, idf_var):
     
     list1 = put_nc_id_ax_df_into_list(tot_sent) # list1[0] tot_sent
     
@@ -6566,13 +6567,30 @@ def rearrange(tot_sent, consistent, all_sent, greek2, conditionals):
 
         tot_sent = print_object_properties(object_properties, tot_sent)
 
-        instantiations = determine_if_same_class(object_properties)
+        instantiations = determine_if_same_class(object_properties,idf_var)
+
+        # instantiations = use_indefinite_instantiation(conditionals,\
+        #                         instantiations, object_properties)
 
         tot_sent = print_instantiations(instantiations, tot_sent)
 
         # relevant_sentences = determine_relevance(list1[0],list2[0])
 
     return [tot_sent, consistent]
+
+
+def use_indefinite_instantiation(conditionals, instantiations, \
+                            object_properties):
+
+    for instant in instantiations:
+        if isinstance(instant[2],list):
+            gen_var = instant[0]
+            acquired_sent = instant[2]
+            for obj_list in object_properties:
+                if obj_list[0] == gen_var:
+                    gen_sent = obj_list[5]
+                    needed_sentences = list(set(gen_sent)-set(acquired_sent))
+                    bb = 8
 
 
 def print_general_object_properties(object_properties):
@@ -6643,7 +6661,7 @@ def print_object_properties(object_properties, tot_sent):
     return tot_sent
 
 
-def determine_if_same_class(object_properties):
+def determine_if_same_class(object_properties,idf_var):
     # this determines whether a particular object belongs to the same class
     # as a general object
     instantiations = []
@@ -6668,13 +6686,30 @@ def determine_if_same_class(object_properties):
                             partic_var = object_property[0]
                             predicates = object_property[3]
                             instantiations = instantiate2(predicates,\
-                                    general_properties, \
-                                    instantiations, general_numbers, gen_var,
-                                    partic_var)
+                                        general_properties, instantiations,
+                                        general_numbers, gen_var, partic_var,
+                                        object_properties)
+                            break
+                    else:
+                        bool1 = infer_member(general_properties)
+                        if bool1:
+                            new_var = idf_var[0]
+                            del idf_var[0]
+                            group_var = findinlist(general_groups[0],dv_nam,1,0)
+                            instantiations.append([gen_var,new_var,group_var+"#"])
                             break
 
     return instantiations
 
+
+def infer_member(general_properties):
+    # if a general variable's only antecedent property is that it is a member
+    # of a class then we may infer that it is detached
+
+    for property in general_properties:
+        if property[0][0] != "$":
+            return False
+    return True
 
 def instantiate_things(object_properties, instantiations, i):
     # this determines if an indefinite thing can be instantiated
@@ -6707,8 +6742,8 @@ def instantiate_things(object_properties, instantiations, i):
     return [instantiations, True]
 
 
-def instantiate2(predicates, general_properties, instantiations, general_numbers, \
-                 gen_var, partic_var):
+def instantiate2(predicates, general_properties, instantiations, general_numbers, gen_var, partic_var,
+                 object_properties):
     # this determines if a particular object has all the predicates of the
     # general object
 
@@ -6728,6 +6763,9 @@ def instantiate2(predicates, general_properties, instantiations, general_numbers
                         numbers.remove(properties[j][1])
                         break
                 elif properties[j][1] not in sentences:
+                    if "'" in gen_prop:
+                        gen_prop = change_indef_attach_var(properties[j], object_properties)
+
                     for predicate in predicates:
                         if gen_prop in predicate:
                             temp_list.remove(gen_prop)
@@ -6736,6 +6774,7 @@ def instantiate2(predicates, general_properties, instantiations, general_numbers
                                 numbers.remove(properties[j][1])
                             break
 
+
     if sentences != []:
         if numbers == []:
             instantiations.append([gen_var, partic_var, []])
@@ -6743,6 +6782,24 @@ def instantiate2(predicates, general_properties, instantiations, general_numbers
             instantiations.append([gen_var, partic_var, sentences])
 
     return instantiations
+
+def change_indef_attach_var(sent_parts,object_properties):
+
+    for var in sent_parts[2]:
+        if "'" in var:
+            var = var[:-1]
+            break
+
+    d = findposinmd(var,object_properties,0)
+    attach_group = object_properties[d][2]
+    attach_pred = object_properties[d][3]
+    attach_sent_parts = object_properties[d][4]
+
+
+
+
+
+
 
 
 def rearrange_general_object_properties(object_properties):
@@ -6766,24 +6823,29 @@ def rearrange_general_object_properties(object_properties):
                 next_sent_num = properties[j + 1][3]
                 next_sent_type = properties[j + 1][1][-1]
                 predicate = properties[j][0]
+                sent_parts = properties[j][4]
                 list1 = []
+                list3 = []
                 while sent_type == next_sent_type and sent_num == next_sent_num:
                     list1.append(predicate)
+                    list3.append(sent_parts)
                     if j + 1 < len(properties):
                         j += 1
                         sent_type = properties[j][1][-1]
                         sent_num = properties[j][3]
                         predicate = properties[j][0]
+                        sent_parts = properties[j][4]
                         if j + 1 < len(properties):
                             next_sent_type = properties[j + 1][1][-1]
                             next_sent_num = properties[j + 1][3]
                         else:
                             break
                 list1.append(predicate)
-                list2.append([list1, sent_num])
+                list3.append(sent_parts)
+                list2.append([list1, sent_num, list3])
                 j += 1
         if j < len(properties):
-            list2.append([[properties[j][0]], properties[j][3]])
+            list2.append([[properties[j][0]], properties[j][3], properties[j][4]])
             sent_num = properties[j][3]
             if sent_num not in sentence_numbers:
                 sentence_numbers.append(sent_num)
@@ -6802,29 +6864,52 @@ def get_detached_predicates(variable_type, stan_det_sent):
         subj = stan_det_sent[i][9][5]
         relat = stan_det_sent[i][9][9]
         obj = stan_det_sent[i][9][14]
-        if obj == None:
-            obj = ""
+        obj = "" if obj == None else obj
+        relat2 = stan_det_sent[i][9][15]
+        obj2 = stan_det_sent[i][9][18]
+        obj2 = "" if obj2 == None else obj2
+        relat2 = "" if relat2 == None else relat2
         t_value = stan_det_sent[i][9][8]
+        subj_pred = alpha + t_value + relat + obj + relat2 + obj2
+        sub_sent_parts = [alpha,t_value,relat,obj,relat2,obj2]
+        if obj != "":
+            obj_pred = subj + t_value + relat + alpha + relat2 + obj2
+            obj_sent_parts = [subj,t_value,relat,alpha,relat2,obj2]
+        if obj2 != "":
+            obj2_pred = subj + t_value + relat + obj + relat2 + alpha
+            obj2_sent_parts = [subj, t_value, relat, obj, relat2, alpha]
+
+        absolute_predicate = subj + relat + obj + relat2 + obj2
         s_variable_kind = get_quick_variable_type(subj, variable_type)
         o_variable_kind = get_quick_variable_type(obj, variable_type)
-        detached_predicates.append([subj + relat + obj, t_value, stan_det_sent[i][9][42]])
+        o2_variable_kind = get_quick_variable_type(obj2, variable_type)
+        detached_predicates.append([absolute_predicate, t_value, stan_det_sent[i][9][42]])
         if relat == "I":
             kind = findinlist(obj, dv_nam, 0, 1)
             skind = kind_exception(kind, variable_type,obj)
         else:
             skind = get_class(relat, 5)
-        object_properties = get_object_properties(stan_det_sent[i][9][5], object_properties, s_variable_kind,
-                                        t_value + relat + obj, skind, "c")
-        if isvariable(stan_det_sent[i][9][14]):
+        object_properties = get_object_properties(subj,\
+                                        object_properties, s_variable_kind,
+                                        subj_pred, skind, "c",sub_sent_parts)
+        if isvariable(obj) or obj == 'i':
             okind = get_class(relat, 14)
-            object_properties = get_object_properties(stan_det_sent[i][9][14], object_properties, o_variable_kind,
-                                            subj + t_value + relat, okind, "c")
+            object_properties = get_object_properties(obj, object_properties, \
+                                        o_variable_kind,
+                                        obj_pred, okind, "c",obj_sent_parts)
+        if isvariable(obj2) or obj2 == 'i':
+            object_properties = get_object_properties(obj2, object_properties,\
+                                        o2_variable_kind,
+                                        obj2_pred, 'thing', "c",obj2_sent_parts)
+
+
 
     return [object_properties,detached_predicates]
 
 
-def get_general_object_properties(str1, object_properties, variable_kind, property, kind, sent_kind, \
-                                  sent_num, cond_num):
+def get_general_object_properties(str1, object_properties, variable_kind, \
+                            property, kind, sent_kind,
+                            sent_num, cond_num,sent_parts):
     # this builds a list of object properties, if the variable is general
 
     uninformative_properties = ["I", "J", "H"]  # these are properties all object_properties have
@@ -6839,38 +6924,43 @@ def get_general_object_properties(str1, object_properties, variable_kind, proper
     if d == -1:
         if kind == "":
             print 'this should not be used'
-            object_properties.append([str1, variable_kind, [], [[property, sent_kind, sent_num, cond_num]], "", "", []])
+            object_properties.append([str1, variable_kind, [], [[property, \
+                    sent_kind, sent_num, cond_num, sent_parts]], "", "", []])
         else:
             if sent_kind[-1] == 'q':
                 object_properties.append([str1, variable_kind, [kind], \
-                                          [], "", "", [property, sent_kind, sent_num, cond_num]])
+                    [], "", "", [property, sent_kind, sent_num, cond_num, sent_parts]])
             else:
                 object_properties.append([str1, variable_kind, [kind], [[property, \
-                                    sent_kind, sent_num, cond_num]], "", "", []])
+                        sent_kind, sent_num, cond_num, sent_parts]], "", "", []])
     else:
         for i in range(len(object_properties)):
             if object_properties[i][0] == str1:
                 list_kind = object_properties[i][2]
-                conseq_properties = object_properties[i][6]
+                try:
+                    conseq_properties = object_properties[i][6]
+                except IndexError:
+                    return object_properties
                 list_properties = object_properties[i][3]
                 if kind not in list_kind and kind != "":
                     list_kind.append(kind)
                 if sent_kind[-1] == 'q':
-                    list1 = [property, sent_kind, sent_num, cond_num]
+                    list1 = [property, sent_kind, sent_num, cond_num, sent_parts]
                     conseq_properties.append(list1)
                     object_properties[i] = [str1, variable_kind, list_kind, \
-                                            list_properties, "", "", conseq_properties]
+                                list_properties, "", "", conseq_properties]
                 else:
-                    list1 = [property, sent_kind, sent_num, cond_num]
+                    list1 = [property, sent_kind, sent_num, cond_num, sent_parts]
                     list_properties.append(list1)
                     object_properties[i] = [str1, variable_kind, list_kind, \
-                                            list_properties, "", "", conseq_properties]
+                                list_properties, "", "", conseq_properties]
                 break
 
     return object_properties
 
 
-def get_object_properties(str1, object_properties, variable_kind, property, kind, sent_kind):
+def get_object_properties(str1, object_properties, variable_kind, property,\
+                    kind, sent_kind, sent_parts):
     # this builds a list of object properties
 
     if property == 'Su':
@@ -6883,20 +6973,22 @@ def get_object_properties(str1, object_properties, variable_kind, property, kind
     d = findposinmd(str1, object_properties, 0)
     if d == -1:
         if kind == "":
-            object_properties.append([str1, variable_kind, [], [property]])
+            object_properties.append([str1, variable_kind, [], [property], [sent_parts]])
         else:
-            object_properties.append([str1, variable_kind, [kind], [property]])
+            object_properties.append([str1, variable_kind, [kind], [property], [sent_parts]])
     else:
         for i in range(len(object_properties)):
             if object_properties[i][0] == str1:
                 list_kind = object_properties[i][2]
                 list_properties = object_properties[i][3]
+                list_sent_parts = object_properties[i][4]
                 if kind not in list_kind and kind != "":
                     list_kind.append(kind)
                 if property not in list_properties and property \
                         not in uninformative_properties:
                     list_properties.append(property)
-                object_properties[i] = [str1, variable_kind, list_kind, list_properties]
+                object_properties[i] = [str1, variable_kind, list_kind, list_properties,\
+                    list_sent_parts]
                 break
     return object_properties
 
@@ -6960,60 +7052,90 @@ def get_attached_predicates(variable_type, conditionals, object_properties):
                     subj = conditionals[i][j][k][5]
                     obj = conditionals[i][j][k][14]
                     relat = conditionals[i][j][k][9]
+                    relat2 = conditionals[i][j][k][15]
+                    relat2 = "" if relat2 == None else relat2
+                    obj2 = conditionals[i][j][k][18]
+                    obj2 = "" if obj2 == None else obj2
                     t_value = conditionals[i][j][k][8]
                     sent_kind = conditionals[i][j][k][53]
                     sent_num = str(cond_num) + "." + conditionals[i][j][k][43]
                     s_variable_kind = get_quick_variable_type(subj, variable_type)
                     o_variable_kind = get_quick_variable_type(obj, variable_type)
-                    if s_variable_kind == 'indefinite attach' or s_variable_kind == 'agen':
-                        subj = ""
-                    if o_variable_kind == 'indefinite attach' or o_variable_kind == 'agen':
-                        obj = ""
-                    if obj != None:
-                        str1 = subj + relat + obj
-                        s_predicate = t_value + relat + obj
-                    else:
-                        str1 = subj + relat
-                        s_predicate = t_value + relat
-                    o_predicate = subj + t_value + relat
-                    if t_value == "~":
-                        temp_list.append([str1, t_value, conditionals[i][2]])
-                    else:
-                        attached_predicates.append([str1, t_value, conditionals[i][2]])
+                    o2_variable_kind = get_quick_variable_type(obj2, variable_type)
+                    new_subj,new_obj,new_obj2 = [subj,obj,obj2]
+                    if s_variable_kind == 'agen':
+                        new_subj = alpha
+                    elif s_variable_kind == 'indefinite attach' or \
+                            s_variable_kind == 'mixed':
+                        new_subj = subj + "'"
+                    if o_variable_kind == 'agen':
+                        new_obj = alpha
+                    elif o_variable_kind == 'indefinite attach' or \
+                            o_variable_kind == 'mixed':
+                        new_obj = obj + "'"
+                    if o2_variable_kind == 'agen':
+                        new_obj2 = alpha
+                    elif o2_variable_kind == 'indefinite attach' or \
+                            o2_variable_kind == 'mixed':
+                        new_obj2 = obj2 + "'"
+                    absolute_predicate = new_subj + relat + new_obj + relat2 + new_obj2
+                    predicate = new_subj + t_value + relat + new_obj + relat2 + new_obj2
+                    sent_parts = [new_subj, t_value, relat, new_obj, relat2, new_obj2]
+
+
+                    # if t_value == "~":
+                    #     temp_list.append([str1, t_value, conditionals[i][2]])
+                    # else:
+                    attached_predicates.append([absolute_predicate, t_value, conditionals[i][2]])
                     if relat == "I":
                         skind = findinlist(obj, dv_nam, 0, 1)
                         skind = kind_exception(skind, variable_type,obj)
                     else:
                         skind = get_class(relat, 5)
-                    if s_variable_kind == 'agen' or s_variable_kind == 'indef detach':
-                        object_properties = get_general_object_properties(conditionals[i][j][k][5], \
+                    special_group = ['agen','indef detach']
+                    if s_variable_kind in special_group:
+                        object_properties = get_general_object_properties(subj, \
                                                     object_properties, s_variable_kind,
-                                                    s_predicate, \
-                                                    skind, sent_kind, sent_num, cond_num)
+                                                    predicate, skind, sent_kind,
+                                                    sent_num, cond_num, sent_parts)
                     else:
                         object_properties = get_object_properties(conditionals[i][j][k][5], \
-                                                object_properties, s_variable_kind, s_predicate,
-                                                skind, sent_kind)
+                                                object_properties, s_variable_kind, predicate,
+                                                skind, sent_kind,sent_parts)
 
-                    if obj != None:
-                        if isvariable(obj) or obj == 'i' or obj == "":
-                            okind = get_class(relat, 14)
-                            if o_variable_kind == 'agen' or o_variable_kind == 'indef detach':
-                                object_properties = get_general_object_properties(conditionals[i][j][k][14], \
-                                                  object_properties, o_variable_kind,
-                                                  o_predicate, \
-                                                  okind, sent_kind, sent_num, cond_num)
-                            else:
-                                object_properties = get_object_properties(conditionals[i][j][k][14], object_properties,
-                                                  o_variable_kind, o_predicate, okind,
-                                                  sent_kind)
+                    if obj != "":
+                        okind = get_class(relat, 14)
+                        if o_variable_kind in special_group:
+                            object_properties = get_general_object_properties(obj, \
+                                              object_properties, o_variable_kind,
+                                              predicate,
+                                              okind, sent_kind, sent_num, cond_num, sent_parts)
+                        else:
+                            object_properties = get_object_properties(obj, object_properties,
+                                              o_variable_kind, predicate, okind,
+                                              sent_kind,sent_parts)
+
+                    if obj2 != "":
+                        if o2_variable_kind in special_group:
+                            object_properties = get_general_object_properties(obj2, \
+                                            object_properties, o2_variable_kind,
+                                            predicate, 'thing', sent_kind, sent_num,
+                                            cond_num, sent_parts)
+
+                        else:
+                            object_properties = get_object_properties(obj2, object_properties,
+                                              o2_variable_kind, predicate, "thing",
+                                              sent_kind, sent_parts)
+
+
+
 
 
             else:
                 break
 
-    for i in temp_list:
-        attached_predicates.insert(0, i)
+    # for i in temp_list:
+    #     attached_predicates.insert(0, i)
     object_properties = sorted(object_properties, key=operator.itemgetter(1))
     object_properties = purge_thing_from_properties(object_properties)
 
@@ -7045,6 +7167,7 @@ def kind_exception(str1, variable_type, obj):
     # if str1 equals none then that means the subject belongs to an indefinite
     # concept
 
+    print 'hey'
 
 def get_quick_variable_type(variable, variable_type):
     # this tells us what type a certain variable is after we already know what it is
@@ -7224,111 +7347,6 @@ def get_rel_conj(candd, conditionals):
             if d > -1:
                 list2.append(candd[d])
     return list2
-
-
-def instantiable(all_sent, d, e, pot_id, member_prop, diff_nval, linked, gen_var2, embed_var=[]):
-    # diff_nval = different negation value, sentences must have a different negation value
-    # d is the rel sent, and e is the non rel sent
-    global cnjts, gen_var
-    relat1 = all_sent[d][9]
-    srelat1 = all_sent[d][15]
-    relat = all_sent[e][9]
-    srelat = all_sent[e][15]
-    temp_linked = []
-    temp_linked2 = []
-    one_before_zero = 0
-    if d == 13 and e == 8:
-        bb = 8
-
-    if (diff_nval and all_sent[d][8] != all_sent[e][8]) or not diff_nval:
-        if relat == relat1 and srelat == srelat1 and all_sent[d][0] != all_sent[e][0]:
-            subj1 = all_sent[d][5]
-            obj1 = all_sent[d][14]
-            sobj1 = all_sent[d][18]
-            subj = all_sent[e][5]
-            obj = all_sent[e][14]
-            sobj = all_sent[e][18]
-            if subj1 == 'v' and relat == "I" and subj == 'u' and relat1 == "I":
-                bb = 8
-            if subj1 == subj and relat == relat1 and srelat == srelat1 and obj == obj1 \
-                    and sobj == sobj1:
-                return
-
-            elif (subj == subj1 or (subj1 in gen_var or subj in gen_var)) \
-                    and (obj == obj1 or (obj1 in gen_var or obj in gen_var)) \
-                    and (sobj == sobj1 or (sobj1 in gen_var or sobj in gen_var)):
-                if subj1 == subj:
-                    subj = ""
-                    subj1 = ""
-                if obj1 == obj:
-                    obj = ""
-                    obj1 = ""
-                if sobj1 == sobj:
-                    sobj = ""
-                    sobj1 = ""
-                list4 = [subj, subj1, obj, obj1, sobj, sobj1]
-                for p in range(0, 5, 2):
-                    if list4[p] != "":
-                        temp_linked.append(list4[p])
-                        temp_linked2.append(list4[p + 1])
-                        bool1 = False
-                        for q in range(len(pot_id)):
-                            if pot_id[q][0] == list4[p] and pot_id[q][1] == list4[p + 1]:
-                                bool1 = True
-                                break
-                        if not bool1:
-                            f = findposinlist(list4[p], member_prop, 0)
-                            g = findposinlist(list4[p + 1], member_prop, 0)
-                            len1 = len(member_prop[f][8])
-                            len2 = len(member_prop[g][8])
-                            if len1 > len2:
-                                pot_id.append([list4[p], list4[p + 1], ""])
-                                one_before_zero = False
-                            elif len2 < len1:
-                                pot_id.append([list4[p + 1], list4[p], ""])
-                                one_before_zero = True
-                            else:
-                                if list4[p + 1] in gen_var and list4[p] not in gen_var:
-                                    pot_id.append([list4[p], list4[p + 1], ""])
-                                elif list4[p + 1] not in gen_var and list4[p] in gen_var:
-                                    pot_id.append([list4[p + 1], list4[p], ""])
-                                else:
-                                    pot_id.append([list4[p], list4[p + 1], "="])
-                if len(temp_linked) > 1:
-                    linked.append(temp_linked)
-                    linked.append(temp_linked2)
-
-                # if temp != []:
-                #
-                #     if one_before_zero == 0:
-                #         if pot_id != []:
-                #             for t in range(len(temp)):
-                #                 bool1 = two_elements_are_in_list(pot_id,temp[t][0],temp[t][1],0,1)
-                #                 if not bool1:
-                #                     bool2 = two_elements_are_in_list(pot_id,temp[t][1],temp[t][0],0,1)
-                #                     if bool2:
-                #                         one_before_zero = True
-                #                         break
-                #                 else:
-                #                     one_before_zero = False
-                #         else:
-                #             one_before_zero = False
-                #
-                #
-                #
-                #     if one_before_zero:
-                #         q = 1
-                #         s = 0
-                #     else:
-                #         q = 0
-                #         s = 1
-                #
-                #     for r in range(len(temp)):
-                #         pot_id.append([temp[r][q],temp[r][s],"="])
-                return
-            else:
-                return
-
 
 def most_common(list1):
     data = Counter(list1)
@@ -10311,7 +10329,7 @@ def get_result(post_data, archive_id=None, request=None):
                        def_atoms, num_sent)
         list2 = instantiate(all_sent, tot_sent, basic_object_properties, words, candd, candd2, \
                             conditionals, prop_sent, prop_name, id_num, identities, \
-                            test_sent[k][0][3], greek2)
+                            test_sent[k][0][3], greek2,idf_var)
         test_sent[k] = list2[0]
         tot_prop_name.append(prop_name)
         yy = ""
