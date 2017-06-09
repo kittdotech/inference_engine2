@@ -6575,13 +6575,114 @@ def rearrange(tot_sent, consistent, all_sent, greek2, conditionals, idf_var):
 
         instantiations = determine_if_same_class(object_properties, idf_var)
 
+        conditionals = substitute_in_conditionals(instantiations,conditionals)
+
         tot_sent = print_instantiations(instantiations, tot_sent)
 
         temp_instant_time2 = time.time()
         temp_instant_time2 = temp_instant_time2 - temp_instant_time
         instan_time += temp_instant_time2
 
-    return [tot_sent, consistent]
+    return [tot_sent, conditionals]
+
+
+def substitute_in_conditionals(instantiations,conditionals):
+    # this substitutes the attached variable with the detached variables
+
+    num2 = [34,35,32,31,30,29]
+    var_slots = [5,14,18]
+    total_numbers = []
+    for sub_properties in instantiations:
+        num = sub_properties[3]
+        if isinstance(num,int):
+            num = [num]
+        att_var = sub_properties[0]
+        det_var = sub_properties[1]
+        for i in num:
+            for m in range(len(conditionals)):
+                cond_sent = conditionals[m]
+                if cond_sent[2] == i:
+                    total_numbers.append(m)
+                    for j in num2:
+                        if cond_sent[j] == []:
+                            break
+                        else:
+                            for f in range(len(cond_sent[j])):
+                                atom_cond_sent = cond_sent[j][f]
+                                new_sent = copy.deepcopy(atom_cond_sent)
+                                new_sent[54] = False
+                                for k in var_slots:
+                                    if atom_cond_sent[k] == att_var:
+                                        new_sent[k] = det_var
+                                        new_sent[54] = True
+                                        break
+                                cond_sent[j][f] = new_sent
+                    conditionals[m] = cond_sent
+
+    conditionals = make_new_conditionals(conditionals, total_numbers)
+
+
+def make_new_conditionals(conditionals, total_numbers):
+    # this builds new strings within the conditional list
+
+    num = [34,35,32,31,30,29]
+    for i in total_numbers:
+        prop_var_greek = conditionals[i][36][5]
+        prop_var_greek2 = prop_var_greek
+        for j in num:
+            for k in range(len(conditionals[i][j])):
+                atom_cond_sent = conditionals[i][j][k]
+                if atom_cond_sent[54]:
+                    oldp = atom_cond_sent[42]
+                    temp_oldp = "(" + oldp + ")"
+                    oldp_greek = get_greek(conditionals[i][36][6],temp_oldp)
+                    list1 = build_short_sent(atom_cond_sent)
+                    atom_cond_sent[0] = list1[0]
+                    atom_cond_sent[42] = list1[1]
+                    prop_var_greek = prop_var_greek.replace(oldp_greek,list1[1])
+                    prop_var_greek2 = prop_var_greek2.replace(oldp_greek, list1[0])
+                    if j == 34:
+                        n = 0
+                    elif j == 35:
+                        n = 1
+                    else:
+                        print "you haven't coded for this yet"
+                        sys.exit()
+                    if isinstance(conditionals[i][n][0],list):
+                        for m in range(len(conditionals[i][n])):
+                            if conditionals[i][n][m][0] == oldp:
+                                conditionals[i][n][m][0] = list1[1]
+                    else:
+                        if conditionals[i][n][0] == oldp:
+                            conditionals[i][n][0] = list1[1]
+                    for m in range(len(conditionals[i][38])):
+                        if conditionals[i][38][m] == oldp:
+                            conditionals[i][38][m] = list1[1]
+        conditionals[i][4] = prop_var_greek
+        conditionals[i][37] = prop_var_greek2
+
+    return conditionals
+
+
+def get_greek(list1,str1):
+    # this gets the greek letter substitute for the propositional variable
+    for i in list1:
+        if i != None:
+            if i[0] == str1:
+                return i[1]
+    print "something is wrong in the get greek function"
+    sys.exit()
+
+def build_short_sent(list1):
+    # this makes a new natural language sentence
+
+    list1[15] = "" if list1[15] == None else list1[15]
+    list1[18] = "" if list1[18] == None else list1[18]
+    list2 = ["(",list1[5],list1[8],list1[9],list1[14],list1[15],list1[18],")"]
+    str1 = "".join(list2)
+    str1p = name_sent(str1)
+
+    return [str1,str1p]
 
 def print_general_object_properties(object_properties):
     # this prints up the predicates for the general variables since
@@ -6727,7 +6828,7 @@ def instantiate_things(object_properties, instantiations, i):
                         property = property.replace("~", "")
                         partic_tvalue = "~"
                     if con_sent in property and partic_tvalue != gen_tvalue:
-                        instantiations.append([gen_var, object[0], []])
+                        instantiations.append([gen_var, object[0], [], con_list[3]])
                         return [instantiations, False]
 
     return [instantiations, True]
@@ -6764,7 +6865,7 @@ def instantiate2(predicates, general_properties, instantiations, general_numbers
                         else:
                             gen_prop = list1[0]
                             if list1[1] != 'already found':
-                                instantiations.append([list1[1],list1[2],"I"])
+                                instantiations.append([list1[1],list1[2],"I",[]])
                             indef_instant_used = True
 
                     for predicate in predicates:
@@ -6779,9 +6880,9 @@ def instantiate2(predicates, general_properties, instantiations, general_numbers
 
     if sentences != []:
         if numbers == []:
-            instantiations.append([gen_var, partic_var, []])
+            instantiations.append([gen_var, partic_var, [],general_numbers])
         else:
-            instantiations.append([gen_var, partic_var, sentences])
+            instantiations.append([gen_var, partic_var, sentences,[]])
 
     return instantiations
 

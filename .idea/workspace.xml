@@ -38,8 +38,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+            <state relative-caret-position="-96">
+              <caret line="5995" column="8" lean-forward="false" selection-start-line="5995" selection-start-column="0" selection-end-line="5995" selection-end-column="8" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -50,8 +50,8 @@
       <file leaf-file-name="practice.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/practice.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <state relative-caret-position="268">
+              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -103,9 +103,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>def rea</find>
-      <find>mine_if</find>
-      <find>def get_det</find>
       <find>def print_ge</find>
       <find>kind_ex</find>
       <find>&quot;$</find>
@@ -133,6 +130,9 @@
       <find>instan</find>
       <find>instan_used</find>
       <find>def rearr</find>
+      <find>def instant</find>
+      <find>conditionals[i][j]</find>
+      <find>def inst</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -159,6 +159,7 @@
       <replace>stan_det_sent</replace>
       <replace>con_sent</replace>
       <replace>[i]</replace>
+      <replace>atom_cond_sent</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -239,7 +240,7 @@
     <option name="x" value="593" />
     <option name="y" value="23" />
     <option name="width" value="847" />
-    <option name="height" value="811" />
+    <option name="height" value="858" />
   </component>
   <component name="ProjectReloadState">
     <option name="STATE" value="1" />
@@ -810,7 +811,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496964908070</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="built instantiate2 function">
+      <created>1496984690232</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1496984690232</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TodoView">
@@ -823,7 +831,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="593" y="23" width="847" height="811" extended-state="0" />
+    <frame x="593" y="23" width="847" height="858" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23178808" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -835,7 +843,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29602888" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24071527" sideWeight="0.48787448" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27493262" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25855514" sideWeight="0.46984127" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297244" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -908,17 +916,24 @@
     <MESSAGE value="put variables into 5 categories: definite, general, mixed, indefinite attached and indefinite detached" />
     <MESSAGE value="made changes to the print object properties function" />
     <MESSAGE value="now able to get predicates of general variables" />
-    <MESSAGE value="built instantiate2 function" />
     <MESSAGE value="instantiation now works successfully for a large number of sentences" />
     <MESSAGE value="working on indefinite instantiation" />
-    <option name="LAST_COMMIT_MESSAGE" value="working on indefinite instantiation" />
+    <MESSAGE value="built instantiate2 function" />
+    <option name="LAST_COMMIT_MESSAGE" value="built instantiate2 function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py</url>
+          <line>6845</line>
+          <option name="timeStamp" value="6975" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6975" />
+      <option name="time" value="6993" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1245,14 +1260,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1273,10 +1280,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/practice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="21" lean-forward="true" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
+        <state relative-caret-position="-96">
+          <caret line="5995" column="8" lean-forward="false" selection-start-line="5995" selection-start-column="0" selection-end-line="5995" selection-end-column="8" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
