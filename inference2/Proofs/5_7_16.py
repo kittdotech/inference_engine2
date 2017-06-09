@@ -18,7 +18,7 @@ tot_tim = time.time()
 
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
-strt = 0  # if n then proof type before may 1
+strt = 2  # if n then proof type before may 1
 stp = 37
 print_to_doc = True
 if j == 1:
@@ -5995,6 +5995,7 @@ def categorize_property_bearers(j, i, list, members, basic_object_properties, st
 
 def instantiate(all_sent, tot_sent, basic_object_properties, words, candd, candd2, conditionals, \
                 prop_sent, prop_name, id_num, identities, truth_value, greek2, idf_var):
+
     global sn, psent, impl, definite2, ind_var, gen_var, idf_var2, never_used
     global instan_time, instan_used, simple_id, cnjts, pn, affneg
 
@@ -6016,17 +6017,17 @@ def instantiate(all_sent, tot_sent, basic_object_properties, words, candd, candd
 
     list1 = detach_wo_instantiation(greek2, sent, all_sent, prop_sent, candd, candd2, \
                                     conditionals, prop_name, disjuncts, tot_sent, 2, negat)
-    consistent = list1[0]
-    conditionals = list1[1]
 
-    list1 = rearrange(tot_sent, consistent, all_sent, greek2, conditionals, idf_var)
+    list1 = rearrange(tot_sent, list1[0], all_sent, greek2, list1[1], idf_var) # conditionals = list1[1], consistent = list[0]
 
-    tot_sent = list1[0]
-    consistent = list1[1]
+    candd = prepare_candd(list1[2]) # det_sent = list1[2]
 
-    tv = final_truth_value(consistent, truth_value)
+    list2 = statement_logic(greek2, prop_sent, all_sent, list1[1], \
+                            candd, candd2, disjuncts, 0, all_sent) # cond = list[1], det_sent = list1[2]
 
-    return [tot_sent, tv]
+    tv = final_truth_value(list2[0], truth_value)
+
+    return [list1[0], tv] # tot_sent = list1[0]
 
 
 def final_truth_value(consistent, truth_value):
@@ -6048,6 +6049,12 @@ def determine_truth_value(consistent, impl):
         tv = False
     return tv
 
+def prepare_candd(stan_det_sent):
+
+    candd = []
+    for sent in stan_det_sent:
+        candd.append([sent[0],sent[2],sent[3]])
+    return candd
 
 def subtract_400(prop_sent, g):
     # this function renumbers numbers from 400 down to a more reasonable number
@@ -6547,7 +6554,7 @@ def rearrange(tot_sent, consistent, all_sent, greek2, conditionals, idf_var):
     if consistent and conditionals != []:
 
         instan_used += 1
-        temp_instant_time = time.time()
+        y = time.time()
 
         list4 = print_standard_sent(list1[0], conditionals, all_sent, consistent, greek2)
 
@@ -6579,11 +6586,11 @@ def rearrange(tot_sent, consistent, all_sent, greek2, conditionals, idf_var):
 
         tot_sent = print_instantiations(instantiations, tot_sent)
 
-        temp_instant_time2 = time.time()
-        temp_instant_time2 = temp_instant_time2 - temp_instant_time
-        instan_time += temp_instant_time2
+        z = time.time()
+        z = z - y
+        instan_time += z
 
-    return [tot_sent, conditionals]
+    return [tot_sent, conditionals, stan_det_sent]
 
 
 def substitute_in_conditionals(instantiations,conditionals):
@@ -6620,6 +6627,8 @@ def substitute_in_conditionals(instantiations,conditionals):
                     conditionals[m] = cond_sent
 
     conditionals = make_new_conditionals(conditionals, total_numbers)
+
+    return conditionals
 
 
 def make_new_conditionals(conditionals, total_numbers):
@@ -6658,10 +6667,27 @@ def make_new_conditionals(conditionals, total_numbers):
                     for m in range(len(conditionals[i][38])):
                         if conditionals[i][38][m] == oldp:
                             conditionals[i][38][m] = list1[1]
+                    pass
         conditionals[i][4] = prop_var_greek
         conditionals[i][37] = prop_var_greek2
+        list1 = get_ant_and_cond(prop_var_greek)
+        conditionals[i][6] = list1[0]
+        conditionals[i][7] = list1[1]
 
     return conditionals
+
+
+def get_ant_and_cond(str1):
+
+    list1 = mainconn(str1)
+    ant = str1[:list1[1]]
+    con = str1[list1[1]+1:]
+    ant = ant.strip()
+    con = con.strip()
+    ant = "" if os(ant) else ant
+    con = "" if os(con) else con
+
+    return [ant,con]
 
 
 def get_greek(list1,str1):
@@ -8179,8 +8205,6 @@ def prepare_iff_elim(greek2, def_info, str2, all_sent, mainc, s, num="", tot_sen
         list7[2] = num
 
     str2 = remove_outer_paren(str2)
-    if str2 == "k " + iff + " z":
-        bb = 8
     list7[4] = str2
     list7[5] = ""
     if mainc == iff:
@@ -8241,8 +8265,6 @@ def prepare_iff_elim(greek2, def_info, str2, all_sent, mainc, s, num="", tot_sen
     list9 = get_prop(str2, True, greek2)
     list7[38] = list9[1]
     list7[37] = list9[0]
-    if list9[0] == None or list9[0] == "":
-        bb = 8
 
     return list7
 
@@ -9585,7 +9607,7 @@ def statement_logic(greek2, prop_sent, all_sent, conditionals, candd, candd2, di
         consistent = list1[0]
         conditionals = list1[1]
     if consistent == False:
-        return False
+        return [False, conditionals]
     if kind == 1:
         dummy = finddisj(conditionals, disjuncts)
     c = time.time()

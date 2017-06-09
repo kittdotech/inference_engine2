@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="built instantiate2 function">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/claims.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/ex_dict.py" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/inference2/Proofs/kk.sh" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/ex_dict.py" afterPath="$PROJECT_DIR$/inference2/Proofs/ex_dict.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
     </list>
@@ -38,8 +37,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-96">
-              <caret line="5995" column="8" lean-forward="false" selection-start-line="5995" selection-start-column="0" selection-end-line="5995" selection-end-column="8" />
+            <state relative-caret-position="330">
+              <caret line="6029" column="0" lean-forward="false" selection-start-line="6029" selection-start-column="0" selection-end-line="6029" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -72,8 +71,8 @@
       <file leaf-file-name="temp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="6815" column="0" lean-forward="true" selection-start-line="6815" selection-start-column="0" selection-end-line="6815" selection-end-column="0" />
+            <state relative-caret-position="169">
+              <caret line="8402" column="0" lean-forward="false" selection-start-line="8402" selection-start-column="0" selection-end-line="8402" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -103,17 +102,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>def print_ge</find>
-      <find>kind_ex</find>
-      <find>&quot;$</find>
-      <find>def kind</find>
-      <find>def get_obj</find>
-      <find>def get</find>
-      <find>use_indefinite_ins</find>
-      <find>def get_att</find>
-      <find>def</find>
-      <find>cjcnd(</find>
-      <find>convert2</find>
       <find>make_cond</find>
       <find>equality2</find>
       <find>equality3</find>
@@ -129,10 +117,21 @@
       <find>get_att</find>
       <find>instan</find>
       <find>instan_used</find>
-      <find>def rearr</find>
-      <find>def instant</find>
       <find>conditionals[i][j]</find>
+      <find>candd</find>
+      <find>def instan</find>
+      <find>instantiab</find>
+      <find>candd2</find>
+      <find>statement_l</find>
+      <find>statement_logic(</find>
+      <find>def insta</find>
       <find>def inst</find>
+      <find>def rearr</find>
+      <find>strip.</find>
+      <find>def</find>
+      <find>def get_an</find>
+      <find>def sub</find>
+      <find>def instant</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -158,8 +157,8 @@
       <replace>properties</replace>
       <replace>stan_det_sent</replace>
       <replace>con_sent</replace>
-      <replace>[i]</replace>
       <replace>atom_cond_sent</replace>
+      <replace>[i]</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -223,9 +222,9 @@
         <option value="$PROJECT_DIR$/inference2/Proofs/ex_dict_new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/claims.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/prove.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/practice.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/temp.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
       </list>
     </option>
@@ -818,7 +817,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496984690232</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="built make new conditionals function">
+      <created>1496999274658</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1496999274658</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TodoView">
@@ -894,7 +900,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="deleted put_nat_sent_in_cond2 function, put the function in link_nat_sent function" />
     <MESSAGE value="removed some bugs from latest updated function" />
     <MESSAGE value="built attached_variables function" />
     <MESSAGE value="put instantiation after axioms" />
@@ -919,21 +924,32 @@
     <MESSAGE value="instantiation now works successfully for a large number of sentences" />
     <MESSAGE value="working on indefinite instantiation" />
     <MESSAGE value="built instantiate2 function" />
-    <option name="LAST_COMMIT_MESSAGE" value="built instantiate2 function" />
+    <MESSAGE value="built make new conditionals function" />
+    <option name="LAST_COMMIT_MESSAGE" value="built make new conditionals function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py</url>
-          <line>6845</line>
-          <option name="timeStamp" value="6975" />
+          <url>file://$PROJECT_DIR$/inference2/Proofs/temp.py</url>
+          <line>6248</line>
+          <option name="timeStamp" value="6997" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/temp.py</url>
+          <line>6264</line>
+          <option name="timeStamp" value="6998" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/temp.py</url>
+          <line>8402</line>
+          <option name="timeStamp" value="7006" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="6993" />
+      <option name="time" value="7011" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1260,6 +1276,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/practice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/prove.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -1272,26 +1296,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/temp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="6815" column="0" lean-forward="true" selection-start-line="6815" selection-start-column="0" selection-end-line="6815" selection-end-column="0" />
+        <state relative-caret-position="169">
+          <caret line="8402" column="0" lean-forward="false" selection-start-line="8402" selection-start-column="0" selection-end-line="8402" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-96">
-          <caret line="5995" column="8" lean-forward="false" selection-start-line="5995" selection-start-column="0" selection-end-line="5995" selection-end-column="8" />
+        <state relative-caret-position="330">
+          <caret line="6029" column="0" lean-forward="false" selection-start-line="6029" selection-start-column="0" selection-end-line="6029" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
