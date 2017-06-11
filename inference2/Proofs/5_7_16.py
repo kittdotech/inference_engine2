@@ -13,14 +13,14 @@ import collections
 # but just prior to that the speed was .066
 # time spent in instantiation is .029
 
-# on 6/8 time spent in instantiation = .009
+# on 6/8 time spent in instantiation = .009, .014
 
 tot_tim = time.time()
 
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
-strt = 1  # if n then proof type before may 1
-stp = 0
+strt = 18  # if n then proof type before may 1
+stp = 19
 print_to_doc = False
 if j == 1:
     django2 = False
@@ -1029,7 +1029,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam, words, rep_rel, identities, \
     atomic_relations = words[22]
     atomic_relata = words[23]
     compound = words[34]
-    not_oft_def = words[36]
+    not_oft_def = copy.deepcopy(words[36])
     uniq_obj = words[37]
     # we have not included group in this list because it seems to make things confusing
     atoms = ['moment', 'relationship', 'point', 'number', 'thought', 'imagination', \
@@ -1058,6 +1058,8 @@ def define(tot_sent, all_sent, idf_var, dv_nam, words, rep_rel, identities, \
     for i in range(len(dv_nam)):
         if i == 3:
             bb = 7
+        if dv_nam[i][1] in not_oft_def:
+            not_oft_def.remove(dv_nam[i][1])
         if not isinmdlist(dv_nam[i][1], relations, 1):
             g = findposinlist(dv_nam[i][1], definitions, 0)
             if dv_nam[i][1] in atoms:
@@ -1254,7 +1256,7 @@ def define(tot_sent, all_sent, idf_var, dv_nam, words, rep_rel, identities, \
             str1 = all_sent[m][i]
             if relat == 'B':
                 bb = 8
-            if m == 7 and i == 14:
+            if m == 8 and i == 14:
                 bb = 8
 
             if all_sent[m][43] != 'cc':
@@ -1306,6 +1308,8 @@ def define(tot_sent, all_sent, idf_var, dv_nam, words, rep_rel, identities, \
 
                     g = findposinlist(definiendum, definitions, 0)
                     definition = definitions[g][1]
+                    if definiendum == 'ada':
+                        bb = 8
                     if definition == 'natural':
                         definition = "(c'=" + definiendum + ") & (d'=natural_whole) & ((bIc') " + conditional \
                                      + " (bId'))"
@@ -1791,7 +1795,6 @@ def divide_sent(words, list2, idf_var, tot_sent, all_sent):
     redundant = words[21]
     conn = words[4]
     relations = words[6]
-    not_oft_def = words[36]
     uniq_obj = words[37]
     nonsq = False
     for i in range(len(list2)):
@@ -1865,11 +1868,11 @@ def divide_sent(words, list2, idf_var, tot_sent, all_sent):
     g = len(all_sent)
     i = -1
     impl = ""
+    define_this = False
     while i < g - 1:
         i += 1
         for j in range(len(all_sent[i])):
-            if all_sent[i][j] in not_oft_def:
-                not_oft_def.remove(all_sent[i][j])
+
             if all_sent[i][j] in conn:
                 str4 = all_sent[i][j]
                 str5 = ""
@@ -1911,7 +1914,7 @@ def divide_sent(words, list2, idf_var, tot_sent, all_sent):
                 dummy = new_sentence2(old_sent, old_p, new_sent, new_p, tot_sent, rule)
                 break
 
-    words[36] = not_oft_def
+
     g = len(all_sent)
     i = -1
     while i < g - 1:
@@ -6993,6 +6996,7 @@ def instantiate_things(object_properties, instantiations, i):
     # we only instantiate it if the particular variable contradicts
     # the general variable's consequent property
 
+    list1 = []
     gen_var = object_properties[i][0]
     if object_properties[i][6] == []:
         return [instantiations, True]
@@ -7004,7 +7008,11 @@ def instantiate_things(object_properties, instantiations, i):
         if "~" in con_sent:
             con_sent = con_sent.replace("~", "")
             gen_tvalue = "~"
+        if "'" in con_sent:
+            con_sent = remove_prime(con_list)
         for object in object_properties:
+            if object[0] == 'v':
+                bb = 8
             if object[1] != "agen" and object[1] != 'indef attach':
                 properties = object[3]
                 for property in properties:
@@ -7012,12 +7020,26 @@ def instantiate_things(object_properties, instantiations, i):
                     if "~" in property:
                         property = property.replace("~", "")
                         partic_tvalue = "~"
-                    if con_sent in property and partic_tvalue != gen_tvalue:
+                    if con_sent == property and partic_tvalue != gen_tvalue:
                         thing_var = findinlist("thing",dv_nam,1,0)
                         instantiations.append([gen_var, object[0], "T", con_list[3], thing_var])
                         return [instantiations, False]
 
     return [instantiations, True]
+
+
+def remove_prime(con_list):
+    # this remove the prime sign from an indefinite variable
+
+    con_list[4][1] = ""
+    i = -1
+    for word in con_list[4]:
+        i += 1
+        if "'" in word:
+            word = word[:-1]
+            con_list[4][i] = word
+
+    return "".join(con_list[4])
 
 
 def instantiate2(predicates, general_properties, instantiations, general_numbers, gen_var, partic_var,
@@ -10266,7 +10288,7 @@ def get_result(post_data, archive_id=None, request=None):
     for k in range(strt, stp):
         if not excel and not one_sent:
             views.progressbar_send(request, strt, stp, k, 1)
-        if k == 28:
+        if k == 20:
             bb = 7
         st1 = time.time()
         prop_name = []
