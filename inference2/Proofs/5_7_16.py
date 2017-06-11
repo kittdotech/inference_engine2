@@ -14,13 +14,14 @@ import collections
 # time spent in instantiation is .029
 
 # on 6/8 time spent in instantiation = .009, .014
+# on 6/10 time spent in instantiation = .018, definitions = .031, total .074
 
 tot_tim = time.time()
 
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
-strt = 18  # if n then proof type before may 1
-stp = 19
+strt = 0  # if n then proof type before may 1
+stp = 31
 print_to_doc = False
 if j == 1:
     django2 = False
@@ -7129,7 +7130,9 @@ def change_indef_attach_var(sent_parts, object_properties,k,instantiations):
                 for predicates in list_properties[4]:
                     potentially_identical = False
                     for i in range(6):
-                        try:
+                        try: # this happens because the general variables and the
+                # and the particular variables have different lists.  i might change it
+                # so that they have the same type of lists in the future
                             if sent[i] == predicates[i] or \
                                 sent[i] == alpha or \
                                 predicates[i] == alpha \

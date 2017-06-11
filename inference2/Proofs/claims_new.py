@@ -1,6 +1,5 @@
 def pop_sent(str1):
-    sent = [[[ 1,"A group does not have|w any|n members",None,'co']],\
-[[ 1,"no mind thinks something|a",None,'co']],\
+    sent = [[[ 1,"no mind thinks something|a",None,'co']],\
 [[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
 [[ 1,"I saw everyone who drank something in the van",None,'co'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I did not see Leibniz",None,'j']],\
 [[ 1,"I love nothing which is|r about murder",None,'co'],[ 2,"Hamlet is|r about murder",None,'j'],[ 3,"I love Hamlet",None,'j']],\
@@ -16,7 +15,6 @@ def pop_sent(str1):
 [[ 1,"no part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a white",None,'j']],\
 [[ 1,"I love everyone who reads Leibniz",None,'co'],[ 2,"Russell reads Leibniz",None,'j'],[ 3,"I do not love Russell",None,'j']],\
 [[ 1,"There is|e a moment which does not exist in|b time",None,'co']],\
-[[ 1,"2 is|g not a|r number|i",None,'co']],\
 [[ 1,"There is|e a whole|c which is|g an|r individual",None,'co']],\
 [[ 1,"There is|e a whole which is|g an|r individual",None,'ta']],\
 [[ 1,"my dog drank some water",None,'co'],[ 2,"I do not own a dog",None,'j']],\
@@ -29,12 +27,8 @@ def pop_sent(str1):
 [[ 1,"the dog's ball is|a red",None,'co'],[ 2,"the dog does not own a ball",None,'j']],\
 [[ 1,"Ada's ball is|a red",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
 [[ 1,"I took Ada's ball",None,'co'],[ 2,"Ada does not own a ball",None,'j']],\
-[[ 1,"there is|e a group which has|w no members",None,'co']],\
-[[ 1,"no mind is|a mental",None,'co']],\
-[[ 1,"I took a dog's ball",None,'co'],[ 2,"no dog owns a|a ball",None,'j']],\
 [[ 1,"The|r property|n redness is|a red",None,'co']],\
 [[ 1,"Plato has|t the same teacher as Xenothon",None,'co'],[ 2,"Xenothon does not have|t a teacher",None,'j']],\
-[[ 1,"Doglike is|g not a|r partially material|a concept|a",None,'co']],\
 [[ 1,"I did not shed any|n tears",None,'co'],[ 2,"I shed a tear",None,'j']],\
 [[ 1,"There is|e a thought which smells",None,'co']],\
 [[ 1,"There is|e a thought which desires something",None,'co']],\
