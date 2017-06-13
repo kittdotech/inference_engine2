@@ -6,6 +6,7 @@ import operator
 import sys
 from ex_dict_new import large_dict
 from claims_new import pop_sent
+import pprint
 import collections
 
 # averaged .076 on 5.22 (proof type 'n'), .039 definitions, .004 statement logic
@@ -17,12 +18,12 @@ import collections
 # on 6/10 time spent in instantiation = .018, definitions = .031, total .074
 
 tot_tim = time.time()
-
+print ('hey')
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
 strt = 0  # if n then proof type before may 1
 stp = 31
-print_to_doc = False
+print_to_doc = True
 if j == 1:
     django2 = False
     temp17 = False
@@ -78,7 +79,7 @@ if mysql:
     import os
 
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    print BASE_DIR
+    print(BASE_DIR)
     sys.path.append(BASE_DIR)
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "inference_engine2.settings")
     import django
@@ -120,25 +121,25 @@ result_data = {}
 st_log_tim = 0
 def_tim = 0
 inst_tim = 0
-cond_r = unichr(8835)
-const = u"\u2102"  # consistency
-top = unichr(8868)
-bottom = unichr(8869)
-neg = unichr(172)
-idd = unichr(8781)  # translation symbol
-iff = unichr(8801)
-mini_c = unichr(8658)
-mini_e = unichr(8703)
-implies = unichr(8866)
-conditional = unichr(8594)
-nonseq = unichr(8876)
-xorr = unichr(8891)
-idisj = unichr(8744)
-cj = unichr(8896)
-aid = unichr(8776)
-disj = unichr(8855)
-equi = unichr(8660)
-ne = u"\u2260"  # not equal
+cond_r = chr(8835)
+const = "\u2102"  # consistency
+top = chr(8868)
+bottom = chr(8869)
+neg = chr(172)
+idd = chr(8781)  # translation symbol
+iff = chr(8801)
+mini_c = chr(8658)
+mini_e = chr(8703)
+implies = chr(8866)
+conditional = chr(8594)
+nonseq = chr(8876)
+xorr = chr(8891)
+idisj = chr(8744)
+cj = chr(8896)
+aid = chr(8776)
+disj = chr(8855)
+equi = chr(8660)
+ne = "\u2260"  # not equal
 
 sn = 1
 instan_used = 0  # the number of times the instan function is used
@@ -147,52 +148,52 @@ qn = 300  # numbers the property sent list
 pn = 400
 id_num = 0
 
-l1 = u"\u2081"
-l2 = u"\u2082"
-l3 = u"\u2083"
-l4 = u"\u2084"  # if you increase to l5 then change convert function
-ua = u"\u1d43"
-ub = u"\u1d47"
-uc = u"\u1d9c"
-ud = u"\u1d48"
-ue = u"\u1d49"
-uf = u"\u1da0"
-ug = u"\u1d4d"
-ui = u"\u2071"
-uk = u"\u1d4f"
-um = u"\u1d50"
-un = u"\u207f"
-uo = u"\u1d52"
-up = u"\u1d56"
-ut = u"\u1d57"
-uv = u"\u1d5b"
-uu = u"\u1d58"
-uw = u"\u02b7"
-uy = u"\u02b8"
-uj = u"\u02B2"
-ul = u"\u02E1"
-ur = u"\u02b3"
-us = u"\u02e2"
-uh = u"\u02b0"
+l1 = "\u2081"
+l2 = "\u2082"
+l3 = "\u2083"
+l4 = "\u2084"  # if you increase to l5 then change convert function
+ua = "\u1d43"
+ub = "\u1d47"
+uc = "\u1d9c"
+ud = "\u1d48"
+ue = "\u1d49"
+uf = "\u1da0"
+ug = "\u1d4d"
+ui = "\u2071"
+uk = "\u1d4f"
+um = "\u1d50"
+un = "\u207f"
+uo = "\u1d52"
+up = "\u1d56"
+ut = "\u1d57"
+uv = "\u1d5b"
+uu = "\u1d58"
+uw = "\u02b7"
+uy = "\u02b8"
+uj = "\u02B2"
+ul = "\u02E1"
+ur = "\u02b3"
+us = "\u02e2"
+uh = "\u02b0"
 
 tot_prop_name = []
 tot_prop_sent = []
-prop_var4 = [unichr(97 + t) for t in range(26)]
-prop_var2 = [unichr(97 + t) + u"\u2081" for t in range(26)]
-prop_var3 = [unichr(97 + t) + u"\u2082" for t in range(26)]
-prop_var5 = [unichr(97 + t) + u"\u2083" for t in range(26)]
-prop_var6 = [unichr(97 + t) + u"\u2084" for t in range(26)]
+prop_var4 = [chr(97 + t) for t in range(26)]
+prop_var2 = [chr(97 + t) + "\u2081" for t in range(26)]
+prop_var3 = [chr(97 + t) + "\u2082" for t in range(26)]
+prop_var5 = [chr(97 + t) + "\u2083" for t in range(26)]
+prop_var6 = [chr(97 + t) + "\u2084" for t in range(26)]
 prop_var4 = prop_var4 + prop_var2 + prop_var3 + prop_var5 + prop_var6
-idf_var2 = [unichr(122 - t) for t in range(25)]
+idf_var2 = [chr(122 - t) for t in range(25)]
 idf_var2.remove("i")
 idf_var2.remove("l")
-idf_var3 = [unichr(122 - t) + l1 for t in range(25)]
-idf_var4 = [unichr(122 - t) + l2 for t in range(25)]
+idf_var3 = [chr(122 - t) + l1 for t in range(25)]
+idf_var4 = [chr(122 - t) + l2 for t in range(25)]
 idf_var2 = idf_var2 + idf_var3 + idf_var4
-greek = [unichr(945 + t) for t in range(50)]
+greek = [chr(945 + t) for t in range(50)]
 p = 1
 subscripts = [l1, l2, l3, l4]
-alpha = unichr(945)
+alpha = chr(945)
 
 if excel:
     wb4 = load_workbook('../inference engine new.xlsx')
@@ -270,27 +271,27 @@ def tran_str(str1, type3):
 
 def get_super(str1):
     if str1 == "a":
-        return u"\u1d43"
+        return "\u1d43"
     elif str1 == "b":
-        return u"\u1d47"
+        return "\u1d47"
     elif str1 == "c":
-        return u"\u1d9c"
+        return "\u1d9c"
     elif str1 == "d":
-        return u"\u1d48"
+        return "\u1d48"
     elif str1 == "e":
-        return u"\u1d49"
+        return "\u1d49"
     elif str1 == "f":
-        return u"\u1da0"
+        return "\u1da0"
     elif str1 == "g":
-        return u"\u1d4d"
+        return "\u1d4d"
     elif str1 == "h":
-        return u"\u02b0"
+        return "\u02b0"
     elif str1 == "i":
-        return u"\u2071"
+        return "\u2071"
     elif str1 == "j":
-        return u"\u02B2"
+        return "\u02B2"
     elif str1 == "k":
-        return u"\u1d4f"
+        return "\u1d4f"
 
         # ua = u"\u1d43"
     # ub = u"\u1d47"
@@ -317,29 +318,29 @@ def get_super(str1):
     # uy = u"\u02b8"
 
     elif str1 == "l":
-        return u"\u02E1"
+        return "\u02E1"
     elif str1 == "m":
-        return u"\u1d50"
+        return "\u1d50"
     elif str1 == "n":
-        return u"\u207f"
+        return "\u207f"
     elif str1 == "o":
-        return u"\u1d52"
+        return "\u1d52"
     elif str1 == "p":
-        return u"\u1d56"
+        return "\u1d56"
     elif str1 == "r":
-        return u"\u02b3"
+        return "\u02b3"
     elif str1 == "s":
-        return u"\u02e2"
+        return "\u02e2"
     elif str1 == "t":
-        return u"\u1d57"
+        return "\u1d57"
     elif str1 == "u":
-        return u"\u1d58"
+        return "\u1d58"
     elif str1 == "v":
-        return u"\u1d5b"
+        return "\u1d5b"
     elif str1 == "w":
-        return u"\u02b7"
+        return "\u02b7"
     elif str1 == "y":
-        return u"\u02b8"
+        return "\u02b8"
 
 
 def remove_outer_paren(str1, bool1=False):
@@ -554,7 +555,7 @@ def find_sentences(sentence):
     g = sentence.count('(')
     h = sentence.count(')')
     if g != h:
-        print 'wrong number of parentheses in sentence:' + sentence
+        print('wrong number of parentheses in sentence:' + sentence)
         sys.exit()
     if sentence.startswith("(~g)"):
         bb = 8
@@ -594,7 +595,7 @@ def find_sentences(sentence):
     mini_c2 = mini_c + neg
     sentence2 = copy.copy(sentence)
     prt = copy.copy(sentence)
-    more_num = [unichr(945 + x) for x in range(24)]
+    more_num = [chr(945 + x) for x in range(24)]
     if os(sentence) == False:
         temp_string = mainconn(sentence)
 
@@ -733,7 +734,7 @@ def find_sentences(sentence):
 
                         if os(otemp_sent):
                             p += 1
-                            skel_nam.append([otemp_sent, unichr(p)])
+                            skel_nam.append([otemp_sent, chr(p)])
                         else:
                             skel_nam.append(None)
                     else:
@@ -1428,7 +1429,7 @@ def concept(all_sent, tot_sent, dv_nam, definitions, posp):
                                 list2.append(str2)
                                 b += 1
                         if b > 1:
-                            print 'you have not coded for multiple concepts'
+                            print('you have not coded for multiple concepts')
                         olda = "(" + "b" + ' = ' + con + ")"
                         oldc = "(" + "c " + str4 + " b" + ")"
                         rn1 = ""
@@ -1922,7 +1923,7 @@ def divide_sent(words, list2, idf_var, tot_sent, all_sent):
         i += 1
         for j in range(len(all_sent[i])):
             if all_sent[i][j] == 'that':
-                print 'that used'
+                print('that used')
                 old_sent = all_sent[i][-2]
                 old_p = all_sent[i][-1]
                 del all_sent[i][-1]
@@ -2611,7 +2612,7 @@ def prop_type(paren_num, gparen_num, paren_conn, gparen_conn, sent_num, def_con)
     elif paren_conn == "&" and gparen_conn == iff:
         str1 = 'bic'
     elif paren_conn == xorr and gparen_conn == conditional:
-        print "you have not coded for this sentence type yet"
+        print("you have not coded for this sentence type yet")
         sys.exit()
 
     return str1
@@ -2758,7 +2759,7 @@ def division(tot_sent, all_sent, words, kind, def_sent=[]):
                             n = i - 1
                         if scope_uni(all_sent, m, i) and (kind == 0 or kind == 3):
                             rule = 'ADJ E'
-                            print "division used"
+                            print("division used")
                             list17 = copy.deepcopy(all_sent[m])
                             if all_sent[m][8] != None or all_sent[m][12] != None:
                                 str7 = "~"
@@ -3653,7 +3654,7 @@ def change_variables(defined, al_def, definition, definiendum, e, tot_sent, dv_n
                         str3 = findinlist(temp_str, match_dv, 0, 1)
                         if str3 != None and temp_str != str3:
                             def_sent[i][j] = str3
-                            print "rare rename rule used"
+                            print("rare rename rule used")
                             str2 = '(' + temp_str + idd + str3 + ')'
                             str2 = str2 + l2
                             if str2 not in rename and str2 != "":
@@ -3692,7 +3693,7 @@ def change_variables(defined, al_def, definition, definiendum, e, tot_sent, dv_n
                 if str3 != None:
                     str4 = findinlist(str3, new_match, 0, 1)
                     if str4 != None:
-                        print "unmatched2 used"
+                        print("unmatched2 used")
                         str2 = '(' + str3 + idd + str4 + ')'
                         if str2 not in rename and str2 != "":
                             rename.append(str2)
@@ -3975,7 +3976,7 @@ def ant_var(list1):
         g = list2.count(list2[i])
         if g > 1:
             return list2[i]
-    print 'your method for finding the antecedent variable is not working'
+    print('your method for finding the antecedent variable is not working')
     sys.exit()
 
 
@@ -4448,7 +4449,7 @@ def categorize_words(words, str2, idf_var, all_sent, kind=1, first=False, snoun=
                         return 'n'
             except IndexError:
                 bb = 8
-            print "you misspelled " + word
+            print("you misspelled " + word)
             sys.exit()
         if word in anaphoric_relations and first:
             anaphora = []
@@ -4918,14 +4919,14 @@ def build_dict(ex_dict):
         else:
             almost_done = False
         if str1 != None:
-            if not isinstance(str1, (int, long)):
+            if not isinstance(str1, int):
                 str1 = str1.strip()
             if word == 'non_whole':
                 bb = 7
             elif word == 2:
                 bb = 7
 
-            if isinstance(word, (int, long)):
+            if isinstance(word, int):
                 word = str(word)
 
             if "(" in word:
@@ -4933,6 +4934,8 @@ def build_dict(ex_dict):
                 word = word[:cc - 1]
 
             word = word.strip()
+            if word == "<":
+                bb = 8
             definitions2.append([word, i])
             if excel:
                 str3 = ws.cell(row=i, column=5).value
@@ -4956,7 +4959,7 @@ def build_dict(ex_dict):
                 if str3 != None:
                     str3 = str3.strip()
                 if str1 == None:
-                    print "you did not state the part of speech for " + word
+                    print("you did not state the part of speech for " + word)
                     sys.exit()
                 sec_let = copy.copy(str1)
                 fir_let = str1[0:1]
@@ -5070,10 +5073,16 @@ def build_dict(ex_dict):
                         definitions.append([word, defin, fir_let, sec_let, thir_let, fif_let, i])
 
     syn_pairs.sort()
-    relat.sort()
-    atomic_relata.sort()
-    relations.sort()
-    relations2.sort()
+
+    for i in relat:
+        if i[0] == None:
+            bb = 8
+
+    relat = sorted(relat, key=operator.itemgetter(0))
+    atomic_relata = sorted(atomic_relata, key=operator.itemgetter(0))
+    relations = sorted(relations, key=operator.itemgetter(0))
+    relations2 = sorted(relations2, key=operator.itemgetter(0))
+
     words = [adj, cor, detm, adv, lcon, noun, relat, srelat, trelat, subo, \
              aux, negg, dnoun, syn_pairs, synon, det, definitions, det_pairs, relations, \
              relations2, particles, redundant, atomic_relations, atomic_relata, \
@@ -5489,7 +5498,7 @@ def get_sent(all_sent, str1):
         str2 = all_sent[i][42].replace("~", "")
         if str1 == str2:
             return i
-    print "the get sent function is wrong"
+    print("the get sent function is wrong")
     sys.exit()
 
 
@@ -6310,7 +6319,7 @@ def get_detached_sentences(detach_sent, all_sent):
                 bool1 = True
                 break
         if not bool1:
-            print 'a detached sentence is missing from the all sent list'
+            print('a detached sentence is missing from the all sent list')
             sys.exit()
     return detach_sent
 
@@ -6339,7 +6348,7 @@ def get_detached_variables(detach_sent):
                     elif detach_sent[i][9][9] == 'J' and detach_sent[i][9][14] == definite_concept:
                         defn.append(detach_sent[i][9][j])
                     elif detach_sent[i][9][9] == 'J' and detach_sent[i][9][14] == general_concept:
-                        print 'a general variable should not be here'
+                        print('a general variable should not be here')
                         general.append(detach_sent[i][9][j])
                     else:
                         if detach_sent[i][9][j] not in temp_list:
@@ -6562,7 +6571,7 @@ def renumber_conditionals(conditionals, new_numbers):
         if old_num < 400:
             conditionals[i][2] = new_numbers.get(old_num)
             if conditionals[i][2] == None:
-                print 'you renumbering of conditionals failed'
+                print('you renumbering of conditionals failed')
 
     return conditionals
 
@@ -6781,7 +6790,7 @@ def make_new_conditionals(conditionals, changed_conditionals):
                     elif j == 35:
                         n = 1
                     else:
-                        print "you haven't coded for this yet"
+                        print("you haven't coded for this yet")
                         sys.exit()
                     if isinstance(conditionals2[n][0],list):
                         for m in range(len(conditionals2[n])):
@@ -6825,7 +6834,7 @@ def get_greek(list1,str1):
         if i != None:
             if i[0] == str1:
                 return i[1]
-    print "something is wrong in the get greek function"
+    print("something is wrong in the get greek function")
     sys.exit()
 
 def build_short_sent(list1):
@@ -7116,7 +7125,7 @@ def change_indef_attach_var(sent_parts, object_properties,k,instantiations):
 
     d = findposinmd(att_var, object_properties, 0)
     if d == -1:
-        print 'there is something wrong with your '
+        print('there is something wrong with your ')
         'object properties list'
         sys.exit()
     set_attach = set(object_properties[d][2])
@@ -7290,7 +7299,7 @@ def get_general_object_properties(str1, object_properties, variable_kind, \
 
     if d == -1:
         if kind == "":
-            print 'this should not be used'
+            print('this should not be used')
             object_properties.append([str1, variable_kind, [], [[property, \
                             sent_kind, sent_num, cond_num, sent_parts]], "", "",
                                       []])
@@ -7803,7 +7812,7 @@ def new_cond(greek2, pot_id, candd, conditionals, tot_sent, member_prop, candd2,
                     bb = 8
                 g = findposinlist(temp_oprop, all_sent, 42)
                 if g == -1:
-                    print "one of your sentences is missing from the all_sent list"
+                    print("one of your sentences is missing from the all_sent list")
                 new_list = []
                 for s in range(0, maxm):
                     list9 = copy.deepcopy(all_sent[g])
@@ -7861,10 +7870,10 @@ def new_cond(greek2, pot_id, candd, conditionals, tot_sent, member_prop, candd2,
                 for s in range(0, most):
                     anc3 = ""
                     anc4 = ""
-                    if unichr(945) in nprop[s]:
+                    if chr(945) in nprop[s]:
                         bb = 8
 
-                    if nprop[s] not in temp8 and unichr(945) not in nprop[s]:
+                    if nprop[s] not in temp8 and chr(945) not in nprop[s]:
                         temp8.append(nprop[s])
                         for t in range(len(anc2)):
                             if anc2[t][0] == s and anc4 == "" and anc3 != "" and anc2[t][1] != anc3:
@@ -7897,7 +7906,7 @@ def new_cond(greek2, pot_id, candd, conditionals, tot_sent, member_prop, candd2,
 
 
 def convert(list1):
-    more_prop = [unichr(945 + x) for x in range(24)]
+    more_prop = [chr(945 + x) for x in range(24)]
     list2 = list1[38]
     oprop = list1[4]
     oprop = oprop.replace("~", "")
@@ -8270,11 +8279,11 @@ def link_natural_sent_to_all_sent(conditionals, all_sent):
                         sixth_d.append(list2)
                         break
                     else:
-                        print 'you did not categorize the attached sentences correctly'
+                        print('you did not categorize the attached sentences correctly')
                         sys.exit()
             if not bool1:
                 str1 = findinlist(str1, prop_name, 0, 2)
-                print "sentence " + list7[38][i] + " - " + str1 + " was not found in the all sent list"
+                print("sentence " + list7[38][i] + " - " + str1 + " was not found in the all sent list")
                 sys.exit()
         list7[34] = antecedent
         list7[35] = consequent
@@ -8329,11 +8338,11 @@ def ancestor_numbers(list2, k, def_info):
         list2[53] = paren_conn
 
     elif len(k) == 5:
-        print "you have not coded for attached sentences with 5 generations yet"
+        print("you have not coded for attached sentences with 5 generations yet")
         sys.exit()
 
     if list2[53] == None:
-        print "the number ancestor function is messed up"
+        print("the number ancestor function is messed up")
         sys.exit()
     return list2
 
@@ -8369,7 +8378,7 @@ def convert_con_to_letter(str1, str2):
     elif str1 == "&":
         return 'c'
     else:
-        print 'the convert con to letter function is messed up'
+        print('the convert con to letter function is messed up')
         # sys.exit()
 
 
@@ -9031,8 +9040,8 @@ def material_implication(all_sent, prop_sent, conditionals, kind):
                             j -= 1
                             m += 1
                             if m > 200:
-                                print "in the material implication function \
-                                you are caught in an infinite loop"
+                                print("in the material implication function \
+                                you are caught in an infinite loop")
                                 sys.exit()
 
                             str3 = str1[j:j + 1]
@@ -9136,8 +9145,8 @@ def demorgan(all_sent, prop_sent, conditionals, candd, candd2, kind, one_sent=Fa
             while s < r:
                 i += 1
                 if i > 200:
-                    print "you are caught in an infinite loop in the \
-                    demorgan function"
+                    print("you are caught in an infinite loop in the \
+                    demorgan function")
                     sys.exit()
                 str2 = str1[i:i + 2]
                 if str2 == "~(":
@@ -9156,8 +9165,8 @@ def demorgan(all_sent, prop_sent, conditionals, candd, candd2, kind, one_sent=Fa
                     while j < len(str1):
                         m += 1
                         if m > 200:
-                            print "you are caught in an infinite loop in the \
-                            demorgan function"
+                            print("you are caught in an infinite loop in the \
+                            demorgan function")
                             sys.exit()
                         bool1 = False
                         str3 = str1[j:j + 1]
@@ -9992,7 +10001,7 @@ def detach_wo_instantiation(greek2, sent, all_sent, prop_sent, candd, candd2, co
         g = sent[i].count('(')
         h = sent[i].count(')')
         if g != h:
-            print 'wrong number of parentheses in sentence:' + sent[i]
+            print('wrong number of parentheses in sentence:' + sent[i])
             sys.exit()
 
         sent[i][1] = enclose(sent[i][1])
@@ -10000,8 +10009,8 @@ def detach_wo_instantiation(greek2, sent, all_sent, prop_sent, candd, candd2, co
             qq += 1
         else:
             if sent[i][1].count("(") != sent[i][1].count(")"):
-                print "line " + str(sent[i][0]) + " does not have the right number \
-                                             of parentheses"
+                print("line " + str(sent[i][0]) + " does not have the right number \
+                                             of parentheses")
 
             sent[i][1] = remove_outer_paren(sent[i][1])
             ostring = copy.copy(sent[i][1])
@@ -10339,12 +10348,12 @@ def get_result(post_data, archive_id=None, request=None):
         tot_prop_name.append(prop_name)
         yy = ""
         if list2[1] == False:
-            print 'False'
+            print('False')
             yy = k + 1
             # break
         en1 = time.time()
         z = en1 - st1
-        print str(k) + " - " + str("{0:.2f}".format(z))
+        print(str(k) + " - " + str("{0:.2f}".format(z)))
     en = time.time()
     if stp == 0:
         stp = k
@@ -10356,10 +10365,10 @@ def get_result(post_data, archive_id=None, request=None):
         ee = instan_time / instan_used
     else:
         ee = 0
-    print "average " + str("{0:.3f}".format(g))
-    print "time used in definitions " + str("{0:.3f}".format(m))
-    print "time used in statement logic " + str("{0:.3f}".format(dd))
-    print "time used in instantiation " + str("{0:.3f}".format(ee))
+    print("average " + str("{0:.3f}".format(g)))
+    print("time used in definitions " + str("{0:.3f}".format(m)))
+    print("time used in statement logic " + str("{0:.3f}".format(dd)))
+    print("time used in instantiation " + str("{0:.3f}".format(ee)))
     dummy = print_sent_full(test_sent, p, tot_prop_name, words, yy)
     if django2:
         views.progressbar_send(request, 0, 100, 100, 2)
@@ -10382,11 +10391,11 @@ if excel or one_sent or temp17:
     if words_used:
         wb5.save('../dictionary last perfect.xlsx')
     en = time.time()
-    print en - st
+    print(en - st)
 elif mysql:
     dummy = get_result('hey')
 
 tot_tim2 = time.time()
 g = tot_tim2 - tot_tim
-print "total " + str("{0:.1f}".format(g))
+print("total " + str("{0:.1f}".format(g)))
 
