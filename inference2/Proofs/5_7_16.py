@@ -19,6 +19,7 @@ import collections
 
 tot_tim = time.time()
 print ('hey')
+print ('hey')
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
 strt = 0  # if n then proof type before may 1
