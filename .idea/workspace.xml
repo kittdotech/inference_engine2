@@ -34,8 +34,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="26" column="10" lean-forward="true" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
+            <state relative-caret-position="474">
+              <caret line="7148" column="33" lean-forward="false" selection-start-line="7148" selection-start-column="33" selection-end-line="7148" selection-end-column="33" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -111,7 +111,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>abbreviations</find>
       <find>dv_nam</find>
       <find>variables</find>
       <find>get_detached_v</find>
@@ -141,6 +140,7 @@
       <find>def rear</find>
       <find>def chan</find>
       <find>def instant</find>
+      <find>def change</find>
     </findStrings>
     <replaceStrings>
       <replace>35</replace>
@@ -511,13 +511,6 @@
       <option name="presentableId" value="Default" />
       <updated>1454034293054</updated>
     </task>
-    <task id="LOCAL-00005" summary="hey">
-      <created>1492094695677</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1492094695678</updated>
-    </task>
     <task id="LOCAL-00006" summary="- changed to | in action">
       <created>1492323693509</created>
       <option name="number" value="00006" />
@@ -854,7 +847,14 @@
       <option name="project" value="LOCAL" />
       <updated>1497599377634</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="refactored object properties list">
+      <created>1497618195379</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1497618195379</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TodoView">
@@ -930,7 +930,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed INM definition, non_wholes now define" />
     <MESSAGE value="changed def of individual, some of the sentences when using the axioms were not being put in the standard_cj list" />
     <MESSAGE value="minor glitches in previous committ" />
     <MESSAGE value="unenclose function is only called from find_sentences function now" />
@@ -955,21 +954,15 @@
     <MESSAGE value="testing" />
     <MESSAGE value="testing2" />
     <MESSAGE value="only 3 types of variables now" />
-    <option name="LAST_COMMIT_MESSAGE" value="only 3 types of variables now" />
+    <MESSAGE value="refactored object properties list" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored object properties list" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <default-breakpoints>
-        <breakpoint type="python-exception">
-          <properties notifyOnTerminate="true" exception="BaseException">
-            <option name="notifyOnTerminate" value="true" />
-          </properties>
-        </breakpoint>
-      </default-breakpoints>
-      <option name="time" value="7407" />
+      <option name="time" value="7410" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1299,8 +1292,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="10" lean-forward="true" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
+        <state relative-caret-position="474">
+          <caret line="7148" column="33" lean-forward="false" selection-start-line="7148" selection-start-column="33" selection-end-line="7148" selection-end-column="33" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>

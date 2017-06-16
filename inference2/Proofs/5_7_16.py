@@ -21,8 +21,8 @@ tot_tim = time.time()
 
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
-strt = 0  # if n then proof type before may 1
-stp = 0
+strt = 15  # works up to 31
+stp = 31
 print_to_doc = False
 if j == 1:
     django2 = False
@@ -6584,7 +6584,7 @@ def rearrange(total_sent, consistent, all_sent, greek2, attach_sent, variables):
 
         list2 = get_attached_predicates(variable_type, attach_sent, list3[0])  # list2[1] = object_properties
 
-        object_properties = rearrange_general_object_properties(list2[1])
+        object_properties = rearrange_object_properties(list2[1])
 
         object_properties = print_general_object_properties(object_properties)
 
@@ -7134,27 +7134,19 @@ def change_indef_attach_var(sent_parts, object_properties, k, instantiations):
     for detach_prop in object_properties:
         set_detach = set(detach_prop[2])
         list1 = set_attach.intersection(set_detach)
-        if list1 == set_attach and detach_prop[0] != att_var:
+        if list1 == set_attach and detach_prop[0] != att_var and detach_prop[1] != 'agen':
             det_var = detach_prop[0]
             for attach_sent_part in attach_sent_parts:
                 for detach_sent_part in detach_prop[3][0][2]:
                     potentially_identical = False
                     for i in range(6):
-                        #todo remove this
-                        try:  # this happens because the general variables and the
-                            # and the particular variables have different lists.  i might change it
-                            # so that they have the same type of lists in the future
-                            if attach_sent_part[i] == detach_sent_part[i] or \
-                                attach_sent_part[i] == alpha or \
-                                detach_sent_part[i] == alpha \
-                                or attach_sent_part[i] == att_var + "'":
-                                pass
-                            else:
-                                break
-                        except:
-                            return False
-
-
+                        if attach_sent_part[i] == detach_sent_part[i] or \
+                            attach_sent_part[i] == alpha or \
+                            detach_sent_part[i] == alpha \
+                            or attach_sent_part[i] == att_var + "'":
+                            pass
+                        else:
+                            break
                     else:
                         potentially_identical = True
                         break
@@ -7193,7 +7185,7 @@ def indefinite_instantiation(det_var, att_var, sent):
     return str1
 
 
-def rearrange_general_object_properties(object_properties):
+def rearrange_object_properties(object_properties):
     # rearrange the object properties of the general objects so as to make it
     # easier to instantiate with
     # it takes the list of the form [Rd, cf, 33],[Re, cd, 33],[Rg,a,34]
@@ -7201,6 +7193,8 @@ def rearrange_general_object_properties(object_properties):
     i = -1
     while i < len(object_properties)-1:
         i += 1
+        if i > 10:
+            bb = 8
         list2 = []
         properties = object_properties[i][3]
         j = 0
@@ -7349,11 +7343,7 @@ def get_general_object_properties(str1, \
         for i in range(len(object_properties)):
             if object_properties[i][0] == str1:
                 list_kind = object_properties[i][2]
-                #todo remove this
-                try:
-                    conseq_properties = object_properties[i][6]
-                except IndexError:
-                    return object_properties
+                conseq_properties = object_properties[i][6]
                 list_properties = object_properties[i][3]
                 if kind not in list_kind and kind != "":
                     list_kind.append(kind)
