@@ -21,7 +21,7 @@ tot_tim = time.time()
 
 j = 2  # was 35
 proof_type = 'l'  # if l then long proof showing decision procedure for instantiation
-strt = 15  # works up to 31
+strt = 0  # works up to 31
 stp = 31
 print_to_doc = False
 if j == 1:
@@ -92,29 +92,19 @@ anaphoric_relations = []
 prop_name = []
 prop_var = []
 plural_c = []
-embed = []
-affneg = []
 anaphora = ""
 impl = ""
 time1 = 0
 definite = []
-psent = []
-definite2 = []
-ant_cond = []
 cnjts = []
+embed = []
 never_used = []
 attach_sent = []
 def_used = []
 candd = []
-candd2 = []
 rel_conj = []
-ind_var = []
-gen_var = []
 already_defined = []
-conc = []
 prop_sent = []
-tagged_nouns = []
-tagged_nouns2 = []
 abbreviations = []
 basic_object_properties = []
 result_data = {}
@@ -780,6 +770,8 @@ def find_sentences(sentence):
         if os(wneg[i]):
             str1 = str1.replace(skel_nam[i][0], skel_nam[i][1])
 
+    skel_nam = translate_to_greek(skel_nam, wneg, id_num)
+
     skel_string = str1
     # skel_string = remove_outer_paren(skel_string)
     if skel_string.find("(!") > -1:
@@ -803,6 +795,20 @@ def find_sentences(sentence):
     return output
 
 
+def translate_to_greek(skel_nam, wneg, id_num):
+
+    for i in range(len(skel_nam)):
+        if skel_nam[i] == None:
+            to_be_translated = wneg[i]
+            for j in range(len(skel_nam)-1,-1,-1):
+                if skel_nam[j] != None:
+                    if skel_nam[j][0] in to_be_translated and id_num[j][1] == "":
+                        to_be_translated = to_be_translated.replace(skel_nam[j][0],skel_nam[j][1])
+            skel_nam[i] = to_be_translated
+
+    return skel_nam
+
+
 def add_to_dv(abbreviations, all_sent, m, k, variables, str2):
     if isvariable(str2) == False:
         str3 = findinlist(str2, abbreviations, 1, 0)
@@ -820,7 +826,7 @@ def add_to_dv(abbreviations, all_sent, m, k, variables, str2):
             all_sent[m][k] = str3
 
 
-def word_sub(variables, abbreviations, total_sent, all_sent, words, id_num):
+def word_sub(variables, abbreviations, total_sent, all_sent, words, id_num, attach_sent):
     all_sent = remove_duplicates(all_sent, 0)
     relations = words[18]
     relations2 = words[19]
@@ -869,7 +875,8 @@ def word_sub(variables, abbreviations, total_sent, all_sent, words, id_num):
                 newp = name_sent(new_sent)
                 all_sent[m][0] = new_sent
                 all_sent[m][42] = newp
-                dummy = new_sentence2(old_sent, oldp, new_sent, newp, total_sent, "SUB", id_num)
+                attach_sent = prepare_att_sent_1_sent(old_sent, oldp, new_sent, newp, attach_sent)
+                attach_sent = new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, total_sent, "SUB", id_num)
                 all_sent[m][46] = list4
                 bool1 = False
 
@@ -877,7 +884,7 @@ def word_sub(variables, abbreviations, total_sent, all_sent, words, id_num):
                 # decision = dec_pro(decision,all_sent[m],pronouns)
                 # all_sent[m][56] = decision
 
-    return
+    return [attach_sent, all_sent]
 
 
 def assigned_var(str1, abbreviations, variables):
@@ -895,7 +902,7 @@ def assigned_var(str1, abbreviations, variables):
         return str2
 
 
-def there(all_sent, m, total_sent, def_sent):
+def there(all_sent, m, total_sent, def_sent, attach_sent):
     global sn
     old_sent = all_sent[m][0]
     oldp = all_sent[m][42]
@@ -916,8 +923,10 @@ def there(all_sent, m, total_sent, def_sent):
     all_sent.append(list1)
     bool1 = check_dimension(total_sent, 1, new_sent)
     if not bool1:
-        dummy = new_sentence2(old_sent, oldp, new_sent, newp, total_sent, "DE there")
+        attach_sent = prepare_att_sent_1_sent(old_sent, oldp, new_sent, newp, attach_sent)
+        attach_sent = new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, total_sent, "DE there")
 
+    return [attach_sent, all_sent]
 
 def scope_rel_pro(list, i):
     if i == 10 and list[59] != None:
@@ -932,7 +941,8 @@ def scope_rel_pro(list, i):
         return True
 
 
-def cia(all_sent, m, total_sent, i):
+def cia(all_sent, m, total_sent, i, attach_sent):
+
     list1 = [None] * 80
     old_sent = all_sent[m][0]
     oldp = all_sent[m][42]
@@ -953,10 +963,11 @@ def cia(all_sent, m, total_sent, i):
     list1[46] = [200]
     list1[56] = [200]
     all_sent[m][i] = None
-    dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+    attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 1)
 
+    return [attach_sent, all_sent]
 
-def adje(all_sent, m, total_sent, i, words, variables):
+def adje(all_sent, m, total_sent, i, words, variables, attach_sent):
     rule = 'ADJ E'
     list1 = [None] * 80
     old_sent = all_sent[m][0]
@@ -988,21 +999,25 @@ def adje(all_sent, m, total_sent, i, words, variables):
     list2.remove(i)
     all_sent[m][46] = list2
     dummy = new_categories(all_sent[m], words, variables, all_sent)
+    attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 1)
 
-    dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+    return [attach_sent, all_sent]
 
 
-def rel_pro_elim(all_sent, m, total_sent, i, words, variables):
+def rel_pro_elim(all_sent, m, total_sent, i, words, variables, attach_sent):
+
     list1 = [None] * 80
     old_sent = all_sent[m][0]
     oldp = all_sent[m][42]
     rule = "DE " + all_sent[m][i]
     list1 = rel_pro(i, m, all_sent, list1, words, variables)
-    dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+    attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 1)
 
+    return attach_sent
 
-def ande(all_sent, m, total_sent, i, words, variables):
+def ande(all_sent, m, total_sent, i, words, variables, attach_sent):
     # this seperates a sentence with an 'and' coordinator into two
+
     all_sent[m][66] = None
     old_sent = all_sent[m][0]
     oldp = all_sent[m][42]
@@ -1013,11 +1028,14 @@ def ande(all_sent, m, total_sent, i, words, variables):
     for i in range(6, 20):
         list1[i] = all_sent[m][i]
     list1 = new_categories(list1, words, variables, all_sent, True)
-    dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+    attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 1)
+
+    return [attach_sent, all_sent]
 
 
-def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, identities, \
-           def_atoms, num_sent):
+def define(total_sent, all_sent, variables, abbreviations, words, rep_rel,\
+           identities, def_atoms, attach_sent,
+           detach_sent):
     zz = time.time()
     all_sent = remove_duplicates(all_sent, 0)
     pronouns2 = copy.deepcopy(words[24])
@@ -1048,7 +1066,7 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
     # unique object_properties which form a group, in the definiednum the relation is = but in the
     # definiens the IG relation appears
     # unq_gr = ['time'] #unique group
-    global sn, anaphora, gen_var, def_tim
+    global sn, anaphora, def_tim
     i_defined = False
     def_sent = []
     al_def = []  # already defined
@@ -1111,8 +1129,8 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
                     if all_sent[m][0] not in def_sent and str1 not in universal and \
                                     definition != None and str1 in pronouns:
                         if str1 != "i" or not i_defined:
-                            dummy = change_variables(defined, al_def, definition, str1, 0, total_sent, \
-                                                     abbreviations, variables, words, rep_rel, all_sent, m, [], [], \
+                            dummy = change_variables(defined, al_def, definition, str1, total_sent, abbreviations,
+                                                     variables, words, rep_rel, all_sent, m, detach_sent, attach_sent,
                                                      "pronoun", i)
                             if str1 != "i":
                                 del all_sent[m]
@@ -1130,8 +1148,8 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
                     str1 = all_sent[m][i]
                     definition = findinlist(str1, definitions, 0, 1)
                     if all_sent[m][0] not in def_sent and str1 not in universal:
-                        dummy = change_variables(defined, al_def, definition, str1, 0, total_sent, \
-                                                 abbreviations, variables, words, rep_rel, all_sent, m, [], [], \
+                        dummy = change_variables(defined, al_def, definition, str1, total_sent, abbreviations,
+                                                 variables, words, rep_rel, all_sent, m, detach_sent, attach_sent,
                                                  "determinative", i)
                         del all_sent[m]
                         m -= 1
@@ -1149,9 +1167,11 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
                             i = 5
                         elif i == 70:
                             i = 14
-                        dummy = change_variables(defined, al_def, definition, "the", 0, total_sent, \
-                                                 abbreviations, variables, words, rep_rel, all_sent, m, [], [], \
+                        list1 = change_variables(defined, al_def, definition, "the", total_sent, abbreviations,
+                                                 variables, words, rep_rel, all_sent, m, detach_sent, attach_sent,
                                                  "proper name possessive", i)
+                        all_sent = list1[1]
+                        attach_sent = list1[0]
                         del all_sent[m]
                         m -= 1
                         break
@@ -1161,7 +1181,9 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
         m += 1
         start = False
         if all_sent[m][66] != None and all_sent[m][9] not in compound:
-            dummy = ande(all_sent, m, total_sent, i, words, variables)
+            list1 = ande(all_sent, m, total_sent, i, words, variables, attach_sent)
+            attach_sent = list1[0]
+            all_sent = list1[1]
             del all_sent[m]
             start = True
             m -= 1
@@ -1169,25 +1191,29 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
         if 50 in all_sent[m][56] and not start:
             for i in num50:
                 if i in all_sent[m][46] and scope_uni(all_sent, m, i):
-                    dummy = adje(all_sent, m, total_sent, i, words, variables)
+                    list1 = adje(all_sent, m, total_sent, i, words, variables, attach_sent)
+                    attach_sent = list1[0]
+                    all_sent = list1[1]
                     break  # this only works for one adjective
 
         if (36 in all_sent[m][46] or 35 in all_sent[m][46]) and not start:
             for i in num60:
                 if all_sent[m][i] != None:
-                    dummy = cia(all_sent, m, total_sent, i)
+                    list1 = cia(all_sent, m, total_sent, i, attach_sent)
+                    all_sent = list1[1]
+                    attach_sent = list1[0]
 
         if 70 in all_sent[m][56] and not start:
             for i in num70:
                 if i in all_sent[m][46] and scope_uni(all_sent, m, i, 1) and \
                                 all_sent[m][i] != 'that' + uc:
-                    dummy = rel_pro_elim(all_sent, m, total_sent, i, words, variables)
+                    attach_sent = rel_pro_elim(all_sent, m, total_sent, i, words, variables, attach_sent)
                     break
 
         if 80 in all_sent[m][56] and not start:
             for i in num80:
                 if i in all_sent[m][46] and scope_uni(all_sent, m, i, 1):
-                    dummy = that(all_sent, m, i, total_sent, abbreviations, words, variables)
+                    attach_sent = that(all_sent, m, i, total_sent, abbreviations, words, variables, attach_sent)
                     del all_sent[m]
                     start = True
                     m -= 1
@@ -1199,9 +1225,11 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
                     str1 = all_sent[m][i]
                     definition = findinlist(str1, definitions, 0, 1)
                     if all_sent[m][0] not in def_sent:
-                        dummy = change_variables(defined, al_def, definition, str1, 0, total_sent, \
-                                                 abbreviations, variables, words, rep_rel, all_sent, m, [], [], \
+                        list1 = change_variables(defined, al_def, definition, str1, total_sent, abbreviations,
+                                                 variables, words, rep_rel, all_sent, m, detach_sent, attach_sent,
                                                  "poss pro", i)
+                        all_sent = list1[1]
+                        attach_sent = list1[0]
                         del all_sent[m]
                         m -= 1
                         start = True
@@ -1210,7 +1238,9 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
         if 90 in all_sent[m][56] and not start:
             for i in num90:
                 if i in all_sent[m][46]:
-                    dummy = poss_elim(all_sent, m, i, total_sent)
+                    list1 = poss_elim(all_sent, m, i, total_sent, attach_sent)
+                    attach_sent = list1[0]
+                    all_sent = list1[1]
                     del all_sent[m]
                     start = True
                     m -= 1
@@ -1220,13 +1250,17 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
         if 100 in all_sent[m][56] and not start:
             for i in num100:
                 if i in all_sent[m][46] and uni_scope_rel(all_sent, m, i):
-                    dummy = rel_div(all_sent, m, total_sent, i, posp, words, variables)
+                    list1 = rel_div(all_sent, m, total_sent, i, posp, words, variables, attach_sent)
+                    attach_sent = list1[0]
+                    all_sent = list1[1]
                     break
 
         if 110 in all_sent[m][56] and not start:
             for i in num110:
                 if all_sent[m][i] == 'there':
-                    dummy = there(all_sent, m, total_sent, def_sent)
+                    list1 = there(all_sent, m, total_sent, def_sent, attach_sent)
+                    attach_sent = list1[0]
+                    all_sent = list1[1]
                     start = True
                     del all_sent[m]
                     m -= 1
@@ -1238,10 +1272,11 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
                     str1 = all_sent[m][i]
                     definition = findinlist(str1, definitions, 0, 1)
                     if all_sent[m][0] not in def_sent:
-                        dummy = change_variables(defined, al_def, definition, str1, 0, total_sent, \
-                                                 abbreviations, variables, words, rep_rel, all_sent, m, [], [], \
+                        list1 = change_variables(defined, al_def, definition, str1, total_sent, abbreviations,
+                                                 variables, words, rep_rel, all_sent, m, detach_sent, attach_sent,
                                                  "determinative", i)
-                        start = True
+                        all_sent = list1[1]
+                        attach_sent = list1[0]
                         del all_sent[m]
                         m -= 1
                         break
@@ -1258,7 +1293,7 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
             str1 = all_sent[m][i]
             if relat == 'B':
                 bb = 8
-            if m == 8 and i == 14:
+            if m == 13 and i == 9:
                 bb = 8
 
             if all_sent[m][43] != 'cc':
@@ -1279,7 +1314,7 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
                     definiendum = str1
                     bool2 = True
                 elif i == 9 and relat in ua_relat:
-                    dummy = add_atomic(all_sent, m, atoms2, total_sent, abbreviations)
+                    attach_sent = add_atomic(all_sent, m, atoms2, total_sent, abbreviations,attach_sent)
                 elif relat == '=' and all_sent[m][41] == 1:
                     id = True
                     bool2 = True
@@ -1330,10 +1365,11 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
                             or pos == 'r' or pos == 'e' or pos == 's' or (relat == '=' and pos == 'n') or adverb or id:
                         if definition != None and all_sent[m][0] not in def_sent:
                             def_sent.append(all_sent[m][0])
-                            dummy = change_variables(defined, al_def, definition, definiendum, 0, total_sent,
-                                                     abbreviations,
-                                                     variables, \
-                                                     words, rep_rel, all_sent, m, [], [], kind, i, circ)
+                            list1 = change_variables(defined, al_def, definition, definiendum, total_sent,
+                                                     abbreviations, variables, words, rep_rel, all_sent, m, detach_sent,
+                                                     attach_sent, kind, i, circ)
+                            all_sent = list1[1]
+                            attach_sent = list1[0]
                             break
 
     if def_atoms != []:
@@ -1342,15 +1378,15 @@ def define(total_sent, all_sent, variables, abbreviations, words, rep_rel, ident
             for j in range(len(all_sent)):
                 if all_sent[j][46] != "x":
                     if all_sent[j][9] == a_relat and all_sent[j][8] != "~":
-                        dummy = add_atomic(all_sent, j, atoms2, total_sent, abbreviations)
+                        attach_sent = add_atomic(all_sent, j, atoms2, total_sent, abbreviations,attach_sent)
 
                         # if we state that something is not a concept then we need to falisfy that
-    dummy = concept(all_sent, total_sent, abbreviations, definitions, posp)
+    attach_sent = concept(all_sent, total_sent, abbreviations, definitions, posp, attach_sent)
     j = time.time()
     j = j - zz
     def_tim += j
     # end7
-    return
+    return [attach_sent, all_sent]
 
 
 def uni_scope_rel(all_sent, m, i):
@@ -1370,10 +1406,10 @@ def uni_scope_rel(all_sent, m, i):
         return True
 
 
-def add_atomic(all_sent, m, atoms2, total_sent, abbreviations):
+def add_atomic(all_sent, m, atoms2, total_sent, abbreviations, attach_sent):
     relat = all_sent[m][9]
     if all_sent[m][8] == "~":
-        return
+        return attach_sent
     pos = findinlist(relat, atoms2, 1, 2)  # position = position
     str1 = all_sent[m][pos]
     str2 = findinlist(relat, atoms2, 1, 0)
@@ -1393,12 +1429,13 @@ def add_atomic(all_sent, m, atoms2, total_sent, abbreviations):
             list1[42] = nprop
             list1[43] = "cc"
             all_sent.append(list1)
-            dummy = new_sentence2(osent, oldp, nsent, nprop, total_sent, "DE " + str2, "", iff)
-        else:
-            bb = 8
+            attach_sent = prepare_att_sent_1_sent(osent, oldp, nsent, nprop, attach_sent)
+            attach_sent = new_sentence2(osent, oldp, nsent, attach_sent, nprop, total_sent, "DE " + str2, "", iff)
+    
+    return attach_sent
 
 
-def concept(all_sent, total_sent, abbreviations, definitions, posp):
+def concept(all_sent, total_sent, abbreviations, definitions, posp, attach_sent):
     global sn
     str1 = ""
     list2 = []
@@ -1458,12 +1495,15 @@ def concept(all_sent, total_sent, abbreviations, definitions, posp):
                         str3 = newa + " " + conditional + " " + newc
                         str3p = oldp + " " + conditional + " " + newp
                         sn += 1
+                        attach_sent = prepare_att_sent_3_sent(newa,oldp,newc, \
+                                            newp, attach_sent, str3, str3p, sn, "c")
                         total_sent.append([sn, str3, str3p, "", "SUB", sn - 2, sn - 1, "", ""])
-                        return
+                        break
 
+    return attach_sent
 
 def name_sent(str1, bool2=False, str4=""):
-    global prop_var, affneg, prop_name
+    global prop_var, prop_name
 
     no_space = copy.copy(str1)
     if str1.find('~') > -1:
@@ -1502,31 +1542,6 @@ def name_sent(str1, bool2=False, str4=""):
 def assign_var(str1, str2, abbreviations):
     list1 = [str2, str1]
     abbreviations.append(list1)
-
-
-def determ(variables, all_sent, total_sent, words, abbreviations, m):
-    global sn
-    # def_det contains the determinatives and their definitions
-    def_det = words[15]
-    detm = words[2]
-    list1 = copy.deepcopy(all_sent[m][46])
-    num = [3, 10]
-    for i in range(len(all_sent[m][46])):
-        k = all_sent[m][46][i]
-        if k in num:
-            str1 = all_sent[m][k]
-            if str1 in detm:
-                defin = findinlist(str1, def_det, 0, 2)
-                all_sent[m][k] = None
-                list1.remove(k)
-                if i == 10:
-                    if "z~Rc" in defin:
-                        defin = defin.replace("z~Rc", "c~Rz")
-                    else:
-                        defin = defin.replace("zRc", "cRz")
-                dummy = change_variables(defin, str1, total_sent, abbreviations, variables)
-    all_sent[m][46] = list1
-
 
 def insert_space(str, integer):
     return str[0:integer] + ' ' + str[integer:]
@@ -1728,10 +1743,6 @@ def remove_duplicates2d(list1, i, h):
 def id_sent(list4, all_sent, irrel_group, embed_var):
     # this turns the abbreviations into a string of conjuncts
 
-    global gen_var
-    global ind_var
-    global definite2
-
     abbreviations = []
     # this loop removes duplicates in a multidimensional list
     for i in range(len(list4)):
@@ -1757,9 +1768,6 @@ def id_sent(list4, all_sent, irrel_group, embed_var):
             list1[42] = prop1
             if not bool1 and abbreviations[i][1] not in spec_prop:
                 all_sent.append(list1)
-            if abbreviations[i][0] not in gen_var and abbreviations[i][0] not in ind_var \
-                    and abbreviations[i][0] not in definite2:
-                definite2.append(abbreviations[i][0])
             if mini_e in str1:
                 embed_var.append(abbreviations[i][0])
         else:
@@ -1792,14 +1800,11 @@ def remove_values_from_list(the_list, val):
     return the_list
 
 
-def divide_sent(words, list2, variables, total_sent, all_sent):
+def divide_sent(words, list2, variables, total_sent, all_sent, attach_sent):
     global sn
     global impl
     redundant = words[21]
     conn = words[4]
-    relations = words[6]
-    uniq_obj = words[37]
-    nonsq = False
     for i in range(len(list2)):
         str2 = list2[i][1]
         str2 = str2.lower()
@@ -1838,7 +1843,8 @@ def divide_sent(words, list2, variables, total_sent, all_sent):
                     new_sent = build_sent2(all_sent[i])
                     newp = name_sent(new_sent)
                     all_sent[i] += [new_sent, newp, ""]
-                    dummy = new_sentence2(old_sent, old_p, new_sent, newp, total_sent, "modal transfer")
+                    attach_sent = new_sentence2(old_sent, old_p, new_sent, \
+                                attach_sent, newp, total_sent, "modal transfer")
                     break
     str1 = ""
     bool1 = False
@@ -1865,7 +1871,8 @@ def divide_sent(words, list2, variables, total_sent, all_sent):
             newp = name_sent(new_sent)
             all_sent[i] += [new_sent, newp, ""]
             rule = "RD " + str2
-            dummy = new_sentence2(old_sent, old_p, new_sent, newp, total_sent, rule)
+            attach_sent = prepare_att_sent_1_sent(old_sent, old_p, new_sent, newp, attach_sent)
+            attach_sent = new_sentence2(old_sent, old_p, new_sent, attach_sent, newp, total_sent, rule)
 
     rule = "DE "
     g = len(all_sent)
@@ -1914,7 +1921,7 @@ def divide_sent(words, list2, variables, total_sent, all_sent):
                 i -= 1
                 new_sent = "(" + ant_s + " " + str1 + " " + cons_s + ")"
                 new_p = "(" + antp + ' ' + str1 + ' ' + consp + ")"
-                dummy = new_sentence2(old_sent, old_p, new_sent, new_p, total_sent, rule)
+                attach_sent = new_sentence2(old_sent, old_p, new_sent, attach_sent, new_p, total_sent, rule)
                 break
 
     g = len(all_sent)
@@ -1946,43 +1953,15 @@ def divide_sent(words, list2, variables, total_sent, all_sent):
                 all_sent.append(cons)
                 del all_sent[i]
                 i -= 1
-                dummy = new_sentence2(old_sent, old_p, ant_s, antp, total_sent, 'DF that')
+                attach_sent = new_sentence2(old_sent, old_p, ant_s, attach_sent, antp, total_sent, 'DF that')
                 break
 
-    # g = len(all_sent)
-    # i = -1
-    # while i < g - 1:
-    #     i += 1
-    #     for j in range(len(all_sent[i])):
-    #         if all_sent[i][j] == 'and':
-    #             old_sent = all_sent[i][-2]
-    #             old_p = all_sent[i][-1]
-    #             del all_sent[i][-1]
-    #             del all_sent[i][-1]
-    #             ant = all_sent[i][:j]
-    #             cons = all_sent[i][j+1:]
-    #             cons_s = build_sent2(cons)
-    #             consp = name_sent(cons_s)
-    #             del ant[0]
-    #             ant.insert(0,consp)
-    #             ant_s = build_sent2(ant)
-    #             antp = name_sent(ant_s)
-    #             if consp in variables:
-    #                 variables.remove(consp)
-    #                 abbreviations.append([consp, cons_s,1])
-    #             ant += [ant_s,antp]
-    #             cons += [cons_s,consp]
-    #             all_sent.append(ant)
-    #             all_sent.append(cons)
-    #             del all_sent[i]
-    #             i -= 1
-    #             dummy = new_sentence2(old_sent,old_p,ant_s,antp,total_sent,'df that')
-    #             break
-
-    return
 
 
-def rel_repl(all_sent, total_sent, words, abbreviations, variables, id_num):
+    return [attach_sent, all_sent]
+
+
+def rel_repl(all_sent, total_sent, words, abbreviations, variables, id_num, attach_sent):
     relations = words[6]
     doubles = words[31]
     doubles.sort()
@@ -2035,7 +2014,8 @@ def rel_repl(all_sent, total_sent, words, abbreviations, variables, id_num):
         all_sent[j][-2] = newp
         all_sent[j][-1] = old_type
         if newp != oldp:
-            dummy = new_sentence2(old_sent, oldp, new_sent, newp, total_sent, "SUB", id_num)
+            attach_sent = prepare_att_sent_1_sent(old_sent, oldp, new_sent, newp, attach_sent)
+            attach_sent = new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, total_sent, "SUB", id_num)
         all_sent[j] = categorize_words(words, all_sent[j], variables, all_sent, 0, True)
 
     # here we change not a into no and other synonyms
@@ -2138,12 +2118,13 @@ def rel_repl(all_sent, total_sent, words, abbreviations, variables, id_num):
         if bool2:
             new_sent = build_sent(all_sent[i])
             newp = name_sent(new_sent)
-            dummy = new_sentence2(old_sent, oldp, new_sent, newp, total_sent, rule, "")
+            attach_sent = prepare_att_sent_1_sent(old_sent, oldp, new_sent, newp, attach_sent)
+            attach_sent = new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, total_sent, rule, "")
             all_sent[i][0] = new_sent
             all_sent[i][42] = newp
             dummy = new_categories(all_sent[i], words, variables, all_sent)
 
-    return
+    return [attach_sent, all_sent]
 
 
 def new_categories(list5, words, variables, all_sent, kind=False):
@@ -2170,7 +2151,8 @@ def new_categories(list5, words, variables, all_sent, kind=False):
         return list3
 
 
-def new_sentence2(old_sent, oldp, new_sent, newp, total_sent, rule, anc1="", conn=iff, anc2="", anc3=""):
+def new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, total_sent, \
+                  rule, anc1="", conn=iff, anc2="", anc3=""):
     global sn
     str5 = old_sent + " " + conn + " " + new_sent
     str6 = oldp + " " + conn + " " + newp
@@ -2179,8 +2161,12 @@ def new_sentence2(old_sent, oldp, new_sent, newp, total_sent, rule, anc1="", con
         sn += 1
         if sn == 8:
             bb = 7
+        attach_sent[-1][2] = sn
+        attach_sent[-1][37] = str5
+        attach_sent[-1][4] = str6
         total_sent.append([sn, str5, str6, "", rule, anc1, anc2, anc3, ""])
 
+    return attach_sent
 
 def build_app(list1):
     str1 = list1[0]
@@ -2189,7 +2175,7 @@ def build_app(list1):
     return str1
 
 
-def rel_div(all_sent, m, total_sent, i, pos, words, variables):
+def rel_div(all_sent, m, total_sent, i, pos, words, variables, attach_sent):
     genre = 1
     old_sent = all_sent[m][0]
     oldp = all_sent[m][42]
@@ -2249,12 +2235,14 @@ def rel_div(all_sent, m, total_sent, i, pos, words, variables):
         all_sent[m][d] = None
         all_sent[m][8] = None
     if genre == 1:
-        dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+        attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 1)
     elif genre == 2:
-        dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 2, list3)
+        attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 2, list3)
 
+    return [attach_sent, all_sent]
 
-def poss_elim(all_sent, m, i, total_sent):
+def poss_elim(all_sent, m, i, total_sent, attach_sent):
+
     list1 = [None] * 80
     str1 = all_sent[m][i][0]
     list1[5] = str1
@@ -2278,7 +2266,10 @@ def poss_elim(all_sent, m, i, total_sent):
     list1[46] = [200]
     list1[56] = [200]
     all_sent.append(list1)
-    dummy = new_sentence2(old_sent, oldp, str3, str3p, total_sent, "PNE")
+    attach_sent = prepare_att_sent_2_sent(old_sent, oldp, str4, str4p, str5, str5p, str3, str3p, attach_sent)
+    attach_sent = new_sentence2(old_sent, oldp, str3, attach_sent, str3p, total_sent, "PNE")
+
+    return [attach_sent, all_sent]
 
 
 def poss_noun(variables, all_sent, m, n, abbreviations, str7):
@@ -2328,7 +2319,7 @@ def poss_noun(variables, all_sent, m, n, abbreviations, str7):
     return list3
 
 
-def that(all_sent, m, i, total_sent, abbreviations, words, variables):
+def that(all_sent, m, i, total_sent, abbreviations, words, variables, attach_sent):
     num = [11, 1, 2, 47, 3, 69, 4, 55, 5, 66, 67, 35, 48, 59, 6, 8, 9, 7, 48, 12, 10, 70, 13, 14, 36, 60, 63, 49, 15,
            16, 17, 18, \
            61, 64, 50, 19, 20, 21, 22, 62, 65, 51, 23, 24, 25, 26, 52, 27, 28, \
@@ -2395,8 +2386,11 @@ def that(all_sent, m, i, total_sent, abbreviations, words, variables):
     list3[42] = str2p
     all_sent.append(list3)
     embed.append(list2)
-    dummy = new_sentence2(all_sent[m][0], all_sent[m][42], str2, str2p, total_sent, "DE that" + uc)
-    return
+    attach_sent = prepare_att_sent_1_sent(all_sent[m][0], all_sent[m][42], str2, str2p, attach_sent)
+    attach_sent = new_sentence2(all_sent[m][0], all_sent[m][42], \
+                                str2, attach_sent, str2p, total_sent, "DE that" + uc)
+
+    return attach_sent
 
 
 def scope_uni(all_sent, m, i, kind=""):
@@ -2487,7 +2481,8 @@ def rel_pro(i, m, all_sent, list1, words, variables, new_var=""):
     return list1
 
 
-def new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, kind=1, list3=[]):
+def new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, kind=1, list3=[]):
+
     if list1[8] == neg:
         list1[8] = "~"
     if kind == 2:
@@ -2515,9 +2510,92 @@ def new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, kind=1
         new_sent = sent1
         newp = sent1p
         conn = conditional
-    dummy = new_sentence2(old_sent, oldp, new_sent, newp, total_sent, rule, "", conn)
 
+    attach_sent = prepare_att_sent_2_sent(old_sent, oldp, sent1, \
+                                          sent1p, sent2, sent2p, new_sent, newp, attach_sent)
 
+    attach_sent = new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, total_sent, rule, "", conn)
+
+    return attach_sent
+
+def prepare_att_sent_2_sent(old_sent, oldp, sent1, sent1p, \
+                            sent2, sent2p, new_sent, newp, attach_sent):
+    # this builds parts of the attach_sent list
+    
+    otv = ""
+    if "~" in oldp:
+        oldp = oldp.replace("~","")
+        otv = "~"
+    s1tv = ""
+    if "~" in sent1p:
+        sent1p = sent1p.replace("~", "")
+        s1tv = "~"
+    s2tv = ""
+    if "~" in sent2p:
+        sent2p = sent2p.replace("~", "")
+        s2tv = "~"
+
+    list4 = [""] * 50
+    list4[0] = [[oldp, otv]]
+    list4[1] = [[sent1p, s1tv], [sent2p,s2tv]]
+    list4[3] = "e"
+    list4[40] = old_sent
+    list4[41] = new_sent
+    list4[8] = newp
+    list4[42] = [old_sent]
+    list4[43] = [[sent1], [sent2]]
+    attach_sent.append(list4)
+
+    return attach_sent
+
+def prepare_att_sent_1_sent(old_sent,oldp,new_sent,newp, attach_sent):
+
+    otv = ""
+    if "~" in oldp:
+        oldp = oldp.replace("~", "")
+        otv = "~"
+    s1tv = ""
+    if "~" in newp:
+        newp = newp.replace("~", "")
+        s1tv = "~"
+    list4 = [""] * 50
+    list4[0] = [[oldp, otv]]
+    list4[1] = [[newp, s1tv]]
+    list4[3] = "e"
+    list4[40] = old_sent
+    list4[41] = new_sent
+    list4[42] = old_sent
+    list4[43] = [new_sent]
+    attach_sent.append(list4)
+
+    return attach_sent
+
+def prepare_att_sent_3_sent(old_sent,oldp,new_sent,newp, attach_sent, \
+                            full_sent, full_sentp, sn, kind):
+
+    otv = ""
+    if "~" in oldp:
+        oldp = oldp.replace("~", "")
+        otv = "~"
+    s1tv = ""
+    if "~" in newp:
+        newp = newp.replace("~", "")
+        s1tv = "~"
+    list4 = [""] * 50
+    list4[0] = [[oldp, otv]]
+    list4[1] = [[newp, s1tv]]
+    list4[2] = sn
+    list4[3] = kind
+    list4[4] = full_sentp
+    list4[37] = full_sent
+    list4[40] = old_sent
+    list4[41] = new_sent
+    list4[42] = [old_sent]
+    list4[43] = [new_sent]
+    attach_sent.append(list4)
+
+    return attach_sent
+    
 def mult_defnd(list1, def_num):
     for i in range(len(list1)):
         num = list1[i][0]
@@ -2685,6 +2763,7 @@ def add_sent2(all_sent, m, k, o, new_var2, words):
 
 
 def division(total_sent, all_sent, words, kind, def_sent=[]):
+    print ('you have not prepared for attach sent')
     global anaphora, variables
     univ = ['every']
     list2 = []
@@ -2749,7 +2828,7 @@ def division(total_sent, all_sent, words, kind, def_sent=[]):
                         rule = "DE and" + uc
                         for i in range(6, 20):
                             list1[i] = all_sent[m][i]
-                        dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+                            attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 1)
                     elif k == 1 and all_sent[m][i] != None:
                         if i == 13:
                             n = 10
@@ -2777,7 +2856,8 @@ def division(total_sent, all_sent, words, kind, def_sent=[]):
                             list1[14] = all_sent[m][i]
                             all_sent[m][i] = None
                             if kind == 0:
-                                dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+                                attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent,
+                                                        total_sent, 1)
                             else:
                                 g += 1
                                 list2.append(list1)
@@ -2806,7 +2886,8 @@ def division(total_sent, all_sent, words, kind, def_sent=[]):
                             all_sent.append(list1)
                             g += 1
                         else:
-                            dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+                            attach_sent = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent,
+                                                    1)
                         list17[46] = "x"
                         all_sent.append(list17)
                     elif k == 3 and kind == 1 and all_sent[m][i] != None and scope_uni(all_sent, m, i, 1) \
@@ -2814,14 +2895,14 @@ def division(total_sent, all_sent, words, kind, def_sent=[]):
                         rule = "DE " + all_sent[m][i]
                         list17 = copy.deepcopy(all_sent[m])
                         dummy = rel_pro(i, m, all_sent, list1)
-                        dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+                        dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent, 1)
                         list17[46] = "x"
                         all_sent.append(list17)
                     elif k == 4 and all_sent[m][i] == 'that' + uc:  # formerly uc
                         dummy = that(all_sent, m, i, total_sent, abbreviations, words, variables)
                         break
                     elif k == 4 and (i == 69 or i == 70) and all_sent[m][i] != None:
-                        dummy = poss_elim(all_sent, m, i, total_sent)
+                        dummy = poss_elim(all_sent, m, i, total_sent, attach_sent)
                         break
                     elif k == 5 and kind == 2 and all_sent[m][i] != None:
                         # right now the only relation we have found that divides by making the object
@@ -2885,16 +2966,18 @@ def division(total_sent, all_sent, words, kind, def_sent=[]):
                             all_sent[m][d] = None
                             all_sent[m][8] = None
                         if genre == 1:
-                            dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 1)
+                            dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent,
+                                                    1)
                         elif genre == 2:
-                            dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, total_sent, 2, list3)
+                            dummy = new_sent_prelim(old_sent, oldp, all_sent, list1, m, rule, attach_sent, total_sent,
+                                                    2, list3)
                             genre = 1
                         list17[46] = "x"
                         all_sent.append(list17)
                     elif k == 6 and kind == 2:
                         str1 = all_sent[m][i]
                         if str1 == 'there':
-                            dummy = there(all_sent, m, total_sent, def_sent)
+                            dummy = there(all_sent, m, total_sent, def_sent, attach_sent)
                             break
 
     if kind == 3:
@@ -2979,14 +3062,13 @@ def abb_change(list5, already_checked, all_sent, def_sent, i, match_dv, match_ty
     return True
 
 
-def abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, gen_var, cnnan, rename):
+def abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, cnnan, rename):
     match_dv.append([def_sent[i][j], variables[0]])
     match_type.append(2)
     str1 = "(" + def_sent[i][j] + idd + variables[0] + ")"
     str1 = str1 + l2
     temp_match.append([def_sent[i][j], variables[0]])
     def_sent[i][j] = variables[0]
-    gen_var.append(variables[0])
     cnnan.append(variables[0])
     rename.append(str1)
     del variables[0]
@@ -3013,6 +3095,7 @@ def qadj(all_sent, m, j, new_var, kind=0):
 
 
 def cut_def(def_info, definition):
+    # todo for the definition of time this function doesn't work
     minn = []
     maxx = 0
     mini = 0
@@ -3076,8 +3159,9 @@ def cut_def(def_info, definition):
     return definition
 
 
-def change_variables(defined, al_def, definition, definiendum, e, total_sent, abbreviations, variables, \
-                     words, rep_rel, all_sent, m, prop_con, p_sent, kind="", k=0, circ=""):
+def change_variables(defined, al_def, definition, definiendum, total_sent, \
+                     abbreviations, variables, words, rep_rel,
+                     all_sent, m, detach_sent, attach_sent, kind="", k=0, circ=""):
     # def_rn = definition rename
     # this function renames the variables in a definition
     # end0
@@ -3086,12 +3170,12 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
     # 4 = negated consequent
 
 
-    global sn, plural_c, definite2, definite, anaphora, ind_var, gen_var, def_used
+    global sn, plural_c, definite, anaphora, def_used
     b = time.time()
     # this is for those determinatives which have negations in their definitions where
     # the sentences has an R variable
     identical_det = ["only", "anything_except", "anyone_except", "many" + un, 'no']
-    if definiendum == "ada":
+    if definiendum == "no":
         bb = 7
     if definiendum not in def_used and not definiendum.isupper():
         def_used.append(definiendum)
@@ -3240,10 +3324,6 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
         if list1 != []:
             poss_str = list1[0]
             poss_strp = list1[1]
-        if all_sent[m][45] == 1:
-            str5 = findinlist(ovar, abbreviations, 0, 1)
-            if str5 in tagged_nouns:
-                tagged_nouns2.append([all_sent[m][j], str5])
 
     sdefinition = def_info[8]
     def_sent = []
@@ -3384,23 +3464,6 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                         telist7[p] = all_sent[m][p]
                         list1.append(all_sent[m][p])
 
-                # not many is the one negated determinative which is defined in this way and its
-                # negation is removed in the definiens
-                if definiendum == 'not' + ui + ' ' + 'many' + ud:
-                    if all_sent[m][8] == 'not' + ui and def_info[4][i][0] not in first_in_def:
-                        telist7[8] = ""
-                        telist7[k] = 'exactly_one'
-                        str2 = findinlist(ovar, plural_c, 0, 1)
-                        telist7[j] = str2
-                    if def_info[4][i][0] in first_in_def:
-                        telist7[j] = ovar
-                        if all_sent[m][47] == 'not' + ui:
-                            telist7[47] = 'not' + ui
-                        elif all_sent[m][8] == 'not' + ui:
-                            telist7[8] = 'not' + ui
-                            telist7[47] = None
-                            not_many = True
-                            # just in case the list has a tagged noun
                 telist7[45] = all_sent[m][45]
                 # for the determinatives which have negations in their definition then we need
                 # to do something special
@@ -3423,23 +3486,7 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                     telist7[j] = ovar
                 if has_detrm:
                     telist7[k] = temp_det
-                if definiendum == 'everything_except' + up and i == 13:
-                    telist7[8] = "~"
-                    match_type.append(9)
-                    if 'y' in variables:
-                        telist7[j] = 'y'
-                        match_dv.append(['y', 'y'])
-                    else:
-                        telist7[j] = variables[0]
-                        match_dv.append(['y', variables[0]])
-                        new_var.append(variables[0])
-                        del variables[0]
-                if (definiendum == 'all' and i == 4) or (definiendum == 'only' + up and i == 9):
-                    telist7[j] = 'd'
-                    telist7[42] = None
 
-                if definiendum == 'any' + un and i == 2:
-                    telist7[10] = "every"
                 if bool2:
                     str2 = findinlist("z", match_dv, 0, 1)
                     telist7[j] = str2
@@ -3486,14 +3533,6 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                 max_num = len(sent_num)
             elif len(sent_num) > max_num:
                 max_num = len(sent_num)
-
-            # cnn_type = prop_type(paren_num,gparen_num,paren_conn,gparen_conn,sent_num,def_con)
-            # #if the cnn_type is 'an' or bic1 or bic2 then we need not define it
-            # if cnn_type == 'an' or cnn_type == 'bic' or cnn_type == 'cn':
-            #      telist7[46] = 'x'
-
-            if paren_conn == None:
-                bb = 7
 
             telist7[54] = str(sn) + "." + str(paren_num)
             telist7[44] = def_info[6][i][1]
@@ -3542,10 +3581,6 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                             match_type.append(0)
                             break
 
-    # if the definiendum is many-o then its object variable needs to be matched
-    if definiendum == 'many' + uo:
-        match_dv.append(['c', all_sent[m][14]])
-        match_type.append(9)
     num = [5, 14]
     num2 = [5, 14, 18, 22, 26, 30, 34]
     num3 = [9, 14, 8]
@@ -3606,8 +3641,8 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                         elif temp_str == str3:
                             already_checked2.append([i, j])
                         elif def_sent[i][j] == rr_var:
-                            dummy = abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, gen_var, \
-                                                cnnan, rename)
+                            dummy = abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, cnnan,
+                                                rename)
                         else:
                             # here we check to see if it has a plural form
                             # if j == 14 and def_sent[i][9] == 'OFP':
@@ -3652,20 +3687,10 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                     if no_match:
                         temp_str = def_sent[i][j]
                         str3 = findinlist(temp_str, match_dv, 0, 1)
-                        if str3 != None and temp_str != str3:
-                            def_sent[i][j] = str3
-                            print("rare rename rule used")
-                            str2 = '(' + temp_str + idd + str3 + ')'
-                            str2 = str2 + l2
-                            if str2 not in rename and str2 != "":
-                                rename.append(str2)
-                            str2 = ""
-                        elif temp_str == str3:
-                            pass
-                        else:
-                            dummy = abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, \
-                                                gen_var, cnnan, rename)
-                            unmatched2.append([i, j])
+
+                        dummy = abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, cnnan,
+                                            rename)
+                        unmatched2.append([i, j])
             else:
                 temp_str = def_sent[i][j]
                 str3 = findinlist(temp_str, match_dv, 0, 1)
@@ -3679,10 +3704,8 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                     str2 = ""
                 else:
                     if def_sent[i][j] not in taken_out:
-                        dummy = abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, gen_var, cnnan,
-                                            rename)
+                        dummy = abb_change2(match_dv, match_type, def_sent, i, variables, temp_match, j, cnnan, rename)
                     unmatched2.append([i, j])
-                    gen_var.append(def_sent[i][j])
 
         if unmatched2 != [] and new_match != []:
             for k in range(len(unmatched2)):
@@ -3692,17 +3715,7 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                 str3 = findinlist(temp_str, temp_match, 1, 0)
                 if str3 != None:
                     str4 = findinlist(str3, new_match, 0, 1)
-                    if str4 != None:
-                        print("unmatched2 used")
-                        str2 = '(' + str3 + idd + str4 + ')'
-                        if str2 not in rename and str2 != "":
-                            rename.append(str2)
-                            str2 = ""
-                        if def_sent[i][j] in gen_var:
-                            gen_var.remove(def_sent[i][j])
-                            cnnan.remove(def_sent[i][j])
-                            never_used.append(def_sent[i][j])
-                        def_sent[i][j] = str4
+
 
     if prop_con != [] and prop_pos != []:  # here we replace propositional constants
         match_dv2 = []
@@ -3731,24 +3744,15 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                     match_dv2.append([str3, prop_con[i][0]])
                     str4 = "(" + str3 + idd + prop_con[i][0] + ")"
                     rename.append(str4)
-                g = findposinlist(prop_con[i][0], abbreviations, 1)
+                g = findposinlist(str3, abbreviations, 0)
                 if g > -1:
-                    bool2 = True
-                    str3 = variables[0]
-                    del variables[0]
-                    match_dv2.append([prop_con[i][0], str3])
-                    str4 = "(" + prop_con[i][0] + idd + str3 + ")"
-                    rename.append(str4)
-                else:
-                    g = findposinlist(str3, abbreviations, 0)
-                    if g > -1:
-                        str5 = abbreviations[g][1]
-                        if str5 != str1:
-                            str3 = variables[0]
-                            del variables[0]
-                            match_dv2.append([prop_con[i][0], str3])
-                            str4 = "(" + prop_con[i][0] + idd + str3 + ")"
-                            rename.append(str4)
+                    str5 = abbreviations[g][1]
+                    if str5 != str1:
+                        str3 = variables[0]
+                        del variables[0]
+                        match_dv2.append([prop_con[i][0], str3])
+                        str4 = "(" + prop_con[i][0] + idd + str3 + ")"
+                        rename.append(str4)
 
                 abbreviations.append([str3, str1, 1])
                 prop_con[i][0] = str3
@@ -3817,7 +3821,7 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
     # replacements have been made
     str1 = skel_string.replace(" ", "")
     if str1 in al_def:
-        return
+        return [attach_sent, all_sent]
     else:
         al_def.append(str1)
 
@@ -3896,6 +3900,9 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
             sn += 1
             total_sent.append([sn, skel_string, str3, "", rule, "", "", "", ""])
 
+    attach_sent = prepare_attach_sent(def_info, def_sent, skel_string, str3, \
+            sn, detach_sent, attach_sent)
+
     list1 = []
     num = [5, 14, 15, 18, 26, 30]
     def_var = findinlist("definite", abbreviations, 1, 0)
@@ -3903,21 +3910,6 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
     gen = findinlist("general", abbreviations, 1, 0)
 
     for i in range(len(def_sent)):
-        if def_sent[i][9] == "J":
-            if def_sent[i][14] == def_var:
-                if def_sent[i][5] in gen_var:
-                    gen_var.remove(def_sent[i][5])
-                if def_sent[i][5] not in definite2:
-                    definite2.append(def_sent[i][5])
-            elif def_sent[i][14] == indef:
-                if def_sent[i][5] in gen_var:
-                    gen_var.remove(def_sent[i][5])
-                if def_sent[i][5] not in ind_var:
-                    ind_var.append(def_sent[i][5])
-            elif def_sent[i][14] == gen:
-                if def_sent[i][5] not in gen_var:
-                    gen_var.append(def_sent[i][5])
-                    cnnan.append(def_sent[i][5])
 
         # the indefinite articles have special negations
         for n in num:
@@ -3925,7 +3917,9 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                 new_var.remove(def_sent[i][n])
         if definiendum == "many" + un:
             if not def_sent[i][40] and def_sent[i][8] == "~":
-                def_sent[i] = not_a(def_sent[i], k, total_sent, all_sent)
+                list11 = not_a(def_sent[i], k, total_sent, all_sent, attach_sent)
+                def_sent[i] = list11[1]
+                attach_sent = list11[0]
 
         bool1 = check_dimension(all_sent, 0, def_sent[i][0])
         bool2 = in_dv(def_sent[i], abbreviations)
@@ -3939,21 +3933,296 @@ def change_variables(defined, al_def, definition, definiendum, e, total_sent, ab
                 bb = 8
             all_sent.append(def_sent[i])
 
-    if len(list1) > 1:
-        str1 = ant_var(list1)
-        if len(list1) > 1:
-            list1[0][58] = str1
-        else:
-            list1[58] = str1
-        ant_cond.append(list1)
-    elif len(list1) == 1:
-        list1[0][58] = list1[0][5]
-        ant_cond.append(list1)
 
     c = time.time()
     d = c - b
     # end2
-    return
+    return [attach_sent, all_sent]
+
+
+def prepare_attach_sent(def_info, def_sent, skel_string, str3, sn, detach_sent, attach_sent):
+    # this populates the attach sent list
+
+    list1 = [""] * 50
+    list1[2] = sn
+    list1[4] = str3
+    list1[37] = skel_string
+    antecedent = []
+    consequent = []
+    embed_info = []
+    ant_found = False
+    con_found = False
+    ant_variables = []
+    con_variables = []
+    correspondence = {}
+    correspondence2 = {}
+    spec_conn = [iff, conditional, idisj, xorr]
+    total_sent_in_attach_sent = []
+    embed_att_sent = []
+    if def_info[4][0][1] == iff:
+        list1[3] = "e"
+    elif def_info[4][0][1] == conditional:
+        list1[3] = "c"
+    else:
+        def_info = reformat_def_info(def_info)
+
+    main_conn_location = def_info[4][0][2]
+    for i in range(1,len(def_info[0])):
+        t_value = ""
+        if def_info[4][i][1] == "":
+            greek_letter = def_info[6][i][1]
+            for sent in def_sent:
+                if sent[44] == greek_letter:
+                    bare_sent = sent[42].replace("~", "")
+                    sent[8] = "" if sent[8] == None else sent[8]
+                    t_value = sent[8]
+                    sent = ancestor_numbers(sent, def_info[4][i][0], def_info)
+                    if sent[53][-1] == "a" or sent[53][-1] == "b":
+                        antecedent.append(sent)
+                    else:
+                        consequent.append(sent)
+                    # this is because the ~ can be placed in slots other than 8
+                    if "~" in sent[42]: t_value = "~"
+                    total_sent_in_attach_sent.append([bare_sent,sent[8]])
+                    correspondence.update({def_info[0][i]: [greek_letter,sent[0],sent]})
+                    correspondence2.update({sent[0]:[greek_letter, def_info[0][i], sent[42]]})
+                    break
+
+        parent_conn = get_parent_connective(def_info,i)
+        str_loc = def_info[3][0].find(def_info[3][i])
+        if (def_info[4][i][1] != "&" and len(def_info[4][i][0])==2) or \
+                (len(def_info[4][i][0]) == 3 and parent_conn == "&" and def_info[4][i][1] == ""):
+            if str_loc < main_conn_location:
+                ant_variables.append([def_info[0][i], t_value])
+            else:
+                con_variables.append([def_info[0][i], t_value])
+
+        if def_info[4][i][1] != "" and len(def_info[4][i][0]) == 2:
+            if str_loc < main_conn_location and not ant_found:
+                ant_found = True
+                ant_conjunction = def_info[3][i]
+
+            elif str_loc > main_conn_location and not con_found:
+                con_found = True
+                con_conjunction = def_info[3][i]
+
+        if def_info[4][i][1] in spec_conn:
+            embed_att_sent.append(i)
+
+    list1[42] = copy.deepcopy(ant_variables)
+    list1[43] = copy.deepcopy(con_variables)
+
+    if ant_found:
+        list2 = build_conjunction2(antecedent, ant_conjunction, correspondence2)
+        list1[40] = list2[0]
+        list1[7] = list2[1]
+    else:
+        list1[40] = antecedent[0][0]
+
+    list1[0] = abbreviate_sentences(ant_variables, correspondence, antecedent, correspondence2)
+
+    if con_found:
+        list2 = build_conjunction2(consequent, con_conjunction, correspondence2)
+        list1[41] = list2[0]
+        list1[8] = list2[1]
+    else:
+        list1[41] = consequent[0][0]
+
+    list1[1] = abbreviate_sentences(con_variables, correspondence, consequent, correspondence2)
+
+    if embed_att_sent != []:
+        for num in embed_att_sent:
+            list4 = prepare_embed_att_sent(def_info, num, correspondence)
+            embed_info.append(list4)
+
+
+    list1[34] = antecedent
+    list1[35] = consequent
+    list1[38] = total_sent_in_attach_sent
+    list1[39] = embed_info
+    attach_sent.append(list1)
+
+    return attach_sent
+
+
+def prepare_embed_att_sent(def_info, num, correspondence):
+    # this takes those attached sentences within attached sentences and
+    # prepares them to be manipulated
+
+    def_info2 = copy.deepcopy(def_info)
+    sent_num = def_info[4][num][0]
+    def_info2 = delete_irrel_sent(def_info2, sent_num)
+    list1 = [""] * 50
+    main_conn_location = def_info2[6][0].find(def_info2[4][0][1])
+    if def_info2[4][0][1] == conditional:
+        list1[3] = "c"
+    else:
+        list1[3] = "e"
+    greek_sent = def_info2[6][0]
+    nat_sent = greek_sent
+    abbreviated_sent = greek_sent
+    for i in range(1, len(def_info2[4])):
+        if def_info2[4][i][1] == "&":
+            print ('you havet coded for this in the prepare embed')
+            ('att_sent function')
+            sys.exit()
+        location = greek_sent.find(def_info2[6][i][1])
+        sent_info = correspondence.get(def_info2[0][i])
+        sent_abbr = sent_info[2][42]
+        nat_sent = nat_sent.replace(sent_info[0], sent_info[1])
+        abbreviated_sent = abbreviated_sent.replace(sent_info[0], sent_abbr)
+        tvalue = ""
+
+        if "~" in sent_info[1]:
+            sent_info[1] = sent_info[1].replace("~","")
+            sent_abbr = sent_abbr.replace("~","")
+            tvalue = "~"
+
+
+        if location < main_conn_location:
+            h = 42
+            g = 0
+            k = 35
+        else:
+            h = 43
+            g = 1
+            k = 34
+        list1[h] = [[sent_info[1], tvalue]]
+        list1[g] = [[sent_abbr, tvalue]]
+        list1[k] = [sent_info[2]]
+    list1[4] = abbreviated_sent
+    list1[37] = nat_sent
+
+    return list1
+
+
+def delete_irrel_sent(def_info2, sent_num):
+    # this deletes sentences from the def_info list
+    # which are not members of the embedded sentence
+    # under investigation
+
+    i = 0
+    while i < len(def_info2[4]):
+
+        if not def_info2[4][i][0].startswith(sent_num):
+            del def_info2[0][i]
+            del def_info2[1][i]
+            del def_info2[3][i]
+            del def_info2[4][i]
+            del def_info2[6][i]
+        else:
+            i += 1
+
+    return def_info2
+
+def reformat_def_info(def_info):
+    # this builds a new def_info list such that the conjunctions not
+    # within a equivalence or conditional statement are deleted
+
+    sent_num = "0"
+    connectives = [conditional, iff]
+    primary_connective_found = False
+    for i in range(len(def_info[4])):
+        if not primary_connective_found:
+            if def_info[4][i][1] in connectives:
+                sent_num = def_info[4][i][0][-1]
+                primary_connective_found = True
+                def_info[4][i][0] = sent_num
+            else:
+                def_info[0][i] = None
+        else:
+            if def_info[4][i][0][1] != sent_num:
+                def_info[0][i] = None
+            else:
+                def_info[4][i][0] = def_info[4][i][0][1:]
+
+    i = -1
+    while i < len(def_info[0]) -1:
+        i += 1
+        if def_info[0][i] == None:
+            del def_info[0][i]
+            del def_info[1][i]
+            del def_info[3][i]
+            del def_info[4][i]
+            del def_info[6][i]
+            i -= 1
+
+    return def_info
+
+
+def get_parent_connective(def_info,i):
+
+    sent_number = def_info[4][i][0]
+    for i in range(i-1,-1,-1):
+        temp_num = def_info[4][i][0]
+        if sent_number.startswith(def_info[4][i][0]):
+            return def_info[4][i][1]
+    else:
+        print ('you failed to find the parent connective')
+        sys.exit()
+
+
+
+def abbreviate_sentences(to_be_converted, correspondence, sent_parts, correspondence2):
+    # this converts the 0th or 1st member of the attach_sent_list into
+    # sentence variables
+
+    greek_english = []
+    for sent in to_be_converted:
+        if os(sent[0]):
+            new_sent = correspondence.get(sent[0])
+            no_space_sent = new_sent[1].replace(" ","")
+            no_space_sent = no_space_sent.replace("~","")
+            no_space_sent = remove_outer_paren(no_space_sent)
+            sent_variable = findinlist(no_space_sent, prop_name,1,0)
+            if sent_variable != None:
+                for old_sent in to_be_converted:
+                    if old_sent[0] == sent[0]:
+                        old_sent[0] = sent_variable
+                        break
+            else:
+                print ('there is something wrong with your abbreviate sentences function')
+                sys.exit()
+        elif not os(sent[0]):
+            to_translate = sent[0]
+            to_translate = to_translate.replace("~","")
+            for sent2 in sent_parts:
+                list1 = correspondence2.get(sent2[0])
+                greek_letter = list1[0]
+                old_sent = list1[1]
+                to_translate2 = to_translate
+                to_translate = to_translate.replace(old_sent,greek_letter)
+                greek_english.append([greek_letter, list1[2]])
+                if to_translate2 == to_translate:
+                    print ('there is something wrong with the abbreviate sentences function')
+                    sys.exit()
+
+            for translation_pair in greek_english:
+                to_translate = to_translate.replace(translation_pair[0],translation_pair[1])
+
+            sent[0] = to_translate
+
+    return to_be_converted
+
+def build_conjunction2(sentences, conjunction, correspondence):
+    # if an attached sentence has a conjunction within then
+    # this function converts it into a natural, abbreviated and greek sentence
+
+    conjunction = conjunction.replace(" ","")
+    conjunction = conjunction.replace("~", "")
+    for sentence in sentences:
+        list1 = correspondence.get(sentence[0])
+        list1[1] = list1[1].replace(" ","")
+        list1[1] = list1[1].replace("~", "")
+        conjunction = conjunction.replace(list1[1],list1[0])
+    greek_conjunction = conjunction
+    nat_conjunction = conjunction
+    for sentence in sentences:
+        nat_conjunction = nat_conjunction.replace(sentence[44], sentence[0])
+        conjunction = conjunction.replace(sentence[44], sentence[42])
+    conjunction = proper_spacing2(conjunction)
+    nat_conjunction = proper_spacing2(nat_conjunction)
+    return [nat_conjunction, conjunction, greek_conjunction]
 
 
 def var_ch(match_dv):
@@ -3980,7 +4249,7 @@ def ant_var(list1):
     sys.exit()
 
 
-def not_a(list1, k, total_sent, all_sent):
+def not_a(list1, k, total_sent, all_sent, attach_sent):
     num = [10, 16, 20, 24]
 
     for i in num:
@@ -3995,11 +4264,12 @@ def not_a(list1, k, total_sent, all_sent):
             str1p = name_sent(str1)
             list2[0] = str1
             list2[42] = str1p
-            dummy = new_sentence2(list1[0], list1[42], str1, str1p, total_sent, rule)
+            attach_sent = prepare_att_sent_1_sent(list1[0], list1[42], str1, str1p, attach_sent)
+            attach_sent = new_sentence2(list1[0], list1[42], str1, attach_sent, str1p, total_sent, rule)
             list1[46] = [200]
             all_sent.append(list1)
-            return list2
-    return list1
+            return [attach_sent, list2]
+    return [attach_sent, list1]
 
 
 def categorize_words(words, str2, variables, all_sent, kind=1, first=False, snoun="", \
@@ -4574,7 +4844,7 @@ def build_sent_name(prop_name):
     return list1
 
 
-def syn(total_sent, all_sent, words, def_atoms):
+def syn(total_sent, all_sent, words, def_atoms, attach_sent):
     global sn, def_used
     doubles = words[31]
     bool1 = False
@@ -4665,9 +4935,11 @@ def syn(total_sent, all_sent, words, def_atoms):
             all_sent[m][-3] = new_sent
             all_sent[m][-2] = newp
             all_sent[m][-1] = sent_type
-            dummy = new_sentence2(old_sent, oldp, new_sent, newp, total_sent, "SUB", anc1, iff, anc2, anc3)
+            attach_sent = prepare_att_sent_1_sent(old_sent, oldp, new_sent, newp, attach_sent)
+            attach_sent = new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, \
+                            total_sent, "SUB", anc1, iff, anc2, anc3)
             bool1 = False
-    return
+    return [attach_sent, all_sent]
 
 
 def quick_print(list1, list2, list3, kind=0, a=0, b=0, c=0):
@@ -5210,8 +5482,7 @@ def whole_exception(list1, str1):
         return False
 
 
-def axioms(greek2, list1, bo2, disjuncts, total_sent, candd, candd2, attach_sent, all_sent, prop_sent, \
-           member_prop, not_id):
+def axioms(greek2, list1, bo2, disjuncts, total_sent, candd, attach_sent, all_sent, member_prop, not_id):
     already_done = []
     use_statement_logic = False
     global abbreviations, sn, cnjts
@@ -5259,9 +5530,8 @@ def axioms(greek2, list1, bo2, disjuncts, total_sent, candd, candd2, attach_sent
                                 obj2 = list3[j][0][14]
                                 osec_sent = list3[j][0][0]
                                 use_statement_logic = axioms2(greek2, pos1, pos2, rel1, rel2, sub1, obj1, sub2, obj2,
-                                                              osec_sent, total_sent, used_ax, \
-                                                              candd, candd2, attach_sent, all_sent, member_prop,
-                                                              not_id, prop_sent)
+                                                              osec_sent, total_sent, used_ax, candd, attach_sent,
+                                                              all_sent, member_prop, not_id)
                                 if use_statement_logic:
                                     break
 
@@ -5277,9 +5547,8 @@ def axioms(greek2, list1, bo2, disjuncts, total_sent, candd, candd2, attach_sent
                         obj2 = conjuncts[1][0][14]
                         osec_sent = conjuncts[1][0][0]
                         use_statement_logic = axioms2(greek2, pos1, pos2, rel1, rel2, sub1, obj1, sub2, obj2, osec_sent,
-                                                      total_sent, used_ax, \
-                                                      candd, candd2, attach_sent, all_sent, member_prop, not_id,
-                                                      prop_sent)
+                                                      total_sent, used_ax, candd, attach_sent, all_sent, member_prop,
+                                                      not_id)
                         if use_statement_logic:
                             break
 
@@ -5303,26 +5572,23 @@ def axioms(greek2, list1, bo2, disjuncts, total_sent, candd, candd2, attach_sent
                                 sub2 = conjuncts[j][0][5]
                                 obj2 = conjuncts[j][0][14]
                                 osec_sent = conjuncts[j][0][0]
-                                use_statement_logic = axioms2(greek2, pos1, pos2, \
-                                                              rel1, rel2, sub1, obj1, sub2, obj2, osec_sent, total_sent,
-                                                              used_ax, \
-                                                              candd, candd2, attach_sent, all_sent, member_prop,
-                                                              not_id, prop_sent)
+                                use_statement_logic = axioms2(greek2, pos1, pos2, rel1, rel2, sub1, obj1, sub2, obj2,
+                                                              osec_sent, total_sent, used_ax, candd, attach_sent,
+                                                              all_sent, member_prop, not_id)
                                 if use_statement_logic:
                                     break
 
     if use_statement_logic:
         candd = get_rel_conj(candd, attach_sent)
         attach_sent5 = copy.deepcopy(attach_sent)
-        list1 = statement_logic(greek2, prop_sent, all_sent, attach_sent5, \
-                                candd, candd2, disjuncts, 0, all_sent)
+        list1 = statement_logic(greek2, all_sent, total_sent, attach_sent5, candd, 0)
         return list1
     else:
         return [True, attach_sent]
 
 
-def axioms2(greek2, pos1, pos2, rel1, rel2, sub1, obj1, sub2, obj2, osec_sent, total_sent, used_ax, \
-            candd, candd2, attach_sent, all_sent, member_prop, not_id, prop_sent):
+def axioms2(greek2, pos1, pos2, rel1, rel2, sub1, obj1, sub2, obj2, osec_sent, total_sent, used_ax, candd, attach_sent,
+            all_sent, member_prop, not_id):
     global abbreviations, variables, sn, cnjts
 
     rn_list = []
@@ -5418,25 +5684,18 @@ def axioms2(greek2, pos1, pos2, rel1, rel2, sub1, obj1, sub2, obj2, osec_sent, t
     total_sent.append([sn, rename, "", "", "RN", "", "", "", ""])
     sn += 1
     total_sent.append([sn, nax, naxp, "", "SUB", e, sn - 1, "", ""])
-    prop_sent.append([sn, naxp, "", "", "", "", "", "", "", ""])
     list2 = mainconn(naxp)
     enc_naxp = enclose(naxp)
     def_info = find_sentences(enc_naxp)
     list1 = prepare_iff_elim(greek2, def_info, naxp, all_sent, list2[0], list2[1], sn, total_sent)
     attach_sent.append(list1)
-    # sn += 1
-    # total_sent.append([sn,sent4,sent4p,"","AY ENT","","","",""])
-    # candd.append([sn,sent4p,""])
-    # prop_sent.append([sn,sent4p,"","","","","","","",""])
     sn += 1
     total_sent.append([sn, sent2, sent2p, "", "AY ENT", "", "", "", ""])
-    prop_sent.append([sn, sent2p, "", "", "", "", "", "", "", ""])
     candd.append([sn, sent2p, ""])
     sn += 1
     total_sent.append([sn, subst1, "", "", "OS", sn - 1, sn - 2, "", ""])
     sn += 1
     total_sent.append([sn, subst4, subst4p, "", "SUB", sn - 1, "", "", ""])
-    prop_sent.append([sn, subst4p, "", "", "", "", "", "", "", ""])
     list2 = mainconn(subst4p)
     enc_subst4p = enclose(subst4p)
     def_info = find_sentences(enc_subst4p)
@@ -5502,51 +5761,9 @@ def get_sent(all_sent, str1):
     sys.exit()
 
 
-def find_group(str1, all_sent, subj, basic_object_properties):
-    global gen_var
-    pair1 = ["integer", 'NUMBER']
-    pair2 = ["", ""]
-    synonyms = [pair1, pair2]
-    exceptions = ['this' + un, 'that' + un]
-    if subj == 't':
-        bb = 8
-
-    str3 = None
-    str4 = None
-    list1 = []
-    for i in range(len(basic_object_properties)):
-        if basic_object_properties[i][0] == subj:
-            str4 = basic_object_properties[i][1]
-            if str4 not in list1:
-                list1.append(str4)
-
-    for i in range(len(all_sent)):
-        if all_sent[i][46] != "x":
-            if all_sent[i][9] == "I" and all_sent[i][8] != "~" and all_sent[i][5] == subj:
-                str2 = all_sent[i][14]
-                str3 = findinlist(str2, abbreviations, 0, 1)
-                if str3 in exceptions:
-                    str3 = None
-                if str3 != None:
-                    d = findposinlist(str3, synonyms, 0)
-                    if d > -1:
-                        str3 = synonyms[d][1]
-                    str3 = str3.upper()
-                    if str3 not in list1:
-                        list1.append(str3)
-                elif all_sent[i][14] not in gen_var:
-                    str3 = all_sent[i][14].upper()
-                    str3 = str3 + " THINGS"
-                    list1.append(str3)
-
-    if str3 == None and str4 == None and list1 == []:
-        return None
-    else:
-        list2 = [subj, list1]
-        return list2
-
-
 def simple_id(total_sent, all_sent, identities):
+
+    print ('you have not coded this function to prepare attached sentences yet')
     num = [5, 14, 18, 22]
     dummy = remove_duplicates2d(identities, 0, 1)
     for i in range(len(identities)):
@@ -5576,11 +5793,12 @@ def simple_id(total_sent, all_sent, identities):
                         newp = name_sent(new_sent)
                         list1[0] = new_sent
                         list1[42] = newp
-                        dummy = new_sentence2(old_sent, oldp, new_sent, newp, total_sent, "SUB", identities[i][1])
+                        attach_sent = new_sentence2(old_sent, oldp, new_sent, attach_sent, newp, total_sent, "SUB",
+                                              identities[i][1])
                         all_sent.append(list1)
 
 
-def reflex(all_sent, j, total_sent, prop_sent):
+def reflex(all_sent, j, total_sent):
     global sn, pn
     list1 = copy.deepcopy(all_sent[j])
     list1[8] = "~"
@@ -5590,455 +5808,58 @@ def reflex(all_sent, j, total_sent, prop_sent):
     g = copy.copy(sn)
     sn += 1
     total_sent.append([sn, str2, str1, "", "IRR", "", "", ""])
-    for p in range(len(prop_sent)):
-        if prop_sent[p][0] == g:
+    for p in range(len(total_sent)):
+        if total_sent[p][0] == g:
             break
-    prop_sent.insert(p + 1, [sn, all_sent[j][42], "~", "", "", "", "", "", ""])
-    str3 = all_sent[j][42] + " & " + str1
+    total_sent.insert(p + 1, [sn, str2, all_sent[j][42], "~", "", "", "", "", "", ""])
+    str3 = str2 + " & " + str1
+    str3p = all_sent[j][42] + " & " + str1
     pn += 1
-    for p in range(len(prop_sent) - 1, -1, -1):
-        if prop_sent[p][1] == all_sent[j][42] and prop_sent[p][2] == "":
-            k = prop_sent[p][0]
+    for p in range(len(total_sent) - 1, -1, -1):
+        if total_sent[p][2] == all_sent[j][42] and total_sent[p][3] == "":
+            k = total_sent[p][0]
             break
-    prop_sent.append([pn, str3, "", "&I", sn, k, None, None, None, None, None])
+    total_sent.append([pn, str3, str3p, "", "&I", sn, k, None, None, None, None, None])
     pn += 1
-    prop_sent.append([pn, bottom, "", bottom + "I", pn - 1, None, None, None, None, None, None, \
-                      None, None, None, None])
+    total_sent.append([pn, bottom, "", bottom + "I", pn - 1, None, None, None, None, None, None, \
+                       None, None, None, None])
 
     return False
 
 
-def search_for_category_errors(all_sent, words, basic_object_properties, bo2, \
-                               member_prop, not_id, property_sent, total_sent, detach_sent, \
-                               variable_type, attach_sent):
-    global qn
-    atomic = words[29]
-    members = []
-    non_id = []
-    used_var = []
-    consq = []
-    for i in range(len(variables2)):
-        if variables2[i] not in variables:
-            used_var.append(variables2[i])
-        else:
-            if i > 26:
-                break
-
-    consistent = True
-    nw = []
-    basic_cat = ["moment", "relationship", "point", "number", "thought", "imagination", "group", \
-                 "property", "possible world", "word", "natural whole", "mind", 'matter', 'sensorium', \
-                 'sensation']
-    num = [5, 14, 18, 22]
-    spec_prop = ["indefinite", "definite"]
-    j = -1
-    while j < (len(all_sent)) - 1:
-        j += 1
-        if j == 13:
-            bb = 8
-        relat = all_sent[j][9]
-        if relat == "J":
-            str6 = findinlist(all_sent[j][14], abbreviations, 0, 1)
-            if str6 in spec_prop:
-                all_sent[j][46] = [200]
-                all_sent[j][56] = [200]
-        if all_sent[j][5] == all_sent[j][14] and \
-                        all_sent[j][9] != "=" and all_sent[j][8] != "~":
-            consistent = reflex(all_sent, j, total_sent, prop_sent)
-            if not consistent:
-                break
-
-        if all_sent[j][9] == ne:
-            non_id.append([all_sent[j][0], all_sent[j][5], all_sent[j][14]])
-        else:
-            for p in num:
-                if all_sent[j][p] != None and isvariable(all_sent[j][p]):
-                    if j == 13 and p == 14:
-                        bb = 8
-                    rel = ""
-                    if relat == "A" or (relat == 'T' and p == 14):
-                        kind = 'MOMENT'
-                    elif relat == "IR" and p == 5:
-                        kind = 'FACT'
-                    elif relat == 'AB' or relat == "L" or relat == 'AB' or (relat == 'S' and p == 14):
-                        kind = 'POINT'
-                    elif relat == "G" or (relat == 'N' and p == 14):
-                        kind = 'NUMBER'
-                    elif relat == "M" and p == 5 or (relat == 'TK' and p == 14):
-                        kind = 'MENTAL RELATIONSHIP'
-                        rel = "ir"
-                    elif relat == "M" and p == 14:
-                        kind = 'IMAGINATION'
-                    elif relat == "I" and p == 14:
-                        kind = "NOUN CONCEPT"
-                    elif relat == "H" and p == 14:
-                        kind = "NOUN PROPERTY"
-                    elif relat == "J" and p == 14:
-                        kind = "ADJECTIVIAL PROPERTY"
-                    elif relat == "HE" and p == 5:
-                        kind = "PARTICLE"
-                    elif (relat == 'TK' and p == 14) or (relat == "M" and p == 5):
-                        kind = 'THOUGHT'
-                    elif relat == "HE" and p == 14:
-                        kind = "ENERGY"
-                    elif relat == "W" and p == 5:
-                        kind = "WHOLE"
-                    elif relat == 'P' and p == 14:
-                        kind = 'POSSIBLE WORLD'
-                    elif relat == "D" and p == 14:
-                        kind = 'POSSIBLE RELATIONSHIP'
-                    elif relat == 'AL':
-                        kind = 'LETTER'
-                    elif (relat == 'TK' or relat == "D") and p == 5:
-                        kind = 'MIND'
-                    elif relat == "S" and p == 5:
-                        kind = 'MATTER'
-                    elif relat == "O" and p == 14:
-                        kind = 'SENSORIUM'
-                    else:
-                        kind = ""
-                    if all_sent[j][8] == "~":
-                        kind = ""
-                    dummy = categorize_property_bearers(p, j, all_sent, members, basic_object_properties, kind, bo2,
-                                                        words, consq, rel, basic_cat)
-    basic_object_properties2 = []
-    if consistent:
-        mem_var = []
-        basic_object_properties2 = copy.deepcopy(basic_object_properties)
-        basic_object_properties = sorted(basic_object_properties, key=operator.itemgetter(1, 0))
-        has2groups = []
-        # if something is both matter and a natural whole then it is a natural whole
-        # remove blanks in the second dimension
-        i = -1
-        while i < len(basic_object_properties) - 1:
-            i += 1
-            if basic_object_properties[i][0] in nw and basic_object_properties[i][1] == 'MATTER':
-                del basic_object_properties[i]
-                i -= 1
-        for i in range(len(members)):
-            if i == 13:
-                bb = 8
-            if members[i][0] == 'v':
-                pp = 7
-            if members[i][4] == 'general':
-                members[i][2] = members[i][2] + "*"
-            if members[i][1] == "":
-                group = find_group(members[i][2], all_sent, members[i][0], basic_object_properties)
-                if group == None:
-                    members[i][1] = 'THING'
-                else:
-                    if len(group[1]) > 1:
-                        if group not in has2groups:
-                            has2groups.append(group)
-                    group = group[1][0]
-                    members[i][1] = group
-                    # basic_object_properties.append([members[i][0],group])
-
-        for i in range(len(members)):
-            if members[i][0] == 'u':
-                pp = 7
-            p = findposinlist(members[i][0], has2groups, 0)
-            if p > -1:
-                members[i][1] = has2groups[p][1][0]
-
-        members = sorted(members, key=operator.itemgetter(1, 0))
-        list4 = []
-        list5 = []
-        list6 = []
-        list9 = []
-        irrel = []
-        senti = []
-        senti2 = []
-        gv_corr = []
-        spec_prop = []
-        str2 = ""
-        str4 = ""
-        dis_con = False
-        u = 0
-        if members != []:
-            for i in range(len(members)):
-                str1 = members[i][0]
-                str3 = members[i][1]
-                isirel = members[i][5]
-                if str1 == 'p':
-                    bb = 7
-                if i == 12:
-                    bb = 8
-
-                if str1 != str2 and str2 != "":
-                    senti3 = senti + senti2
-                    list5.append([str2, members[i - 1][1], list4, irrel, spec_prop, senti3])
-                    qn += 1
-                    member_prop.append([str2, members[i - 1][1], list6, list4, list9, irrel, u, qn, senti, senti2])
-                    u = 0  # number of positions a moment or a number occupies
-                    list4 = []
-                    list6 = []
-                    list9 = []
-                    irrel = []
-                    senti = []
-                    senti2 = []
-                    gv_corr = []
-                    spec_prop = []
-                    if "@" in members[i][3]:
-                        gv_corr.append([members[i][3], members[i][7]])
-                    if members[i][4] == 1:
-                        u += 1
-                    if members[i][1] != "":
-                        if isirel == "":
-                            senti.append(members[i][6])
-                            list4.append(members[i][2])
-                            list6.append(members[i][3])
-                        elif isirel == 'ir' or isirel == 'cn':
-                            senti2.append(members[i][6])
-                            irrel.append(members[i][2])
-                            list9.append(members[i][3])
-                        elif isirel == 'sp':
-                            spec_prop.append(members[i][2])
-                else:
-                    if "@" in members[i][3]:
-                        gv_corr.append([members[i][3], members[i][7]])
-                    if members[i][4] == 1:
-                        u += 1
-                    if members[i][1] != "":
-                        if isirel == "":
-                            senti.append(members[i][6])
-                            list4.append(members[i][2])
-                            list6.append(members[i][3])
-                        elif isirel == 'ir' or isirel == 'cn':
-                            senti2.append(members[i][6])
-                            irrel.append(members[i][2])
-                            list9.append(members[i][3])
-                        elif isirel == 'sp':
-                            spec_prop.append(members[i][2])
-                str2 = str1
-
-            if members[i][1] != "":
-                qn += 1
-                senti3 = senti + senti2
-                list5.append([str2, members[i - 1][1], list4, irrel, spec_prop, senti3])
-                member_prop.append([str2, members[i - 1][1], list6, list4, list9, irrel, u, qn, senti, senti2])
-
-            if has2groups != []:
-                for i in range(len(has2groups)):
-                    str1 = has2groups[i][0]
-                    list3 = []
-                    for m in range(len(list5)):
-                        if list5[m][0] == str1:
-                            break
-                    for j in range(1, len(has2groups[i][1])):
-                        str2 = has2groups[i][1][j].upper()
-                        list5.append([str1, str2, list5[m][2], list5[m][3], list5[m][4], list5[m][5]])
-                        member_prop.append([str1, str2, member_prop[m][2], member_prop[m][3], \
-                                            member_prop[m][4], member_prop[m][5], member_prop[m][6], "",
-                                            member_prop[m][8], member_prop[m][9]])
-            list5 = sorted(list5, key=operator.itemgetter(1, 0))
-            member_prop = sorted(member_prop, key=operator.itemgetter(1, 0))
-            # dummy = missing_variables(total_sent,used_var,list5,never_used,all_sent,irrel,property_sent)
-            str3 = list5[0][1]
-            property_sent.append(["", str3, "", "", "", "", ""])
-            non_id2 = copy.deepcopy(non_id)
-            b = 0
-            for i in range(len(list5)):
-                str1 = list5[i][0] + " "
-                str4 = list5[i][1]
-                if i == 11:
-                    bb = 7
-                if str1 == 'n ':
-                    bb = 8
-                for k in range(2, 5):
-                    str2 = ""
-                    str5 = ""
-                    if len(list5[i][2]) == 0 and k == 2:
-                        if list5[i][0] in gen_var:
-                            str2 = "[general]"
-                        elif list5[i][0] in definite2:
-                            str2 = "[definite]"
-                        elif list5[i][0] in ind_var:
-                            str2 = "[indefinite]"
-                    elif k == 4 and list5[i][4] != []:
-                        for s in range(len(list5[i][k])):
-                            if list5[i][k][s] != "":
-                                if str5 == "":
-                                    str5 = " [" + list5[i][k][s]
-                                else:
-                                    str5 += " & " + list5[i][k][s]
-                        str2 += str5 + "]"
-                    else:
-                        if list5[i][k] != []:
-                            for s in range(len(list5[i][k])):
-                                if list5[i][k][s] != "":
-                                    if str2 == "":
-                                        str2 = list5[i][k][s]
-                                    else:
-                                        str2 += " & " + list5[i][k][s]
-                            if k == 3:
-                                str2 = " {" + str2 + "}"
-                    if k == 2 and str2 == "" and str1 in gen_var:
-                        str1 += "[general]"
-                    if str2 != "":
-                        str1 += str2
-
-                if str4 != str3:
-                    property_sent.append(["", str4, "", "", "", "", ""])
-                str3 = str4
-                b += 1
-                str7 = str(b) + "a"
-                if non_id2 != []:
-                    not_id = isnotid(list5[i][0], non_id2, property_sent)
-                property_sent.append([member_prop[i][7], str1, "", "", "", "", ""])
-
-            str1 = ""
-        not_id = []
-    bb = 8
-    list1 = [basic_object_properties2, member_prop, property_sent, not_id, total_sent, consistent]
-
-    return list1
 
 
-def categorize_property_bearers(j, i, list, members, basic_object_properties, str1, bo2, words, consq, rel, basic_cat):
-    global abbreviations, gen_var, cnjts, ind_var
-    atomic_relations = words[22]
-    subj = list[i][5]
-    relat = list[i][9]
-    obj = list[i][14]
-    sent = list[i][0]
-    bool2 = False
-    if list[i][42] == 'n':
-        x = 1
-    else:
-        bool2 = True
-    if not bool2:
-        orelata = list[i][x]  # opposite relata
-    else:
-        orelata = 1
-    # here we determine if the property is irrelevant for determining identity
-    bool1 = False
-    spec_prop = ["definite", "indefinite", 'general', 'particular']
-    if list[i][8] == None:
-        list[i][8] = ""
-    num = [5, 14, 18, 22]
-    if subj == "p" and relat == "I" and obj == 'z' and j == 5:
-        bb = 8
+def instantiate(all_sent, total_sent, candd, attach_sent, id_num, identities, truth_value, greek2, variables):
 
-    bool3 = False
-    if relat == "J" and j == 5:
-        str6 = findinlist(list[i][14], abbreviations, 0, 1)
-        if str6 in spec_prop:
-            bool3 = True
-    bool4 = False
-    if relat == "I" and j == 5:
-        str6 = findinlist(list[i][14], abbreviations, 0, 1)
-        if str6 in basic_cat:
-            bool4 = True
-
-    is_con = True
-    if list[i][42] not in cnjts and list[i][53] != "an":
-        is_con = False
-
-    str5 = ""
-    str9 = ""
-    if str1 != "" and orelata in gen_var:
-        str5 = "ir"
-    elif bool3:
-        str5 = 'sp'
-    elif bool4:
-        str5 = "ir"
-    elif rel == 'ir':
-        str5 = "ir"
-    elif relat == "EX":
-        str5 = "ir"
-    elif j == 14 and relat == 'N':
-        str5 = 'ir'
-    elif not is_con:
-        str5 = 'ir'
-        str9 = "cn"
-        consq.append(sent)
-    elif (relat == "I" or relat == "J") and obj in gen_var:
-        str5 = 'ir'
-    # else:
-    #     for k in num:
-    #         if list[i][k] in gen_var or list[i][k] == None:
-    #             str5 = 'ir'
-    #         else:
-    #             str5 = ""
-    #             break
-
-    if list[i][14] == None:
-        str3 = ""
-    else:
-        str3 = list[i][14]
-    if str9 == "cn":
-        tilde = ""
-        sent = sent.replace("~", "")
-        sent = sent.replace("  ", " ")
-    else:
-        tilde = list[i][8]
-
-    # if an object occupies 2 positions of the A relation then it cannot be replaced with
-    # an object that occupies 1 position
-    u = ""
-    if relat == "A" or relat == "G":
-        u = 1
-
-    if j == 5:
-        if list[i][14] == None:
-            str7 = ""
-        elif list[i][14] in gen_var:
-            str7 = "@"
-        else:
-            str7 = list[i][14]
-
-        members.append([list[i][j], str1, sent, tilde + list[i][9] \
-                        + str7, u, str5, list[i], list[i][14]])
-
-    else:
-        if list[i][5] in gen_var:
-            str7 = "@"
-        else:
-            str7 = list[i][5]
-
-        members.append([list[i][j], str1, sent, str7 + tilde \
-                        + list[i][9], u, str5, list[i], list[i][5]])
-
-    if str1 != "":
-        if [list[i][j], str1] not in basic_object_properties:
-            basic_object_properties.append([list[i][j], str1])
-            bo2.append(list[i])
-    return
-
-
-def instantiate(all_sent, total_sent, basic_object_properties, words, candd, candd2, attach_sent, \
-                prop_sent, prop_name, id_num, identities, truth_value, greek2, variables):
-    global sn, psent, impl, definite2, ind_var, gen_var, variables2, never_used
-    global instan_time, instan_used, simple_id, cnjts, pn, affneg
-
+    global sn, impl, variables2, never_used, embed_var
+    global instan_time, instan_used, simple_id, cnjts, pn
+    # bbb
     irrel_group = []
     embed_var = []
-    dummy = remove_duplicates(all_sent, 0)
+    candd = []
+    all_sent = remove_duplicates(all_sent, 0)
+
     if identities != []:
         dummy = simple_id(total_sent, all_sent, identities)
+
     dv_list = id_sent(abbreviations, all_sent, irrel_group, embed_var)
+
     total_sent.insert(id_num - 1, [id_num, dv_list[0], dv_list[1], "", 'ID'])
-    disjuncts = []
-    negat = []
-    sent = []
 
-    for i in range(len(total_sent)):
-        if total_sent[i][2] != "":
-            sent.append([total_sent[i][0], total_sent[i][2]])
-            negat.append(total_sent[i][3])
+    list1 = put_nc_id_ax_df_into_list(total_sent)  # list1[0] total_sent
 
-    list1 = detach_wo_instantiation(greek2, sent, all_sent, prop_sent, candd, candd2, \
-                                    attach_sent, prop_name, disjuncts, total_sent, 2, negat)
+    attach_sent = renumber_attach_sent(attach_sent, list1[1])
+
+    list1 = statement_logic(greek2, all_sent, list1[0], attach_sent, candd, 1)
+
+    # list1 = detach_wo_instantiation(greek2, total_sent, all_sent, candd, attach_sent, 2)
 
     list1 = rearrange(total_sent, list1[0], all_sent, greek2, list1[1],
                       variables)  # attach_sent = list1[1], consistent = list[0]
 
     candd = prepare_candd(list1[2])  # det_sent = list1[2]
-    prop_sent = prepare_prop_sent(prop_sent, list1[0])
 
-    list2 = statement_logic(greek2, prop_sent, all_sent, list1[1], \
-                            candd, candd2, disjuncts, 0, all_sent)  # cond = list[1], det_sent = list1[2]
+    list2 = statement_logic(greek2, all_sent, total_sent, list1[1], candd, 0)  # cond = list[1], det_sent = list1[2]
 
     tv = final_truth_value(list2[0], truth_value)
 
@@ -6064,21 +5885,6 @@ def determine_truth_value(consistent, impl):
         tv = False
     return tv
 
-
-def prepare_prop_sent(prop_sent, total_sent):
-    for sent in reversed(total_sent):
-        if sent[0] == "" and sent[2] == "":
-            break
-        list1 = [None] * 11
-        list1[0] = sent[0]
-        list1[1] = sent[2]
-        list1[2] = sent[3]
-        list1[3] = sent[4]
-        prop_sent.append(list1)
-
-    return prop_sent
-
-
 def prepare_candd(detach_sent):
     candd = []
     for sent in detach_sent:
@@ -6086,20 +5892,20 @@ def prepare_candd(detach_sent):
     return candd
 
 
-def subtract_400(prop_sent, g):
+def subtract_400(g, tot_sent):
     # this function renumbers numbers from 400 down to a more reasonable number
-    for i in range(len(prop_sent)):
-        if prop_sent[i][0] > 400 and prop_sent[i][0] != "":
-            prop_sent[i][0] = prop_sent[i][0] - g
-        if prop_sent[i][4] > 400 and prop_sent[i][4] != "":
-            prop_sent[i][4] = prop_sent[i][4] - g
-        if prop_sent[i][5] > 400 and prop_sent[i][5] != "":
-            prop_sent[i][5] = prop_sent[i][5] - g
-        if prop_sent[i][6] > 400 and prop_sent[i][6] != "":
-            prop_sent[i][6] = prop_sent[i][6] - g
-        if prop_sent[i][7] > 400 and prop_sent[i][7] != "":
-            prop_sent[i][7] = prop_sent[i][7] - g
-    return prop_sent
+    for i in range(len(tot_sent)):
+        if tot_sent[i][0] > 500 and tot_sent[i][0] != "":
+            tot_sent[i][0] = tot_sent[i][0] - g
+        if tot_sent[i][5] > 500 and tot_sent[i][5] != "":
+            tot_sent[i][5] = tot_sent[i][5] - g
+        if tot_sent[i][6] > 500 and tot_sent[i][6] != "":
+            tot_sent[i][6] = tot_sent[i][6] - g
+        if tot_sent[i][7] > 500 and tot_sent[i][7] != "":
+            tot_sent[i][7] = tot_sent[i][7] - g
+        if tot_sent[i][8] > 500 and tot_sent[i][8] != "":
+            tot_sent[i][8] = tot_sent[i][8] - g
+    return tot_sent
 
 
 def put_nc_id_ax_df_into_list(total_sent):
@@ -6163,19 +5969,6 @@ def rearrange_total_sent(list5, list1, list2):
             dict1.update({total_sent[i][0]: j})
             total_sent[i][0] = j
 
-    for i in range(len(prop_sent)):
-        if i == 53:
-            bb = 8
-        d = dict1.get(prop_sent[i][0], None)
-        if d != None:
-            prop_sent[i][0] = d
-        for j in range(4, 8):
-            if prop_sent[i][j] == None or prop_sent[i][j] == "":
-                break
-            d = dict1.get(prop_sent[i][0], None)
-            if d != None:
-                prop_sent[i][j] = d
-
     for i in range(len(total_sent)):
         for j in range(0, 5):
             if len(total_sent[i]) > 5 + j:
@@ -6196,100 +5989,96 @@ def build_standard_attach_sent(attach_sent):
 
     return standard_cd
 
-
+#
 def print_standard_sent(total_sent, attach_sent, all_sent, consistent, greek2):
-    # this function divides all sentences into standard conjuncts, standard
-    # attach_sent and non standard sentences
-    # it also converts the prop_sent into
-    # nat sent and puts them into the tot sent list
-    nonstandard = []
-    detach_sent = []
-    total_sent.append(["", "", "", "", "", "", "", "", "", ""])
-    total_sent.append(["", "_______________________", "", "", "", "", "", "", "", ""])
 
-    for i in range(len(prop_sent)):
-        if i == 11:
-            bb = 8
-        if prop_sent[i][0] > 400:
-            if prop_sent[i][1] == bottom:
-                total_sent.append([prop_sent[i][0], bottom, prop_sent[i][1], prop_sent[i][2], \
-                                   prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6], prop_sent[i][7]])
-            elif os(prop_sent[i][1]):
-
-                if "~" in prop_sent[i][1]:
-                    str7 = prop_sent[i][1][1:]
-                    # this is for sentences of the form ~~p
-                    str1 = "~" + prop_sent[i][2] + findinlist(str7, prop_name, 0, 2)
-                else:
-                    str1 = prop_sent[i][2] + findinlist(prop_sent[i][1], prop_name, 0, 2)
-
-                bool1 = False
-                for d in range(len(all_sent)):
-                    str3 = all_sent[d][42].replace("~", "")
-                    if prop_sent[i][1] == str3:
-                        bool1 = True
-                        break
-                if consistent:
-                    if bool1:
-                        detach_sent.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                            prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6],
-                                            prop_sent[i][7], "", ""])
-                    else:
-                        nonstandard.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                            prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6],
-                                            prop_sent[i][7]])
-
-                total_sent.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                   prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6], prop_sent[i][7]])
-
-            else:
-                t = findposinmd(prop_sent[i][1], attach_sent, 4)
-                if prop_sent[i][0] == 32:
-                    bb = 8
-                if t > -1:
-                    if attach_sent[t][37] == "" or attach_sent[t][37] == None:
-                        list2 = get_prop(prop_sent[i][1], True, greek2)
-                        attach_sent[t][37] = list2[0]
-                        list3 = list2[1]
-                        str1 = list2[0]
-                    else:
-                        list3 = attach_sent[t][38]
-                        str1 = attach_sent[t][37]
-                else:
-                    if i == 55:
-                        bb = 8
-                    list2 = get_prop(prop_sent[i][1], True)
-                    list3 = list2[1]
-                    str1 = list2[0]
-                bool1 = False
-                list4 = mainconn(prop_sent[i][1])
-                if list4[0] != "&":
-                    for d in range(len(list3)):
-                        str4 = list3[d].replace("~", "")
-                        bool1 = False
-                        for e in range(len(all_sent)):
-                            str3 = all_sent[e][42].replace("~", "")
-                            if str4 == str3:
-                                bool1 = True
-                                break
-
-                total_sent.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                   prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], \
-                                   prop_sent[i][6], prop_sent[i][7]])
-                if consistent:
-                    if not bool1:
-                        nonstandard.append([prop_sent[i][0], str1, "", "", \
-                                            prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], \
-                                            prop_sent[i][6], prop_sent[i][7]])
-
-    if not consistent:
-        total_sent.append(prop_sent[-1])
-
-    standard_cd = build_standard_attach_sent(attach_sent)
-
-    total_sent = add_stan_sent(nonstandard, standard_cd, detach_sent, total_sent)
-
-    return [total_sent, detach_sent]
+    return
+#     # this function divides all sentences into standard conjuncts, standard
+#     # attach_sent and non standard sentences
+#     # it also converts the prop_sent into
+#     # nat sent and puts them into the tot sent list
+#     nonstandard = []
+#     detach_sent = []
+#     total_sent.append(["", "", "", "", "", "", "", "", "", ""])
+#     total_sent.append(["", "_______________________", "", "", "", "", "", "", "", ""])
+#
+#     for i in range(len(total_sent)):
+#         if i == 11:
+#             bb = 8
+#         if total_sent[i][0] > 400:
+#              if os(total_sent[i][1]):
+#
+#                 if "~" in total_sent[i][1]:
+#                     str7 = total_sent[i][1][1:]
+#                     # this is for sentences of the form ~~p
+#                     str1 = "~" + total_sent[i][2] + findinlist(str7, prop_name, 0, 2)
+#                 else:
+#                     str1 = total_sent[i][2] + findinlist(total_sent[i][1], prop_name, 0, 2)
+#
+#                 bool1 = False
+#                 for d in range(len(all_sent)):
+#                     str3 = all_sent[d][42].replace("~", "")
+#                     if total_sent[i][1] == str3:
+#                         bool1 = True
+#                         break
+#                 if consistent:
+#                     if bool1:
+#                         detach_sent.append([total_sent[i][0], str1, total_sent[i][1], total_sent[i][2], \
+#                                             total_sent[i][3], total_sent[i][4], total_sent[i][5], total_sent[i][6],
+#                                             total_sent[i][7], "", ""])
+#                     else:
+#                         nonstandard.append([total_sent[i][0], str1, total_sent[i][1], total_sent[i][2], \
+#                                             total_sent[i][3], total_sent[i][4], total_sent[i][5], total_sent[i][6],
+#                                             total_sent[i][7]])
+#
+#             else:
+#                 t = findposinmd(total_sent[i][1], attach_sent, 4)
+#                 if total_sent[i][0] == 32:
+#                     bb = 8
+#                 if t > -1:
+#                     if attach_sent[t][37] == "" or attach_sent[t][37] == None:
+#                         list2 = get_prop(total_sent[i][1], True, greek2)
+#                         attach_sent[t][37] = list2[0]
+#                         list3 = list2[1]
+#                         str1 = list2[0]
+#                     else:
+#                         list3 = attach_sent[t][38]
+#                         str1 = attach_sent[t][37]
+#                 else:
+#                     if i == 55:
+#                         bb = 8
+#                     list2 = get_prop(total_sent[i][1], True)
+#                     list3 = list2[1]
+#                     str1 = list2[0]
+#                 bool1 = False
+#                 list4 = mainconn(total_sent[i][1])
+#                 if list4[0] != "&":
+#                     for d in range(len(list3)):
+#                         str4 = list3[d].replace("~", "")
+#                         bool1 = False
+#                         for e in range(len(all_sent)):
+#                             str3 = all_sent[e][42].replace("~", "")
+#                             if str4 == str3:
+#                                 bool1 = True
+#                                 break
+#
+#                 total_sent.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
+#                                    prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], \
+#                                    prop_sent[i][6], prop_sent[i][7]])
+#                 if consistent:
+#                     if not bool1:
+#                         nonstandard.append([prop_sent[i][0], str1, "", "", \
+#                                             prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], \
+#                                             prop_sent[i][6], prop_sent[i][7]])
+#
+#     if not consistent:
+#         total_sent.append(prop_sent[-1])
+#
+#     standard_cd = build_standard_attach_sent(attach_sent)
+#
+#     total_sent = add_stan_sent(nonstandard, standard_cd, detach_sent, total_sent)
+#
+#     return [total_sent, detach_sent]
 
 
 def prepare_disjuncts(attach_sent, greek2):
@@ -6558,15 +6347,13 @@ def rearrange(total_sent, consistent, all_sent, greek2, attach_sent, variables):
     # aaa
     global instan_used, instan_time
 
-    list1 = put_nc_id_ax_df_into_list(total_sent)  # list1[0] total_sent
-
-    attach_sent = renumber_attach_sent(attach_sent, list1[1])  # list1[1] new_numbers
+      # list1[1] new_numbers
 
     if consistent and attach_sent != []:
         instan_used += 1
         y = time.time()
 
-        list4 = print_standard_sent(list1[0], attach_sent, all_sent, consistent, greek2)
+        list4 = print_standard_sent(total_sent, attach_sent, all_sent, consistent, greek2)
 
         attach_sent = prepare_disjuncts(attach_sent, greek2)
 
@@ -6908,17 +6695,6 @@ def print_object_properties(object_properties, total_sent):
             str1 += "  " + i[2][j]
         str1 += " |"
         str1 += "  " + i[4]
-        initial_general_string = False
-        # for j in range(len(i[3])):
-        #     if i[1] == 'agen':
-        #         str1 += "  " + i[4]
-        #         initial_general_string = True
-        #         break
-        #     else:
-        #     # elif i[1] == 'agen' and initial_general_string:
-        #         str1 += "  [" + i[3][j][0] + " " + i[3][j][1] + " " + i[3][j][2] + "]"
-        #     # else:
-        #     #     str1 += "  " + i[3][j][0]
         list1[1] = str1
         total_sent.append(list1)
 
@@ -7046,18 +6822,18 @@ def remove_prime(con_list):
 
 
 def total_detach_prop(list1):
-
     list2 = []
     for set in list1:
         for prop in set[0]:
             list2.append(prop)
     return list2
 
+
 def instantiate2(predicates, general_properties, instantiations, general_numbers, gen_var, partic_var,
                  object_properties):
     # this determines if a particular object has all the predicates of the
     # general object
-#bbb
+    # bbb
 
     sentences = []
     properties = copy.deepcopy(general_properties)
@@ -7141,9 +6917,9 @@ def change_indef_attach_var(sent_parts, object_properties, k, instantiations):
                     potentially_identical = False
                     for i in range(6):
                         if attach_sent_part[i] == detach_sent_part[i] or \
-                            attach_sent_part[i] == alpha or \
-                            detach_sent_part[i] == alpha \
-                            or attach_sent_part[i] == att_var + "'":
+                                        attach_sent_part[i] == alpha or \
+                                        detach_sent_part[i] == alpha \
+                                or attach_sent_part[i] == att_var + "'":
                             pass
                         else:
                             break
@@ -7160,6 +6936,7 @@ def change_indef_attach_var(sent_parts, object_properties, k, instantiations):
 
     return False
 
+
 def get_sent_parts(list1):
     # this flattens the list of sent parts in the object properties list
     properties = []
@@ -7171,6 +6948,7 @@ def get_sent_parts(list1):
                 sent_parts.append(list1[i][2][j])
 
     return sent_parts
+
 
 def indefinite_instantiation(det_var, att_var, sent):
     # this replaces the attached variable with the detached variable
@@ -7191,7 +6969,7 @@ def rearrange_object_properties(object_properties):
     # it takes the list of the form [Rd, cf, 33],[Re, cd, 33],[Rg,a,34]
     # and puts into the list [[Rd,Re],33],[[Rg],34]
     i = -1
-    while i < len(object_properties)-1:
+    while i < len(object_properties) - 1:
         i += 1
         if i > 10:
             bb = 8
@@ -7276,7 +7054,6 @@ def get_detached_predicates(variable_type, detach_sent):
         else:
             skind = get_class(relat, 5)
 
-
         object_properties = get_general_object_properties(subj, \
                                                           object_properties,
                                                           s_variable_kind,
@@ -7338,7 +7115,8 @@ def get_general_object_properties(str1, \
                                       [], "", "", [property, sent_kind, sent_num, cond_num, sent_parts]])
         else:
             object_properties.append([str1, variable_kind, [kind], [[property, \
-                                    sent_kind, sent_num, cond_num, sent_parts]], "", "", []])
+                                                                     sent_kind, sent_num, cond_num, sent_parts]], "",
+                                      "", []])
     else:
         for i in range(len(object_properties)):
             if object_properties[i][0] == str1:
@@ -7360,7 +7138,6 @@ def get_general_object_properties(str1, \
                 break
 
     return object_properties
-
 
 
 def get_class(relat, p):
@@ -7563,51 +7340,6 @@ def add_stan_sent(nonstandard, standard_cd, detach_sent, total_sent):
     return total_sent
 
 
-def fix_id(pot_id, rel_sent, all_sent, linked):
-    num = [5, 14, 18, 22]
-    useless = []
-    tot_var = []
-
-    for i in range(len(pot_id)):
-        if pot_id[i][0] not in tot_var:
-            tot_var.append(pot_id[i][0])
-        if pot_id[i][1] not in tot_var:
-            tot_var.append(pot_id[i][1])
-
-    for i in range(len(rel_sent)):
-        for j in num:
-            if rel_sent[i][j] in tot_var:
-                tot_var.remove(rel_sent[i][j])
-
-    done = []
-    for i in range(len(pot_id)):
-        if i not in done:
-            if pot_id[i][1] in tot_var:
-                str1 = pot_id[i][0]
-                str2 = pot_id[i][1]
-                pot_id[i][0] = str2
-                pot_id[i][1] = str1
-                done.append(i)
-
-
-def find_gen(all_sent, gen_var2, k, part_var):
-    global abbreviations, cnjts
-    num = [5, 14, 18, 22]
-    if all_sent[k][42] in cnjts:
-        for j in num:
-            if j > 17 and all_sent[k][j] == None:
-                break
-            part_var.append(all_sent[k][j])
-            if all_sent[k][j] in gen_var2:
-                gen_var2.remove(all_sent[k][j])
-    else:
-        for j in num:
-            if j > 17 and all_sent[k][j] == None:
-                break
-            if not check_dimension(abbreviations, 0, all_sent[k][j]) and all_sent[k][j] not in part_var:
-                if all_sent[k][j] not in gen_var2:
-                    gen_var2.append(all_sent[k][j])
-
 
 def get_rel_conj(candd, attach_sent):
     list2 = []
@@ -7619,337 +7351,6 @@ def get_rel_conj(candd, attach_sent):
     return list2
 
 
-def most_common(list1):
-    data = Counter(list1)
-    return data.most_common(1)[0][0]
-
-
-def new_cond(greek2, pot_id, candd, attach_sent, total_sent, member_prop, candd2, \
-             all_sent, orel_sent):
-    global sn, prop_name, prop_sent, abbreviations
-    def_var = findinlist("definite", abbreviations, 1, 0)
-    indef = findinlist("indefinite", abbreviations, 1, 0)
-    gen = findinlist("general", abbreviations, 1, 0)
-    pot_anc = []  # ancestor of potential identities
-    pot_id = sorted(pot_id, key=operator.itemgetter(1))
-    list1 = []
-    list2 = []
-    anc1 = ""
-    anc2 = ""
-    attach_sent2 = copy.deepcopy(attach_sent)
-    sec_dim = []  # second dimension
-    appears_twice = []
-    pot_id2 = copy.deepcopy(pot_id)
-
-    for i in range(len(pot_id)):
-        sec_dim.append(pot_id[i][1])
-
-    if len(pot_id) > 1:
-        i = -1
-        while i < len(pot_id) - 1:
-            i += 1
-            bool1 = check_dimension(list1, 1, pot_id[i][1])
-            if bool1:
-                bool2 = False
-                for m in range(len(orel_sent)):
-                    if i == -1:
-                        break
-                    d = findposinlist(orel_sent[m][0], all_sent, 42)
-                    sent = all_sent[d][0]
-                    for n in range(len(all_sent)):
-                        sent2 = all_sent[n][0]
-                        if all_sent[n][46] != "x" and n != d:
-                            if all_sent[n][9] == all_sent[d][9] and all_sent[d][8] == all_sent[n][8]:
-
-                                if all_sent[n][14] == all_sent[d][14]:
-                                    f = findposinlist(all_sent[n][5], pot_id, 0)
-                                    if f > -1:
-                                        del pot_id[f]
-                                        del pot_id2[f]
-                                        del sec_dim[f]
-                                        i -= 1
-                                        bool2 = True
-                                        break
-
-                                elif all_sent[n][5] == all_sent[d][5]:
-                                    f = findposinlist(all_sent[n][14], pot_id, 0)
-                                    if f > -1:
-                                        del pot_id[f]
-                                        del pot_id2[f]
-                                        del sec_dim[f]
-                                        bool2 = True
-                                        i -= 1
-                                        break
-                if not bool2:
-                    appears_twice.append(pot_id[i][1])
-            else:
-                list1.append(pot_id[i])
-
-    if len(appears_twice) > 0 and len(pot_id) > 1:
-        str1 = most_common(sec_dim)  # number of times the most abundant member of a list appears in that list
-        maxm = sec_dim.count(str1)
-        pot_id3 = []
-        list2 = []
-        i = -1
-        while i < len(pot_id) - 1:
-            i += 1
-            if i + 1 == len(pot_id) - 1:
-                if pot_id[i][1] == pot_id[i + 1][1]:
-                    list2.append(pot_id[i][0])
-                    list2.append(pot_id[i + 1][0])
-                    pot_id3.append([list2, pot_id[i][1]])
-                    break
-                elif pot_id[i][1] != pot_id[i + 1][1]:
-                    if list2 != []:
-                        list2.append(pot_id[i][0])
-                        pot_id3.append([list2, pot_id[i][1]])
-                        pot_id3.append([[pot_id[i + 1][0]], pot_id[i + 1][1]])
-                        break
-                    else:
-                        pot_id3.append([[pot_id[i][0]], pot_id[i][1]])
-                        pot_id3.append([[pot_id[i + 1][0]], pot_id[i + 1][1]])
-                        break
-            elif pot_id[i][1] == pot_id[i + 1][1]:
-                list2.append(pot_id[i][0])
-            elif pot_id[i][1] != pot_id[i + 1][1] and list2 != []:
-                list2.append(pot_id[i][0])
-                pot_id3.append([list2, pot_id[i][1]])
-                list2 = []
-            elif pot_id[i][1] != pot_id[i + 1][1] and list2 == []:
-                pot_id3.append([[pot_id[i][0]], pot_id[i][1]])
-        pot_id = pot_id3
-    else:
-        maxm = 1
-        for i in range(len(pot_id)):
-            str1 = pot_id[i][0]
-            pot_id[i][0] = [str1]
-
-    for i in range(len(pot_id2)):
-        b = findposinlist(pot_id2[i][0], member_prop, 0)
-        c = findposinlist(pot_id2[i][1], member_prop, 0)
-        str1 = member_prop[b][0]
-        str2 = member_prop[c][0]
-        e = len(member_prop[b][2])
-        f = len(member_prop[c][2])
-        anc1 = member_prop[b][7]
-        anc2 = member_prop[c][7]
-        if anc1 == "":
-            for k in range(len(member_prop)):
-                if member_prop[k][0] == str1 and member_prop[k][7] != "":
-                    anc1 = member_prop[k][7]
-                    break
-        if anc2 == "":
-            for k in range(len(member_prop)):
-                if member_prop[k][0] == str2 and member_prop[k][7] != "":
-                    anc2 = member_prop[k][7]
-                    break
-
-        if pot_id2[i][2] == "":
-            os1 = "(" + pot_id2[i][1] + mini_c + pot_id2[i][0] + ")"
-            sn += 1
-            total_sent.append([sn, os1, "", "", "OS", anc1, anc2, "", ""])
-            pot_id2[i].append(sn)
-        else:
-            os1 = "(" + pot_id2[i][1] + "=" + pot_id2[i][0] + ")"
-            sn += 1
-            total_sent.append([sn, os1, "", "", "LL", anc1, anc2, "", ""])
-            pot_id2[i].append(sn)
-
-    if pot_id != []:
-        num = [5, 14, 18, 22]
-
-        for i in range(len(attach_sent2)):
-            if i == 2:
-                bb = 8
-            ocond2 = attach_sent2[i][4]
-            res = convert(attach_sent2[i])
-            ocond_prop = res[0]
-            ncond_prop = []
-            nprop = []
-            for s in range(0, maxm):
-                ncond_prop.append(res[0])
-                nprop.append(res[0])
-
-            conversion = res[1]
-            isrelevant = False
-            anc2 = []
-            most = 1
-            for j in range(len(attach_sent2[i][38])):
-
-                oprop = attach_sent2[i][38][j]  # old proposition (sentence letter)
-                if oprop[0] == "~":
-                    temp_oprop = oprop[1:]
-                else:
-                    temp_oprop = oprop
-
-                osent = findinlist(temp_oprop, all_sent, 42, 0)
-                if osent == None:
-                    bb = 8
-                g = findposinlist(temp_oprop, all_sent, 42)
-                if g == -1:
-                    print("one of your sentences is missing from the all_sent list")
-                new_list = []
-                for s in range(0, maxm):
-                    list9 = copy.deepcopy(all_sent[g])
-                    new_list.append(list9)
-
-                for h in range(len(pot_id)):
-                    str2 = pot_id[h][1]
-
-                    if str2 in osent:
-                        if all_sent[g][9] == "J" and (all_sent[g][14] == gen or \
-                                                                  all_sent[g][14] == def_var or all_sent[g][
-                            14] == indef):
-                            pass
-                        else:
-                            for q in num:
-                                if all_sent[g][q] == None and q > 17:
-                                    break
-                                if all_sent[g][q] == str2:
-                                    isrelevant = True
-                                    for s in range(0, maxm):
-                                        if len(pot_id[h][0]) == maxm:
-                                            str1 = pot_id[h][0][s]
-                                            f = findposmd(str1, str2, pot_id2, 0, 1, 3)
-                                            if [s, f] not in anc2:
-                                                anc2.append([s, f])
-                                        elif len(pot_id[h][0]) != maxm and len(pot_id[h][0]) > 1:
-                                            # print "you have not coded for a matrix of instantiations yet"
-                                            str1 = pot_id[h][0][0]
-                                            f = findposmd(str1, str2, pot_id2, 0, 1, 3)
-                                            if [s, f] not in anc2:
-                                                anc2.append([s, f])
-                                        else:
-                                            str1 = pot_id[h][0][0]
-                                            f = findposmd(str1, str2, pot_id2, 0, 1, 3)
-                                            if [s, f] not in anc2:
-                                                anc2.append([s, f])
-                                        new_list[s][q] = str1
-                                        if s + 1 > most:
-                                            most += 1
-
-                oprop = oprop.replace("~", "")
-                greek_prop = findinlist(oprop, conversion, 0, 1)
-                ocond_prop = ocond_prop.replace(greek_prop, osent)
-
-                for s in range(0, most):
-                    if most > 1:
-                        bb = 8
-                    nsent = build_sent(new_list[s])
-                    newp = name_sent(nsent)
-                    ncond_prop[s] = ncond_prop[s].replace(greek_prop, nsent)
-                    nprop[s] = nprop[s].replace(greek_prop, newp)
-
-            if isrelevant:
-                temp8 = []
-                for s in range(0, most):
-                    anc3 = ""
-                    anc4 = ""
-                    if chr(945) in nprop[s]:
-                        bb = 8
-
-                    if nprop[s] not in temp8 and chr(945) not in nprop[s]:
-                        temp8.append(nprop[s])
-                        for t in range(len(anc2)):
-                            if anc2[t][0] == s and anc4 == "" and anc3 != "" and anc2[t][1] != anc3:
-                                anc4 = anc2[t][1]
-                                break
-                            if anc2[t][0] == s and anc3 == "":
-                                anc3 = anc2[t][1]
-                        sn += 1
-                        str1 = "(" + ocond_prop + ") " + conditional + " (" + ncond_prop[s] + ")"
-                        str1p = "(" + ocond2 + ") " + conditional + " (" + nprop[s] + ")"
-                        total_sent.append([sn, str1, str1p, "", "SUB", anc3, anc4, "", ""])
-                        list4 = [""] * 15
-                        list4[0] = sn
-                        list4[1] = str1p
-                        list4[2] = ""
-                        prop_sent.append(list4)
-                        list2 = mainconn(str1p)
-                        enc_str1p = enclose(str1p)
-                        def_info = find_sentences(enc_str1p)
-                        list1 = prepare_iff_elim(greek2, def_info, str1p, all_sent, list2[0], list2[1], sn)
-                        list1[37] = str1
-                        bool1 = check_dimension(attach_sent, 4, list1[4])
-                        if not bool1:
-                            attach_sent.append(list1)
-
-    else:
-        attach_sent += attach_sent2
-
-    return True
-
-
-def convert(list1):
-    more_prop = [chr(945 + x) for x in range(24)]
-    list2 = list1[38]
-    oprop = list1[4]
-    oprop = oprop.replace("~", "")
-    list3 = []
-    k = -1
-    list4 = [l1, l2, l3, l4]
-    for j in range(len(oprop)):
-        str2 = oprop[j:j + 1]
-        str3 = oprop[j + 1:j + 2]
-        if str2.islower():
-            k += 1
-            if str3 in list4:
-                str2 += str3
-                oprop = oprop[:j] + more_prop[k] + oprop[j + 2:]
-            else:
-                oprop = oprop[:j] + more_prop[k] + oprop[j + 1:]
-            list3.append([str2, more_prop[k]])
-    return [oprop, list3]
-
-
-def oinstant(list1, list2, pot_id, oid):
-    global gen_var
-    # time ignored
-    num = [5, 14, 18]
-    for i in num:
-        if list2[i] in gen_var and list2[i] != pot_id[1]:
-            if [list1[i], list2[i]] not in oid:
-                oid.append([list1[i], list2[i]])
-
-
-def missing_variables(total_sent, used_var, list5, never_used, all_sent, irrel, property_sent):
-    global definite2
-    global ind_var
-    global gen_var
-
-    var = [definite2, ind_var, gen_var]
-    tot_var = definite2 + ind_var + gen_var
-    tot_var2 = []
-    var_name = ["definite abbreviations:", "indefinite abbreviations:", "general abbreviations:"]
-    for i in range(0, 3):
-        str1 = ""
-        if var[i] != []:
-            for j in range(len(var[i])):
-                tot_var2.append(var[i][j])
-                str1 += " " + var[i][j]
-            str1 = var_name[i] + str1
-            property_sent.append(["", str1, "", "", "", "", "", ""])
-    str1 = ""
-    for i in range(len(used_var)):
-        if used_var[i] not in tot_var2 and used_var[i] not in never_used:
-            str1 += " " + used_var[i]
-    if str1 != "":
-        total_sent.append(["", "variable type missing: " + str1, "", "", "", "", "", "", ""])
-
-    str1 = ""
-    list2 = []
-    for i in range(len(list5)):
-        list2.append(list5[i][0])
-    for i in range(len(tot_var)):
-        if i == 10:
-            bb = 8
-        if tot_var[i] not in list2 and tot_var[i] not in irrel and \
-                        tot_var[i] not in never_used:
-            str1 += " " + tot_var[i]
-    if str1 != "":
-        total_sent.append(["", "missing variables:" + str1, "", "", "", "", "", "", ""])
-
-
 def asymmetry(all_sent, str1, str2):
     for i in range(len(all_sent)):
         if all_sent[i][46] != "x":
@@ -7957,18 +7358,6 @@ def asymmetry(all_sent, str1, str2):
                 if all_sent[i][14] == str1 or all_sent[i][14] == str2:
                     return False
     return True
-
-
-def isrel(str1, all_sent):
-    # if the sentence has not already appeared since we are dealing with nonatoms, then
-    # we do not need to infer it
-    str1 = str1.replace("~", "")
-    for i in range(len(all_sent)):
-        str2 = all_sent[i][42]
-        str2 = str2.replace("~", "")
-        if str2 == str1:
-            return True
-    return False
 
 
 def check_dimension(list1, i, str1, bool1=False, k=0):
@@ -8056,35 +7445,6 @@ def tilde_removal2(str1):
     else:
         str4 = ""
     return [str1, str4]
-
-
-def simple_sent_name(str1):
-    str1 = remove_outer_paren(str1)
-    str2 = findinlist(str1, prop_name, 1, 0)
-    if str2 == None:
-        ostring = str1.replace(" ", "")
-        str2 = prop_var[0]
-        del prop_var[0]
-    prop_name.append([str2, ostring, str1])
-    return str2
-
-
-def is_conjunction(str1):
-    if str1.count(idisj) == 0 and str1.count(iff) == 0 and \
-                    str1.count(conditional) == 0 and str1.count('&') > 0 and str1.count(xorr) == 0:
-        return True
-    else:
-        return False
-
-
-def get_sentence_abbreviations(list1):
-    # this extracts the sentence abbreviations from a complex attached sentence
-    list2 = []
-    for i in range(len(list1)):
-        if os(list1[i]):
-            list2.append(list1[i])
-    return list2
-
 
 def get_conjuncts(str1, bool1=False):
     # remove outparent if true
@@ -8272,6 +7632,7 @@ def link_natural_sent_to_all_sent(attach_sent, all_sent):
 
 
 def ancestor_numbers(list2, k, def_info):
+    # todo move this to near the prepare_attach_sent function
     # this determines the number and connective of the ancestors of a
     # sent in the conditional
     list2[53] = None
@@ -8286,10 +7647,10 @@ def ancestor_numbers(list2, k, def_info):
         ggparen_conn = convert_con_to_letter(ggparen_conn, gparen_num[-1])
         gparen_conn = convert_con_to_letter(gparen_conn, paren_num[-1])
         paren_conn = convert_con_to_letter(paren_conn, self_num)
-        list2[45] = 4
-        list2[46] = paren_conn
-        list2[47] = gparen_conn
-        list2[48] = ggparen_conn
+        # list2[45] = 4
+        # list2[46] = paren_conn
+        # list2[47] = gparen_conn
+        # list2[48] = ggparen_conn
         list2[53] = paren_conn + gparen_conn + ggparen_conn
 
     elif len(k) == 3:
@@ -8299,17 +7660,17 @@ def ancestor_numbers(list2, k, def_info):
         paren_conn = findinlist(paren_num, def_info[4], 0, 1)
         gparen_conn = convert_con_to_letter(gparen_conn, paren_num[-1])
         paren_conn = convert_con_to_letter(paren_conn, self_num)
-        list2[45] = 3
-        list2[46] = paren_conn
-        list2[47] = gparen_conn
+        # list2[45] = 3
+        # list2[46] = paren_conn
+        # list2[47] = gparen_conn
         list2[53] = paren_conn + gparen_conn
 
     elif len(k) == 2:
         paren_num = k[0]
         paren_conn = findinlist(paren_num, def_info[4], 0, 1)
         paren_conn = convert_con_to_letter(paren_conn, self_num)
-        list2[45] = 2
-        list2[46] = paren_conn
+        # list2[45] = 2
+        # list2[46] = paren_conn
         list2[53] = paren_conn
 
     elif len(k) == 5:
@@ -8360,7 +7721,7 @@ def convert_con_to_letter(str1, str2):
 def prepare_iff_elim(greek2, def_info, str2, all_sent, mainc, s, num="", total_sent=[]):
     global sn
 
-    list7 = [""] * 47
+    list7 = [""] * 50
     list7[36] = def_info
     if num == "":
         list7[2] = sn + 1
@@ -8439,8 +7800,8 @@ def islist(list1):
         return True
 
 
-def new_prop(all_sent, prop_sent, str1, ng, asp, anc1, anc2, anc3=None, anc4=None, \
-             is_premise=False, num="", ostring=""):
+def new_prop(all_sent, total_sent, str1, ng, asp, anc1, anc2, anc3=None, anc4=None, is_premise=False, num="",
+             ostring=""):
     if ng == None:
         ng = ""
     global sn, pn
@@ -8454,38 +7815,42 @@ def new_prop(all_sent, prop_sent, str1, ng, asp, anc1, anc2, anc3=None, anc4=Non
 
     if ng == "":
         str1 = remove_outer_paren(str1)
-    str2 = findinlist(str1, prop_sent, 1, 2)
+    str2 = findinlist(str1, total_sent, 2, 3)
     if str2 == ng:
         return True
     elif str2 == None:
+
         if is_premise:
             # sn = num
-            prop_sent.append([num, str1, ng, "", "", "", None, None, ostring, None, None, \
+            total_sent.append([num,findinlist(str1,prop_name,0,2), str1, ng, "", "", "", None, None, ostring, None, None, \
                               None, None, None, None])
         else:
             pn += 1
-            prop_sent.append([pn, str1, ng, asp, anc1, anc2, None, None, None, None, None, \
+            total_sent.append([pn, findinlist(str1,prop_name,0,2), str1, ng, asp, anc1, anc2, None, None, None, None, None, \
                               None, None, None, None])
         return True
     elif str2 != ng:
         pn += 1
-        prop_sent.append([pn, str1, ng, asp, anc1, anc2, None, None, None, None, None, \
+        nat_str = findinlist(str1,prop_name,0,2)
+        total_sent.append([pn,nat_str, str1, ng, asp, anc1, anc2, None, None, None, None, None, \
                           None, None, None, None])
-        anc2 = findinlist(str1, prop_sent, 1, 0)
+        anc2 = findinlist(str1, total_sent, 2, 0)
         pn += 1
         if not os(str1):
+            nat_str = "(" + nat_str + ")"
             str1 = "(" + str1 + ")"
         str1 = str1 + " & " + "~" + str1
-        prop_sent.append([pn, str1, "", "&I", pn - 1, anc2, None, None, None, None, None, \
+        nat_str = nat_str + " & " + "~" + nat_str
+        total_sent.append([pn, nat_str, str1, "", "&I", pn - 1, anc2, None, None, None, None, None, \
                           None, None, None, None])
         str1 = bottom
         pn += 1
-        prop_sent.append([pn, str1, "", bottom + "I", pn - 1, None, None, None, None, None, None, \
+        total_sent.append([pn,str1, "", "", bottom + "I", pn - 1, None, None, None, None, None, None, \
                           None, None, None, None])
         return False
 
 
-def many_cond(greek2, all_sent, candd, candd2, attach_sent, kind, asp, anc2, f, g, r):
+def many_cond(greek2, all_sent, candd, attach_sent, kind, asp, anc2, f, g, r, total_sent):
     original_conditional = copy.deepcopy(attach_sent[g])
     list1 = attach_sent[g][f]
     del list1[0]
@@ -8504,8 +7869,9 @@ def many_cond(greek2, all_sent, candd, candd2, attach_sent, kind, asp, anc2, f, 
     list2.append([candd[r][1], candd[r][2]])
     if list1 == []:
         cjct = attach_sent[g][h]
-        consistent = new_prop_sent(greek2, all_sent, "", kind, asp, "", anc2, \
-                                   attach_sent, g, candd, candd2, attach_sent[g][8], cjct)
+
+        consistent = new_prop_sent(greek2, all_sent, "", kind, asp, "", anc2, attach_sent, g, total_sent, candd,
+                                   attach_sent[g][8], cjct)
         if not consistent:
             return [False, attach_sent]
         else:
@@ -8530,20 +7896,23 @@ def many_cond(greek2, all_sent, candd, candd2, attach_sent, kind, asp, anc2, f, 
                     #     bb = 8
                     if list1 == []:
                         cjct = attach_sent[g][h]
-                        consistent = new_prop_sent(greek2, all_sent, "", kind, asp, "", anc2, \
-                                                   attach_sent, g, candd, candd2, attach_sent[g][8], cjct)
-                        if not consistent:
-                            return [False, attach_sent]
-                        else:
-                            return [True, attach_sent]
+                        consistent = new_prop_sent(greek2, all_sent, "", kind, asp, "", anc2, attach_sent,\
+                                                g, total_sent, candd)
+                        attach_sent[g][8], cjct
+                    if not consistent:
+                        return [False, attach_sent]
                     else:
-                        # attach_sent[g][8] = None
-                        break
-                elif str1 == str2 and ng != neg2:
-                    # the point of having blank returns is because if it returns true
-                    # then we need to subtract the conditional counter, here g, by 1
-                    attach_sent[g][8] = ""
-                    return ["Neither", attach_sent]
+                        return [True, attach_sent]
+                else:
+                    # attach_sent[g][8] = None
+                    break
+            elif str1 == str2 and ng != neg2:
+                # the point of having blank returns is because if it returns true
+                # then we need to subtract the conditional counter, here g, by 1
+                attach_sent[g][8] = ""
+                return ["Neither", attach_sent]
+
+
     attach_sent[g] = original_conditional
     attach_sent[g][f] = list1
     attach_sent[g][8] = ""
@@ -8551,7 +7920,18 @@ def many_cond(greek2, all_sent, candd, candd2, attach_sent, kind, asp, anc2, f, 
     return ["Neither", attach_sent]
 
 
-def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
+def modus_ponens(greek2, all_sent, attach_sent, candd, kind, total_sent):
+
+    if kind == 1:
+        add = True
+        for i in range(len(total_sent)):
+            if add:
+                candd.append([total_sent[i][0], total_sent[i][2], total_sent[i][3]])
+            if total_sent[i][4] == "ID":
+                add = False
+            if total_sent[i][0] == "" and total_sent[i][1] == "":
+                add = True
+
     r = -1
     while r < len(candd) - 1:
         if attach_sent == []:
@@ -8577,22 +7957,12 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                 str12 = attach_sent[g][3]
                 if str12 != 'd':
                     anc2 = attach_sent[g][2]
-                    if attach_sent[g][6] == "":
-                        antec_conjunct = ""
-                        temp_ant = attach_sent[g][0][0]
-                        temp_nega = attach_sent[g][0][1]
-                    else:
-                        antec_conjunct = attach_sent[g][6]
-                        temp_ant = attach_sent[g][0][0][0]
-                        temp_nega = attach_sent[g][0][0][1]
-                    if attach_sent[g][7] == "":
-                        conseq_conjunct = ""
-                        temp_con = attach_sent[g][1][0]
-                        temp_negc = attach_sent[g][1][1]
-                    else:
-                        conseq_conjunct = attach_sent[g][7]
-                        temp_con = attach_sent[g][1][0][0]
-                        temp_negc = attach_sent[g][1][0][1]
+                    antec_conjunct = attach_sent[g][6]
+                    temp_ant = attach_sent[g][0][0][0]
+                    temp_nega = attach_sent[g][0][0][1]
+                    conseq_conjunct = attach_sent[g][7]
+                    temp_con = attach_sent[g][1][0][0]
+                    temp_negc = attach_sent[g][1][0][1]
                     temp_ant = temp_ant.replace(" ", "")
                     temp_con = temp_con.replace(" ", "")
                     temp_ant = remove_outer_paren(temp_ant)
@@ -8602,12 +7972,11 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                         if f == 0 and temp_detach_sent == temp_ant:
                             if detach_sent_truth_val == temp_nega:
                                 if str12 == 'c':
-                                    str13 = "MP"
+                                    rule = "MP"
                                 else:
-                                    str13 = "EE"
+                                    rule = "EE"
                                 if antec_conjunct != "":
-                                    list1 = many_cond(greek2, all_sent, candd, candd2, attach_sent, "con", str13, \
-                                                      anc2, f, g, r)
+                                    list1 = many_cond(greek2, all_sent, candd, attach_sent, "con", rule, anc2, f, g, r)
                                     consistent = list1[0]
                                     attach_sent = list1[1]
                                     if not consistent:
@@ -8619,8 +7988,9 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                                 else:
                                     # con indicates that the consequent of the conditional is to be detached
                                     #
-                                    consistent = new_prop_sent(greek2, all_sent, "", "con", \
-                                                               str13, anc1, anc2, attach_sent, g, candd, candd2)
+                                    consistent = detach(attach_sent, detach_sent, total_sent, "con", rule)
+                                    consistent = new_prop_sent(greek2, all_sent, "", "con", rule, anc1, anc2,
+                                                               attach_sent, g, total_sent, candd)
                                     if consistent == False:
                                         return [False, attach_sent]
                                     del attach_sent[g]
@@ -8629,8 +7999,8 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                             elif detach_sent_truth_val != temp_nega and str12 == 'e':
                                 if not attach_sent[g][28] and antec_conjunct == "":
                                     if kind != 2:
-                                        consistent = new_prop_sent(greek2, all_sent, "~", "con", \
-                                                                   "EN", anc1, anc2, attach_sent, g, candd, candd2)
+                                        consistent = new_prop_sent(greek2, all_sent, "~", "con", "EN", anc1, anc2,
+                                                                   attach_sent, g, total_sent, candd)
                                         if not consistent:
                                             return [False, attach_sent]
                                         del attach_sent[g]
@@ -8640,16 +8010,15 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                         elif f == 1 and temp_detach_sent == temp_con:
                             if detach_sent_truth_val == temp_negc and str12 == 'e':
                                 if conseq_conjunct == "":
-                                    consistent = new_prop_sent(greek2, all_sent, "", "ant", "EE", \
-                                                               anc1, anc2, attach_sent, g, candd, candd2)
+                                    consistent = new_prop_sent(greek2, all_sent, "", "ant", "EE", anc1, anc2,
+                                                               attach_sent, g, total_sent, candd)
                                     if not consistent:
                                         return [False, attach_sent]
                                     del attach_sent[g]
                                     g -= 1
                                     break
                                 else:
-                                    list1 = many_cond(greek2, all_sent, candd, candd2, attach_sent, "ant", "EE", \
-                                                      anc2, f, g, r)
+                                    list1 = many_cond(greek2, all_sent, candd, attach_sent, "ant", "EE", anc2, f, g, r)
                                     consistent = list1[0]
                                     attach_sent = list1[1]
                                     if not consistent:
@@ -8662,11 +8031,11 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                                 if not attach_sent[g][27]:
                                     if kind != 2:
                                         if str12 == 'c':
-                                            str13 = "MT"
+                                            rule = "MT"
                                         else:
-                                            str13 = "EN"
-                                        consistent = new_prop_sent(greek2, all_sent, "~", "ant", \
-                                                                   str13, anc1, anc2, attach_sent, g, candd, candd2)
+                                            rule = "EN"
+                                        consistent = new_prop_sent(greek2, all_sent, "~", "ant", rule, anc1, anc2,
+                                                                   attach_sent, g, total_sent, candd)
 
                                         if not consistent:
                                             return [False, attach_sent]
@@ -8686,9 +8055,8 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                                             if temp_detach_sent == attach_sent[g][0][s][0] and \
                                                             detach_sent_truth_val != attach_sent[g][0][s][1]:
 
-                                                consistent = new_prop_sent(greek2, all_sent, "~", "con", \
-                                                                           "EN", anc1, anc2, attach_sent, g, candd,
-                                                                           candd2)
+                                                consistent = new_prop_sent(greek2, all_sent, "~", "con", "EN", anc1,
+                                                                           anc2, attach_sent,g, total_sent, candd)
                                                 if not consistent:
                                                     return [False, attach_sent]
                                                 del attach_sent[g]
@@ -8707,12 +8075,11 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                                                             detach_sent_truth_val != attach_sent[g][1][s][1]:
 
                                                 if str12 == 'e':
-                                                    str13 = "EN"
+                                                    rule = "EN"
                                                 else:
-                                                    str13 = "MT"
-                                                consistent = new_prop_sent(greek2, all_sent, "~", "ant", \
-                                                                           str13, anc1, anc2, attach_sent, g, candd,
-                                                                           candd2)
+                                                    rule = "MT"
+                                                consistent = new_prop_sent(greek2, all_sent, "~", "ant", rule, anc1,
+                                                                           anc2, attach_sent, g, total_sent, candd)
                                                 if not consistent:
                                                     return [consistent, attach_sent]
                                                 del attach_sent[g]
@@ -8720,6 +8087,25 @@ def modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind):
                                                 break
 
     return [True, attach_sent]
+
+
+def detach(attach_sent, detach_sent, total_sent, kind, g, anc1, anc2, rule):
+
+    global pn
+    pn += 1
+    if kind == 'con':
+        h = 43
+        k = 1
+    else:
+        h = 42
+        k = 0
+    if len(attach_sent[g][h]) == 1:
+        list1 = [""] * 8
+        list1[0] = pn
+        list1[1] = attach_sent[g][h][0]
+        list1[2] = attach_sent[g][k][0]
+        list1[3] = attach_sent[g][k][1]
+
 
 
 def disjunction_heirarchy(attach_sent, str5, d, new_disj=False):
@@ -8734,7 +8120,7 @@ def disjunction_heirarchy(attach_sent, str5, d, new_disj=False):
     str5 = enclose(str5)
     def_info = find_sentences(str5)
     mainc = def_info[4][0][1]
-    list2 = [""] * 47
+    list2 = [""] * 50
     n = 7
     if mainc == xorr:
         list2[3] = 'x'
@@ -8814,8 +8200,16 @@ def proper_spacing(str1):
     str1 = str1.replace("&", " & ")
     return str1
 
+def proper_spacing2(str1):
 
-def iff_elim(all_sent, prop_sent, attach_sent, kind):
+    str1 = str1.replace(iff, " " + iff + " ")
+    str1 = str1.replace(conditional, " " + conditional + " ")
+    str1 = str1.replace(idisj, " " + idisj + " ")
+    str1 = str1.replace(xorr, " " + xorr + " ")
+    str1 = str1.replace("&", " & ")
+    return str1
+
+def iff_elim(all_sent, attach_sent, kind, total_sent):
     new_sent = False
     for d in range(len(attach_sent)):
         if attach_sent[d][0] != "":
@@ -8930,7 +8324,7 @@ def iff_elim(all_sent, prop_sent, attach_sent, kind):
             if attach_sent[d][3] == "e":
                 attach_sent[d][3] = "c"
                 anc1 = attach_sent[d][2]
-                list1 = [""] * 47
+                list1 = [""] * 50
                 list1[5] = ""
                 if attach_sent[d][6] == "":
                     str1 = attach_sent[d][0][0]
@@ -8957,18 +8351,18 @@ def iff_elim(all_sent, prop_sent, attach_sent, kind):
                 if attach_sent[d][5] == "" or attach_sent[d][5] == None:
                     str3 = "(" + str5 + ") & (" + str6 + ")"
                     str7 = iff + "E"
-                    no_contr = new_prop(all_sent, prop_sent, str3, ng, str7, anc1, None, None, None)
+                    no_contr = new_prop(all_sent, total_sent, str3, ng, str7, anc1, None, None, None)
 
                     if not no_contr:
                         return [False, attach_sent]
                     attach_sent[d][2] = pn + 1
                     attach_sent[d][0] = [str1, ng1]
                     attach_sent[d][1] = [str4, ng4]
-                    no_contr = new_prop(all_sent, prop_sent, str5, "", "&E", g, "")
+                    no_contr = new_prop(all_sent, total_sent, str5, "", "&E", g, "")
                     if not no_contr:
                         return [False, attach_sent]
                     list1[2] = pn + 1
-                    no_contr = new_prop(all_sent, prop_sent, str6, "", "&E", g, "")
+                    no_contr = new_prop(all_sent, total_sent, str6, "", "&E", g, "")
                     if not no_contr:
                         return [False, attach_sent]
                     attach_sent[d][4] = str5
@@ -8976,19 +8370,19 @@ def iff_elim(all_sent, prop_sent, attach_sent, kind):
                     attach_sent.append(list1)
                 else:
                     str3 = "(" + str5 + ") & (" + str6 + ")"
-                    no_contr = new_prop(all_sent, prop_sent, str3, "~", iff + "E", g, "")
+                    no_contr = new_prop(all_sent, total_sent, str3, "~", iff + "E", g, "")
                     if not no_contr:
                         return [False, attach_sent]
                     attach_sent[d][3] = 'd'
                     attach_sent[d][4] = str3
             elif new_sent:
-                no_contr = new_prop(all_sent, prop_sent, attach_sent[d][4], "", iff + "E", anc1, "")
+                no_contr = new_prop(all_sent, total_sent, attach_sent[d][4], "", iff + "E", anc1, "")
                 if not no_contr:
                     return [False, attach_sent]
     return [True, attach_sent]
 
 
-def material_implication(all_sent, prop_sent, attach_sent, kind):
+def material_implication(all_sent, attach_sent, total_sent):
     for d in range(len(attach_sent)):
         if d == 3:
             bb = 7
@@ -9041,13 +8435,13 @@ def material_implication(all_sent, prop_sent, attach_sent, kind):
                                 break
 
                 str1 = bad_paren(str1)
-                no_contr = new_prop(all_sent, prop_sent, str1, ng, conditional + "E", anc1, "")
+                no_contr = new_prop(all_sent, total_sent, str1, ng, conditional + "E", anc1, "")
                 if not no_contr:
                     return [False, attach_sent]
                 if str1.find("~~") > -1:
                     str1 = str1.replace("~~", "")
                     g = copy.copy(pn)
-                    no_contr = new_prop(all_sent, prop_sent, str1, ng, "~~E", g, "")
+                    no_contr = new_prop(all_sent, total_sent, str1, ng, "~~E", g, "")
                     if not no_contr:
                         return [False, attach_sent]
                 attach_sent[d][2] = pn
@@ -9091,8 +8485,8 @@ def bad_paren(str1):
     return mstr
 
 
-def demorgan(all_sent, prop_sent, attach_sent, candd, candd2, kind, one_sent=False, str8="", anc1a="", rule="",
-             conjt=[]):
+def demorgan(all_sent, attach_sent, total_sent, candd, \
+             one_sent=False, str8="", anc1a="", conjt=[]):
     d = -1
     rop = False
     if one_sent:
@@ -9218,13 +8612,13 @@ def demorgan(all_sent, prop_sent, attach_sent, candd, candd2, kind, one_sent=Fal
                 str2 = bad_paren(str2)
             else:
                 str1 = bad_paren(str1)
-            no_contr = new_prop(all_sent, prop_sent, str1, "", "~(E", anc1, "")
+            no_contr = new_prop(all_sent, total_sent, str1, "", "~(E", anc1, "")
             if not no_contr:
                 return [False, attach_sent]
             if str1.find("~~") > -1:
                 str1 = str2
                 anc1 = copy.copy(pn)
-                no_contr = new_prop(all_sent, prop_sent, str2, "", "~~E", anc1, "")
+                no_contr = new_prop(all_sent, total_sent, str2, "", "~~E", anc1, "")
                 if not no_contr:
                     return [False, attach_sent]
             list2 = mainconn(str1)
@@ -9236,7 +8630,7 @@ def demorgan(all_sent, prop_sent, attach_sent, candd, candd2, kind, one_sent=Fal
                 anc1 = copy.copy(pn)
                 for i in range(len(list3)):
                     list4 = tilde_removal2(list3[i])
-                    no_contr = new_prop(all_sent, prop_sent, list4[0], list4[1], "&E", anc1, "")
+                    no_contr = new_prop(all_sent, total_sent, list4[0], list4[1], "&E", anc1, "")
                     if not no_contr:
                         return [False, attach_sent]
                     list2 = mainconn(list3[i])
@@ -9245,7 +8639,7 @@ def demorgan(all_sent, prop_sent, attach_sent, candd, candd2, kind, one_sent=Fal
                         if one_sent:
                             attach_sent = disjunction_heirarchy(attach_sent, str1, 0)
                         else:
-                            list5 = [""] * 47
+                            list5 = [""] * 50
                             list5[2] = pn
                             list5[4] = list4[0]
                             list5[5] = list4[1]
@@ -9288,18 +8682,17 @@ def unenclose(str1):
     return str1
 
 
-def new_disjunct(all_sent, str1, ng, n, prop_sent, attach_sent, candd, candd2, conjt, anc1, anc2, \
-                 anc3=None, anc4=None, kind=0, rule=""):
+def new_disjunct(all_sent, str1, ng, n, attach_sent, candd, total_sent, \
+            conjt, anc1, anc2, anc3=None, anc4=None, kind=0,
+                 rule=""):
     global sn, pn
     list2 = mainconn(str1)
     if kind == 1:
         del attach_sent[n]
-        consistent = new_prop(all_sent, prop_sent, str1, ng, "&I", \
-                              anc1, anc2, anc3, anc4)
+        consistent = new_prop(all_sent, total_sent, str1, ng, "&I", anc1, anc2, anc3, anc4)
         return [consistent, attach_sent]
     elif kind == 2:
-        consistent = new_prop(all_sent, prop_sent, str1, ng, "&I", \
-                              anc1, anc2, anc3, anc4)
+        consistent = new_prop(all_sent, total_sent, str1, ng, "&I", anc1, anc2, anc3, anc4)
         return [consistent, attach_sent]
     else:
         if os(str1):
@@ -9307,21 +8700,19 @@ def new_disjunct(all_sent, str1, ng, n, prop_sent, attach_sent, candd, candd2, c
             str1 = remove_outer_paren(str1)
             list1 = tilde_removal2(str1)
             str1 = list1[0]
-            consistent = new_prop(all_sent, prop_sent, str1, list1[1], rule + "E", \
-                                  anc1, anc2)
+            consistent = new_prop(all_sent, total_sent, str1, list1[1], rule + "E", anc1, anc2)
             candd.append([pn, list1[0], list1[1]])
             conjt.append([pn, list1[0], list1[1]])
             return [consistent, attach_sent]
         elif list2[0] == "&":
             del attach_sent[n]
             str1 = remove_outer_paren(str1)
-            dummy = new_prop(all_sent, prop_sent, str1, ng, rule + "E", \
-                             anc1, anc2)
+            dummy = new_prop(all_sent, total_sent, str1, ng, rule + "E", anc1, anc2)
             g = copy.copy(pn)
             list3 = get_conjuncts(str1)
             for i in range(len(list3)):
                 list4 = tilde_removal2(list3[i])
-                consistent = new_prop(all_sent, prop_sent, list4[0], list4[1], "&E", g, "")
+                consistent = new_prop(all_sent, total_sent, list4[0], list4[1], "&E", g, "")
                 if dummy == False:
                     return [consistent, attach_sent]
                 if list3[i].find(idisj) > -1:
@@ -9331,8 +8722,7 @@ def new_disjunct(all_sent, str1, ng, n, prop_sent, attach_sent, candd, candd2, c
                     conjt.append([pn, list4[0], list4[1]])
             return [True, attach_sent]
         else:
-            consistent = new_prop(all_sent, prop_sent, str1, ng, idisj + "E", \
-                                  anc1, anc2)
+            consistent = new_prop(all_sent, total_sent, str1, ng, idisj + "E", anc1, anc2)
             if consistent == False:
                 return [consistent, attach_sent]
             if ng == "~":
@@ -9344,8 +8734,8 @@ def new_disjunct(all_sent, str1, ng, n, prop_sent, attach_sent, candd, candd2, c
             return [True, attach_sent]
 
 
-def xorr_elim(all_sent, attach_sent, n, i, parent, grandparent, whole_d, candd, candd2, conjt, \
-              prop_sent, anc1, anc2, kind=0):
+def xorr_elim(all_sent, attach_sent, n, i, parent, grandparent, \
+              total_sent, whole_d, candd, anc1, anc2, conjt, kind=0):
     str9 = ""
     de_mor = False
     if kind == 0:
@@ -9374,15 +8764,14 @@ def xorr_elim(all_sent, attach_sent, n, i, parent, grandparent, whole_d, candd, 
         if grandparent == whole_d:
             mc = mainconn(str9)
             if mc[0] == '&':
-                list1 = xorr_elim2(str9, prop_sent, attach_sent, candd, candd2, anc1, anc2)
+                list1 = xorr_elim2(all_sent,str9,attach_sent,candd,conjt,anc1,anc2,total_sent)
                 consistent = list1[0]
                 attach_sent = list1[1]
                 if consistent == False:
                     return [consistent, attach_sent]
             else:
                 list4 = tilde_removal(str9)
-                consistent = new_prop(all_sent, prop_sent, list4[0], list4[1], xorr + "E", \
-                                      anc1, anc2)
+                consistent = new_prop(all_sent, total_sent, list4[0], list4[1], xorr + "E", anc1, anc2)
                 if consistent == False:
                     return [consistent, attach_sent]
         else:
@@ -9391,25 +8780,25 @@ def xorr_elim(all_sent, attach_sent, n, i, parent, grandparent, whole_d, candd, 
                 str9 = grandparent.replace(parent, str9)
                 str9 = whole_d.replace(grandparent, str9)
                 str9 = bad_paren(str9)
-                consistent = new_prop(all_sent, prop_sent, str9, "", xorr + "E", anc1, anc2)
+                consistent = new_prop(all_sent, total_sent, str9, "", xorr + "E", anc1, anc2)
                 if str9.find("~~") > -1:
                     str9 = str9.replace("~~", "")
-                    consistent = new_prop(all_sent, prop_sent, str9, "", "~~E", pn, "")
+                    consistent = new_prop(all_sent, total_sent, str9, "", "~~E", pn, "")
 
             else:
                 str9 = whole_d.replace(grandparent, str9)
                 str9 = bad_paren(str9)
-                consistent = new_prop(all_sent, prop_sent, str9, "", xorr + "E", anc1, anc2)
+                consistent = new_prop(all_sent, total_sent, str9, "", xorr + "E", anc1, anc2)
                 g = copy.copy(pn)
                 if str9.find("~~") > -1:
                     str9 = str9.replace("~~", "")
-                    consistent = new_prop(all_sent, prop_sent, str9, "", "~~E", g, "")
+                    consistent = new_prop(all_sent, total_sent, str9, "", "~~E", g, "")
                     if consistent == False:
                         return consistent
                 attach_sent = disjunction_heirarchy(attach_sent, str9, n, True)
                 del attach_sent[n]
             if de_mor:
-                list1 = demorgan(prop_sent, attach_sent, candd, candd2, conjt, "", True, str9, pn, xorr + "E")
+                list1 = demorgan(all_sent,attach_sent,total_sent,candd,True,str9,pn)
                 consistent = list1[0]
                 attach_sent = list1[1]
                 if consistent == False:
@@ -9421,21 +8810,21 @@ def xorr_elim(all_sent, attach_sent, n, i, parent, grandparent, whole_d, candd, 
     else:
         # this does not account for the case where the parent == grandparent but
         # grandparent does not == whole d
-        list1 = xorr_elim2(str9, prop_sent, attach_sent, candd, candd2, conjt, anc1, anc2)
+        list1 = xorr_elim2(all_sent, str9, attach_sent, candd, conjt, anc1, anc2, total_sent)
         consistent = list1[0]
         attach_sent = list1[1]
     return [consistent, attach_sent]
 
 
-def xorr_elim2(all_sent, str9, prop_sent, attach_sent, candd, candd2, conjt, anc1, anc2):
+
+def xorr_elim2(all_sent, str9, attach_sent, candd, conjt, anc1, anc2, total_sent):
     str9 = bad_paren(str9)
-    consistent = new_prop(all_sent, prop_sent, str9, "", xorr + "E", \
-                          anc1, anc2)
+    consistent = new_prop(all_sent, total_sent, str9, "", xorr + "E", anc1, anc2)
     if consistent == False:
         return [False, attach_sent]
     if str9.find("~~") > -1:
         str9 = str9.replace("~~", "")
-        consistent = new_prop(all_sent, prop_sent, str9, "", "~~E", pn, "")
+        consistent = new_prop(all_sent, total_sent, str9, "", "~~E", pn, "")
         if consistent == False:
             return [consistent, attach_sent]
     list3 = get_conjuncts(str9)
@@ -9443,13 +8832,12 @@ def xorr_elim2(all_sent, str9, prop_sent, attach_sent, candd, candd2, conjt, anc
     for b in range(len(list3)):
         list4 = tilde_removal2(list3[b])
         list4[0] = remove_outer_paren(list4[0])
-        consistent = new_prop(all_sent, prop_sent, list4[0], list4[1], "&E", g, "")
+        consistent = new_prop(all_sent, total_sent, list4[0], list4[1], "&E", g, "")
         if consistent == False:
             return consistent
         if not os(list3[b]):
             if list4[1] == "~":
-                list1 = demorgan(prop_sent, attach_sent, \
-                                 candd, candd2, "", True, list3[b], pn, "&E", conjt)
+                list1 = demorgan(all_sent,attach_sent,total_sent,candd,list3[b],pn,"&E")
                 consistent = list1[0]
                 attach_sent = list1[1]
                 if consistent == False:
@@ -9462,7 +8850,7 @@ def xorr_elim2(all_sent, str9, prop_sent, attach_sent, candd, candd2, conjt, anc
     return [True, attach_sent]
 
 
-def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kind=""):
+def disjunction_elimination(all_sent, attach_sent, candd, total_sent, kind=""):
     bool1 = False
     bool2 = False
     global sn, pn
@@ -9473,9 +8861,6 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
             attach_sent = disjunction_heirarchy(attach_sent, attach_sent[i][4], i)
     i = -1
     conjt = copy.deepcopy(candd)
-    if kind == 2:
-        list11 = []
-        rel_conj = finddisj(attach_sent, list11, 1)
 
     while i < len(conjt) - 1:
         i += 1
@@ -9545,8 +8930,8 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
 
                         elif str2 == str4 and str5 == "x":
 
-                            list1 = xorr_elim(all_sent, attach_sent, n, i, parent, grandparent, whole_d, candd, candd2, \
-                                              conjt, prop_sent, anc1, anc2)
+                            list1 = xorr_elim(all_sent, attach_sent, n, i, parent, grandparent, total_sent, whole_d,
+                                              candd, anc1, anc2, )
                             consistent = list1[0]
                             attach_sent = list1[1]
                             if not consistent:
@@ -9585,10 +8970,9 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
                                                 if list11 == []:
                                                     str3 = build_sent_list2(list2)
                                                     if mc[0] == xorr:
-                                                        new_prop(all_sent, prop_sent, str3, "", "&I", anc1, anc3, anc4)
-                                                        list1 = xorr_elim(attach_sent, n, i, parent, \
-                                                                          grandparent, whole_d, candd, candd2, conjt,
-                                                                          prop_sent, pn, anc2, 1)
+                                                        new_prop(all_sent, total_sent, str3, "", "&I", anc1, anc3, anc4)
+                                                        list1 = xorr_elim(all_sent,attach_sent,n,i,parent,grandparent,\
+                                                                          total_sent,whole_d,candd,anc1,anc2,conjt,1)
                                                         consistent = list1[0]
                                                         attach_sent = list1[1]
                                                         if not consistent:
@@ -9597,21 +8981,20 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
                                                         # if the conjunct is not embedded within another conjunct
                                                         # then the disjunct is simply deleted
                                                         if whole_d == grandparent:
-                                                            list1 = new_disjunct(all_sent, str3, "", n, prop_sent, \
-                                                                                 attach_sent, candd, candd2, conjt,
-                                                                                 anc1, anc3, anc4, anc5, 1)
+                                                            list1 = new_disjunct(all_sent, str3, "", n, attach_sent,
+                                                                                 candd, total_sent, conjt, anc1, anc3,
+                                                                                 anc4, anc5, 1)
                                                             attach_sent = list1[1]
                                                         else:
                                                             str8 = whole_d.replace(grandparent, parent2)
                                                             if str8.find("(") > -1 and str8.find(idisj) > -1:
                                                                 str8 = bad_paren(str8)
-                                                            list1 = new_disjunct(all_sent, str3, "", n, prop_sent, \
-                                                                                 attach_sent, candd, candd2, conjt,
-                                                                                 anc1, "", anc3, anc4, 2)
+                                                            list1 = new_disjunct(all_sent, str3, "", n, attach_sent,
+                                                                                 candd, total_sent, conjt, anc1, "",
+                                                                                 anc3, anc4, 2)
                                                             attach_sent = list1[1]
-                                                            list1 = new_disjunct(all_sent, str8, "", n, prop_sent, \
-                                                                                 attach_sent, candd, candd2, conjt,
-                                                                                 pn - 1, anc2)
+                                                            list1 = new_disjunct(all_sent, str8, "", n, attach_sent,
+                                                                                 candd, total_sent, conjt, pn - 1, anc2)
                                                             consistent = list1[0]
                                                             attach_sent = list1[1]
                                                             if not consistent:
@@ -9644,9 +9027,8 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
                                                 if str8.find("(") > -1 and (
                                                                 str8.find(idisj) > -1 or str8.find(xorr) > -1):
                                                     str8 = bad_paren(str8)
-                                                list1 = new_disjunct(all_sent, str8, "", n, prop_sent, \
-                                                                     attach_sent, candd, candd2, conjt, anc1, anc2,
-                                                                     None, None, 0, rule)
+                                                list1 = new_disjunct(all_sent, str8, "", n, attach_sent, candd,
+                                                                     total_sent, conjt, anc1, anc2, None, None, 0, rule)
                                                 consistent = list1[0]
                                                 attach_sent = list1[1]
                                                 if not consistent:
@@ -9675,8 +9057,8 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
                             str8 = whole_d.replace(grandparent, str9)
                             if str8.find("(") > -1 and str8.find(idisj) > -1:
                                 str8 = bad_paren(str8)
-                            list1 = new_disjunct(all_sent, str8, "", n, prop_sent, attach_sent, candd, candd2, conjt,
-                                                 anc1, anc2, None, None, 0, rule)
+                            list1 = new_disjunct(all_sent, str8, "", n, attach_sent, candd, total_sent, conjt, anc1,
+                                                 anc2, None, None, 0, rule)
                             consistent = list1[0]
                             attach_sent = list1[1]
                             if not consistent:
@@ -9701,8 +9083,8 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
                                 str8 = whole_d.replace(parent, str9)
                                 if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
                                     str8 = bad_paren(str8)
-                                list1 = new_disjunct(all_sent, str8, "", n, prop_sent, attach_sent, \
-                                                     candd, candd2, conjt, anc1, anc2, None, None, 0, rule)
+                                list1 = new_disjunct(all_sent, str8, "", n, attach_sent, candd, total_sent, conjt, anc1,
+                                                     anc2, None, None, 0, rule)
                                 consistent = list1[0]
                                 attach_sent = list1[1]
                                 if not consistent:
@@ -9718,8 +9100,8 @@ def disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kin
                                 str8 = whole_d.replace(parent, str5)
                                 if str8.find("(") > -1 and (str8.find(idisj) > -1 or str8.find(xorr) > -1):
                                     str8 = bad_paren(str8)
-                                list1 = new_disjunct(all_sent, str8, "", n, prop_sent, attach_sent, \
-                                                     candd, candd2, conjt, anc1, anc2, None, None, 0, rule)
+                                list1 = new_disjunct(all_sent, str8, "", n, attach_sent, candd, total_sent, conjt, anc1,
+                                                     anc2, None, None, 0, rule)
                                 consistent = list1[0]
                                 attach_sent = list1[1]
                                 if not consistent:
@@ -9737,74 +9119,57 @@ def extract_list(list1, d):
     return list2
 
 
-def statement_logic(greek2, prop_sent, all_sent, attach_sent, candd, candd2, disjuncts, kind="", conc="", impl=""):
+def statement_logic(greek2, all_sent, total_sent, attach_sent, candd, kind=""):
     global time1, st_log_tim
     b = time.time()
 
-    list1 = modus_ponens(greek2, all_sent, attach_sent, candd, candd2, prop_sent, kind)
+    list1 = modus_ponens(greek2, all_sent, attach_sent, candd, kind, total_sent)
     consistent = list1[0]
     attach_sent = list1[1]
     if consistent == False:
         return [False, attach_sent]
     if kind != 2:
 
-        list1 = iff_elim(all_sent, prop_sent, attach_sent, kind)
+        list1 = iff_elim(all_sent, attach_sent, kind, total_sent)
         consistent = list1[0]
         attach_sent = list1[1]
         if consistent == False:
             return [False, attach_sent]
 
-        list1 = material_implication(all_sent, prop_sent, attach_sent, kind)
+        list1 = material_implication(all_sent, attach_sent, total_sent)
         consistent = list1[0]
         attach_sent = list1[1]
         if consistent == False:
             return [False, attach_sent]
 
-        list1 = demorgan(all_sent, prop_sent, attach_sent, candd, candd2, kind)
+        list1 = demorgan(all_sent, attach_sent, total_sent, candd)
         consistent = list1[0]
         attach_sent = list1[1]
         if consistent == False:
             return [False, attach_sent]
 
-        list1 = disjunction_elimination(all_sent, prop_sent, attach_sent, candd, candd2, kind)
+        list1 = disjunction_elimination(all_sent, attach_sent, candd, total_sent, kind)
         consistent = list1[0]
         attach_sent = list1[1]
     if consistent == False:
         return [False, attach_sent]
-    if kind == 1:
-        dummy = finddisj(attach_sent, disjuncts)
+
     c = time.time()
     d = c - b
     st_log_tim += d
     return [True, attach_sent]
-
-
-def finddisj(attach_sent, disjuncts, cate=""):
-    if cate == 1:
-        disjuncts = []
-
-    for i in range(len(attach_sent)):
-        for j in range(8, 36):
-            if type(attach_sent[i][j]) is list:
-                if attach_sent[i][j][0][0] not in disjuncts:
-                    disjuncts.append(attach_sent[i][j][0][0])
-            else:
-                break
-    if cate == 1:
-        return disjuncts
-
 
 def add_outer_paren(str1):
     str1 = remove_outer_paren(str1)
     return "(" + str1 + ")"
 
 
-def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, g, candd, candd2, list3=[], cjct=""):
-    global prop_sent
+def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, \
+                  g, total_sent, candd, list3=[], cjct=""):
     global sn, pn
     global impl
 
-    if pn == 61:
+    if pn == 406 or pn == 409:
         bb = 8
 
     if kind == 'con':
@@ -9823,11 +9188,12 @@ def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, g, c
                 break
             list4[ancc[i]] = list3[i]
         list4[0] = pn
-        list4[1] = cjct
-        list4[2] = ""
-        list4[3] = "&I"
+        list4[1] = findinlist(cjct, prop_name, 0, 2)
+        list4[2] = cjct
+        list4[3] = ""
+        list4[4] = "&I"
         anc1 = pn
-        prop_sent.append(list4)
+        total_sent.append(list4)
 
     if attach_sent[g][e] == "":
         str1 = attach_sent[g][h][0]
@@ -9835,41 +9201,46 @@ def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, g, c
 
         if implies in attach_sent[g][h][0] or nonseq in attach_sent[g][h][0]:
             pn += 1
-            prop_sent.append([pn, str1, "", asp, anc1, anc2, "", "", ""])
+            total_sent.append([pn, findinlist(str1, prop_name, 0, 2), str1, "", asp, anc1, anc2, "", "", ""])
             g = str1.find(implies)
             asp = "DF " + implies
             if g == -1:
                 g = str1.find(nonseq)
                 asp = "DF " + nonseq
-            str2 = str1[:g]
-            str3 = str1[g + 1:]
-            str2 = str2.strip()
-            str3 = str3.strip()
+            str2p = str1[:g]
+            str3p = str1[g + 1:]
+            str2p = str2p.strip()
+            str3p = str3p.strip()
+            str2 = findinlist(str2p,prop_name,0,2)
+            str3 = findinlist(str3p, prop_name, 0, 2)
             if impl == implies:
+                str4p = str2p + " & ~" + str3p + " & " + bottom
                 str4 = str2 + " & ~" + str3 + " & " + bottom
                 str5 = bottom
             else:
+                str4p = str2p + " & ~" + str3p + " & " + top
                 str4 = str2 + " & ~" + str3 + " & " + top
                 str5 = top
             pn += 1
-            prop_sent.append([pn, str4, "", asp, pn - 1, "", "", "", ""])
+            total_sent.append([pn, str4, str4p, "", asp, pn - 1, "", "", "", ""])
             pn += 1
-            prop_sent.append([pn, str2, "", "&E", pn - 1, "", "", "", ""])
-            candd.append([pn, str2, ""])
+            total_sent.append([pn, str2, str2p, "", "&E", pn - 1, "", "", "", ""])
+            candd.append([pn, str2p, ""])
             pn += 1
-            prop_sent.append([pn, str3, "~", "&E", pn - 2, "", "", "", ""])
-            candd.append([pn, str3, "~"])
+            total_sent.append([pn, str3, str3p, "~", "&E", pn - 2, "", "", "", ""])
+            candd.append([pn, str3p, "~"])
             pn += 1
-            prop_sent.append([pn, str5, "", "&E", pn - 3, "", "", "", ""])
+            total_sent.append([pn, str5, "", "", "&E", pn - 3, "", "", "", ""])
             return
 
         # here we take care of double negatives
         if ng == "~" and attach_sent[g][h][1] == "~":
             pn += 1
-            prop_sent.append(
-                [pn, "~" + str1, "~", asp, anc1, anc2, None, None, None, None, None, None, None, None, None])
+            nat_str1 = findinlist(str1,prop_name,0,2)
+            total_sent.append(
+                [pn, "~" + nat_str1, "~" + str1, "~", asp, anc1, anc2, None, None, None, None, None, None, None, None, None])
             g = copy.copy(pn)
-            dummy = new_prop(all_sent, prop_sent, str1, "", "~~E", g, None)
+            dummy = new_prop(all_sent, total_sent, str1, "", "~~E", g, None)
             if dummy == False:
                 return False
             ng = ""
@@ -9882,7 +9253,7 @@ def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, g, c
         elif list2[0] != "" and ng == "~":
             str1 = add_outer_paren(str1)
         if bool1 == False:
-            dummy = new_prop(all_sent, prop_sent, str1, ng, asp, anc1, anc2)
+            dummy = new_prop(all_sent, total_sent, str1, ng, asp, anc1, anc2)
             if dummy == False:
                 return False
 
@@ -9893,7 +9264,7 @@ def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, g, c
             list3 = prepare_iff_elim(greek2, def_info, str1, all_sent, list2[0], list2[1], pn)
             attach_sent.append(list3)
         elif list2[0] == iff or list2[0] == conditional or list2[0] == idisj or list2[0] == xorr:
-            list5 = [""] * 47
+            list5 = [""] * 50
             list5[2] = pn
             list5[4] = str1
             list5[5] = ng
@@ -9902,25 +9273,25 @@ def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, g, c
     else:
         str1 = attach_sent[g][e]
         if ng == "~":
-            list5 = [""] * 47
+            list5 = [""] * 50
             list5[2] = pn + 1
             list5[4] = str1
             list5[5] = "~"
             list5[3] = 'd'
             attach_sent.append(list5)
-            dummy = new_prop(all_sent, prop_sent, str1, ng, asp, anc1, anc2)
+            dummy = new_prop(all_sent, total_sent, str1, ng, asp, anc1, anc2)
             if dummy == False:
                 return False
         else:
             list1 = attach_sent[g][h]
             str1 = remove_outer_paren(str1)
-            dummy = new_prop(all_sent, prop_sent, str1, ng, asp, anc1, anc2)
+            dummy = new_prop(all_sent, total_sent, str1, ng, asp, anc1, anc2)
             if dummy == False:
                 return False
             anc1 = copy.copy(pn)
             for i in range(len(list1)):
                 list2 = mainconn(list1[i][0])
-                dummy = new_prop(all_sent, prop_sent, list1[i][0], list1[i][1], "&E", anc1, "")
+                dummy = new_prop(all_sent, total_sent, list1[i][0], list1[i][1], "&E", anc1, "")
                 if dummy == False:
                     return False
                 candd.append([pn, list1[i][0], list1[i][1]])
@@ -9930,7 +9301,7 @@ def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, attach_sent, g, c
                     list4 = prepare_iff_elim(greek2, def_info, list1[i][0], all_sent, list2[0], list2[1], pn)
                     attach_sent.append(list4)
                 elif list2[0] != "":
-                    list5 = [""] * 47
+                    list5 = [""] * 50
                     if list2[0] == conditional:
                         list5[3] = 'c'
                     elif list2[0] == iff:
@@ -9959,102 +9330,94 @@ def oc(str1):
         return False
 
 
-def detach_wo_instantiation(greek2, sent, all_sent, prop_sent, candd, candd2, attach_sent, prop_name, disjuncts,
-                            total_sent, kind, negat):
-    global conc
+def detach_wo_instantiation(greek2, total_sent, all_sent, candd, attach_sent, kind):
+
     global sn
     global rel_conj
     conj_elim = []
     temp_attach_sent = []
-    conc = ""
     impl = ""
     qq = 0
 
-    for i in range(len(sent)):
+    for i in range(len(total_sent)):
         if i == 8:
             bb = 7
-        g = sent[i].count('(')
-        h = sent[i].count(')')
-        if g != h:
-            print('wrong number of parentheses in sentence:' + sent[i])
-            sys.exit()
+        if total_sent[i][2] != "":
+            g = total_sent[i][2].count('(')
+            h = total_sent[i][2].count(')')
+            if g != h:
+                print('wrong number of parentheses in sentence:' + total_sent[i][2])
+                sys.exit()
 
-        sent[i][1] = enclose(sent[i][1])
-        if sent[i][1].find("!") > -1:
-            qq += 1
-        else:
-            if sent[i][1].count("(") != sent[i][1].count(")"):
-                print("line " + str(sent[i][0]) + " does not have the right number \
-                                             of parentheses")
+            total_sent[i][2] = enclose(total_sent[i][2])
 
-            sent[i][1] = remove_outer_paren(sent[i][1])
-            ostring = copy.copy(sent[i][1])
+            total_sent[i][2] = remove_outer_paren(total_sent[i][2])
+            ostring = copy.copy(total_sent[i][2])
             nstring = proper_spacing(ostring)
 
-            if os(sent[i][1]):
+            if os(total_sent[i][2]):
                 if kind == "":
                     list3 = tilde_removal(nstring)
-                    list4 = tilde_removal(ostring)
                     str2 = list3[0]
                     ng = list3[1]
                 else:
-                    ng = negat[i]
-                    str2 = sent[i][1]
-                candd.append([sent[i][0], str2, ng])
+                    ng = total_sent[i][3]
+                    str2 = total_sent[i][2]
+                candd.append([total_sent[i][0], str2, total_sent[i][3]])
             else:
                 list1 = find_sentences(ostring)
-                sent[i][1] = list1[0][0]
+                total_sent[i][2] = list1[0][0]
                 str2 = list1[0][0]
                 if kind == "":
                     list4 = tilde_removal2(str2)
                     ng = list4[1]
                     str2 = list4[0]
                 else:
-                    ng = negat[i]
+                    ng = total_sent[i][3]
                 list2 = mainconn(str2)
                 if list2[0] == idisj or list2[0] == xorr:
                     if oc(str2):
                         candd.append([nstring, str2, ng])
-                    list5 = [""] * 47
-                    list5[2] = sent[i][0]
+                    list5 = [""] * 50
+                    list5[2] = total_sent[i][0]
                     list5[3] = 'd'
                     list5[4] = str2
                     list5[5] = ng
                     attach_sent.append(list5)
                 elif list1[4][0][1] != "&":
                     if list1[4][0][1] != idisj and ng == "" and list1[4][0][1] != xorr:
-                        list7 = prepare_iff_elim(greek2, list1, str2, all_sent, list2[0], list2[1], sent[i][0],
+                        list7 = prepare_iff_elim(greek2, list1, str2, all_sent, list2[0], list2[1], total_sent[i][0],
                                                  total_sent)
                     else:
-                        list7 = [""] * 47
-                        list7[2] = sent[i][0]
+                        list7 = [""] * 50
+                        list7[2] = total_sent[i][0]
                         list7[3] = 'd'
                         list7[4] = str2
                         list7[5] = ng
                     attach_sent.append(list7)
                     if oc(str2):
-                        candd.append([sent[i][0], str2, ng])
+                        candd.append([total_sent[i][0], str2, ng])
                 else:
                     list3 = get_conjuncts(str2)  # ggg
                     for j in range(len(list3)):
                         list5 = tilde_removal2(list3[j])
                         if os(list3[j]):
                             if not two_elements_are_in_list(conj_elim, list5[0], list5[1], 1, 2):
-                                conj_elim.append([sent[i][0], list5[0], list5[1]])
+                                conj_elim.append([total_sent[i][0], list5[0], list5[1]])
                         else:
                             if not two_elements_are_in_list(temp_attach_sent, list5[0], list5[1], 1, 2):
-                                temp_attach_sent.append([sent[i][0], list5[0], list5[1]])
+                                temp_attach_sent.append([total_sent[i][0], list5[0], list5[1]])
                             else:
                                 bb = 8
 
-            no_contr = new_prop(all_sent, prop_sent, str2, ng, "", None, None, None, None, True, sent[i][0], ostring)
+            no_contr = new_prop(all_sent, total_sent, str2, ng, "", None, None, None, None, True, total_sent[i][0],
+                                ostring)
             if not no_contr:
                 return False
 
     if conj_elim != []:
         for i in range(len(conj_elim)):
-            no_contr = new_prop(all_sent, prop_sent, conj_elim[i][1], conj_elim[i][2], "&E", \
-                                conj_elim[i][0], None)
+            no_contr = new_prop(all_sent, total_sent, conj_elim[i][1], conj_elim[i][2], "&E", conj_elim[i][0], None)
             if not no_contr:
                 return False
             candd.append([pn, conj_elim[i][1], conj_elim[i][2]])
@@ -10068,11 +9431,11 @@ def detach_wo_instantiation(greek2, sent, all_sent, prop_sent, candd, candd2, at
             # ffd
             ng = temp_attach_sent[i][2]
             list2 = mainconn(str2)
-            no_contr = new_prop(all_sent, prop_sent, str2, ng, "&E", temp_attach_sent[i][0], None)
+            no_contr = new_prop(all_sent, total_sent, str2, ng, "&E", temp_attach_sent[i][0], None)
             if list2[0] != idisj and ng == "" and list2[0] != "&" and list2[0] != xorr:
                 list7 = prepare_iff_elim(greek2, list1, str2, all_sent, list2[0], list2[1], pn + 1, total_sent)
             else:
-                list7 = [""] * 47
+                list7 = [""] * 50
                 list7[2] = pn + 1
                 list7[4] = str2
                 list7[3] = 'd'
@@ -10085,7 +9448,7 @@ def detach_wo_instantiation(greek2, sent, all_sent, prop_sent, candd, candd2, at
             if not no_contr:
                 return False
 
-    list1 = statement_logic(greek2, prop_sent, all_sent, attach_sent, candd, candd2, disjuncts, kind, conc, impl)
+    list1 = statement_logic(greek2, all_sent, total_sent, attach_sent, candd, kind)
     return list1
 
 
@@ -10223,10 +9586,10 @@ def get_result(post_data, archive_id=None, request=None):
             w4.append(row)
         w4 = tuple(w4)
 
-    global prop_name, plural_c, anaphora, definite, prop_var, ind_var
-    global ant_cond, attach_sent, candd, rel_conj, conc, prop_sent, sn, impl
-    global tagged_nouns, tagged_nouns2, abbreviations, basic_object_properties, variables, greek
-    global gen_var, definite2, cnjts, test_one, stp, strt, candd2, pn, embed, affneg
+    global prop_name, plural_c, anaphora, definite, prop_var
+    global attach_sent, candd, rel_conj, conc, sn, impl
+    global abbreviations, basic_object_properties, variables, greek
+    global cnjts, test_one, stp, strt, pn, embed
 
     if one_sent:  # ggg
         # str99 = 'co^ Russell has courage  % Russell is|a not courageous'
@@ -10287,20 +9650,12 @@ def get_result(post_data, archive_id=None, request=None):
         anaphora = ""
         impl = ""
         definite = []
-        definite2 = []
-        gen_var = []
-        ant_cond = []
         attach_sent = []
-        affneg = []
         candd = []
         cnjts = []
-        ind_var = []
+        detach_sent = []
         rel_conj = []
-        conc = []
         identities = []
-        prop_sent = []
-        tagged_nouns = []
-        tagged_nouns2 = []
         abbreviations = []
         basic_object_properties = []
         def_atoms = []
@@ -10309,16 +9664,22 @@ def get_result(post_data, archive_id=None, request=None):
         greek2 = copy.deepcopy(greek)
         id_num = test_sent[k][-1][0] + 1
         sn = id_num
-        dummy = divide_sent(words, test_sent[k], variables, total_sent, all_sent)
-        num_sent = len(all_sent)
-        dummy = syn(total_sent, all_sent, words, def_atoms)
-        dummy = rel_repl(all_sent, total_sent, words, abbreviations, variables, id_num)
-        dummy = word_sub(variables, abbreviations, total_sent, all_sent, words, id_num)
-        dummy = define(total_sent, all_sent, variables, abbreviations, words, rep_rel, identities, \
-                       def_atoms, num_sent)
-        list2 = instantiate(all_sent, total_sent, basic_object_properties, words, candd, candd2, \
-                            attach_sent, prop_sent, prop_name, id_num, identities, \
-                            test_sent[k][0][3], greek2, variables)
+
+        list4 = divide_sent(words, test_sent[k], variables, total_sent, all_sent, attach_sent)
+
+        list4 = syn(total_sent, list4[1], words, def_atoms, list4[0])
+
+        list4 = rel_repl(list4[1], total_sent, words, abbreviations, variables, id_num, list4[0]) # list4[0] = atttach_sent
+
+        list4 = word_sub(variables, abbreviations, total_sent, list4[1], words, id_num, list4[0]) # list4[1] = all_sent
+
+        list4 = define(total_sent, list4[1], variables, abbreviations, words, rep_rel, identities, def_atoms,
+                       list4[0], detach_sent)
+
+        list2 = instantiate(list4[1], total_sent, candd, list4[0], id_num, \
+                            identities, test_sent[k][0][3], greek2,
+                            variables)
+
         test_sent[k] = list2[0]
         tot_prop_name.append(prop_name)
         yy = ""
