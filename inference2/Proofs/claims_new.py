@@ -79,7 +79,7 @@ def pop_sent(str1):
 [[ 1,"I saw the same movie as you",None,'co'],[ 2,"That|d movie was Casablanca",None,'j'],[ 3,"I did not see Casablanca",None,'j']],\
 [[ 1,"Leibniz and|c aristotle ate from the same cake",None,'co'],[ 2,"This|n was that|d cake",None,'j'],[ 3,"Leibniz did not eat from this|n",None,'j']],\
 [[ 1,"The door is|a not large",None,'co'],[ 2,"The door which is|a green is|a large",None,'j']],\
-[[ 1,"If Leibniz and|c Aristotle studied logic then Leibniz studied logic",None,'ta']],\
+# [[ 1,"If Leibniz and|c Aristotle studied logic then Leibniz studied logic",None,'ta']],\
 [[ 1,"Russell is|g not a|r man",None,'co']],\
 [[ 1,"Russell has the|r property courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
