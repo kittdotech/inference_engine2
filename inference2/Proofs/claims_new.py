@@ -44,6 +44,7 @@ def pop_sent(str1):
 [[ 1,"A region|a is|g not a group of|i points",None,'co']],\
 [[ 1,"There is|e a point which thinks some|p thoughts",None,'co']],\
 [[ 1,"There is|e a mind which thinks no thoughts",None,'co']],\
+    #todo at|p is wrong
 [[ 1,"I saw the man who drank some|p beers at|p the party",None,'co'],[ 2,"no one|p drank some|p beers at|p the party",None,'j']],\
 [[ 1,"Some|p minds smell",None,'co']],\
 [[ 1,"Some|p points smell",None,'co']],\
