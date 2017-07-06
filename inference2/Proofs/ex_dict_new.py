@@ -694,7 +694,7 @@ def large_dict(str1):
 ['n','part|s',None,'(c=part|s) & ((bIc) x^ (bINd))'],\
 ['ns','part|s',None,'(part|s=physical spatial part)'],\
 ['a','partially material|a (property)',None,'(b=partially material|a) & ((cJb) x^ ((dWf) & (fIg) & (dJc) & (dWh) & (hIk))) & ((cIb) t^ (cIe)) & (e=property) & (g=body|c) & (k=mind)'],\
-['','partially material|b (concept)',None,'(b=partially material|a) & ((cJb) x^ ((dWf) & (fIg) & (dIc) & (dWh) & (hIk))) & (g=body|c) & (k=mind)'],\
+['a','partially material|b (concept)',None,'(b=partially material|a) & ((cJb) x^ ((dWf) & (fIg) & (dIc) & (dWh) & (hIk))) & (g=body|c) & (k=mind)'],\
 ['ns','partially spiritual',None,'(partially spiritual = partially material|b)'],\
 ['r','participate','PRTC','(bPRTCc) x^ ((dCAUSc) x^ (dWb))'],\
 ['na','party',None,'postponed'],\
@@ -942,6 +942,7 @@ def large_dict(str1):
 ['ra','spoke','SPK','postponed'],\
 ['na','sprite',None,'(c=sprite) & (d=artificial) & ((bJc) t^ (bJd))'],\
 ['ra','standing','STD','postponed'],\
+['ra','study','STD','postponed'],\
 ['ra','studied','STD','postponed'],\
 ['n','table',None,'artificial'],\
 ['na','table',None,'(c=table) & (d=artificial) & ((bJc) t^ (bJd))'],\

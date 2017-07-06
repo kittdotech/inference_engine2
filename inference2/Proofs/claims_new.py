@@ -33,7 +33,7 @@ def pop_sent(str1):
 [[ 1,"There is|e a thought which smells",None,'co']],\
 [[ 1,"There is|e a thought which desires something",None,'co']],\
 [[ 1,"There is|e a mind which is|a not mental",None,'co']],\
-[[ 1,"There is|e a thought which is|g a|r group",None,'co']],\
+[[ 1,"There is|e a thought which is|g a|r group",None,'ta']],\
 [[ 1,"There is|e a number|i which is|a physical",None,'co']],\
 [[ 1,"There is|e a mind which smells",None,'co']],\
 [[ 1,"There is|e a point which smells",None,'co']],\
@@ -41,15 +41,11 @@ def pop_sent(str1):
 [[ 1,"There is|e a moment which is|a physical",None,'co']],\
 [[ 1,"JFK is|g a|r kennedy",None,'co'],[ 2,"JFK is|g not part|f of the kennedy|a family",None,'j']],\
 [[ 1,"Something is|g a|r b",None,'co'],[ 2,"b is|g not a|r class",None,'j']],\
-[[ 1,"A region|a is|g not a group of|i points",None,'co']],\
 [[ 1,"There is|e a point which thinks some|p thoughts",None,'co']],\
-[[ 1,"There is|e a mind which thinks no thoughts",None,'co']],\
-    #todo at|p is wrong
 [[ 1,"I saw the man who drank some|p beers at|p the party",None,'co'],[ 2,"no one|p drank some|p beers at|p the party",None,'j']],\
 [[ 1,"Some|p minds smell",None,'co']],\
 [[ 1,"Some|p points smell",None,'co']],\
 [[ 1,"Some|p numbers|i are|a physical",None,'co']],\
-[[ 1,"Some|p thoughts are|g groups",None,'co']],\
 [[ 1,"Some|p points think something",None,'co']],\
 [[ 1,"Some|p points have|w members",None,'co']],\
 [[ 1,"Some|p points are|a physical",None,'co']],\
@@ -63,12 +59,10 @@ def pop_sent(str1):
 [[ 1,"A universal is|r not distinct from its|a instance",None,'co']],\
 [[ 1,"There is|e a universal which is|r not distinct from its|a instances",None,'co']],\
 [[ 1,"The concept|n cat is|g itself|r a|r cat",None,'co']],\
-[[ 1,"Julius Caesar is|g a|r number|i",None,'co']],\
 [[ 1,"Dog is|g not a|r concept|n",None,'co']],\
 [[ 1,"Point is|g a|r partially material|a concept|n",None,'co']],\
 [[ 1,"This dog is|g a|r concept|n",None,'co']],\
 [[ 1,"Thought is|g a|r partially material|a concept|n",None,'co']],\
-[[ 1,"Something exists inside of|r a point",None,'co']],\
 [[ 1,"There is|e a point which is|a physical",None,'co']],\
 [[ 1,"There is|e a number|i which smells",None,'co']],\
 [[ 1,"There is|e a thought which is|a not mental|b",None,'co']],\
@@ -80,11 +74,10 @@ def pop_sent(str1):
 [[ 1,"I saw the same movie as you",None,'co'],[ 2,"That|d movie was Casablanca",None,'j'],[ 3,"I did not see Casablanca",None,'j']],\
 [[ 1,"Leibniz and|c aristotle ate from the same cake",None,'co'],[ 2,"This|n was that|d cake",None,'j'],[ 3,"Leibniz did not eat from this|n",None,'j']],\
 [[ 1,"The door is|a not large",None,'co'],[ 2,"The door which is|a green is|a large",None,'j']],\
-# [[ 1,"If Leibniz and|c Aristotle studied logic then Leibniz studied logic",None,'ta']],\
+[[ 1,"Leibniz and|c Aristotle studied logic ",None,'co'],[ 2,"Leibniz did not study logic",None,'j']],\
 [[ 1,"Russell is|g not a|r man",None,'co']],\
 [[ 1,"Russell has the|r property courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"I think that|c it|p is|a true that|c you are|a smart",None,'co'],[ 2,"I do not believe that|c you are|a smart",None,'j']],\
-[[ 1,"This cat is|g not a|r cat",None,'co']],\
-[[ 1,"This|n is|g a|r group of|i points",None,'co'],[ 2,"No points belong to this|n",None,'j']]]
+[[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']]]
     return sent
