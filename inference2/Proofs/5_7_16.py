@@ -109,8 +109,6 @@ variables = []
 abbreviations = []
 
 anaphoric_relations = []
-plural_c = []  #
-definite = []  #
 anaphora = ""
 time1 = 0
 embed = []
@@ -482,22 +480,18 @@ def isvariable(str3, kind=""):
         return False
     elif str3 == 'i':
         return False
-    try:
-        if str3 != "":
-            str3 = str3.replace(l1, "")
-            str3 = str3.replace(l2, "")
-            str3 = str3.replace(neg, "")
-            if len(str3) == 1 and str3.islower():
-                bool2 = True
-            else:
-                bool2 = False
-    except AttributeError:
-        print ('error in isvariable function')
-        sys.exit()
+
+    if str3 != "":
+        str3 = str3.replace(l1, "")
+        str3 = str3.replace(l2, "")
+        str3 = str3.replace(neg, "")
+        if len(str3) == 1 and str3.islower():
+            bool2 = True
+        else:
+            bool2 = False
+
     if kind == "":
         return bool2
-    else:
-        return isidef
 
 
 def os(str1):
@@ -937,19 +931,20 @@ def remove_duplicates(list1, i):
     return list1
 
 
-def step_two(def_atoms):
+def step_two():
+
     global sn, anaphora, def_tim, all_sent
     zz = time.time()
     all_sent = remove_duplicates(all_sent, 0)
 
-    used_atomic_relations = []  # used atomic relations
     def_sent = []
+    definite_assignments = []
 
-    defined_numbers, used_atomic_relations = add_abbreviations_to_all_sent(used_atomic_relations)
+    defined_numbers = add_abbreviations_to_all_sent()
 
     eliminate_pronouns(def_sent)
 
-    eliminate_determinatives(def_sent)
+    eliminate_determinatives(def_sent, definite_assignments)
 
     eliminate_proper_name_possessives(def_sent)
 
@@ -977,29 +972,22 @@ def step_two(def_atoms):
 
         m = eliminate_universals(m, start, def_sent)
 
-    define_relations_and_concepts(defined_numbers, used_atomic_relations, def_sent)
-
-    add_def_atoms(def_atoms)
+    define_relations_and_concepts(defined_numbers, def_sent)
 
     add_necessary_conditions_for_concept()
+
     j = time.time()
     j = j - zz
     def_tim += j
-    # end7
 
 
-def add_abbreviations_to_all_sent(used_atomic_relations):
+def add_abbreviations_to_all_sent():
+
     definitions = words[16]
     relations = words[6]
     numbers_def = []
-    # we have not included group in this list because it seems to make things confusing
-    atoms = ['moment', 'relationship', 'point', 'number', 'thought', 'imagination', \
-             'property', 'possible world', 'possible relationship', 'word', 'reality']
-    atoms2 = [['moment', 'T', 14], ['relationship', "IR", 5], ['point', 'S', 14], ['number', 'N', 14], \
-              ['thought', 'TK', 14], ['imagination', "M", 14], \
-              ['property', "J", 14], ['possible world', 'U', 14], \
-              ['possible relationship', "U", 5], ['word', 'AW', "b"], ['reality', "IR", 14]]
     rarely_defined = copy.deepcopy(words[36])
+
     for i in range(len(abbreviations)):
         if i == 3:
             bb = 7
@@ -1007,9 +995,6 @@ def add_abbreviations_to_all_sent(used_atomic_relations):
             rarely_defined.remove(abbreviations[i][1])
         if not isinmdlist(abbreviations[i][1], relations, 1):
             g = findposinlist(abbreviations[i][1], definitions, 0)
-            if abbreviations[i][1] in atoms:
-                str1 = findinlist(abbreviations[i][1], atoms2, 0, 1)
-                used_atomic_relations.append(str1)
             if g > -1:
                 list1 = [None] * 80
                 list1[5] = abbreviations[i][0]
@@ -1024,7 +1009,7 @@ def add_abbreviations_to_all_sent(used_atomic_relations):
                 # down to 0 if you do not have the following code
                 numbers_def.append(abbreviations[i][1])
 
-    return numbers_def, used_atomic_relations
+    return numbers_def
 
 
 def eliminate_pronouns(def_sent):
@@ -1057,7 +1042,7 @@ def eliminate_pronouns(def_sent):
                                 i_defined = True
 
 
-def eliminate_determinatives(def_sent):
+def eliminate_determinatives(def_sent, definite_assignments):
     definitions = words[16]
     poss_pro = words[25]
     universal = ['every', 'no']
@@ -1071,7 +1056,7 @@ def eliminate_determinatives(def_sent):
                     str1 = all_sent[m][i]
                     definition = findinlist(str1, definitions, 0, 1)
                     if all_sent[m][0] not in def_sent and str1 not in universal:
-                        change_variables(definition, str1, m, "determinative", i)
+                        change_variables(definition, str1, m, "determinative", i, definite_assignments)
                         del all_sent[m]
                         m -= 1
                         break
@@ -1370,17 +1355,13 @@ def eliminate_universals(m, start, def_sent):
     return m
 
 
-def define_relations_and_concepts(numbers_def, ua_relat, def_sent):
+def define_relations_and_concepts(numbers_def, def_sent):
+
     uniq_obj = words[37]
     atomic_relata = words[23]
     atomic_relations = words[22]
     def_relat = ["J", "I", '=', 'H']
     definitions = words[16]
-    atoms2 = [['moment', 'T', 14], ['relationship', "IR", 5], ['point', 'S', 14], ['number', 'N', 14], \
-              ['thought', 'TK', 14], ['imagination', "M", 14],
-              ['property', "J", 14], ['possible world', 'U', 14],
-              ['possible relationship', "U", 5], ['word', 'AW', "b"], ['reality', "IR", 14]]
-
     not_oft_def = use_rarely_defined_word()
 
     num130 = [9, 14]
@@ -1418,19 +1399,14 @@ def define_relations_and_concepts(numbers_def, ua_relat, def_sent):
                     kind = 'AS'
                     definiendum = str1
                     bool2 = True
-                elif i == 9 and relat in ua_relat:
-                    add_atomic(m, atoms2)
                 elif relat == '=' and all_sent[m][41] == 1:
                     id = True
                     bool2 = True
                     definiendum = all_sent[m][14]
                     all_sent[m][41] = None
-                    try:
-                        str4 = int(definiendum)
-                        if definiendum not in numbers_def:
-                            bool2 = False
-                    except ValueError:
-                        pass
+                    if definiendum not in numbers_def:
+                        bool2 = False
+
                 elif relat == "=" and all_sent[m][41] != 1:
                     bool2 = False
                     list_id = [""] * 80
@@ -1490,20 +1466,6 @@ def use_rarely_defined_word():
     return not_oft_def
 
 
-def add_def_atoms(def_atoms):
-    atoms2 = [['moment', 'T', 14], ['relationship', "IR", 5], ['point', 'S', 14], ['number', 'N', 14],
-              ['thought', 'TK', 14], ['imagination', "M", 14], \
-              ['property', "J", 14], ['possible world', 'U', 14], \
-              ['possible relationship', "U", 5], ['word', 'AW', "b"], ['reality', "IR", 14]]
-
-    if def_atoms != []:
-        for i in range(len(def_atoms)):
-            atomic_relation = findinlist(def_atoms[i], atoms2, 0, 1)
-            for j in range(len(all_sent)):
-                if all_sent[j][9] == atomic_relation and all_sent[j][8] != "~":
-                    add_atomic(j, atoms2)
-
-
 def uni_scope_rel(m, i):
     univ = ['every', 'no']
     if i == 15:
@@ -1519,29 +1481,6 @@ def uni_scope_rel(m, i):
             return True
     else:
         return True
-
-
-def add_atomic(m, atoms2):
-    ant_sent_parts = copy.deepcopy(all_sent[m])
-    relat = all_sent[m][9]
-    if all_sent[m][8] != "~":
-        pos = findinlist(relat, atoms2, 1, 2)  # position = position
-        str1 = all_sent[m][pos]
-        str2 = findinlist(relat, atoms2, 1, 0)
-        nobj = findinlist(str2, abbreviations, 1, 0)  # new object = nobj
-        list1 = [None] * 80
-        if str1 != nobj:
-            list1[2] = ""
-            list1[5] = str1
-            list1[9] = "I"
-            list1[14] = nobj
-            list1 = build_sent(list1)  # new sent = nsent
-            bool1 = is_in_md(all_sent, 0, list1[0])
-            if not bool1:
-                list1[43] = 'cc'
-                all_sent.append(list1)
-                con_parts = copy.deepcopy(list1)
-                prepare_att_sent_1_sent(ant_sent_parts, "DE" + str2, "", "e", con_parts)
 
 
 def add_necessary_conditions_for_concept():
@@ -1987,6 +1926,7 @@ def divide_sent(list2):
 
 
 def replace_relations():
+
     relations = words[6]
     doubles = words[31]
     doubles.sort()
@@ -2209,8 +2149,8 @@ def eliminate_possessives2(m, i):
     prepare_att_sent_2_sent(ant_sent_parts, con_parts, con_parts2, "PNE", "e")
 
 
-def eliminate_possessive_nouns(m, n, str7):
-    global definite
+def eliminate_possessive_nouns(m, n, definite_assignments, str7):
+
     str1 = all_sent[m][n]
     str1 = str1[:1]
     if str7 == "a":
@@ -2220,11 +2160,14 @@ def eliminate_possessive_nouns(m, n, str7):
     elif str7 == "the":
         str2 = "definite"
         str9 = findinlist(str1, abbreviations, 0, 1)
-        str10 = findinlist(str9, definite, 1, 0)
+        str10 = findinlist(str9, definite_assignments, 1, 0)
         if str10 == None:
             new_var = variables[0]
             del variables[0]
-            definite.append([new_var, str9])
+            # definite_list used here
+            definite_assignments.append([new_var, str9])
+        else:
+            bb = 8
 
     str3 = findinlist(str2, abbreviations, 1, 0)
     all_sent[m][n] = new_var + "'s"
@@ -2608,10 +2551,7 @@ def abb_change(list5, already_checked, i, match_dv, match_type,
                 if not no_match:
                     match_dv.append([defin_sent[i][j], all_sent[t][j]])
                     # cap is for a denied consequent sentence
-                    try:
-                        str2 = "(" + defin_sent[i][j] + idd + all_sent[t][j] + ")"
-                    except:
-                        return
+                    str2 = "(" + defin_sent[i][j] + idd + all_sent[t][j] + ")"
                     if denied_consequent_sent:
                         list3 = build_sent(defin_sent[i])
                         str3 = list3[0]
@@ -2806,7 +2746,7 @@ def build_conjunction_of_biconditionals(def_info):
     return def_info
 
 
-def change_variables(definition, definiendum, m, kind="", k=0):
+def change_variables(definition, definiendum, m, kind="", k=0, definite_assignments = []):
     # def_rn = definition rename
     # this function renames the variables in a definition
     # end0
@@ -2814,7 +2754,7 @@ def change_variables(definition, definiendum, m, kind="", k=0):
     # match_type 1 = idd, constants, 2 = unused var, 3 = already has relation
     # 4 = negated consequent
 
-    global sn, plural_c, definite, anaphora, def_used
+    global sn, anaphora, def_used
     b = time.time()
     # this is for those determinatives which have negations in their definitions where
     # the sentences has an R variable
@@ -2871,10 +2811,8 @@ def change_variables(definition, definiendum, m, kind="", k=0):
 
     add_abbreviations(const_in_def, match_dv, match_type, new_var)
 
-    determ_loc, new_var2, ovar, possessive_nouns = get_match_dv_from_determ(definiendum,
-                                                                            definite, k, kind, m,
-                                                                            match_dv,
-                                                                            match_type, new_var)
+    determ_loc, new_var2, ovar, possessive_nouns = get_match_dv_from_determ(definiendum, k, kind, m, match_dv,
+                                                                            match_type, new_var, definite_assignments)
 
     defin_sent = []
     rename = []
@@ -3238,7 +3176,11 @@ def change_propositional_constants(defin_sent, match_dv, prop_pos, propositional
     return defin_sent, rename
 
 
-def get_match_dv_from_determ(definiendum, definite, k, kind, m, match_dv, match_type, new_var):
+
+
+def get_match_dv_from_determ(definiendum, k, kind, m, match_dv,
+                             match_type, new_var, definite_assignments):
+
     determ_loc = 99  # currently this is only used in the definition of many
     possessive_nouns = []
     new_var2 = ""
@@ -3282,11 +3224,11 @@ def get_match_dv_from_determ(definiendum, definite, k, kind, m, match_dv, match_
         if definiendum == 'the' or definiendum == 'that' + ud:
             str1 = all_sent[m][determ_loc]
             str3 = findinlist(str1, abbreviations, 0, 1)
-            str2 = findinlist(str3, definite, 1, 0)
+            str2 = findinlist(str3, definite_assignments, 1, 0)
             match_type.append(9)
             if str2 == None:
                 match_dv.append(["z", variables[0]])
-                definite.append([variables[0], str3])
+                definite_assignments.append([variables[0], str3])
                 if kind != 'proper name possessive':
                     all_sent[m][determ_loc] = variables[0]
                 else:
@@ -3295,8 +3237,9 @@ def get_match_dv_from_determ(definiendum, definite, k, kind, m, match_dv, match_
                 new_var2 = variables[0]
                 del variables[0]
             else:
+                # definite_list used here
                 all_sent[m][determ_loc] = str2
-                match_dv.append(["z'", str2])
+                match_dv.append(["z", str2])
                 new_var2 = str2
         elif definiendum not in syn_det:
             match_type.append(9)
@@ -3306,9 +3249,9 @@ def get_match_dv_from_determ(definiendum, definite, k, kind, m, match_dv, match_
             new_var.append(variables[0])
             del variables[0]
         if determ_loc == 14 and all_sent[m][70] != None and kind != 'proper name possessive':
-            possessive_nouns = eliminate_possessive_nouns(m, 70, definiendum)
+            possessive_nouns = eliminate_possessive_nouns(m, 70, definite_assignments, definiendum)
         if determ_loc == 5 and all_sent[m][69] != None and kind != 'proper name possessive':
-            possessive_nouns = eliminate_possessive_nouns(m, 69, definiendum)
+            possessive_nouns = eliminate_possessive_nouns(m, 69, definite_assignments, definiendum)
 
     return determ_loc, new_var2, ovar, possessive_nouns
 
@@ -3994,13 +3937,10 @@ def categorize_words(list1, first=False, taken_out=[]):
                 # if the variable stands for an adjective then its part of speech
                 # is adjective
             str1 = findinlist(word, abbreviations, 0, 1)
-            try:
-                if str1 != None and not list1[79] == "is in definition":
-                    str3 = findinlist(str1, posp, 0, 1)
-                    if str3 == "a":
-                        pos = 'a'
-            except:
-                bb = 8
+            if str1 != None and not list1[79] == "is in definition":
+                str3 = findinlist(str1, posp, 0, 1)
+                if str3 == "a":
+                    pos = 'a'
         elif word == "~":
             pos = 'm'
         elif word == "it" + up:
@@ -4392,13 +4332,12 @@ def build_sent_name(prop_name):
     return list1
 
 
-def replace_synonyms(def_atoms):
+def replace_synonyms():
+
     # todo nothing is equivalent to no thing
     global sn, def_used
     doubles = words[31]
     bool1 = False
-    atoms = ['moment', 'relationship', 'point', 'number', 'thought', 'imagination', \
-             'property', 'possible world', 'possible relationship', 'word', 'reality']
     synon = words[14]
     syn_pairs = words[13]
     m = -1
@@ -4470,8 +4409,6 @@ def replace_synonyms(def_atoms):
                         if bool3:
                             del all_sent[m][i + 1]
                         break
-            if all_sent[m][i] in atoms:
-                def_atoms.append(all_sent[m][i])
 
         if bool1:
             all_sent[m] = build_uncategorized_sent(all_sent[m])
@@ -4533,10 +4470,7 @@ def print_sent_full(test_sent, p, tot_prop_name, yy=""):
                 test_sent[i][j][4] = str1
             if excel or one_sent:
                 w4.cell(row=p, column=2).value = test_sent[i][j][0]
-                try:
-                    w4.cell(row=p, column=3).value = test_sent[i][j][3] + test_sent[i][j][1]
-                except:
-                    bb = 8
+                w4.cell(row=p, column=3).value = test_sent[i][j][3] + test_sent[i][j][1]
                 w4.cell(row=p, column=4).value = test_sent[i][j][4]
             else:
                 result_data['text_' + str(p - 1) + '_1'] = test_sent[i][j][0]
@@ -7907,7 +7841,7 @@ def calculate_time_statistics(st):
 
 def get_result(post_data, archive_id=None, request=None):
     global ws, w4, result_data, p
-    global plural_c, anaphora, definite
+    global anaphora
     global sn, total_sent, prop_name
     global all_sent, embed, attach_sent, detach_sent, abbreviations
     global prop_var, variables, stp
@@ -7989,21 +7923,19 @@ def get_result(post_data, archive_id=None, request=None):
         variables = copy.deepcopy(variables2)
         sn = test_sent[k][-1][0] + 1
 
-        plural_c = []  #
+
         embed = []
         anaphora = ""
-        definite = []  #
-        def_atoms = []
 
         divide_sent(test_sent[k])
 
-        replace_synonyms(def_atoms)
+        replace_synonyms()
 
         replace_relations()
 
         word_sub()
 
-        step_two(def_atoms)
+        step_two()
 
         consistent = step_three(test_sent[k][0][3])
 

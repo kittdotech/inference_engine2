@@ -97,7 +97,7 @@ time1 = 0
 band_aid_axiom = ""  # the sentence x is a thing in axioms is getting placed
 # in the standard_cj list because the counting of premises is messed up
 # this is a temporary fix for that problem
-definite = []
+definite_assignments = []
 psent = []
 definite2 = []
 ant_cond = []
@@ -112,13 +112,13 @@ ind_var = []
 gen_var = []
 already_defined = []
 conc = []
-prop_sent = []
+total_sent = []
 tagged_nouns = []
 tagged_nouns2 = []
 dv_nam = []
 basic_objects = []
 result_data = {}
-st_log_tim = 0
+st_log_time = 0
 def_tim = 0
 inst_tim = 0
 cond_r = unichr(8835)
@@ -2276,7 +2276,7 @@ def poss_elim(all_sent, m, i, tot_sent):
 
 
 def poss_noun(idf_var, all_sent, m, n, dv_nam, str7):
-    global definite
+    global definite_assignments
     str1 = all_sent[m][n]
     str1 = str1[:1]
     if str7 == "a":
@@ -3080,7 +3080,7 @@ def def_rn(defined, al_def, definition, definiendum, e, tot_sent, dv_nam, idf_va
     # 4 = negated consequent
 
 
-    global sn, plural_c, definite2, definite, anaphora, ind_var, gen_var, def_used
+    global sn, plural_c, definite2, definite_assignments, anaphora, ind_var, gen_var, def_used
     b = time.time()
     # this is for those determinatives which have negations in their definitions where
     # the sentences has an R variable
@@ -5627,7 +5627,7 @@ def cat_err(all_sent, words, basic_objects, bo2, \
                 all_sent[j][56] = [200]
         if isatomic(all_sent[j], words) and all_sent[j][5] == all_sent[j][14] and \
                         all_sent[j][9] != "=" and all_sent[j][8] != "~":
-            consistent = reflex(all_sent, j, tot_sent, prop_sent)
+            consistent = reflex(all_sent, j, tot_sent, total_sent)
             if not consistent:
                 break
 
@@ -6462,18 +6462,18 @@ def rearrange_tot_sent(list5, list1, list2):
             list1.append([tot_sent[i][0], j])
             tot_sent[i][0] = j
 
-    for i in range(len(prop_sent)):
+    for i in range(len(total_sent)):
         if i == 53:
             bb = 8
-        d = findinlist(prop_sent[i][0], list1, 0, 1)
+        d = findinlist(total_sent[i][0], list1, 0, 1)
         if d != None:
-            prop_sent[i][0] = d
+            total_sent[i][0] = d
         for j in range(4, 8):
-            if prop_sent[i][j] == None or prop_sent[i][j] == "":
+            if total_sent[i][j] == None or total_sent[i][j] == "":
                 break
-            d = findinlist(prop_sent[i][j], list1, 0, 1)
+            d = findinlist(total_sent[i][j], list1, 0, 1)
             if d != None:
-                prop_sent[i][j] = d
+                total_sent[i][j] = d
 
     for i in range(len(tot_sent)):
         for j in range(0, 5):
@@ -6513,52 +6513,52 @@ def build_standard_sent_list(nonstandard, standard_cj, \
     tot_sent.append(["", "_______________________", "", "", "", "", "", "", "", ""])
 
     if not consistent:
-        d = len(prop_sent) - 1
+        d = len(total_sent) - 1
     else:
-        d = len(prop_sent)
+        d = len(total_sent)
 
     for i in range(d):
         if i == 11:
             bb = 8
-        if prop_sent[i][0] > c or prop_sent[i][1] == band_aid_axiom:
-            if prop_sent[i][1] == bottom:
-                tot_sent.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                 prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6], prop_sent[i][7]])
-            elif os(prop_sent[i][1]):
+        if total_sent[i][0] > c or total_sent[i][1] == band_aid_axiom:
+            if total_sent[i][1] == bottom:
+                tot_sent.append([total_sent[i][0], str1, total_sent[i][1], total_sent[i][2], \
+                                 total_sent[i][3], total_sent[i][4], total_sent[i][5], total_sent[i][6], total_sent[i][7]])
+            elif os(total_sent[i][1]):
 
-                if "~" in prop_sent[i][1]:
-                    str7 = prop_sent[i][1][1:]
+                if "~" in total_sent[i][1]:
+                    str7 = total_sent[i][1][1:]
                     # this is for sentences of the form ~~p
-                    str1 = "~" + prop_sent[i][2] + findinlist(str7, prop_name, 0, 2)
+                    str1 = "~" + total_sent[i][2] + findinlist(str7, prop_name, 0, 2)
                 else:
-                    str1 = prop_sent[i][2] + findinlist(prop_sent[i][1], prop_name, 0, 2)
+                    str1 = total_sent[i][2] + findinlist(total_sent[i][1], prop_name, 0, 2)
 
                 bool1 = False
                 for d in range(len(all_sent)):
                     str3 = all_sent[d][42].replace("~", "")
-                    if prop_sent[i][1] == str3:
+                    if total_sent[i][1] == str3:
                         bool1 = True
                         break
                 if consistent:
                     if bool1:
-                        standard_cj.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                            prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6],
-                                            prop_sent[i][7]])
+                        standard_cj.append([total_sent[i][0], str1, total_sent[i][1], total_sent[i][2], \
+                                            total_sent[i][3], total_sent[i][4], total_sent[i][5], total_sent[i][6],
+                                            total_sent[i][7]])
                     else:
-                        nonstandard.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                            prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6],
-                                            prop_sent[i][7]])
+                        nonstandard.append([total_sent[i][0], str1, total_sent[i][1], total_sent[i][2], \
+                                            total_sent[i][3], total_sent[i][4], total_sent[i][5], total_sent[i][6],
+                                            total_sent[i][7]])
 
-                tot_sent.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                 prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], prop_sent[i][6], prop_sent[i][7]])
+                tot_sent.append([total_sent[i][0], str1, total_sent[i][1], total_sent[i][2], \
+                                 total_sent[i][3], total_sent[i][4], total_sent[i][5], total_sent[i][6], total_sent[i][7]])
 
             else:
-                t = findposinmd(prop_sent[i][1], conditionals, 4)
-                if prop_sent[i][0] == 32:
+                t = findposinmd(total_sent[i][1], conditionals, 4)
+                if total_sent[i][0] == 32:
                     bb = 8
                 if t > -1:
                     if conditionals[t][37] == "" or conditionals[t][37] == None:
-                        list2 = get_prop(prop_sent[i][1], True, greek2)
+                        list2 = get_prop(total_sent[i][1], True, greek2)
                         conditionals[t][37] = list2[0]
                         list3 = list2[1]
                         str1 = list2[0]
@@ -6568,11 +6568,11 @@ def build_standard_sent_list(nonstandard, standard_cj, \
                 else:
                     if i == 55:
                         bb = 8
-                    list2 = get_prop(prop_sent[i][1], True)
+                    list2 = get_prop(total_sent[i][1], True)
                     list3 = list2[1]
                     str1 = list2[0]
                 bool1 = False
-                list4 = mainconn(prop_sent[i][1])
+                list4 = mainconn(total_sent[i][1])
                 if list4[0] != "&":
                     for d in range(len(list3)):
                         str4 = list3[d].replace("~", "")
@@ -6583,17 +6583,17 @@ def build_standard_sent_list(nonstandard, standard_cj, \
                                 bool1 = True
                                 break
 
-                tot_sent.append([prop_sent[i][0], str1, prop_sent[i][1], prop_sent[i][2], \
-                                 prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], \
-                                 prop_sent[i][6], prop_sent[i][7]])
+                tot_sent.append([total_sent[i][0], str1, total_sent[i][1], total_sent[i][2], \
+                                 total_sent[i][3], total_sent[i][4], total_sent[i][5], \
+                                 total_sent[i][6], total_sent[i][7]])
                 if consistent:
                     if not bool1:
-                        nonstandard.append([prop_sent[i][0], str1, "", "", \
-                                            prop_sent[i][3], prop_sent[i][4], prop_sent[i][5], \
-                                            prop_sent[i][6], prop_sent[i][7]])
+                        nonstandard.append([total_sent[i][0], str1, "", "", \
+                                            total_sent[i][3], total_sent[i][4], total_sent[i][5], \
+                                            total_sent[i][6], total_sent[i][7]])
 
     if not consistent:
-        tot_sent.append(prop_sent[-1])
+        tot_sent.append(total_sent[-1])
 
 
 def prepare_disjuncts(conditionals, greek2):
@@ -7157,7 +7157,7 @@ def most_common(list1):
 
 def new_cond(greek2, pot_id, candd, conditionals, tot_sent, member_prop, candd2, \
              all_sent, orel_sent):
-    global sn, prop_name, prop_sent, dv_nam
+    global sn, prop_name, total_sent, dv_nam
     def_var = findinlist("definite", dv_nam, 1, 0)
     indef = findinlist("indefinite", dv_nam, 1, 0)
     gen = findinlist("general", dv_nam, 1, 0)
@@ -9585,7 +9585,7 @@ def extract_list(list1, d):
 
 
 def statement_logic(greek2, prop_sent, all_sent, conditionals, candd, candd2, disjuncts, kind="", conc="", impl=""):
-    global time1, st_log_tim
+    global time1, st_log_time
     b = time.time()
     list1 = modus_ponens(greek2, all_sent, conditionals, candd, candd2, prop_sent, kind)
     consistent = list1[0]
@@ -9642,7 +9642,7 @@ def add_outer_paren(str1):
 
 
 def new_prop_sent(greek2, all_sent, ng, kind, asp, anc1, anc2, conditionals, g, candd, candd2, list3=[], cjct=""):
-    global prop_sent
+    global total_sent
     global sn, pn
     global impl
 
@@ -10060,8 +10060,8 @@ def get_result(post_data, archive_id=None, request=None):
             w4.append(row)
         w4 = tuple(w4)
 
-    global prop_name, plural_c, anaphora, definite, prop_var, ind_var
-    global ant_cond, conditionals, candd, rel_conj, conc, prop_sent, sn, impl
+    global prop_name, plural_c, anaphora, definite_assignments, prop_var, ind_var
+    global ant_cond, conditionals, candd, rel_conj, conc, total_sent, sn, impl
     global tagged_nouns, tagged_nouns2, dv_nam, basic_objects, idf_var, greek
     global gen_var, definite2, cnjts, test_one, stp, strt, candd2, pn, embed, affneg
 
@@ -10170,7 +10170,7 @@ def get_result(post_data, archive_id=None, request=None):
         stp = k
     g = (en - st) / (stp - strt)
     m = def_tim / (stp - strt)
-    dd = st_log_tim / (stp - strt)
+    dd = st_log_time / (stp - strt)
     global instan_used, instan_time
     if instan_used != 0:
         ee = instan_time / instan_used
