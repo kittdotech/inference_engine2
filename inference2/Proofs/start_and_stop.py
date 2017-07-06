@@ -1,7 +1,7 @@
 
 def info():
 
-    strt = 1
+    strt = 0
     stp = 0
     print_to_doc = False
 

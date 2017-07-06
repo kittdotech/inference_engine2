@@ -108,17 +108,18 @@ words = []
 variables = []
 abbreviations = []
 
-anaphoric_relations = []
-anaphora = ""
-time1 = 0
-embed = []
+
 def_used = []
-tot_prop_name = []
 already_defined = []
+
+tot_prop_name = []
 result_data = {}
+time1 = 0
 st_log_time = 0
 def_tim = 0
 inst_tim = 0
+instan_used = 0  # the number of times the instan function is used
+instan_time = 0  # measures the time used in instantiation
 cond_r = chr(8835)
 const = "\u2102"  # consistency
 top = chr(8868)
@@ -139,12 +140,7 @@ disj = chr(8855)
 equi = chr(8660)
 ne = "\u2260"  # not equal
 
-sn = 1
-instan_used = 0  # the number of times the instan function is used
-instan_time = 0  # measures the time used in instantiation
-qn = 300  # numbers the property sent list
-pn = 400
-id_num = 0
+
 
 l1 = "\u2081"
 l2 = "\u2082"
@@ -811,11 +807,12 @@ def add_to_dv(m, k, str2):
 
 
 def word_sub():
+
+    global sn
     pronouns = words[24]
     num = [4, 5, 13, 14, 17, 18, 22, 26, 30, 34, 35, 36, 51, 52, 63, 64, 65, 67, 69, 70]
     num3 = [8, 12, 49, 50, 51, 52]
     other = ['there', 'it' + up]
-    global sn
     m = -1
     while m < len(all_sent) - 1:
         m += 1
@@ -871,27 +868,6 @@ def assigned_var(str1):
         return str2
 
 
-def eliminate_there2(m, def_sent):
-    ant_sent_parts = copy.deepcopy(all_sent[m])
-    list1 = copy.deepcopy(all_sent[m])
-    list1[5] = all_sent[m][14]
-    list1[3] = all_sent[m][10]
-    list1[4] = all_sent[m][13]
-    list1[14] = None
-    list1[10] = None
-    list1[13] = None
-    con_parts = copy.deepcopy(build_sent(list1))
-    def_sent.append(con_parts[0])
-    all_sent[m][46] = [200]
-    all_sent[m][56] = [200]
-    all_sent.append(list1)
-    bool1 = is_in_md(total_sent, 1, con_parts[0])
-    if not bool1:
-        prepare_att_sent_1_sent(ant_sent_parts, "DE there", "", "e", con_parts)
-
-    return def_sent
-
-
 def scope_rel_pro(list, i):
     if i == 10 and list[59] != None:
         return False
@@ -906,6 +882,7 @@ def scope_rel_pro(list, i):
 
 
 def eliminate_relative_pronouns2(m, i):
+
     list1 = [None] * 80
     ant_sent_parts = copy.deepcopy(all_sent[m])
     rule = "DE " + all_sent[m][i]
@@ -917,6 +894,7 @@ def eliminate_relative_pronouns2(m, i):
 
 
 def remove_duplicates(list1, i):
+
     list2 = []
     j = -1
     while j < len(list1) - 1:
@@ -933,7 +911,7 @@ def remove_duplicates(list1, i):
 
 def step_two():
 
-    global sn, anaphora, def_tim, all_sent
+    global sn, def_tim, all_sent
     zz = time.time()
     all_sent = remove_duplicates(all_sent, 0)
 
@@ -946,31 +924,29 @@ def step_two():
 
     eliminate_determinatives(def_sent, definite_assignments)
 
-    eliminate_proper_name_possessives(def_sent)
+    eliminate_proper_name_possessives(def_sent, definite_assignments)
 
-    m = -1
-    while m < (len(all_sent)) - 1:
-        m += 1
-        start = False
-        m, start = eliminate_and_coordinator1(m, start)
+    eliminate_and_coordinator1()
 
-        eliminate_adjectives(m, start)
+    eliminate_adjectives()
 
-        eliminate_concept_instance_apposition(m, start)
+    eliminate_concept_instance_apposition()
 
-        eliminate_relative_pronouns1(m, start)
+    eliminate_relative_pronouns1()
 
-        m, start = eliminate_that(m, start)
+    eliminate_that()
 
-        m, start = eliminate_possessive_pronouns(m, start, def_sent)
+    eliminate_possessive_pronouns(def_sent)
 
-        m, start = eliminate_possessives1(m, start)
+    eliminate_possessives1()
 
-        divide_relations1(m, start)
+    eliminate_as()
 
-        def_sent, m, start = eliminate_there1(m, start, def_sent)
+    divide_relations1()
 
-        m = eliminate_universals(m, start, def_sent)
+    def_sent = eliminate_there1(def_sent)
+
+    eliminate_universals(def_sent)
 
     define_relations_and_concepts(defined_numbers, def_sent)
 
@@ -1020,7 +996,6 @@ def eliminate_pronouns(def_sent):
     if "it" in pronouns2:
         pronouns2.remove("it")
     pronouns = pronouns2
-    definitions = words[16]
     m = -1
     while m < (len(all_sent)) - 1:
         m += 1
@@ -1029,11 +1004,10 @@ def eliminate_pronouns(def_sent):
             for i in num10:
                 if i in all_sent[m][46]:
                     str1 = all_sent[m][i]
-                    definition = findinlist(str1, definitions, 0, 1)
-                    if all_sent[m][0] not in def_sent and str1 not in universal and \
-                                    definition != None and str1 in pronouns:
+                    if all_sent[m][0] not in def_sent and str1 not in universal \
+                            and str1 in pronouns:
                         if str1 != "i" or not i_defined:
-                            change_variables(definition, str1, m, "pronoun", i)
+                            change_variables(str1, m, "pronoun", i)
                             if str1 != "i":
                                 del all_sent[m]
                                 m -= 1
@@ -1043,7 +1017,7 @@ def eliminate_pronouns(def_sent):
 
 
 def eliminate_determinatives(def_sent, definite_assignments):
-    definitions = words[16]
+
     poss_pro = words[25]
     universal = ['every', 'no']
     m = -1
@@ -1054,16 +1028,15 @@ def eliminate_determinatives(def_sent, definite_assignments):
             for i in num20:
                 if i in all_sent[m][46] and all_sent[m][i] not in poss_pro:
                     str1 = all_sent[m][i]
-                    definition = findinlist(str1, definitions, 0, 1)
                     if all_sent[m][0] not in def_sent and str1 not in universal:
-                        change_variables(definition, str1, m, "determinative", i, definite_assignments)
+                        change_variables(str1, m, "determinative", i, definite_assignments)
                         del all_sent[m]
                         m -= 1
                         break
 
 
-def eliminate_proper_name_possessives(def_sent):
-    definitions = words[16]
+def eliminate_proper_name_possessives(def_sent, definite_assignments):
+
     m = -1
     while m < (len(all_sent)) - 1:
         m += 1
@@ -1071,27 +1044,28 @@ def eliminate_proper_name_possessives(def_sent):
             num30 = [69, 70]  # proper name possessive
             for i in num30:
                 if i in all_sent[m][46]:
-                    definition = findinlist("the", definitions, 0, 1)
                     if all_sent[m][0] not in def_sent:
                         if i == 69:
                             i = 5
                         elif i == 70:
                             i = 14
-                        change_variables(definition, "the", m, "proper name possessive", i)
+                        change_variables("the", m, "proper name possessive", i, definite_assignments)
                         del all_sent[m]
                         m -= 1
                         break
 
 
-def eliminate_and_coordinator1(m, start):
-    compound = words[34]
-    if all_sent[m][66] != None and all_sent[m][9] not in compound:
-        eliminate_and_coordinator2(m)
-        del all_sent[m]
-        start = True
-        m -= 1
+def eliminate_and_coordinator1():
 
-    return m, start
+    # todo None is a member of compound
+    compound = words[34]
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if all_sent[m][66] != None and all_sent[m][9] not in compound:
+            eliminate_and_coordinator2(m)
+            del all_sent[m]
+            m -= 1
 
 
 def eliminate_and_coordinator2(m):
@@ -1112,17 +1086,21 @@ def eliminate_and_coordinator2(m):
     prepare_att_sent_2_sent(ant_sent_parts, con_parts, con_parts2, "DE and" + uc, "e")
 
 
-def eliminate_adjectives(m, start):
-    if 50 in all_sent[m][56] and not start:
-        # todo None is a member of compound
-        num50 = [4, 13, 17, 21, 25, 33]  # adjective
-        for i in num50:
-            if i in all_sent[m][46] and lies_wi_scope_of_univ_quant(m, i):
-                eliminate_adjectives2(m, i)
-                break  # this only works for one adjective
+def eliminate_adjectives():
+
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 50 in all_sent[m][56]:
+            num50 = [4, 13, 17, 21, 25, 33]  # adjective
+            for i in num50:
+                if i in all_sent[m][46] and lies_wi_scope_of_univ_quant(m, i):
+                    eliminate_adjectives2(m, i)
+                    break  # this only works for one adjective
 
 
 def eliminate_adjectives2(m, i):
+
     list1 = [None] * 80
     ant_sent_parts = copy.deepcopy(all_sent[m])
     if i == 13:
@@ -1159,15 +1137,20 @@ def eliminate_adjectives2(m, i):
     prepare_att_sent_2_sent(ant_sent_parts, con_parts, con_parts2, "ADJ E", "e")
 
 
-def eliminate_concept_instance_apposition(m, start):
-    if (36 in all_sent[m][46] or 35 in all_sent[m][46]) and not start:
-        num60 = [35, 36]  # cia
-        for i in num60:
-            if all_sent[m][i] != None:
-                eliminate_concept_instance_apposition2(m, i)
+def eliminate_concept_instance_apposition():
+
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if (36 in all_sent[m][46] or 35 in all_sent[m][46]):
+            num60 = [35, 36]  # cia
+            for i in num60:
+                if all_sent[m][i] != None:
+                    eliminate_concept_instance_apposition2(m, i)
 
 
 def eliminate_concept_instance_apposition2(m, i):
+
     ant_sent_parts = copy.deepcopy(all_sent[m])
     list1 = [None] * 80
     if i == 35:
@@ -1193,84 +1176,118 @@ def eliminate_concept_instance_apposition2(m, i):
     prepare_att_sent_2_sent(ant_sent_parts, con_parts, con_parts2, "CIA", "e")
 
 
-def eliminate_relative_pronouns1(m, start):
-    if 70 in all_sent[m][56] and not start:
-        num70 = [59, 60, 61, 62]  # relative pronouns
-        for i in num70:
-            if i in all_sent[m][46] and lies_wi_scope_of_univ_quant(m, i, 1) and \
-                            all_sent[m][i] != 'that' + uc:
-                eliminate_relative_pronouns2(m, i)
-                break
+def eliminate_relative_pronouns1():
 
-
-def eliminate_that(m, start):
-    if 80 in all_sent[m][56] and not start:
-        num80 = [62, 61, 60, 7]  # that-c
-        for i in num80:
-            if i in all_sent[m][46] and lies_wi_scope_of_univ_quant(m, i, 1):
-                eliminate_that2(m, i)
-                del all_sent[m]
-                start = True
-                m -= 1
-                break
-
-    return m, start
-
-
-def eliminate_possessive_pronouns(m, start, def_sent):
-    definitions = words[16]
-    possessive_pronouns = words[25]
-    if 85 in all_sent[m][56] and not start:
-        num85 = [3, 10, 16, 20, 24, 28, 32]  # possessive pronouns
-        for i in num85:
-            if all_sent[m][i] != None and all_sent[m][i] in possessive_pronouns:
-                str1 = all_sent[m][i]
-                definition = findinlist(str1, definitions, 0, 1)
-                if all_sent[m][0] not in def_sent:
-                    change_variables(definition, str1, m, "poss pro", i)
-                    del all_sent[m]
-                    m -= 1
-                    start = True
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 70 in all_sent[m][56]:
+            num70 = [59, 60, 61, 62]  # relative pronouns
+            for i in num70:
+                if i in all_sent[m][46] and lies_wi_scope_of_univ_quant(m, i, 1) and \
+                                all_sent[m][i] != 'that' + uc:
+                    eliminate_relative_pronouns2(m, i)
                     break
 
-    return m, start
+
+def eliminate_that():
+
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 80 in all_sent[m][56]:
+            num80 = [62, 61, 60, 7]  # that-c
+            for i in num80:
+                if i in all_sent[m][46] and lies_wi_scope_of_univ_quant(m, i, 1):
+                    eliminate_that2(m, i)
+                    del all_sent[m]
+                    m -= 1
+                    break
 
 
-def eliminate_possessives1(m, start):
-    if 90 in all_sent[m][56] and not start:
-        num90 = [69, 70]  # possessives
-        for i in num90:
-            if i in all_sent[m][46]:
-                eliminate_possessives2(m, i)
-                del all_sent[m]
-                start = True
-                m -= 1
-                break
+def eliminate_possessive_pronouns(def_sent):
 
-    return m, start
+    possessive_pronouns = words[25]
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 85 in all_sent[m][56]:
+            num85 = [3, 10, 16, 20, 24, 28, 32]
+            for i in num85:
+                if all_sent[m][i] != None and all_sent[m][i] in possessive_pronouns:
+                    str1 = all_sent[m][i]
+                    if all_sent[m][0] not in def_sent:
+                        change_variables(str1, m, "poss pro", i)
+                        del all_sent[m]
+                        m -= 1
+                        break
 
 
-def divide_relations1(m, start):
-    if 100 in all_sent[m][56] and not start:
-        num100 = [15, 19]  # RDA,RDB
-        for i in num100:
-            if i in all_sent[m][46] and uni_scope_rel(m, i):
-                divide_relations2(m, i)
-                break
+
+def eliminate_possessives1():
+
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 90 in all_sent[m][56]:
+            num90 = [69, 70]
+            for i in num90:
+                if i in all_sent[m][46]:
+                    eliminate_possessives2(m, i)
+                    del all_sent[m]
+                    m -= 1
+                    break
+
+
+def eliminate_as():
+
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if all_sent[m][15] == "AS":
+            con_parts1 = [None] * 80
+            ant_sent_parts = copy.deepcopy(all_sent[m])
+            con_parts1[5] = all_sent[m][5]
+            con_parts1[9] = all_sent[m][9]
+            con_parts1[14] = all_sent[m][14]
+            con_parts1[46] = [5,9,14]
+            con_parts1[56] = [200]
+            con_parts1 = build_sent(con_parts1)
+            con_parts2 = [None] * 80
+            con_parts2[5] = all_sent[m][18]
+            con_parts2[9] = all_sent[m][9]
+            con_parts2[14] = all_sent[m][14]
+            con_parts2[46] = [5, 9, 14]
+            con_parts2[56] = [200]
+            con_parts2 = build_sent(con_parts2)
+            prepare_att_sent_2_sent(ant_sent_parts, con_parts1, con_parts2, "DE AS", "e")
+            del all_sent[m]
+            m -= 1
+            all_sent.append(con_parts1)
+            all_sent.append(con_parts2)
+
+
+def divide_relations1():
+
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 100 in all_sent[m][56]:
+            num100 = [15, 19]
+            for i in num100:
+                if i in all_sent[m][46] and uni_scope_rel(m, i):
+                    divide_relations2(m, i)
+                    break
 
 
 def divide_relations2(m, i):
-    part_of_speech = words[28]  # part of speech
+
+    part_of_speech = words[28]
     genre = 1
     ant_sent_parts = copy.deepcopy(all_sent[m])
     list1 = [None] * 80
     str2 = findinlist(all_sent[m][i], part_of_speech, 0, 2)
-    if (all_sent[m][i] == 'AS'):
-        rule = "RDB"
-        a = 14
-        if all_sent[m][i] == 'AS':
-            anaphora.append(all_sent[m][5])
-    elif str2 == 'o':
+    if str2 == 'o':
         rule = "RDC"
         list3 = [None] * 80
         a = 14
@@ -1281,7 +1298,7 @@ def divide_relations2(m, i):
         list3[10] = all_sent[m][16]
         list3[14] = all_sent[m][18]
         list3 = new_categories(list3, True)
-        all_sent[m][56] = list3[56]  # I'm not sure if this serves a purpose
+        all_sent[m][56] = list3[56]  # todo I'm not sure if this serves a purpose
         all_sent.append(list3)
         genre = 2
         con_parts2 = copy.deepcopy(list3)
@@ -1324,35 +1341,60 @@ def divide_relations2(m, i):
     prepare_att_sent_2_sent(ant_sent_parts, con_parts, con_parts2, rule, "e")
 
 
-def eliminate_there1(m, start, def_sent):
-    if 110 in all_sent[m][56] and not start:
-        num110 = [5, 63, 64]  # there
-        for i in num110:
-            if all_sent[m][i] == 'there':
-                def_sent = eliminate_there2(m, def_sent)
-                start = True
-                del all_sent[m]
-                m -= 1
-                break
+def eliminate_there1(def_sent):
 
-    return def_sent, m, start
-
-
-def eliminate_universals(m, start, def_sent):
-    definitions = words[16]
-    if 120 in all_sent[m][56] and not start:
-        num120 = [3, 10, 16, 20, 24, 28, 32]  # every, many-n
-        for i in num120:
-            if i in all_sent[m][46]:
-                str1 = all_sent[m][i]
-                definition = findinlist(str1, definitions, 0, 1)
-                if all_sent[m][0] not in def_sent:
-                    change_variables(definition, str1, m, "determinative", i)
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 110 in all_sent[m][56]:
+            num110 = [5, 63, 64]  # there
+            for i in num110:
+                if all_sent[m][i] == 'there':
+                    def_sent = eliminate_there2(m, def_sent)
                     del all_sent[m]
                     m -= 1
                     break
 
-    return m
+    return def_sent
+
+
+def eliminate_there2(m, def_sent):
+
+    ant_sent_parts = copy.deepcopy(all_sent[m])
+    list1 = copy.deepcopy(all_sent[m])
+    list1[5] = all_sent[m][14]
+    list1[3] = all_sent[m][10]
+    list1[4] = all_sent[m][13]
+    list1[14] = None
+    list1[10] = None
+    list1[13] = None
+    con_parts = copy.deepcopy(build_sent(list1))
+    def_sent.append(con_parts[0])
+    all_sent[m][46] = [200]
+    all_sent[m][56] = [200]
+    all_sent.append(list1)
+    bool1 = is_in_md(total_sent, 1, con_parts[0])
+    if not bool1:
+        prepare_att_sent_1_sent(ant_sent_parts, "DE there", "", "e", con_parts)
+
+    return def_sent
+
+
+def eliminate_universals(def_sent):
+
+    m = -1
+    while m < (len(all_sent)) - 1:
+        m += 1
+        if 120 in all_sent[m][56]:
+            num120 = [3, 10, 16, 20, 24, 28, 32]
+            for i in num120:
+                if i in all_sent[m][46]:
+                    str1 = all_sent[m][i]
+                    if all_sent[m][0] not in def_sent:
+                        change_variables(str1, m, "determinative", i)
+                        del all_sent[m]
+                        m -= 1
+                        break
 
 
 def define_relations_and_concepts(numbers_def, def_sent):
@@ -1395,10 +1437,6 @@ def define_relations_and_concepts(numbers_def, def_sent):
                     bool2 = True
                     adverb = True
                     kind = 'R'
-                elif i == 9 and relat == 'AS':
-                    kind = 'AS'
-                    definiendum = str1
-                    bool2 = True
                 elif relat == '=' and all_sent[m][41] == 1:
                     id = True
                     bool2 = True
@@ -1453,7 +1491,7 @@ def define_relations_and_concepts(numbers_def, def_sent):
                             or pos == 'r' or pos == 'e' or pos == 's' or (relat == '=' and pos == 'n') or adverb or id:
                         if definition != None and all_sent[m][0] not in def_sent:
                             def_sent.append(all_sent[m][0])
-                            change_variables(definition, definiendum, m, kind, i)
+                            change_variables(definiendum, m, kind, i)
                             break
 
 
@@ -1878,9 +1916,8 @@ def remove_values_from_list(the_list, val):
 
 
 def divide_sent(list2):
+
     global sn
-    global impl
-    redundant = words[21]
 
     for i in range(len(list2)):
         str2 = list2[i][1]
@@ -1904,6 +1941,10 @@ def divide_sent(list2):
         add_to_total_sent(list2[i][0], str2, str3, "", "")
         all_sent.append(list4)
 
+
+def eliminate_redundant_words():
+
+    redundant = words[21]
     bool1 = False
     for i in range(len(all_sent)):
         ant_sent_parts = copy.deepcopy(all_sent[i])
@@ -1922,7 +1963,6 @@ def divide_sent(list2):
             all_sent[i] = build_uncategorized_sent(all_sent[i])
             con_parts = copy.deepcopy(all_sent[i])
             prepare_att_sent_1_sent(ant_sent_parts, "RD " + str2, "", "e", con_parts)
-            # 'do not follow only used by sentence 71 on the may file
 
 
 def replace_relations():
@@ -1977,9 +2017,11 @@ def replace_relations():
         if con_parts[0] != ant_sent_parts[0]:
             prepare_att_sent_1_sent(ant_sent_parts, "SUB", "", "e", con_parts)
 
-    # here we change not a into no and other synonyms
-    num = [8,12, 49, 50, 51, 52]
-    cat = ['many' + un, 'any' + un]
+
+def eliminate_negative_determiners():
+
+    num = [8, 12, 49, 50, 51, 52]
+    special_determinatives = ['many' + un, 'any' + un]
     for i in range(len(all_sent)):
         ant_sent_parts = copy.deepcopy(all_sent[i])
         bool2 = False
@@ -2001,7 +2043,7 @@ def replace_relations():
                         bool2 = True
                         bool1 = True
                         rule = "DE ~ every"
-                    elif all_sent[i][10] in cat:
+                    elif all_sent[i][10] in special_determinatives:
                         rule = "DE ~ " + all_sent[i][10]
                         all_sent[i][10] = 'every'
                         bool2 = True
@@ -2023,7 +2065,7 @@ def replace_relations():
                         bool2 = True
                         add_120 = True
                         rule = "DE ~ every"
-                    elif all_sent[i][10] in cat:
+                    elif all_sent[i][10] in special_determinatives:
                         all_sent[i][10] = 'every'
                         bool2 = True
                         add_120 = True
@@ -2040,7 +2082,7 @@ def replace_relations():
                         bool2 = True
                         add_120 = True
                         rule = "DE ~ every"
-                    elif all_sent[i][16] in cat:
+                    elif all_sent[i][16] in special_determinatives:
                         all_sent[i][16] = 'every'
                         bool2 = True
                         add_120 = True
@@ -2062,7 +2104,7 @@ def replace_relations():
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ every"
-                    elif all_sent[i][20] in cat:
+                    elif all_sent[i][20] in special_determinatives:
                         all_sent[i][20] = 'every'
                         bool2 = True
                         rule = "DE ~ " + all_sent[i][22]
@@ -2078,7 +2120,7 @@ def replace_relations():
                         bool2 = True
                         rule = "DE ~ every"
                         add_120 = True
-                    elif all_sent[i][24] in cat:
+                    elif all_sent[i][24] in special_determinatives:
                         all_sent[i][24] = 'every'
                         bool2 = True
                         add_120 = True
@@ -2094,7 +2136,7 @@ def replace_relations():
                         bool1 = True
                         bool2 = True
                         rule = "DE ~ every"
-                    elif all_sent[i][28] in cat:
+                    elif all_sent[i][28] in special_determinatives:
                         all_sent[i][28] = 'every'
                         bool2 = True
                         add_120 = True
@@ -2192,7 +2234,7 @@ def eliminate_possessive_nouns(m, n, definite_assignments, str7):
 
 
 def eliminate_that2(m, i):
-    global embed
+
     num = allowable_slots()
     list1 = [None] * 80
     bool1 = False
@@ -2248,7 +2290,6 @@ def eliminate_that2(m, i):
     list3 = new_categories(list3, True)
     con_parts = copy.deepcopy(list3)
     all_sent.append(list3)
-    embed.append(list2)
     prepare_att_sent_1_sent(ant_sent_parts, "DE that", "", "e", con_parts)
 
 
@@ -2746,7 +2787,7 @@ def build_conjunction_of_biconditionals(def_info):
     return def_info
 
 
-def change_variables(definition, definiendum, m, kind="", k=0, definite_assignments = []):
+def change_variables(definiendum, m, kind="", k=0, definite_assignments=[]):
     # def_rn = definition rename
     # this function renames the variables in a definition
     # end0
@@ -2754,13 +2795,15 @@ def change_variables(definition, definiendum, m, kind="", k=0, definite_assignme
     # match_type 1 = idd, constants, 2 = unused var, 3 = already has relation
     # 4 = negated consequent
 
-    global sn, anaphora, def_used
+    global sn, def_used
     b = time.time()
     # this is for those determinatives which have negations in their definitions where
     # the sentences has an R variable
     identical_det = ["only", "anything_except", "anyone_except", "many" + un, 'no']
+    definitions = words[16]
+    definition = findinlist(definiendum, definitions, 0, 1)
 
-    if definiendum == "mental":
+    if definiendum == "every":
         bb = 7
 
     if definiendum not in def_used and not definiendum.isupper():
@@ -2824,7 +2867,7 @@ def change_variables(definition, definiendum, m, kind="", k=0, definite_assignme
 
     univ_quant_sent = eliminate_sent_wi_univ_scope(definiendum, determ_loc, k, m, new_var2)
 
-    if kind == "determinative" or kind == "pronoun" or kind == 'AS' or kind == 'poss pro':
+    if kind == "determinative" or kind == "pronoun" or kind == 'poss pro':
         rule = "DE " + definiendum
         rule_found = True
     elif kind == "proper name possessive":
@@ -2867,12 +2910,7 @@ def change_variables(definition, definiendum, m, kind="", k=0, definite_assignme
             bool1 = False
             bool2 = False
 
-            if kind == 'AS' and list8[9] == 'R':
-                list8[9] = anaphora[0]
-                if i == 6:
-                    list8[5] = anaphora[1]
-                list8 = build_sent(list8)
-            elif kind != "" and kind != 'R' and list8[9] == "R":
+            if kind != "" and kind != 'R' and list8[9] == "R":
                 list8[73] = True
                 if list8[3] != None:
                     temp_det = list8[3]
@@ -3061,7 +3099,7 @@ def change_variables(definition, definiendum, m, kind="", k=0, definite_assignme
                     unmatched2.append([i, j])
 
     defin_sent, rename = change_propositional_constants(defin_sent,
-                                                        match_dv, prop_pos, propositional_constants, rename)
+                                match_dv, prop_pos, propositional_constants, rename)
 
     no_var_ch = var_ch(match_dv)
     if no_var_ch:
@@ -3069,7 +3107,7 @@ def change_variables(definition, definiendum, m, kind="", k=0, definite_assignme
         sn += 1
 
     def_info[0], defin_sent = insert_sentence_into_antecedent(def_info[0],
-                                                              defin_sent, univ_quant_sent)
+                                            defin_sent, univ_quant_sent)
 
     if possessive_nouns != []:
         list1 = insert_possessive_nouns(def_info[0], defin_sent, possessive_nouns)
@@ -3093,7 +3131,9 @@ def change_variables(definition, definiendum, m, kind="", k=0, definite_assignme
         if def_info[i][2] == 'eliminate as conjunct':
             list1[46] = 'eliminate as conjunct'
 
-    add_def_sent_to_all_sent(defin_sent)
+    add_def_sent_to_all_sent(definiendum, defin_sent)
+
+    divide_univ_quant_sent(univ_quant_sent)
 
     update_essential_properties_dictionary(first_sent, definiendum, defin_sent)
 
@@ -3122,6 +3162,22 @@ def update_essential_properties_dictionary(first_sent, definiendum, defin_sent):
             ess_prop.append(sent)
 
         essential_properties[definiendum] = ess_prop
+
+
+def divide_univ_quant_sent(univ_quant_sent):
+    # we perform this step because divide relations is the only step that we do
+    # both before and after the universals are defined
+    if univ_quant_sent != []:
+        num100 = [15, 19]
+        m = len(all_sent)-len(univ_quant_sent)
+        n = len(all_sent)
+        m -= 1
+        while m < n-1:
+            m += 1
+            for i in num100:
+                if i in all_sent[m][46]:
+                    divide_relations2(m, i)
+                    break
 
 
 def change_propositional_constants(defin_sent, match_dv, prop_pos, propositional_constants, rename):
@@ -3406,13 +3462,13 @@ def insert_possessive_nouns(def_info0th, defin_sent, possessive_nouns):
 
 
 def match_def_sub_to_all_sent_sub(defin_sent, kind, m, match_dv, match_type, definition):
-    if (kind == "" or kind == "R" or kind == 'AS'):
+    if (kind == "" or kind == "R"):
         for sent in defin_sent:
             if sent[68][1] == "1" and sent[68][-1] == "1":
                 match_dv.append([sent[5], all_sent[m][5]])
                 match_type.append(0)
                 # for definitions where I is the relation then we need not worry about the subject
-                if kind == "R" or kind == 'AS':
+                if kind == "R":
                     match_dv.append([sent[14], all_sent[m][14]])
                     match_type.append(0)
                     if len(sent[68]) == 2:
@@ -3470,7 +3526,8 @@ def eliminate_negated_many(defin_sent, k):
     return defin_sent
 
 
-def add_def_sent_to_all_sent(defin_sent):
+def add_def_sent_to_all_sent(definiendum, defin_sent):
+
     for i in range(len(defin_sent)):
         # we cannot add the first_sent to the all sent list since it is already in there
         if not isinmdlist(defin_sent[i][1], all_sent, 1) and not \
@@ -3898,7 +3955,8 @@ def prepare_categorize_words(str2):
 
 
 def categorize_words(list1, first=False, taken_out=[]):
-    global anaphora
+
+
     sentence_slots = [None] * 80
     relation_type = 0
     list2 = []
@@ -4253,14 +4311,10 @@ def categorize_words(list1, first=False, taken_out=[]):
         else:
             print("you misspelled " + word)
             g = 4 / 0
-        if word in anaphoric_relations and first:
-            anaphora = []
-            anaphora.append(sentence_slots[9])
         if has_comma != "":
             for j in list2:
                 if sentence_slots[j] + "," == has_comma:
                     sentence_slots[39] = j
-                    has_comma = ""
                     break
         if part_compound:
             i += 1
@@ -4753,9 +4807,6 @@ def build_dict(ex_dict):
                         sec_let = 7
                     elif sec_let == 'd':
                         sec_let = 5
-                    list1a = [word, sec_let]
-                elif sec_let == 'c':
-                    anaphoric_relations.append(abbrev_relat)
                 elif sec_let == 's':
                     str6 = defin[defin.find("=") + 1:-1]
                     str6 = str6.strip()
@@ -4790,7 +4841,7 @@ def build_dict(ex_dict):
              aux, negg, dnoun, syn_pairs, synon, det, definitions, det_pairs, relations,
              relations2, particles, redundant, atomic_relations, atomic_relata,
              pronouns, poss_pronouns, plurals, neg_det, pos, really_atomic,
-             anaphoric_relations, doubles, triples, definitions2, compound, proper_names,
+             "", doubles, triples, definitions2, compound, proper_names,
              not_oft_def, uniq_obj, essential_properties, repeat_relat]
 
 
@@ -7839,11 +7890,25 @@ def calculate_time_statistics(st):
     print("total " + str("{0:.3f}".format(total)))
 
 
+def step_one(sent):
+
+    divide_sent(sent)
+
+    eliminate_redundant_words()
+
+    replace_synonyms()
+
+    replace_relations()
+
+    eliminate_negative_determiners()
+
+    word_sub()
+
 def get_result(post_data, archive_id=None, request=None):
+
     global ws, w4, result_data, p
-    global anaphora
     global sn, total_sent, prop_name
-    global all_sent, embed, attach_sent, detach_sent, abbreviations
+    global all_sent, attach_sent, detach_sent, abbreviations
     global prop_var, variables, stp
 
     if not excel and not one_sent:
@@ -7885,7 +7950,6 @@ def get_result(post_data, archive_id=None, request=None):
             for j in range(len(list1[i])):
                 list2 = tran_str(list1[i][j][1], 2)
                 list1[i][j][1] = list2[0]
-
         test_sent = list1
         p = 1
         ex_dict = large_dict('hey')
@@ -7910,7 +7974,7 @@ def get_result(post_data, archive_id=None, request=None):
     for k in range(strt, stp):
         if not excel and not one_sent:
             views.progressbar_send(request, strt, stp, k, 1)
-        if k == 20:
+        if k == 27:
             bb = 7
         st1 = time.time()
         prop_name = []
@@ -7923,17 +7987,7 @@ def get_result(post_data, archive_id=None, request=None):
         variables = copy.deepcopy(variables2)
         sn = test_sent[k][-1][0] + 1
 
-
-        embed = []
-        anaphora = ""
-
-        divide_sent(test_sent[k])
-
-        replace_synonyms()
-
-        replace_relations()
-
-        word_sub()
+        step_one(test_sent[k])
 
         step_two()
 

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="removed">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" />
+    <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" afterPath="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/prove.py" afterPath="$PROJECT_DIR$/inference2/Proofs/prove.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/temp.py" afterPath="$PROJECT_DIR$/inference2/Proofs/temp.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" afterPath="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,8 +39,8 @@
       <file leaf-file-name="5_7_16.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="940" column="12" lean-forward="false" selection-start-line="940" selection-start-column="4" selection-end-line="940" selection-end-column="12" />
+            <state relative-caret-position="197">
+              <caret line="3137" column="0" lean-forward="false" selection-start-line="3137" selection-start-column="0" selection-end-line="3137" selection-end-column="0" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -73,8 +71,8 @@
       <file leaf-file-name="start_and_stop.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/start_and_stop.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="11" lean-forward="true" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+            <state relative-caret-position="75">
+              <caret line="5" column="11" lean-forward="false" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -83,7 +81,7 @@
       <file leaf-file-name="7.5_perfect.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/7.5_perfect.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
+            <state relative-caret-position="31815">
               <caret line="2216" column="0" lean-forward="true" selection-start-line="2216" selection-start-column="0" selection-end-line="2216" selection-end-column="0" />
               <folding />
             </state>
@@ -102,36 +100,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>[16]</find>
-      <find>'ta'</find>
-      <find>def categorize_v</find>
-      <find>def step_fou</find>
-      <find>study</find>
-      <find>def step_four</find>
-      <find>def instantiate2</find>
-      <find>def step_</find>
-      <find>try:</find>
-      <find>used_atom</find>
-      <find>def define</find>
-      <find>def add_nscon</find>
-      <find>def add_atomic</find>
-      <find>atoms</find>
-      <find>plural_c</find>
-      <find>definite</find>
-      <find>definite</find>
-      <find>definite.a</find>
-      <find>definite,</find>
-      <find>definite_list</find>
-      <find>get_match</find>
-      <find>def eliminate_possess</find>
-      <find>def eliminate_posses</find>
-      <find>error</find>
       <find>def get_match_dv</find>
-      <find>error fou</find>
-      <find>eliminate_possessive_nouns(</find>
+      <find>change_var</find>
+      <find>anaphora.appen</find>
+      <find>anaphoric_relation</find>
+      <find>anaphora.</find>
+      <find>'AS'</find>
+      <find>AS</find>
+      <find>anaphora</find>
+      <find>anaphoric</find>
+      <find>RDB</find>
+      <find>def step_tw</find>
+      <find>def eliminate_th</find>
+      <find>embed</find>
+      <find>def step_one</find>
       <find>def step_two</find>
-      <find>def change_v</find>
-      <find>def get_match</find>
+      <find>def eliminate_there</find>
+      <find>def_sent</find>
+      <find>concept_instance</find>
+      <find>def eliminate_rel</find>
+      <find>ssive_pron</find>
+      <find>nate_poss</find>
+      <find>nate_as</find>
+      <find>step_two</find>
+      <find>divide_relat</find>
+      <find>eliminate_there</find>
+      <find>nate_univ</find>
+      <find>def remove_dup</find>
+      <find>def add_defin</find>
+      <find>def add_def</find>
+      <find>end2</find>
     </findStrings>
     <replaceStrings>
       <replace>indef attach</replace>
@@ -231,9 +229,9 @@
         <option value="$PROJECT_DIR$/inference2/Proofs/6.26.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/z 7.5 perfect.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/7.5 perfect.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/7.5_perfect.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" />
       </list>
     </option>
   </component>
@@ -347,7 +345,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="inference_engine2" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/inference2/Proofs/7.5_perfect.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/inference2/Proofs/5_7_16.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -524,13 +522,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1454034293054</updated>
-    </task>
-    <task id="LOCAL-00013" summary="almost put all_sent into conditional[35] and [36]">
-      <created>1495550811365</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1495550811365</updated>
     </task>
     <task id="LOCAL-00014" summary="minor change to excel">
       <created>1495551810669</created>
@@ -868,7 +859,14 @@
       <option name="project" value="LOCAL" />
       <updated>1499303111503</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="removed definite from globals">
+      <created>1499311472246</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1499311472246</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TodoView">
@@ -948,7 +946,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="revised get_detached function" />
     <MESSAGE value="deleted the old method of instantation" />
     <MESSAGE value="working on categorizing objects" />
     <MESSAGE value="put variables into 5 categories: definite, general, mixed, indefinite attached and indefinite detached" />
@@ -973,7 +970,8 @@
     <MESSAGE value="added several globals (no run time error)" />
     <MESSAGE value="refactored instantiation, perfect" />
     <MESSAGE value="proves all 81 claims perfectly" />
-    <option name="LAST_COMMIT_MESSAGE" value="proves all 81 claims perfectly" />
+    <MESSAGE value="removed definite from globals" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed definite from globals" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1000,19 +998,24 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py</url>
-          <line>2169</line>
+          <line>2211</line>
           <option name="timeStamp" value="8927" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/inference2/Proofs/7.5_perfect.py</url>
-          <line>3335</line>
+          <line>3316</line>
           <option name="timeStamp" value="8942" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py</url>
+          <line>3170</line>
+          <option name="timeStamp" value="8962" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="8944" />
+      <option name="time" value="8964" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Python.DjangoServer">
@@ -1038,6 +1041,7 @@
         <watch expression="stp" language="Python" />
         <watch expression="prop_var" language="Python" />
         <watch expression="definite_assignments" language="Python" />
+        <watch expression="anaphora" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -1258,6 +1262,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1328,26 +1333,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/start_and_stop.py">
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/7.5_perfect.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="11" lean-forward="true" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+        <state relative-caret-position="31815">
+          <caret line="2216" column="0" lean-forward="true" selection-start-line="2216" selection-start-column="0" selection-end-line="2216" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/7.5_perfect.py">
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/start_and_stop.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="2216" column="0" lean-forward="true" selection-start-line="2216" selection-start-column="0" selection-end-line="2216" selection-end-column="0" />
+        <state relative-caret-position="75">
+          <caret line="5" column="11" lean-forward="false" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/5_7_16.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="940" column="12" lean-forward="false" selection-start-line="940" selection-start-column="4" selection-end-line="940" selection-end-column="12" />
+        <state relative-caret-position="197">
+          <caret line="3137" column="0" lean-forward="false" selection-start-line="3137" selection-start-column="0" selection-end-line="3137" selection-end-column="0" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
