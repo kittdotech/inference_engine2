@@ -1,5 +1,5 @@
 def pop_sent(str1):
-    sent = [[[ 1,"no mind thinks something|a",None,'co']],\
+    sent = [[[ 1,"no mind thinks something",None,'co']],\
 [[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
 [[ 1,"I saw everyone who drank something in the van",None,'co'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I did not see Leibniz",None,'j']],\
 [[ 1,"I love nothing which is|r about murder",None,'co'],[ 2,"Hamlet is|r about murder",None,'j'],[ 3,"I love Hamlet",None,'j']],\
@@ -7,7 +7,7 @@ def pop_sent(str1):
 [[ 1,"no green man from|b cold mars, lives on|r Earth",None,'co'],[ 2,"Jim is|g a|r green man born on|r Mars",None,'j'],[ 3,"Jim lives on|r Earth",None,'j']],\
 [[ 1,"Every green man from|b Mars drinks",None,'co'],[ 2,"Jim is|g a|r green man born on|r Mars",None,'j'],[ 3,"Jim does not drink",None,'j']],\
 [[ 1,"Everyone who spies on Leibniz, will|r be|a rewarded",None,'co'],[ 2,"Russell spied on Leibniz",None,'j'],[ 3,"Russell was|a not rewarded",None,'j']],\
-[[ 1,"Everyone who spies on a|a nazi in Munich, will|r be|a rewarded",None,'co'],[ 2,"Russell spied on a nazi in Munich",None,'j'],[ 3,"Russell was|a not rewarded",None,'j']],\
+[[ 1,"Everyone who spies on a nazi in Munich, will|r be|a rewarded",None,'co'],[ 2,"Russell spied on a nazi in Munich",None,'j'],[ 3,"Russell was|a not rewarded",None,'j']],\
 [[ 1,"Anyone who breaks the speed limit, will|r be|a caught",None,'co'],[ 2,"Marilyn broke the speed limit",None,'j'],[ 3,"Marilyn was|a not caught",None,'j']],\
 [[ 1,"I did not shed a tear",None,'co'],[ 2,"I shed some|p tears",None,'j']],\
 [[ 1,"Every woman at|p the party drank",None,'co'],[ 2,"Jessica was|r at|p the party",None,'j'],[ 3,"Jessica is|g a|r woman",None,'j'],[ 4,"Jessica did not drink",None,'j']],\
@@ -58,7 +58,7 @@ def pop_sent(str1):
 [[ 1,"b has|c|r causal role c",None,'co'],[ 2,"Causal role c is|g not a|r property|n",None,'j']],\
 [[ 1,"A universal is|r not distinct from its|a instance",None,'co']],\
 [[ 1,"There is|e a universal which is|r not distinct from its|a instances",None,'co']],\
-[[ 1,"The concept|n cat is|g itself|r a|r cat",None,'co']],\
+[[ 1,"The|r concept|n cat is|g itself|r a|r cat",None,'co']],\
 [[ 1,"Dog is|g not a|r concept|n",None,'co']],\
 [[ 1,"Point is|g a|r partially material|a concept|n",None,'co']],\
 [[ 1,"This dog is|g a|r concept|n",None,'co']],\
@@ -78,6 +78,6 @@ def pop_sent(str1):
 [[ 1,"Russell is|g not a|r man",None,'co']],\
 [[ 1,"Russell has the|r property courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
-[[ 1,"I think that|c it|p is|a true that|c you are|a smart",None,'co'],[ 2,"I do not believe that|c you are|a smart",None,'j']],\
+# [[ 1,"I think that|c it is|a true that|c you are|a smart",None,'co'],[ 2,"I do not believe that|c you are|a smart",None,'j']],\
 [[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']]]
     return sent

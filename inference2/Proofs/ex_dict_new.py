@@ -1,32 +1,36 @@
-def large_dict(str1):
-    dict2= [['rbt','above','AB','((bIc) x^ (dABb)) & ((bIc) x^ (bABe)) & (c=point)'],\
-['rbt','after|l','AL','((bIc) x^ (dALb)) & ((bIc) x^ (bALe)) & (c=letter)'],\
-['rbt','after|n ','G','((bIc) x^ (dGb)) & ((bIc) x^ (bGe)) & (c=number)'],\
-['rbt','after ','A','((bIc) x^ (dAb)) & ((bIc) x^ (bAe)) & (c=moment)'],\
-['rbi','and','&','((p&q) t^ (p.qIb)) & (q~Ic) & (rPd) & (b=relationship) & (qb^p&~p) & (c=reality|t) & (rb^p&~q)'],\
-['rbi','are|a','J','((bJc) x^ (cId)) & ((bJc) t^ (bIe)) & ((bJc) t^ (cIf)) & (d=property) & (e=thing) & (f=adjective)'],\
-['rbi','are|g ','I','((bIc) x^ (cId)) & ((eIf) x^ (eIg)) & (d=concept|n) & (g=instance)'],\
-['rbis','at','S','((bIc) x^ (dSb)) & ((dIf) x^ (dSb)) & (c=point) & (f=particle) '],\
-['rbi','at|i ','M','((dMb) t^ (dIc)) & ((bIf) x^ (dMb)) & (c=relationship) & (f=imagination) '],\
-['rbi','at|n ','N','((bIc) x^ (dNb)) & ((eIf) x^ ((eNh) & (hGg))) & ((jIk) x^ (mNg)) & ((nIo) x^ (nNp)) & (f=whole) & (c=number) & (g=1) & (k=individual) & (p=0) & (o=contradiction) '],\
-['rbi','at|p ','P','((dPb) t^ (dIc)) & ((bIf) x^ (dPb)) & (c=relationship) & (f=possible world) '],\
-['rbi','at|s ','O','((bIc) x^ (dOb)) & ((dIc) x^ (dOb)) & (f=sensation) & (c=point|s) '],\
-['rbit','at|t ','T','((dTb) t^ (dIc)) & ((bIf) x^ (dTb)) & (c=relationship) & (f=moment) '],\
-['rbi','at|y','Z','((bIc) x^ (dZb)) & (c=point|a)'],\
-['rbi','desire','D','((dDb) t^ ((bIc) & (bJe))) & ((bIf) x^ (dDb)) & (c=relationship) & (f=mind) & (e=open|r)'],\
-['r','have','H','((bHc) x^ (cId)) & ((bHc) t^ (bIe)) & ((bHc) t^ (cIf)) & (d=property|n) & (e=thing) & (f=noun)'],\
-['rbi','has|w ','W','((bIc) x^ (bWd)) & ((dIe) x^ (bWd)) & (d=whole) & (e=part)'],\
-['rbi','in|o','IR','((c=reality|t) x^ (pIRc)) & ((dIe) t^ (d~Ic)) & ((c=reality|t) t^ (cIf)) & ((qIRc) x^ (cWq)) &  (e=thing) & (f=non_relationship) & (g=relationship)'],\
-['rbts','in front of','F','((bIc) x^ (dFb)) & ((bIc) x^ (bFe)) & (c=point)'],\
-['rbi','is|v','IV','((bIVc) x^ (bId)) & ((bIVc) x^ (cIf)) & ((bIVc) t^ (bIe)) & (d=property|v) & (f=adverb) & (e=non_whole)'],\
-['rbi','is|y','IZ','((bIZc) x^ (cId)) & ((bIYc) x^ (cIf)) & ((bIYc) t^ (bIe)) & (d=property|d) & (f=determinative) & (e=non_whole)'],\
-['rbts','left of','L','((bIc) x^ (dLb)) & ((bIc) x^ (bLe)) & (c=point)'],\
-['rbi','think about','TK','((bTKd) t^ (dIc)) & ((bIf) x^ (bTKd)) & (c=relationship) & (f=mind) '],\
+def large_dict():
+    dict2= [['rat','above','AB','((bIc) x^ (dABb)) & ((bIc) x^ (bABe)) & (c=point)'],\
+['rb','absorb','AD','(c=boson) & ((bIc) x^ (eADb)) & ((eId) x^ (eADf)) & (d=fermion)'],\
+['rat','after ','A','((bIc) x^ (dAb)) & ((bIc) x^ (bAe)) & (c=moment)'],\
+['rat','after|l','AL','((bIc) x^ (dALb)) & ((bIc) x^ (bALe)) & (c=letter)'],\
+['rat','after|n ','G','((bIc) x^ (dGb)) & ((bIc) x^ (bGe)) & (c=number)'],\
+['rat','and','&','((p&q) t^ (p.qIb)) & (q~Ic) & (rPd) & (b=relationship) & (qb^p&~p) & (c=reality|t) & (rb^p&~q)'],\
+['rat','are|a','J','((bJc) x^ (cId)) & ((bJc) t^ (bIe)) & ((bJc) t^ (cIf)) & (d=property) & (e=thing) & (f=adjective)'],\
+['rat','are|g ','I','((bIc) x^ (cId)) & ((eIf) x^ (eIg)) & (d=concept|n) & (g=instance)'],\
+['rais','at','S','((bIc) x^ (dSb)) & ((dIf) x^ (dSb)) & (c=point) & (f=particle) '],\
+['rat','at|i ','M','((dMb) t^ (dIc)) & ((bIf) x^ (dMb)) & (c=relationship) & (f=imagination) '],\
+['rat','at|n ','N','((bIc) x^ (dNb)) & ((eIf) x^ ((eNh) & (hGg))) & ((jIk) x^ (mNg)) & ((nIo) x^ (nNp)) & (f=whole) & (c=number) & (g=1) & (k=individual) & (p=0) & (o=contradiction) '],\
+['rat','at|p ','P','((dPb) t^ (dIc)) & ((bIf) x^ (dPb)) & (c=relationship) & (f=possible world) '],\
+['rat','at|s ','O','((bIc) x^ (dOb)) & ((dIc) x^ (dOb)) & (f=sensation) & (c=point|s) '],\
+['rais','at|t ','T','((dTb) t^ (dIc)) & ((bIf) x^ (dTb)) & (c=relationship) & (f=moment) '],\
+['rai','at|y','Z','((bIc) x^ (dZb)) & (c=point|a)'],\
+['rai','desire','D','((dDb) t^ ((bIc) & (bJe))) & ((bIf) x^ (dDb)) & (c=relationship) & (f=mind) & (e=open|r)'],\
+['rb','emit','EM','(c=fermion) & ((bIc) x^ (bEMd)) & (e=boson) & ((dIe) x^ (bEMd))'],\
+['rai','has|w ','W','((bIc) x^ (bWd)) & ((dIe) x^ (bWd)) & (d=whole) & (e=part)'],\
+['ra','have','H','((bHc) x^ (cId)) & ((bHc) t^ (bIe)) & ((bHc) t^ (cIf)) & (d=property|n) & (e=thing) & (f=noun)'],\
+['rats','in front of','F','((bIc) x^ (dFb)) & ((bIc) x^ (bFe)) & (c=point)'],\
+['rai','in|o','IR','((c=reality|t) x^ (pIRc)) & ((dIe) t^ (d~Ic)) & ((c=reality|t) t^ (cIf)) & ((qIRc) x^ (cWq)) &  (e=thing) & (f=non_relationship) & (g=relationship)'],\
+['rai','is|v','IV','((bIVc) x^ (bId)) & ((bIVc) x^ (cIf)) & ((bIVc) t^ (bIe)) & (d=property|v) & (f=adverb) & (e=non_whole)'],\
+['rai','is|y','IZ','((bIZc) x^ (cId)) & ((bIYc) x^ (cIf)) & ((bIYc) t^ (bIe)) & (d=property|d) & (f=determinative) & (e=non_whole)'],\
+['rats','left of','L','((bIc) x^ (dLb)) & ((bIc) x^ (bLe)) & (c=point)'],\
+['rai','think about','TK','((bTKd) t^ (dIc)) & ((bIf) x^ (bTKd)) & (c=relationship) & (f=mind) '],\
+['n','boson',None,'(c=boson) & ((bIc) x^ (dEMb)) & ((bIc) x^ (eADb)) & ((bIc) t^ (bIg)) & (g=particle)'],\
 ['n','concept|n',None,'(c=concept|n) & ((bIc) x^ (zIb)) & ((bIc) t^ (bIe)) & (e=non_whole)'],\
 ['a','consistent',None,'(c=consistent) & ((pJc) k^ (pPq)) & ((pJc) t^ (pId)) & (d=relationship)'],\
 ['a','contradictory',None,'(c=contradictory) & ((pJc) e^ ((nId) & (p~Pn))) & (d=possible world) & ((pJc) t^ (pId)) & (d=relationship)'],\
 ['aa','extant',None,'((bJc) t^ (cId)) & (d=property)'],\
 ['n','fact',None,'(c=fact) & ((bIc) x^ (bIRd)) & ((bIc) t^ (bIe)) & (((hAg) & (bIc)) t^ (b~IRd Th)) & (d=reality) & (e=relationship) & (g=now)'],\
+['n','fermion',None,'(c=fermion) & ((bIc) x^ (bEMd)) & ((bIc) x^ (bADe)) & ((bIc) t^ (bIg)) & (g=particle)'],\
 ['na','here',None,'(b=here) t^ (cSb)'],\
 ['n','imagination',None,'(c=imagination) & ((bIc) x^ (dMb)) & ((bIc) t^ (bIf)) & (f=non_relationship)'],\
 ['n','instance',None,'(c=instance) & ((bIc) x^ (bId))'],\
@@ -37,12 +41,12 @@ def large_dict(str1):
 ['n','moment',None,'(c=moment) & ((bIc) x^ (dTb)) & ((bIc) x^ (bAh)) & ((bIc) x^ (eAb)) & ((bIc) t^ (bIf)) & (f=non_whole)'],\
 ['na','now',None,'(b=now) t^ (cSb)'],\
 ['n','part',None,'(c=part) & ((bIc) x^ (dWb))'],\
-['n','part|p',None,'(c=part|p) & (((bIc) & (bOFd)) x^ (dWb))'],\
 ['n','particle',None,'(c=particle) & ((bIc) x^ (bSd)) & ((bId) x^ (hTg)) & ((bIc) t^ (bIf)) & (f=non_whole) & (g=now) & (hb^bSd)'],\
 ['n','particle|m',None,'(c=particle|m) & ((bIc) x^ (bOd)) & ((bId) x^ (hTg)) & ((bIc) t^ (bIf)) & (f=non_whole) & (g=now) & (hb^bOd)'],\
+['n','part|p',None,'(c=part|p) & (((bIc) & (bOFd)) x^ (dWb))'],\
 ['n','point',None,'(c=point) & ((bIc) x^ (dSb)) & ((bIc) x^ (eABb)) & ((bIc) x^ (bABm)) & ((bIc) x^ (fFb)) & ((bIc) x^ (bFj)) & ((bIc) x^ (gLb)) & ((bIc) x^ (bLk)) & ((bIc) t^ (bIh)) & (h=non_whole)'],\
-['n','point|s',None,'(c=point|s) & ((bIc) x^ (dOb)) & ((bIc) t^ (bIe)) & (e=non_whole)'],\
 ['n','point|b',None,'(c=point|b) & ((bIc) x^ (dZb)) & ((bIc) x^ (eABb)) & ((bIc) x^ (bABm)) & ((bIc) x^ (gLb)) & ((bIc) x^ (bLk)) & ((bIc) t^ (bIh)) & (h=non_whole)'],\
+['n','point|s',None,'(c=point|s) & ((bIc) x^ (dOb)) & ((bIc) t^ (bIe)) & (e=non_whole)'],\
 ['n','possible relationship',None,'(c=possible relationship) & ((pIc) x^ (pPb))'],\
 ['n','possible world',None,'(c=possible world) & ((bIc) x^ (pPb))'],\
 ['n','property',None,'(c=property) & ((bIc) x^ (dJb)) & ((bIc) t^ (bIe)) & (e=non_whole)'],\
@@ -51,44 +55,44 @@ def large_dict(str1):
 ['n','property|v',None,'(c=property|v) & ((bIc) x^ (dIVb)) & ((bIc) t^ (bIe)) & (e=non_whole)'],\
 ['n','reality|t',None,'((c=reality|t) x^ (pIRc)) & ((dIe) t^ (d~Ic)) & ((c=reality|t) t^ ((cIf) & (cIg))) & ((qIRc) t^ (cWq)) &  (e=thing) & (f=non_relationship) & (g=relationship)'],\
 ['n','sensation',None,'(c=sensation) & ((bIc) x^ (bOd)) & ((bIc) t^ (bIe)) & (e=non_whole)'],\
-['n','sensorium',None,'(c=sensorium) & ((bIc) x^ ((bWd) x^ (eOd)))'],\
 ['na','thing',None,'See atomic categories'],\
 ['n','thought',None,'(c=thought) & ((bIc) x^ (dTKb)) & ((bIc) t^ (bIe)) & ((bIc) x^ (bMf)) & (e=relationship)'],\
 ['n','whole',None,'(c=whole) & ((bIc) x^ (bWd))'],\
 ['na','abbreviation',None,'(c=abbreviation) & ((bIc) x^ ((bId) ed^ (bIe))) & (d=constant) & (e=variable)'],\
+['','active',None,'(wildly disjunctive)'],\
 ['na','adjective',None,'(wildly disjunctive)'],\
 ['na','constant',None,'indefinable'],\
 ['na','intransitive verb',None,'(wildly disjunctive)'],\
+['','non_spatio_temporal',None,'(wildly disjunctive)'],\
 ['na','noun',None,'indefinable'],\
 ['na','noun form',None,'indefinable'],\
-['na','plural form',None,'indefinable'],\
-['','non_spatio_temporal',None,'(wildly disjunctive)'],\
-['','spatio_temporal',None,'(wildly disjunctive)'],\
-['','active',None,'(wildly disjunctive)'],\
 ['','passive',None,'(wildly disjunctive)'],\
+['na','plural form',None,'indefinable'],\
 ['na','relation',None,'(c=relation) & ((bIc) t^ (bId)) & (d=non_whole)'],\
 ['rai','relational variable','R','indefinable'],\
 ['na','relatum',None,'(c=relatum) & ((bIc) x^ (bRd)) & ((eIc) x^ (fRe))'],\
 ['a','root (word)',None,'(wildly disjunctive), (c=root) & ((bJc) t^ (bId)) & (d=word)'],\
 ['na','singular form',None,'(wildly disjunctive)'],\
+['','spatio_temporal',None,'(wildly disjunctive)'],\
 ['na','subject',None,'hard coded - the first relatum is the subject'],\
 ['na','subject|i',None,'indefinable (must occur in if the relation is an intransitive verb)'],\
 ['na','variable',None,'indefinable'],\
 ['na','verb form',None,'(wildly disjunctive)'],\
 ['a','actual|p',None,'(c=actual|p) & (d=reality) & ((pJc) x^ (pIRd))'],\
 ['a','actual|w',None,'(c=actual|w) & ((bJc) x^ (b=reality))'],\
-['ns','set',None,'(set = whole)'],\
+['ns','agglomeration',None,'(agglomeration = whole)'],\
+['ns','attribute',None,'(attribute = property)'],\
 ['rs','aware of',None,'(aware of=TK)'],\
-['rs','belong|g ',None,'(belong|g=I)'],\
 ['r','belong to','BLN','(bBLNc) x^ (cWb)'],\
+['rs','belong|g ',None,'(belong|g=I)'],\
 ['ns','body ',None,'(body=particle)'],\
 ['ns','category|c ',None,'(category|c=concept|n)'],\
-['ns','attribute',None,'(attribute = property)'],\
+['ns','character trait',None,'(character trait = property)'],\
 ['ns','characteristic ',None,'(characteristic=property)'],\
 ['ns','class',None,'(class = concept|n)'],\
-['ns','class|w',None,'(class|w = whole)'],\
 ['ns','class concept',None,'(class concept=concept|n)'],\
-['ns','agglomeration',None,'(agglomeration = whole)'],\
+['ns','class|w',None,'(class|w = whole)'],\
+['ns','collection',None,'(collection = whole)'],\
 ['ns','concept|a',None,'(concept|a = property)'],\
 ['ns','condition',None,'(condition=property)'],\
 ['rs','conscious of',None,'(conscious of=TK)'],\
@@ -115,18 +119,17 @@ def large_dict(str1):
 ['n','part|f|a',None,'(c=part|f|a) & ((bIc) x^ (bId)) & (d=fact)'],\
 ['n','part|i',None,'(c=part|i) & ((bIc) x^ (bId)) & (d=thought)'],\
 ['n','part|w',None,'(c=part|w) & ((bIc) x^ (bId)) & (d=possible relationship)'],\
+['as','physical ',None,'(physical=material)'],\
 ['as','physical|c',None,'(physical|c = material|c)'],\
 ['as','physical|m',None,'(physical|m = material|m)'],\
-['as','physical ',None,'(physical=material)'],\
-['ns','trait',None,'(trait = property)'],\
 ['aa','possible',None,'(b=possible) & ((pJb) x^ (pPc))'],\
 ['n','present',None,'(present = now)'],\
 ['ns','qualia ',None,'(qualia=sensation)'],\
 ['r','right of','RT','(right of=RT) & ((bRTc) x^ (cLb))'],\
 ['ns','sense datum ',None,'(sense datum=particle|m)'],\
-['ns','collection',None,'(collection = whole)'],\
+['ns','set',None,'(set = whole)'],\
 ['ns','time|m ',None,'(time|m=moment)'],\
-['ns','character trait',None,'(character trait = property)'],\
+['ns','trait',None,'(trait = property)'],\
 ['ns','universal',None,'(universal = concept|n)'],\
 ['','thing',None,'(c=thing) & ((bIc) x^ ((bId) ed^ (bIe))) & ((bId) t^ (bIh)) & (d=relation) & (e=non_relation) & (h=non_whole)'],\
 ['','non_relation',None,'(c=non_relation) & ((bIc) x^ ((bId) ed^ (bIe) ed^ (bIf) ed^ (bIg))) & (((bIe) ed^ (bIf)) t^ (bIh)) & (d=class concept) & (e=property|n) & (f=property) & (g=instance) & (h=non_whole)'],\
@@ -145,7 +148,7 @@ def large_dict(str1):
 ['lc','because',None,'(because b, c) x^ (b & (b i^ c))'],\
 ['rs','entails ',None,'(entails = i^)'],\
 ['lb','hence',None,'(hence = i^)'],\
-['rbt','is','=','(is = =)'],\
+['rs','is','=','(is = =)'],\
 ['l','is|b',None,'(is|b = b^)'],\
 ['r','is|i ',None,'(is|i = x^)'],\
 ['rs','mean|e ',None,'(mean|e = x^)'],\
@@ -154,48 +157,48 @@ def large_dict(str1):
 ['lb','not follow',None,'(not follow = nf^)'],\
 ['lc','since',None,'(since = because)'],\
 ['lb','so',None,'(so = i^)'],\
-['r','synonymous|p with',None,'(synonymous|p with=x^)'],\
 ['r','synonymous with ',None,'(synonymous with==)'],\
+['r','synonymous|p with',None,'(synonymous|p with=x^)'],\
 ['lb','then',None,'(then = i^)'],\
 ['lb','then|a',None,'(then|a = t^)'],\
 ['lb','therefore',None,'(therefore = i^)'],\
 ['lb','thus',None,'(thus = i^)'],\
-['u','that|c',None,'(it J p that q) x^ (qJp)'],\
+['y','that|c',None,'(it J p that|c q) x^ (qJp)'],\
+['na','that|n',None,'(that|n = this|n)'],\
 ['u','that|o',None,'hard coded'],\
 ['us','that|s',None,'(that|s = which)'],\
-['na','that|n',None,'(that|n = this|n)'],\
-['na','there',None,'(there EX b) x^ (bEX)'],\
+['nt','there',None,'(there EX b) x^ (bEX)'],\
 ['na','this|n',None,'(this|n Rc) x^ (bRc)'],\
 ['u','where|i',None,'hardcoded - (bRc where|i dQf) x^ ((bRc) & (dQf INE c))'],\
 ['u','which',None,'(bRc which Qd) x^ ((bRc) & (cQd))'],\
 ['u','which|o',None,'hard coded'],\
 ['u','who',None,'((bRc who Qd) x^ ((bRc) & (cQd) & (bIe))) & (e=person)'],\
-['u','who|o',None,'hard coded'],\
 ['u','whom',None,'hard coded'],\
-['b','a|r',None,'redundant'],\
-['b','an|r',None,'redundant'],\
-['b','be|r',None,'redundant'],\
-['b','did',None,'redundant'],\
-['b','do',None,'redundant'],\
-['b','does',None,'redundant'],\
-['b','each other',None,'redundant'],\
-['b','if',None,'redundant'],\
-['b','in|r',None,'redundant'],\
-['b','in common|r',None,'redundant'],\
-['b','is|r',None,'redundant'],\
-['b','it|r',None,'redundant'],\
-['b','itself|r',None,'redundant'],\
-['b','of|r',None,'redundant'],\
-['b','on|r',None,'redundant'],\
-['b','particular',None,'redundant'],\
-['b','real|g',None,'redundant'],\
-['b','same',None,'redundant'],\
-['b','that|r',None,'redundant'],\
-['dr','the|r',None,'redundant'],\
-['b','then|r',None,'redundant'],\
-['b','to|r',None,'redundant'],\
-['b','was|r',None,'redundant'],\
-['b','will|r',None,'redundant'],\
+['u','who|o',None,'hard coded'],\
+['ta','an|r',None,'redundant'],\
+['ta','a|r',None,'redundant'],\
+['ta','be|r',None,'redundant'],\
+['ta','did',None,'redundant'],\
+['ta','do',None,'redundant'],\
+['ta','does',None,'redundant'],\
+['ta','each other',None,'redundant'],\
+['ta','if',None,'redundant'],\
+['ta','in common|r',None,'redundant'],\
+['ta','in|r',None,'redundant'],\
+['ta','is|r',None,'redundant'],\
+['ta','it|r',None,'redundant'],\
+['ta','itself|r',None,'redundant'],\
+['ta','of|r',None,'redundant'],\
+['ta','on|r',None,'redundant'],\
+['ta','particular',None,'redundant'],\
+['ta','real|g',None,'redundant'],\
+['ta','same',None,'redundant'],\
+['ta','that|r',None,'redundant'],\
+['ta','then|r',None,'redundant'],\
+['ta','the|r',None,'redundant'],\
+['ta','to|r',None,'redundant'],\
+['ta','was|r',None,'redundant'],\
+['ta','will|r',None,'redundant'],\
 ['b','(period)',None,'(b.cRd) x^ ((bRd) & (cRd))'],\
 ['b','c^',None,'(bc^c) means wherever we see b we may replace it with c but not vice_versa'],\
 ['b','e^',None,'If the symbols to the left or the right of e^ are written on a line, then we may write the symbols on the other side of e^ on a different line.'],\
@@ -204,20 +207,21 @@ def large_dict(str1):
 ['r','=',None,'(b=c) means wherever we see b we may replace it with c and vice_versa'],\
 ['ra','zzz',None,'(bzzzc) means we may not replace b with c and vice_versa'],\
 ['b','nt+',None,'(nt+p t^ (pIc)) & (c=relationship) & (qJd) & (qb^p&nt+p) & (d=consistent)'],\
-['m','not',None,'~'],\
 ['ma','~',None,'(~p t^ (pIc)) & (c=relationship) & (qJd) & (qb^p&~p) & (d=contradictory)'],\
 ['b','g^',None,'If we have (bg^c) on line 3 and SUB 2,3 in the justification section then only in line 2 may we replace b with c but not vice versa.'],\
 ['c','and|c',None,'(b and|c c R d) x^ (b.cRd)'],\
-['m','not|i',None,'(not|i = nt+)'],\
+['m','not',None,'(not = ~)'],\
 ['rat','not equal to',None,'(not equal to = zzz)'],\
+['m','not|i',None,'(not|i = nt+)'],\
+['ra','R','R','variable relation'],\
 ['','0',None,''],\
 ['','0',None,'Numbers'],\
 ['','0',None,''],\
 ['nu','0',None,'((b=0) x^ ((cGb) & (bGe))) & (c=1) & (e=1)'],\
 ['nu','1',None,'((b=1) x^ ((cGb) & (bGe))) & (c=2) & (e=0)'],\
 ['nu','2',None,'((b=2) x^ ((cGb) & (bGe))) & (c=3) & (e=1)'],\
-['nu','6',None,'((b=2) x^ ((cGb) & (bGe) & (fNb) & ((fWg) x^ ((g=h) ed^ (g=j)))) & (c=3) & (e=1)'],\
 ['nu','3',None,'((b=3) x^ ((cGb) & (bGe))) & (c=4) & (e=2)'],\
+['nu','6',None,'((b=2) x^ ((cGb) & (bGe) & (fNb) & ((fWg) x^ ((g=h) ed^ (g=j)))) & (c=3) & (e=1)'],\
 ['dd','at least one',None,'(at least one bRc) x^ ((zRc) & (zIb))'],\
 ['dd','at least three',None,'(((at least three bRc) & (bOFd) & (bIe)) x^ ((zRc) & (zId) & (yRc) & (yId) & (xId) & (ed^c))) & (e=plural form)'],\
 ['dd','at least two',None,'(((at least two bRc) & (bOFd) & (bIe)) x^ ((zRc) & (zId) & (yRc) & (yId))) & (e=plural form)'],\
@@ -231,37 +235,44 @@ def large_dict(str1):
 ['a','second|u',None,'(z=second|u) & (y=first|u) & ((bJz) & (bIc)) x^ ((dJy) & (dIc) & (bSCUd))'],\
 ['dd','zero',None,'(bR zero c) x^ ((b~Rc) & (cN0))'],\
 ['dd','zero',None,'(zero = no)'],\
-['ddi','a',None,'((a bRc) x^ ((zRc) & (zIb) & (zJe))) & (e=indefinite)'],\
-['ddi','a|a',None,'(a|a bRc) x^ ((zRc) & (zIb))'],\
-['di','all',None,'(all = every)'],\
+['d','a',None,'((a bRc) x^ ((dRc) & (dIb) & (dJe))) & (e=indefinite)'],\
 ['ds','another',None,'(another bRc) x^ ((zRc) & (zIb))'],\
-['ds','any',None,'(any = every)'],\
 ['dt','any|n',None,'(b~R any|n c) x^ (bR no c)'],\
 ['d','anyone except',None,'((anyone except bRc) x^ ((anything except bRc) & (bId))) & (d=person)'],\
 ['d','anything except',None,'(anything except bRc) x^ (((z=~b) t^ (zRc)) & (b~Rc))'],\
-['d','every',None,'(every bRc) x^ ((zIb) t^ (zRc))'],\
+['db','every',None,'(every bRc) x^ ((zIb) t^ (zRc))'],\
 ['','every (different)',None,'((every b R different|b c) x^ ((dIb) t^ ((dRe) & (dRf) & (d~Rg))) & (((mIb) & (jIb) & (kIc)) t^ ((m~Rk) v+ (j~Rk)))) & (h=indefinite) & (e.f.gJh) & (e.f.gIc)'],\
 ['d','everything except|p',None,'((everything except|p bRc) x^ (((z~Ib) t^ (zRc)) & ((yIb) t^ (y~Rc)))'],\
-['dd','few',None,'postponed'],\
+['','few',None,'postponed'],\
+['a','many',None,'(z=many) & (y=2) & ((bJz) x^ ((bNy) ed^ ((bNc) & (cGy))))'],\
+['a','many|a',None,'(c=many|a) & (((bJc) & (eJf)) x^ ((bNd) & (eNg) & (dGg))) & (f=few|a)'],\
 ['dd','many|d',None,'((many|d bRc) x^ ((zRc) & (zIb) & (zJe))) & (e=many)'],\
-['dd','many|n',None,'((many|n bRc) x^ ((zIb) & (zRc) & (zJg) & (yIb) & (y~Rc) & (yJg) & (y zzz z))) & (g=many)'],\
+['d','many|n',None,'(many|n b Rc) x^ (((dWe) x^ ((eRc) & (eIb))) & ((fWg) x^ ((g~Rc) & (gIb))) & (dNh) & (fNj) & (hGj))'],\
+['','many|r',None,'((many|r bRc) x^ ((zIb) & (zRc) & (zJg) & (yIb) & (y~Rc) & (yJg) & (y zzz z))) & (g=many)'],\
 ['dd','many|s',None,'(many|s bRc) x^ ((zIb) & (zRc) & (zJd) & (yIb) & (y~Rc) & (yJd))'],\
-['dd','no',None,'(no bRc) x^ ((zIb) t^ (z~Rc))'],\
+['db','no',None,'(no bRc) x^ ((zIb) t^ (z~Rc))'],\
+['','no b except',None,'(no d except bRc) x^ (((eId) & (ezzzb)) t^ (e~Rc)) & (bRc))'],\
 ['d','no one except',None,'((no one except bRc) x^ ((only bRc) & (bId))) & (d=person)'],\
-['dd','only',None,'(only bRc) x^ (((z=~b) t^ (z~Rc)) & (bRc))'],\
-['ddi','the',None,'((the bRc) x^ ((zRc) & (zIb) & (zJe))) & (e=definite)'],\
+['db','only',None,'(only bRc) x^ (((dzzzb) t^ (d~Rc)) & (bRc))'],\
+['db','only|g',None,'(only|g bRc) x^ (((dRc) t^ (dIb)) & ((e~Id) t^ (e~Rc)))'],\
+['d','the',None,'((the bRc) x^ ((dRc) & (dIb)))'],\
+['di','all',None,'(all = every)'],\
 ['ds','all of the',None,'(all of the=all)'],\
 ['ds','all the',None,'(all the=all)'],\
 ['ds','an',None,'(an = a)'],\
 ['ds','an|a',None,'(an|a = a|a)'],\
-['ws','anyone',None,'(anyone = every person)'],\
-['ws','anything',None,'(anything = every thing)'],\
-['ws','anything|a',None,'(anything|a = a|a thing)'],\
-['ws','everyone',None,'(everyone = every person)'],\
-['ds','everyone except',None,'(everyone except = every person except)'],\
-['ws','everything',None,'(everything = any thing)'],\
+['ds','any',None,'(any = every)'],\
+['nsd','anyone',None,'(anyone = every person)'],\
+['nsd','anything',None,'(anything = every thing)'],\
+['nsd','everyone',None,'(everyone = every person)'],\
+['ns','everyone except',None,'(everyone except = every person except)'],\
+['nsd','everything',None,'(everything = any thing)'],\
 ['d','everything except',None,'(everything except = every thing except)'],\
 ['ds','none of the',None,'(none of the = no)'],\
+['nsd','nothing',None,'(nothing = no thing)'],\
+['ds','nothing except',None,'(nothing except = only)'],\
+['ds','nothing except|p',None,'(nothing except|p = only|p)'],\
+['ns','nothing|d',None,'((nothing|d bRc) x^ ((no b dRc) & (dIz))) & (z=thing)'],\
 ['xs','not|i a',None,'(not|i a = no|s)'],\
 ['xs','not|i a',None,'(not|i a = no|s)'],\
 ['xs','not|i a|a',None,'(not|i a|a = no|s)'],\
@@ -272,81 +283,80 @@ def large_dict(str1):
 ['dd','not|i many|d',None,'(not|i many|d bRc) x^ (exactly one bRc)'],\
 ['xs','not|i many|m',None,'(not|i many|m = few)'],\
 ['xs','not|i many|n',None,'(not|i many|n = every)'],\
-['ws','nothing',None,'(nothing = no thing)'],\
-['d','nothing|d',None,'((nothing|d bRc) x^ ((no b dRc) & (dIz))) & (z=thing)'],\
-['ds','nothing except',None,'(nothing except = only)'],\
-['ds','nothing except|p',None,'(nothing except|p = only|p)'],\
 ['ds','one',None,'(one=some)'],\
 ['ds','one of',None,'(one of=some)'],\
 ['ds','some',None,'(some=a)'],\
-['ds','some|m',None,'(some|m = many|d)'],\
-['ds','some|p',None,'(some|p = many|n)'],\
 ['ds','some of the',None,'(some of the = many|d)'],\
-['ws','someone',None,'(someone = some person)'],\
-['ws','someone|n',None,'(someone|n = some|m person)'],\
-['ws','something',None,'(something = a thing)'],\
-['ws','something',None,'(something = a thing)'],\
-['ws','something|a',None,'(something|a = a|a thing)'],\
+['ds','some|m',None,'(some|m = many|d)'],\
+['nsd','someone',None,'(someone = some person)'],\
+['ds','some|p',None,'(some|p = many|n)'],\
+['nsd','something',None,'(something = a thing)'],\
 ['ds','that|d',None,'(that|d=the)'],\
 ['ds','the|a',None,'(the|a=a)'],\
 ['ds','this',None,'(this=the)'],\
-['p','he',None,'(d=person) & (e=male) & ((he Rb) t^ ((cRb) & (cJe) & (cId))) & (g=definite)'],\
-['ps','her',None,'(her=she)'],\
-['q','her|p',None,'(d=person) & (e=female) & ((her|p bRc) t^ ((bRc) & (dJe) & (dPSb)))'],\
+['p','he',None,'((he Rb) x^ ((cRb) & (cId) & (cJe))) & (c=he) & (d=person) & (e=male)'],\
+['p','her',None,'(her=she)'],\
+['','her|p',None,'((her|p bRc) x^ ((dRc) & (dIb) & (eOWNd) & (eIg) & (eJf)) & (f=female) & (g=person)'],\
 ['ps','him',None,'(him=he)'],\
-['q','his',None,'((his bRc) t^ ((zRc) & (zIb) & (dOWNz))) & (d=he)'],\
-['p','i',None,'(d=person) & ((i Rb) t^ ((iId) & (iJg))) & (g=definite)'],\
-['pa','it',None,'hard coded'],\
-['v','it|p',None,'propositional it'],\
-['p','it|w',None,'hard coded'],\
-['q','its|a',None,'(bR its|a c) t^ ((zIc) & (bHMz) & (bRz))'],\
+['','his',None,'((his bRc) t^ ((zRc) & (zIb) & (dOWNz))) & (d=he)'],\
+['dc','his',None,'((his bRc) x^ ((dRc) & (dIb) & (eOWNd) & (eIg) & (eJf)) & (f=male) & (g=person)'],\
+['p','i',None,'((i Rb) t^ (iId)) & (d=person)'],\
+['pi','it',None,'propositional it'],\
+['p','it|p',None,'((b R it) t^ ((bRc) & (cJd))) & (d=sexless)'],\
+['p','it|p',None,'((b R it|p) x^ ((bRc) & (cJd))) & (d=sexless)'],\
+['dc','its|a',None,'((its|a bRc) x^ ((dRc) & (dIb) & (eHMd) & (eJf))) & (f=sexless)'],\
+['','it|w',None,'hard coded'],\
 ['ps','me',None,'(me=i)'],\
-['q','my',None,'((my bRc) t^ ((zRc) & (zIb) & (iOWNz)))'],\
-['q','my|a',None,'((my bRc) t^ ((zRc) & (zIb) & (iWz)))'],\
-['q','our',None,'(d=person) & ((our bRc) t^ ((bRc) & (eId) & (zIe) & (ePSb)))'],\
-['p','she',None,'(d=person) & (e=female) & ((she Rb) t^ ((cRb) & (cId) & (cJe)))'],\
+['dc','my',None,'((my bRc) x^ ((dRc) & (dIb) & (iOWNd)))'],\
+['','my|a',None,'((my|a bRc) x^ ((dRc) & (dIb) & (iWd)))'],\
+['','our',None,'postponed'],\
+['p','she',None,'((she Rb) x^ ((cRb) & (cId) & (cJe))) & (c=she) & (d=person) & (e=female)'],\
+['','their',None,'postponed'],\
 ['ps','them',None,'(them=they)'],\
 ['p','they',None,'(d=person) & ((they Rb) t^ ((cRb) & (cId) & (zIc) & (cJg))) & (g=definite)'],\
-['p','we',None,'(d=person) & ((we Rb) t^ ((cRb) & (cId) & (zIc) & (cJg))) & (g=definite)'],\
-['p','you',None,'(d=person) & ((you Rb) t^ ((cRb) & (cId) & (cJg))) & (g=definite)'],\
-['p','you|p',None,'(d=person) & ((you|p Rb) t^ ((cRb) & (cId) & (zIc))) & (g=definite)'],\
-['q','your',None,'(e=person) & ((your bRc) t^ ((zRc) & (zIb) & (dOWNz))) & (d=you)'],\
-['q','your|p',None,'(d=person) & ((your|p bRc) t^ ((bRc) & (eId) & (zIe) & (ePSb)))'],\
+['','they',None,'postponed'],\
+['p','we',None,'((we R b) x^ (((gWc) t^ ((cRb) & cId)))) & ((iSPKe) t^ (gWi)) & (eb^we R b) & (d=person)'],\
+['p','you',None,'((you Rb) t^ ((cRb) & (cId))) & (c=you) & (d=person)'],\
+['p','you|p',None,'((you|p R b) x^ ((every cRb) & (every cId))) & ((iSPKe) t^ (c~Wi)) & (eb^wRb) & (d=person)'],\
+['dc','your',None,'((your bRc) x^ ((dRc) & (dIb) & (eIf) & (eOWNd))) & (e=you) & (f=person)'],\
+['','your|a',None,'((your|a bRc) x^ ((dRc) & (dIb) & (you Wd)))'],\
+['','your|p',None,'postponed'],\
 ['n','ability',None,'(c=ability) & ((dH can b) x^ (d can R)) & (((bIc) & (R OFV b)) t^ (d can R))'],\
 ['ra','about','ABT','postponed'],\
 ['r','above|a','ABO','(above|a=ABO) & ((bABOc) x^ ((bSz) & (zABc)))'],\
 ['r','above|m','ABV','(above|m=ABV) & ((bABVc) x^ ((bSz) & (cSy) & (zABy)))'],\
+['r','absorb|g','ADS','(bADSc) x^ ((b.eId) & (fINHh) & (bWh) & (cCRCf) & (fIg))) & (d=body|c) & (g=body|m)'],\
 ['a','abstract',None,'(c=abstract) & ((bJc) x^ ((bAd) ed^ (bABe) ed^ (bGf) ed^ (gHb) ed^ (bWj) ed^ (mIb) ed^ (nJb) ed^ (bIo))) & (o=relation)'],\
+['n','abstract essence',None,'(abstract essence = essence|a)'],\
 ['a','abstract|a',None,'(c=abstract|a) & (((bJc) & (bITd) & (bRe)) x^ (((fId) t^ (fRe))))'],\
 ['a','abstract|c',None,'(c=abstract|c) & (e=abstract) & (((bJc) & (dIb)) x^ (dJe))'],\
 ['a','abstract|d',None,'(c=abstract|d) & ((bJc) x^ ((bAd) ed^ (bABe) ed^ (bGf) ed^ (gHb) ed^ (bJp) ed^ (mIb) ed^ (nJb) ed^ (bIo))) & (o=relation) & (p=abstract|g)'],\
 ['a','abstract|g',None,'(c=abstract|g) & ((bJc) x^ ((bWe) t^ (eJf))) & (f=abstract|d)'],\
-['n','abstract essence',None,'(abstract essence = essence|a)'],\
 ['e','abstractly',None,'((bEX abstractly) x^ ((bJd) & (bJc))) & (c=abstract) & (d=extant)'],\
 ['a','absurd',None,'(b=absurd) & ((pJb) x^ ((pJc) & (nt+pJc))) & (c=contradictory)'],\
 ['as','absurd|r',None,'(absurd|r = ridiculous)'],\
 ['ns','action',None,'(action = effect)'],\
 ['a','actual',None,'(c=actual) & (((bJc) & (bId)) x^ (bId))'],\
-['ns','actual|s',None,'(actual|s = physical|s)'],\
 ['rs','actualize','ACU','(actualize = materialize)'],\
 ['e','actually',None,'(b=reality) & ((p actually) x^ (pIRb))'],\
+['ns','actual|s',None,'(actual|s = physical|s)'],\
 ['r','after|p','AFP','((bAFPc) x^ ((bWd) & (dJe) & (dAc))) & (e=first)'],\
 ['r','allow','ALO','(allow=ALO) & (eb^bPRVc) & ((bALOc) x^ ((dTRYc) t^ (b~TRYe)))'],\
-['e','always|p',None,'(c=always|p) & ((pIVc) x^ ((bId) t^ (pPb))) & (d=possible world)'],\
 ['e','always',None,'(c=always) & ((pIVc) x^ ((bId) t^ (pTb))) & (d=moment)'],\
+['e','always|p',None,'(c=always|p) & ((pIVc) x^ ((bId) t^ (pPb))) & (d=possible world)'],\
 ['rs','appear',None,'(appear=SM)'],\
 ['ns','arbitrary group',None,'(arbitrary group = group|a)'],\
 ['ns','area ',None,'(area=region)'],\
 ['a','artificial',None,'(c=artificial) & ((bJc) x^ ((bJd) & (eIf) & (eCAg INTh))) & (d=natural) & (f=person) & (gb^bJd) & (h=past)'],\
-['rc','as','AS','(as=AS) & (((bASc) & (dRb)) x^ (cRb))'],\
+['rdiaa','as','AS','(as=AS) & (((bASc) & (dRb)) x^ (cRb))'],\
 ['o','ask (how)',None,'((bASKc) x^ ((gIf) t^ (bTKk))) & (c b^ how CAe) & (f=cause) & (h b^ gCAe) & (k b^ hUj)  '],\
 ['o','ask (what)',None,'((hASKg) x^ ((cId) t^ (hTKk))) & (d=thing) & (e b^ bRc) & (g b^ bR what?) & (k b^ eUf)'],\
 ['rs','at|i',None,'(at|i=INP)'],\
 ['rs','at|n',None,'(at|n=NXT)'],\
-['a','atomic|p',None,'(b=indefinable|p) & (c=property) & (e=relationship) & (gb^fHd) & (((dIc) & (dJb)) x^ ((hIe) t^ (hnf^g)))'],\
-['a','atomic|r',None,'(b=indefinable|r) & (f=relationship) & (h=relation) & (cb^dRe) & (((R Jb) & (R If)) x^ ((gIf) t^ (gnf^c)))'],\
 ['o','atomic equivalent',None,'(b=indefinable equivalent) & (((cIb) & (cOFd)) x^ ((c x^ d) & (d~Jf) & ((eIc) t^ (eJf)))) & (f=indefinable)'],\
 ['n','atomic relationship',None,'(c=indefinable relationship) & (d=subject) & (e=relation) & (f=object) & (g=truth value) & (h=locative molecular relationship) & (k=variable) & ((bIc) x^ ((zId) & (yIe) & (wIg) & (bHz) & (bHy) & (vIf) & (bHV) & (bHv) & (vIk) & (zIk) & (uIh) & (bId) & (uHb)))'],\
+['a','atomic|p',None,'(b=indefinable|p) & (c=property) & (e=relationship) & (gb^fHd) & (((dIc) & (dJb)) x^ ((hIe) t^ (hnf^g)))'],\
+['a','atomic|r',None,'(b=indefinable|r) & (f=relationship) & (h=relation) & (cb^dRe) & (((R Jb) & (R If)) x^ ((gIf) t^ (gnf^c)))'],\
 ['rs','attempt',None,'(attempt=TRY)'],\
 ['rs','attended',None,'(attended = participated)'],\
 ['as','authentic',None,'(authentic=actual)'],\
@@ -357,19 +367,20 @@ def large_dict(str1):
 ['r','behind|w','BEH','(behind|d=BEH) & ((bBEHc) x^ ((bWd) & (dSe) & (cFe)))'],\
 ['n','belief',None,'(c=belief) & ((bIc) x^ (zBb))'],\
 ['r','believe','B','(believe=B) & ((bBc) x^ (bTKd)) & ((bBc) t^ (bTKc)) & (e=true) & (db^cJe)'],\
-['rs','believe|t ',None,'(believe|t=BT)'],\
 ['rs','believes',None,'(believes = B)'],\
 ['r','believes|t','BT','(believe tentatively=BT) & ((bBTp) x^ ((bBr) & (bBp))) & (qb^b~Bp) & (rb^qPz)'],\
+['rs','believe|t ',None,'(believe|t=BT)'],\
 ['r','belong|o','BLG','(belong|o=BLG) & ((bBLGc) x^ (cOWNb))'],\
 ['r','belongs to|i','BIM','(bBIMc) x^ (cHIMb)'],\
 ['r','below','BEL','(below|a=BEL) & ((bBELc) x^ ((bSz) & (cABz)))'],\
 ['r','below','BW','(below=BW) & ((bBWc) x^ (cABb))'],\
 ['r','below|m','BLW','(below|m=BLW) & ((bBLWc) x^ ((bSz) & (bSy) & (yABz)))'],\
+['r','between|a','BTA','(bBTAc_d) x^ ((eIf) t^ ~((cRe) & (eRd))) & ((R=L) ed^ (R=AB) ed^ (R=F)) & (f=thing)'],\
 ['r','between|p','BTP','(between|p=BTP) & ((bBTPc_d) x^ ((bNz) & (cNy) & (dNx) & (((xGz) & (zGy)) ed^ ((yGz) & (zGx)))))'],\
 ['r','between|p','BTW','(between=BTW) & ((bBTWc_d) x^ (((bGc) & (dGb)) ed^ ((dGb) & (cGb))))'],\
-['r','between|a','BTA','(bBTAc_d) x^ ((eIf) t^ ~((cRe) & (eRd))) & ((R=L) ed^ (R=AB) ed^ (R=F)) & (f=thing)'],\
 ['rs','between|t ',None,'(between|t=CBT)'],\
 ['na','body|c',None,'(c=body|c) & ((bIc) x^ (((bWd) t^ (dIe)) & (bWf))) & (e=particle)'],\
+['n','body|m',None,'(c=body|m) & ((bIc) x^ ((bWd) t^ (dIe))) & (e=particle|m)'],\
 ['n','boundary',None,'(c=boundary) & (((bIc) & (dHb)) x^ (dINb))'],\
 ['rs','break',None,'(break=VIO)'],\
 ['ra','breaks','BRK','postponed'],\
@@ -379,7 +390,6 @@ def large_dict(str1):
 ['ea','can|a',None,'(d=ability) & (((pb^bR) & (p can|a) & (R VCPc)) x^ (cId))'],\
 ['e','cannot|w',None,'(state=STT) & (c=absolutely false) & (((p cannot|w) & (bSTTp)) x^ ((bDz) & (zb^pJc)))'],\
 ['as','case',None,'(case = true)'],\
-['r','continguous','CTG','(bCTGc) x^ (((bWd) x^ ((dINb) & (c~Wd))) & ((cWe) x^ ((eINc) & (b~We))) & (bWf) & (cWg) & ((hIj) t^ (h~BTAf_g))) & (j=thing)'],\
 ['ns','causal part',None,'(causal part = part|c)'],\
 ['na','causal role',None,'postponed'],\
 ['n','causal whole',None,'(c=causal whole) & (((bIc) & (bOFd)) x^ ((bCAUc) & (dIb)))'],\
@@ -391,9 +401,9 @@ def large_dict(str1):
 ['a','certain',None,'(b=certain) & (((cJb) & (cTOd Tg)) x^ ((eb^(cIRf)) & (dTKe Tg) & (hb^(d~TKe Tk)) & (nb^((jIm) t^ (h~Pj))) & (kAg) & (dTKn))) & (f=reality) & (g=now) & (m=possible world)'],\
 ['rxd','chronologically between','CBT','(chronologically between=CBT) & ((bCBTc and|c d) x^ (((bAc) & (dAb)) ed^ ((bAd) & (cAb))))'],\
 ['n','common name',None,'(c=common name) & ((bIc) x^ ((bId) & (bRFe) & (eIf))) & (d=word) & (f=concept|n)'],\
-['ns','concept|p',None,'(concept|p=plan)'],\
 ['n','concept',None,'(c=concept) & ((dIb) ed^ (eHb) ed^ (fJb)) t^ (bIc)'],\
 ['na','concept phrase',None,'(c=concept_phrase) & ((bIc) x^ ((dIb) & (eRFb) & ((eWf) t^ (fIj)) & (eNg) & (gGh))) & (h=1) & (g=word)'],\
+['ns','concept|p',None,'(concept|p=plan)'],\
 ['ns','conclusion',None,'(conclusion=inference)'],\
 ['as','concrete',None,'(concrete=particular)'],\
 ['ns','condition|s',None,'(condition|s=situation)'],\
@@ -403,11 +413,15 @@ def large_dict(str1):
 ['a','consistently extant',None,'(c=consistently extant) & ((bJc) x^ (pPc)) & (pb^bJd) & (d=extant)'],\
 ['r','contain','CT','(contain=CT) & ((bCTc) x^ (cINb))'],\
 ['a','contingently contradictory',None,'(b=contingently contradictory) & ((p.qJb) x^ ((pJd) & (qJd) & (p.q~Jd))) & (d=consistent)'],\
+['r','continguous','CTG','(bCTGc) x^ (((bWd) x^ ((dINb) & (c~Wd))) & ((cWe) x^ ((eINc) & (b~We))) & (bWf) & (cWg) & ((hIj) t^ (h~BTAf_g))) & (j=thing)'],\
 ['a','contradictorily extant',None,'(c=contradictorily extant) & ((bJc) x^ ((eIf) t^ (p~Pe))) & (pb^bJd) & (d=extant) & (f=possible world)'],\
 ['a','contradictorily extant|a',None,'(c=contradictorily extant|a) & ((bJc contradictorily) x^ ((pWb) & ((eIf) t^ (p~Pe)))) & (d=extant) & (f=possible world)'],\
 ['','contradictory',None,'(c=contradictory) & ((pJc) x^ ((bId) t^ (p~Pb))) & (pb^q.nt+q)'],\
 ['rs','contrary of',None,'(contrary of=NEG)'],\
 ['as','contrasting ',None,'(contrasting=different)'],\
+['r','correspond','CRA','(bCRAc) x^ (((bEMh Td) & (eADc Tf) & (bSg Td)) t^ ((cOj Tf) & (fSUTd))))'],\
+['r','correspond|b','CRB','(bCRBc) x^ (((dEMe Tf) & (gADe Th) & (dSb Tf)) t^ ((jOc Tf) & (hSUTf))))'],\
+['r','correspond|c','CRC','(bCRCc) x^ (((bWd) x^ (dINMe)) & ((cWf) x^ (fINHg)) & ((bWh) t^ ((hCRAj) & (cWj))) & ((cWk) t^ ((mCRAk) & (bWm))))) '],\
 ['r','correspond|s','CRS','(corresponds|s to=CRS) & ((bCRSc) x^ ((zb^yIRx) & (((bHw) & (w=~z)) t^ (cHw))))'],\
 ['r','count',None,'((bCNTc) x^ (bTKd)) & (db^(cWe) & (cNf))'],\
 ['r','count|n',None,'(bCOTc) x^ (cNb)'],\
@@ -416,8 +430,8 @@ def large_dict(str1):
 ['na','dead',None,'postponed'],\
 ['ns','deduction',None,'(deduction=inference)'],\
 ['aa','definite',None,'(definite = individual)'],\
-['as','definite|v',None,'(definite|v = certain)'],\
 ['n','definite description',None,'(c=definite description) & ((bIc) x^ ((dHb) & ((ezzzd) t^ (e~Hb)))) & (d=property)'],\
+['as','definite|v',None,'(definite|v = certain)'],\
 ['axd','different',None,'(c=different) & ((b and|c d J c) x^ (b=~c))'],\
 ['r','different from','DF','(different from=DF) & ((bDFc) x^ (bzzzc))'],\
 ['a','difficult',None,'(c=difficult) & (((bJc) & (bTOd)) x^ ((dTRYb Tf) t^ ((hWe) x^ ((bPe Tg) & (gAf) & (hJk))))) & (k=few)         '],\
@@ -428,9 +442,10 @@ def large_dict(str1):
 ['r','during','DUR','(during=DUR) & ((pDURb) x^ ((bWc.d.e) & (pTe) & (eAc) & (dAe)))'],\
 ['r','during|o','DRG','(during|o=DRG) & ((bDRGc) x^ ((bWe) t^ ((cWe) & (eIf)))) & (f=moment)'],\
 ['r','during|t','DR','(during|t=DR) & ((bDRc) x^ ((cWb.d.e) & (eAb) & (bAd)))'],\
-['r','earlier|p than','ELA','(bELAc) x^ (((bWd) & (cWe)) t^ (eAd))'],\
 ['r','earlier than','EL','(earlier than=EL) & ((bELc) x^ (cAb))'],\
+['r','earlier|p than','ELA','(bELAc) x^ (((bWd) & (cWe)) t^ (eAd))'],\
 ['a','easy',None,'(c=easy) & (((bJc) & (bTOd)) x^ ((dTRYb Tf) t^ ((hWe) x^ ((bPe Tg) & (gAf) & (hJk))))) & (k=many)         '],\
+['r','emit|s','EMS','(bEMSc) x^ ((cWd) x^ ((eEMd) & (bWe)))'],\
 ['r','empirical (of a relation)',None,'(b=empirical) & (R Jb) x^ ((R = SEE) ed^ (R = HR) ed^ (R = TOC) ed^ (R = TST) ed^ (R = SML))'],\
 ['ns','empty space',None,'(empty space=void)'],\
 ['n','energy',None,'(c=energy) & ((bIc) t^ ((dHb) & (dIf))) & (f=particle)'],\
@@ -448,16 +463,10 @@ def large_dict(str1):
 ['n','essence|p',None,'(c=individual essence|p) & (((bIc) & (dHSb) & (fWd)) x^ ((fHSj) & (jIg) & ((bWh) x^ (jWh)))) & (g=individual essence)'],\
 ['n','event',None,'(b=event) & ((pIb) x^ (pOC))'],\
 ['n','everything|n',None,'((b=everything|n) x^ ((cId) t^ (bWc))) & (d=thing)'],\
+['rs','exist as',None,'(exist as = I)'],\
 ['r','exist|b','EXB','((bEXB) x^ (bJc)) & (c=contradictorily extant)'],\
 ['r','exist|c','EXC','((bEXC) x^ (bJc)) & (c=consistently extant)'],\
-['rs','exist as',None,'(exist as = I)'],\
 ['r','exists','EX','(exists=EX) & ((bEX) x^ (bJc)) & (c=extant)'],\
-['rs','exists|a',None,'(exists|a=EA)'],\
-['rs','exists|i',None,'(exists|i=EI)'],\
-['rs','exists|m',None,'(exists|m=EM)'],\
-['rs','exists|n',None,'(exists|n=EXN)'],\
-['rs','exists|p',None,'(exists|p=EP)'],\
-['rs','exists|s',None,'(exists|s=ES)'],\
 ['r','exists divinely','ED','(exists divinely=ED) & (c=God) & ((bED) x^ (bIc))'],\
 ['r','exists historically','EH','(exist historically=EH) & (c=current present) & ((bEH) x^ ((bSzTy) & (cAy)))'],\
 ['r','exists in the imagination','EI','(exists in the imagination=EI) & ((bEI) x^ (bMz))'],\
@@ -467,6 +476,13 @@ def large_dict(str1):
 ['rs','exists physically ',None,'(exists physically=EXN )'],\
 ['r','exists probabilistically','EP','(exists probabilistically=EP) & ((bEP) x^ (bPz))'],\
 ['r','exists sensationally','ES','(exists sensationally=ES) & ((bES) x^ (bOz))'],\
+['rs','exists|a',None,'(exists|a=EA)'],\
+['rs','exists|i',None,'(exists|i=EI)'],\
+['rs','exists|m',None,'(exists|m=EM)'],\
+['rs','exists|n',None,'(exists|n=EXN)'],\
+['rs','exists|p',None,'(exists|p=EP)'],\
+['rs','exists|s',None,'(exists|s=ES)'],\
+['r','experience','EXP','(bEXPc Tg) x^ ((bADSd Th) t^ ((bTKc Tg) & (cIRf) & (gSUTh))) & (cb^dRe)'],\
 ['n','explicit|e relationship|e',None,'(c=explicit|e relationship|e) & ((bIc) x^ ((bWd) & (bWe) & (bWh) & (dIf) & (eIg) & (hIf))) & (f=relatum) & (g=relation)'],\
 ['n','external relationship',None,'(c=external relationship) & ((pIc) x^ ((pPd) v+ (pIRe))) & (e=reality)'],\
 ['a','fake',None,'(c=fake) & (((bJc) & (bId)) x^ (b~Id))'],\
@@ -479,8 +495,8 @@ def large_dict(str1):
 ['aa','fanatical',None,'postponed'],\
 ['ra','feel',None,'postponed'],\
 ['ra','feels',None,'postponed'],\
-['a','few|a',None,'(c=few|a) & (((bJc) & (eJf)) x^ ((bNd) & (eNg) & (gGd))) & (f=many|a)'],\
 ['d','few ',None,'(few=~mn)'],\
+['a','few|a',None,'(c=few|a) & (((bJc) & (eJf)) x^ ((bNd) & (eNg) & (gGd))) & (f=many|a)'],\
 ['a','fictional',None,'(c=fictional) & ((bIc TOh) x^ ((bMd) & (hTKe))) & (eb^(fIRg) t^ (b~CRRf)) & (g=reality)'],\
 ['ra','follows from (contingently)','FLC','(follows from=FLC) & ((bFLCc) x^ ((dJm Pe) & (fJm Pg) & (h~Jm Pm) & (jJm Pk))) & (db^b.c) & (fb^b.nt+c) & (hb^nt+b.c) & (jb^nt+b.nt+c) & (m=probable)'],\
 ['ra','follows from (necessarily)','FL','(follows from=FL) & ((bFLc) x^ ((dJta^ Pe) & (fJta^ Pg) & (hJco^ Pm) & (jJta^ Pk))) & (db^b.c) & (fb^b.nt+c) & (hb^nt+b.c) & (jb^nt+b.nt+c)'],\
@@ -506,9 +522,9 @@ def large_dict(str1):
 ['n','group|a',None,'(c=group|a) & ((bIc) x^ ((bWs) x^ (sHu))) & (xb^(wWb) x^ (wHv)) & (ub^tBx)'],\
 ['na','HA ... friend icm',None,'b and c have a friend in common: postponed'],\
 ['ns','haecceity',None,'(haecceity=unique essence)'],\
+['r','hallucinate','HLC','(bHLCc Td) x^ ((bEMSe Tf) t^ ((bTKk Tg) & (gSUTf) & (cJj) & (c~IRh))) & (j=natural|s) & (kb^cIRh)'],\
 ['rs','happen ',None,'(happen=OC)'],\
 ['ra','has|c','HC','postponed'],\
-['r','has|p|k (causal power)','HCB','(has|p|k= HCB) & ((bHCBc) x^ ((bRd INMe Tf) t^ ((gRh INMe Tg) & (gSUTf)))'],\
 ['r','has|c|p','HCP','(bHCPc) x^ ((bWc) x^ (bCSEd))'],\
 ['r','has|c|r (causal role)','HCA','((bHCAc) x^ (bCAc)) & ((bHCAc) t^ (bHc))'],\
 ['ra','has|e (corpse)','HA','has|c=HA, c=matter, d=dead ((bHAz) & (zIc)) x^ ((zSy) & (bOWNz) & (zJd))'],\
@@ -517,19 +533,12 @@ def large_dict(str1):
 ['r','has|i|m','HIM','((bHIMc) x^ (cMb))'],\
 ['r','has|m','HM','(have|m=HM) & ((bHMc) x^ (cIb))'],\
 ['r','has|n','HN','(has|n=HN) & ((bHNc) x^ ((bINd) & (bINe) & (eINUd)))'],\
+['r','has|p|e','HCE','(bHCEc) x^ ((bHCBc) ed^ (bHCDc))'],\
+['r','has|p|j','HCD','(has|p|j = HCD) & ((bHCDc) x^ (((bTKWr) & (rCRRq) & (qPh) & (To)) t^ ((qTg) & (gAo))) & (qb^bRu INSm)'],\
+['r','has|p|k (causal power)','HCB','(has|p|k= HCB) & ((bHCBc) x^ ((bRd INMe Tf) t^ ((gRh INMe Tg) & (gSUTf)))'],\
 ['r','has|s','HSS','(bHSSc) x^ ((cOd) & (bWc))'],\
 ['r','has|s|p','HSP','(bHSPc) x^ (cINb)'],\
 ['r','has|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
-['r','has|p|j','HCD','(has|p|j = HCD) & ((bHCDc) x^ (((bTKWr) & (rCRRq) & (qPh) & (To)) t^ ((qTg) & (gAo))) & (qb^bRu INSm)'],\
-['r','has|p|e','HCE','(bHCEc) x^ ((bHCBc) ed^ (bHCDc))'],\
-['','have|b','HB','((bHBc) x^ ((bWc) & (cId))) & (d=body|c)'],\
-['r','have|g|c','HGC','(cHGCb) x^ ((cWe) t^ (eIb))'],\
-['rxd','have|i|c (... in common|r)','HCM','(b and|c c HCM d) x^ ((bJd) & (cJd))'],\
-['rs','have|o ',None,'(have|o=own)'],\
-['r','have|p|n','HPN','((bHPNc) x^ (cRFb)) & ((bHPNc) t^ ((bId) & (cIe))) & (d=individual) & (e=proper name)'],\
-['r','have|r (object is a relation)','HR','((bHRc TOd) x^ (bRd)) & (c=R)'],\
-['r','have|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
-['ra','have|w','W','(c=body) &  (((bWz) & (zIc)) x^ (zSy))'],\
 ['ra','have a baby',None,'postponed'],\
 ['ra','have a feeling that',None,'postponed'],\
 ['ra','have a friend',None,'postponed'],\
@@ -548,6 +557,14 @@ def large_dict(str1):
 ['ra','have space left',None,'postponed'],\
 ['ra','have time',None,'postponed'],\
 ['ra','have trouble',None,'postponed'],\
+['','have|b','HB','((bHBc) x^ ((bWc) & (cId))) & (d=body|c)'],\
+['r','have|g|c','HGC','(cHGCb) x^ ((cWe) t^ (eIb))'],\
+['rxd','have|i|c (... in common|r)','HCM','(b and|c c HCM d) x^ ((bJd) & (cJd))'],\
+['rs','have|o ',None,'(have|o=own)'],\
+['r','have|p|n','HPN','((bHPNc) x^ (cRFb)) & ((bHPNc) t^ ((bId) & (cIe))) & (d=individual) & (e=proper name)'],\
+['r','have|r (object is a relation)','HR','((bHRc TOd) x^ (bRd)) & (c=R)'],\
+['r','have|t','HAT','(have|t = HAT) & ((bHATc) x^ (cTCHb))'],\
+['ra','have|w','W','(c=body) &  (((bWz) & (zIc)) x^ (zSy))'],\
 ['rs','hence ',None,'(hence=i^)'],\
 ['a','historical',None,'(c=historical) & (d=current present) & ((bJc) x^ ((bTz) & (dAz) & (b~Td)))'],\
 ['n','hypothetical material object',None,'(c=hypothetical material object) & ((bIc) x^ ((bSz) ed^ (b~Sd)))'],\
@@ -560,38 +577,39 @@ def large_dict(str1):
 ['rs','implies ',None,'(implies=i^)'],\
 ['aa','important',None,'postponed'],\
 ['a','improbable',None,'(c=improbable) & ((bJc) x^ (b~Jd)) & (d=probable)'],\
-['ratso','in','IN','((bINc) x^ ((bId) & (cWb))) & (d=point)'],\
+['ratab','in','IN','((bINc) x^ ((bId) & (cWb))) & (d=point)'],\
+['','in-q','INQ','((bINQc) & (cJd)) x^ (bJd)'],\
 ['rs','in|a ',None,'(in|a=DUR)'],\
 ['r','in|b','INB','((bINBc) x^ ((cWb) & (bId))) & (d=moment)'],\
-['r','in|f','INF','(bINFc) x^ ((bId) & (cId) & ((cWe) x^ (bWe))) & (d=period)'],\
 ['r','in|c','INC','(in) & ((bINCc) t^ ((zSc) & (dIc) & (eIc) & (fIc) & (gIc) & (hIc) & (iIc) & (jIc) & (kIc) & (hLi) & (hABj) & (dFh) & (eFi) & (iABk) & (eABg) & (dLe) & (dABf) & (fFj) & (hLb) & (hABb) & (bLi) & (iABb) & (bLk) & (bABk) & (jLb) & (bABj)))'],\
 ['ratso','in|d','IND','((bINDc) t^ (((bWd) & (dIe)) x^ (cWd))) & (e=point)'],\
-['r','in|e','INE','(bINEc) x^ ((bSd) & (cWd))'],\
-['r','in|g','ING','(c=relationship) & (in|g=ING) & ((bINGp) x^ (((bAWz) ed^ (zAWb)) & (pWb) & (pIc)))'],\
-['r','in|m','INM','(bINMc) x^ (((bWd) x^ ((dSe) & (cWe))) & (bWf) & (fSg) & (hWg))'],\
-['r','in|s','INS','(bINSc) x^ ((bWd) & (dINMc))'],\
-['r','in|r','INR','(in|r=INR) & ((bINRc) x^ ((bSd) & (dINc)))'],\
-['rs','in|p','INP','(in|s = is|g)'],\
-['rs','in|t ',None,'(in|t=during)'],\
-['','in-q','INQ','((bINQc) & (cJd)) x^ (bJd)'],\
-['r','in|v','INV','((bINVc) x^ ((bCAc) & (dWb.e) & (eWf) & (fIg))) & (cb^fMOV) & (g=body|c)'],\
 ['aa','indefinite',None,'(b=indefinite) & ((cJb) x^ ((cJj) & ((kzzzc) t^ (k~Jj)) & ((eId) t^ ((fPg) & (nt+fPh))))) & (f b^ e=c) & (cId)'],\
 ['aa','indefinite|a',None,'postponed'],\
 ['a','indeterminate',None,'(b=indeterminate) & (((pJb) & ((p=q) ed^ (p=r))) x^ ((qNz) & (rNy) & (xNw) & (pNv) & (wGy) & (zGw) & ((vGw) ed^ (wGv))))'],\
 ['a','indexical',None,'postponed'],\
 ['nk','individual',None,'(b=individual) & ((cIb) x^ ((dIe) t^ (d~Ic))) & (e=thing)'],\
-['as','individual|p',None,'(individual|p=particular)'],\
-['ns','individual essence',None,'(individual essence=essence|i)'],\
 ['n','individual essence',None,'(individual essence = essence|i)'],\
+['ns','individual essence',None,'(individual essence=essence|i)'],\
 ['n','individual|p',None,'(c=individual|p) & ((bIc) x^ ((bWd.e) & (dSf) & (eTKg) & (bNh))) & (h=2)'],\
+['as','individual|p',None,'(individual|p=particular)'],\
+['r','in|e','INE','(bINEc) x^ ((bSd) & (cWd))'],\
+['r','in|f','INF','(bINFc) x^ ((bId) & (cId) & ((cWe) x^ (bWe))) & (d=period)'],\
 ['r','infer','INF','(infer=INF) & ((bINFc d) x^ ((zb^nt+c && d) & (yb^zJco^) & (bBy)))'],\
 ['n','inference|c',None,'(c=inference) & ((bIc) x^ (dFLCb)) & (follows from=FLC)'],\
 ['n','inference|n',None,'(c=inference) & ((bIc) x^ (dFLb)) & (follows from=FL)'],\
 ['a','infinite',None,'(c=infinite) & (((bJc) & (bPCPc)) x^ ((zIc) t^ (((yGz) & (zGx)) ed^ ((yAz) & (zAx)) ed^ ((yLz) & (zLx)) ed^ ((yABz) & (zABx)) ed^ ((yFz) & (zFx)))))'],\
 ['a','infinite',None,'(c=infinite) & ((bJc) x^ ((zIb) t^ ((yGz) & (zGx)) ed^ ((yAz) & (zAx)) ed^ ((yLz) & (zLx)) ed^ ((yABz) & (zABx)) ed^ ((yFz) & (zFx))))'],\
+['r','in|g','ING','(c=relationship) & (in|g=ING) & ((bINGp) x^ (((bAWz) ed^ (zAWb)) & (pWb) & (pIc)))'],\
+['r','in|h','INH','(bINHc) x^ ((bWd) x^ ((dOe) & (cWe)))'],\
+['r','in|m','INM','(bINMc) x^ (((bWd) x^ ((dSe) & (cWe))) & (bWf) & (fSg) & (hWg))'],\
+['rs','in|p','INP','(in|s = is|g)'],\
+['r','in|r','INR','(in|r=INR) & ((bINRc) x^ ((bSd) & (dINc)))'],\
+['r','in|s','INS','(bINSc) x^ ((bWd) & (dINMc))'],\
 ['rs','inside',None,'(inside = INE)'],\
+['rs','in|t ',None,'(in|t=during)'],\
 ['ns','interval ',None,'(interval=period)'],\
 ['r','intrinsic',None,'(c=intrinsic) & ((dWb) ed^ (dHb)) t^ (bJc)'],\
+['r','in|v','INV','((bINVc) x^ ((bCAc) & (dWb.e) & (eWf) & (fIg))) & (cb^fMOV) & (g=body|c)'],\
 ['ra','is|e','EX','((bEX) x^ (bJc)) & (c=extant)'],\
 ['ns','item|n',None,'(item|n=object|n)'],\
 ['rs','judge',None,'(judge = believe)'],\
@@ -618,16 +636,15 @@ def large_dict(str1):
 ['n','lower class',None,'(d=lower) & (c=class) & (f=natural essence) & (((bIc) & (bJd) & (eIb)) x^ (((zIe) x^ (zHy)) & (yIf) & (((xIe) & (o~Ix)) t^ (xSw))))'],\
 ['rs','make','MK','(make = cause)'],\
 ['r','make sense','MK','(make=MK) & (c=sense|a) & (d=grammatical) & ((bMKc) x^ ((bJd) & (bJta^)))'],\
-['a','many',None,'(z=many) & (y=2) & ((bJz) x^ ((bNy) ed^ ((bNc) & (cGy))))'],\
-['a','many|a',None,'(c=many|a) & (((bJc) & (eJf)) x^ ((bNd) & (eNg) & (dGg))) & (f=few|a)'],\
 ['n','material part',None,'(c=material part) & (e=sentient being) & (((bIc) & (bOFd)) x^ ((bSz) & (dWb) & (dIe)))'],\
 ['n','material whole',None,'(c=material whole) & (e=material part) & (((bIc) & (bOFd)) x^ ((dIe) & (bWd)))'],\
 ['r','materialize','MTL','(materialize=MTL) & (bMTL Tc) x^ ((b~EXN Td) & (bEXN Tc) & (cAd))'],\
-['r','means|r',None,'((bMNc BYd TOe Tg) x^ ((bCAd Tg) & (bDf))) & (fb^(eEXPd Tg) t^ ((eBc Th) & (hSUTg)))'],\
 ['as','meaningful',None,'(meaningful=significant)'],\
+['r','means|r',None,'((bMNc BYd TOe Tg) x^ ((bCAd Tg) & (bDf))) & (fb^(eEXPd Tg) t^ ((eBc Th) & (hSUTg)))'],\
 ['a','mental',None,'(c=mental) & ((bJc) x^ (bTKd))'],\
 ['aa','mental|a',None,'(c=mental) & ((bJc) x^ ((eTKb) ed^ (bTKd)))'],\
 ['a','mental|b',None,'(c=mental) & ((bJc) x^ (dTKb))'],\
+['r','misinterpret','MSI','(bMSIc Tg) x^ ((bADSd Th) t^ ((bTKc Tg) & (c~IRf) & (gSUTh))) & (cb^dRe)'],\
 ['ns','moment|e',None,'(moment|e=event)'],\
 ['n','moment|f (first)',None,'(z=moment) & (((bIz) & (bJf)) x^ ((cTb) & (dAb))) & (f=first)'],\
 ['n','moment|l (last)',None,'(z=moment) & (((bIz) & (bJf)) x^ ((cTb) & (bAd))) & (f=last)'],\
@@ -637,15 +654,15 @@ def large_dict(str1):
 ['d','more',None,'(more...than) & ((bR mor c thn d Uf) x^ ((cNz Uf) & (dNy Uf) & (zGy) & (bRc Uf) & (bRd Uf)))'],\
 ['aa','mortal',None,'postponed'],\
 ['r','move','MV','(bMV FM c Td TOe Tf) x^ ((bINMc Td) & (bINMe Tf))'],\
-['','move|m','MOV','(bMOVc FM d Te TOf Tg) x^ ((bWh.c) & (((hBk Te) & (cINMd)) t^ (cINMf Tg)))'],\
 ['','move|a','MVA','(bMVAc FM d Te TOf Tg RLj) x^ ((bWh.c) & (jINMk Te) & (jINMk Tg) & (((hBk Te) & (cINMd)) t^ (cINMf Tg)))'],\
+['','move|m','MOV','(bMOVc FM d Te TOf Tg) x^ ((bWh.c) & (((hBk Te) & (cINMd)) t^ (cINMf Tg)))'],\
 ['na','murder',None,'postponed'],\
 ['e','must|w',None,'(states=STT) & (c=absolutely true) & (((p must|w) & (bSTTp)) x^ ((bDz) & (zb^pJc)))'],\
 ['n','narrow reality',None,'(d=reality) & ((b=narrow reality) x^ ((zIRd) t^ (zIb)))'],\
-['a','natural|s (statement)',None,'(b=natural|s) & ((cJb) x^ ((cWd) & (dJe) & (dIf) & (jIh) & (jJg.k))) & (e=natural) & (f=subject) & (g=active) & (h=relation) & (k=non_spatio_temporal)'],\
 ['ns','natural essence',None,'(natural essence = essence|n)'],\
 ['na','natural kind ',None,'(c=natural kind) & ((bIc) x^ ((dIb) & (dJe))) & (e=material)'],\
 ['n','natural number',None,'(c=natural number) & ((bIc) x^ ((zNb) & ((b=0) ed^ (bG0))))'],\
+['a','natural|s (statement)',None,'(b=natural|s) & ((cJb) x^ ((cWd) & (dJe) & (dIf) & (jIh) & (jJg.k))) & (e=natural) & (f=subject) & (g=active) & (h=relation) & (k=non_spatio_temporal)'],\
 ['aa','necessary',None,'(necessary = logically necessary)'],\
 ['r','necessary physical condition','NC','(necessary physical condition=NC) & (g=possible worlds) & (h=reality) & (((bScTd) & (eScTf) & (pNCq GVr)) x^ ((pb^eSc) & (qb^bSc) & (fSUTz) & (zSUTd)  & (((rIRh) & (pTd)) t^ ((qPy Tz) & (nt+qPx Tz))) & (((rIRh) & (p~Td)) t^ (q~Po Tz)) & (pP mn g)))'],\
 ['r','negation of','NEG','(is the negation of=NEG) & (b=contradictory) & ((pNEGq) x^ ((rb^p && q) & (rJb)))'],\
@@ -656,14 +673,12 @@ def large_dict(str1):
 ['n','non_whole',None,'(c=non_whole) & ((bIc) x^ ((dIe) t^ (b~Wd))) & (e=thing)'],\
 ['r','noun counterpart of','NCP','(is the noun counterpart of=NCP) & (is the adjective counterpart of=ACP) & ((bNCPc) x^ (cACP))'],\
 ['ns','number|n',None,'(number|n=natural number)'],\
-['n','object|r',None,'(c=object|r) & (d=relation) & (e=noun) & ((bIc) x^ ((zId) & (bIe) & (bAWz)))'],\
-['n','object|n',None,'(c=object|n) & (d=relation) & (e=thing) & ((bIc) x^ ((bIe) & (b~Id)))'],\
 ['a','objective',None,'(b=objective) & (c=reality) & ((pJb) x^ ((pPz) ed^ (pIRc)))'],\
+['n','object|n',None,'(c=object|n) & (d=relation) & (e=thing) & ((bIc) x^ ((bIe) & (b~Id)))'],\
+['n','object|r',None,'(c=object|r) & (d=relation) & (e=noun) & ((bIc) x^ ((zId) & (bIe) & (bAWz)))'],\
 ['as','obligatory',None,'(obligatory=morally necessary)'],\
 ['as','obligatory|l',None,'(obligatory|l=legally necessary)'],\
 ['r','occur','OC','(occur=OC) & ((pOC) x^ ((p~IRd Tb) & (pIRd Tc) & (cAb))) & (d=reality)'],\
-['ra','of|n','OFN','(((bOFNc) & (bId) & (cIe)) x^ ((fWb.c) & (fIg))) & (g=root) & (d=noun) & (e=adjective)'],\
-['ra','of|v','OFV','(((bOFVc) & (bId) & (cIe)) x^ ((fWb.c) & (fIg))) & (g=root) & (d=verb form) & (e=noun form)'],\
 ['ra','of','OF','postponed'],\
 ['r','of|a','OFA','(of|a=OFA) & (((bOFAc) & (dACPc)) x^ (bJd))'],\
 ['rs','of|c','OFC','(OFC = FLC)'],\
@@ -674,10 +689,12 @@ def large_dict(str1):
 ['r','of|i','OFI','(bOFIc) x^ (cHGCb)'],\
 ['r','of|i|m','OFIM','((bOFIMc) x^ (cHIMb))'],\
 ['r','of|m','OFM','(of|m=OFM) & (d=person) & ((bOFMc) x^ ((bSz) & (cWb) & (cId)))'],\
+['ra','of|n','OFN','(((bOFNc) & (bId) & (cIe)) x^ ((fWb.c) & (fIg))) & (g=root) & (d=noun) & (e=adjective)'],\
 ['r','of|p|w','OFPW','((bOFPWc) x^ (bPc)) & (bId) & (d=part|w)'],\
 ['r','of|r','OFQ','(of|r=OF) & (verbal counterpart=VCP) & (((R VCP b) & (The b OF d)) x^ (d R))'],\
 ['r','of|s','OFS','(of|s=OFS) & ((bOFSc) x^ (cHGb))'],\
 ['r','of|s|p','OFSP','(bOFSPc) x^ (cHSPb)'],\
+['ra','of|v','OFV','(((bOFVc) & (bId) & (cIe)) x^ ((fWb.c) & (fIg))) & (g=root) & (d=verb form) & (e=noun form)'],\
 ['aa','omnipotent',None,'postponed'],\
 ['r','on','ON','(on=ON) & ((bONc) x^ ((bABc) & (bNXTc)))'],\
 ['ns','one|p',None,'(one|p = person)'],\
@@ -688,29 +705,29 @@ def large_dict(str1):
 ['r','own|i','OWI','(own|i=OWI) & ((bOWIc) t^ (cMz))'],\
 ['ra','owns','OWN','postponed'],\
 ['n','pain',None,'(c=pain) & (((bIc) & (bTOd)) x^ ((zb^bOy) & (dWb) & (d~Dz)))'],\
-['ns','part|d',None,'(part|d=property part)'],\
 ['n','part|c',None,'(c=part|c) & ((bIc) x^ ((dWb) x^ (dCSEe)))'],\
+['ns','part|d',None,'(part|d=property part)'],\
 ['ns','part|f',None,'(part|f=familial part)'],\
-['n','part|s',None,'(c=part|s) & ((bIc) x^ (bINd))'],\
-['ns','part|s',None,'(part|s=physical spatial part)'],\
 ['a','partially material|a (property)',None,'(b=partially material|a) & ((cJb) x^ ((dWf) & (fIg) & (dJc) & (dWh) & (hIk))) & ((cIb) t^ (cIe)) & (e=property) & (g=body|c) & (k=mind)'],\
 ['a','partially material|b (concept)',None,'(b=partially material|a) & ((cJb) x^ ((dWf) & (fIg) & (dIc) & (dWh) & (hIk))) & (g=body|c) & (k=mind)'],\
 ['ns','partially spiritual',None,'(partially spiritual = partially material|b)'],\
 ['r','participate','PRTC','(bPRTCc) x^ ((dCAUSc) x^ (dWb))'],\
+['n','part|s',None,'(c=part|s) & ((bIc) x^ (bINd))'],\
+['ns','part|s',None,'(part|s=physical spatial part)'],\
 ['na','party',None,'postponed'],\
 ['a','past',None,'(c=past) & (d=now) & ((bJc) x^ (dAb))'],\
 ['ns','past|e',None,'(past|e=entire past)'],\
-['n','period|d (discontiguous)',None,'(c=period|d) & ((bIc) x^ ((bWd) t^ (dIe))) & (e=moment)'],\
+['rs','perceive',None,'(perceive = absorb|g)'],\
 ['n','period (contiguous)',None,'(c=period) & ((bIc) x^ (((kAf) & (hAk)) x^ (bWk)))'],\
+['n','period|d (discontiguous)',None,'(c=period|d) & ((bIc) x^ ((bWd) t^ (dIe))) & (e=moment)'],\
 ['as','permitted',None,'(permitted = morally contingent)'],\
 ['as','permitted|l',None,'(permitted|l=legally contingent)'],\
 ['n','person',None,'(c=person) & (d=personhood) & ((bIc) x^ (bHd))'],\
 ['n','personhood',None,'(c=personhood) & ((bHc) t^ ((bId) & (zTKw) & (zDx) & (bWz) & (bWy) & (yIe))) & (d=person) & (e=body|c)'],\
 ['n','phenomenon',None,'(c=phenomenon) & (d=event) & ((bIc) x^ ((bId) & (zIb)))'],\
-['ns','phenomenon|e',None,'(phenomenon|e=event)'],\
 ['n','phenomenon',None,'(phenomenon = thing)'],\
+['ns','phenomenon|e',None,'(phenomenon|e=event)'],\
 ['ra','phrase',None,'postponed'],\
-['a','physical|s',None,'(c=physical|s) & ((bJc) x^ (((dHe) & (eIg) & (dSf)) t^ (bWf))) & (g=energy)'],\
 ['r','physical contingent condition','CC','(contingent physical condition=CC) & (given=GV) & (e=reality) & (f=possible worlds) & (((bScTd) & (eScTf) & (pCCq GVr)) x^ ((pb^eSc) & (qb^bSc) & (fSUTz) & (zSUTd) & (((rIRe) & (pTd)) t^ ((qPy Tz) & (nt+qP x Tz))) & (((rIRe) & (p~Td)) t^ ((qPw Tz) & (nt+qPv Tz))) & (pP mn f) & (wNr) & (vNq) & (yNs) & (xNt) & (rGq) & (tGs)))'],\
 ['n','physical law',None,'(c=physical law) & (d=situation) & ((bIc) x^ ((bPo) & (bId)))'],\
 ['n','physical relationship',None,'(z=physical relationship) & (y=subject) & (x=relationship) & ((bIz) x^ ((bHVc) & (bIx) & (cIy) & (eHc) & (eSf)))'],\
@@ -722,6 +739,7 @@ def large_dict(str1):
 ['a','physically impossible',None,'(b=physically impossible) & (c=relata) & (d=reality) & (((pSeTf) u+ (qJb Tg)) x^ (((pSeTf) t^ ((q~Po Tg) & (nt+qPo Tg))) & (zCRRq) & (z~IRd Ty) & (ySUTg) & (gSUTf)))'],\
 ['a','physically necessary',None,'(b=physically necessary) & (c=relata) & (d=reality) & (succeed|t=SUT) & (correspond=CRR) & (((pSeTf) u+ (qJb Tg)) x^ (((pSeTf) t^ ((qPo Tg) & (nt+q~Po Tg) & (zIRd Ty))) & (zCRRq) & (ySUTg) & (gSUTf)))'],\
 ['a','physically possible',None,'(b=physically possible) & (c=physically necessary) & (d=physically contingent) & ((pJb) x^ ((pJc) ed^ (pJd)))'],\
+['a','physical|s',None,'(c=physical|s) & ((bJc) x^ (((dHe) & (eIg) & (dSf)) t^ (bWf))) & (g=energy)'],\
 ['ns','place',None,'(place=region)'],\
 ['n','plan',None,'(c=plan) & ((bIc) x^ ((bDz) & (bBy))) & (zb^bCAUc) & (yb^zPx)'],\
 ['n','pleasure',None,'(c=pleasure) & (((bIc) & (bTOd)) x^ ((zb^bOy) & (dWb) & (bDd)))'],\
@@ -743,9 +761,9 @@ def large_dict(str1):
 ['n','probability',None,'(c=probability) & (g=ratio) & (h=possible worlds) & (f=reality) & (given=GV) & (((bIc) & (bOFd GVe)) x^ ((eIRf) t^ ((dPb h) & (bIg))))'],\
 ['a','probable',None,'(c=probable) & ((bJc) x^ (jGk)) & ((eWd) x^ (bPd)) & ((gWh) x^ (b~Ph)) & (gNj) & (eNk)'],\
 ['n','proper name',None,'(c=proper name) & ((bIc) x^ ((bId) & (bRFe) & (eIf))) & (d=word) & (f=individual)'],\
-['n','property|o',None,'(c=property|o) & ((bIc) x^ (zOWNb))'],\
 ['n','property bearer',None,'(c=property bearer) & ((bIc) x^ (bHz))'],\
 ['n','property part',None,'(c=property part) & (((bIc) & (bOFd)) x^ ((dHb) ed^ (dJb)))'],\
+['n','property|o',None,'(c=property|o) & ((bIc) x^ (zOWNb))'],\
 ['ra','punish',None,'postponed'],\
 ['a','purely material|c (concept|n)',None,'(b=purely material|c) & ((cJb) x^ ((dWf) & (dIc) & (fIg) & ((hIk) t^ (d~Wh)))) & ((cJb) t^ (cIe)) & (e=concept|n) & (g=body|c) & (k=mind)'],\
 ['n','putative mistake',None,'(d=putative mistake) & (e=reality) & (make=MK) & ((yb^cCAz) & (wb^yIe) & (((bMKc) & (cTOb) & (cId)) x^ ((bCAc Tw) & (zOC Tv) & (vSUTw) & ((yIe) ed^ ((yMx) & (bWx))) & (bBw) & (b~Dz))))'],\
@@ -753,12 +771,12 @@ def large_dict(str1):
 ['n','quantity',None,'(c=quantity) & (((bIc) & (bOFd) & (dPCPe)) x^ ((zIe) & (zNb) & (zJf) & (((yIe) & (yNw)) t^ (w~Gb))))'],\
 ['r','raise the probability of','RAS','(raise the probability of=RAS) & ((bRASc) x^ (bCASc))'],\
 ['ra','ratio',None,'postponed'],\
-['a','real|c',None,'(c=real|c) & ((bJc) x^ (bHCEd))'],\
 ['as','real',None,'(real=actual)'],\
-['ns','real|s',None,'(real|s = physical|s)'],\
 ['n','real group',None,'(c=real group) & (d=abstractspace) & (vb^(xIb) e^ (xHw)) & ((bIc) x^ ((zIb) & (yIb) & (vIRd)))'],\
 ['ra','real time',None,'postponed'],\
+['a','real|c',None,'(c=real|c) & ((bJc) x^ (bHCEd))'],\
 ['es','really',None,'(really=actually)'],\
+['ns','real|s',None,'(real|s = physical|s)'],\
 ['r','refer','RF','((bRFc) x^ ((mTn) t^ ((jTq) & (qAn))) & (db^bJf) & (hb^cJf) & (jb^kTKh) & (mb^kEXPd) & (f=extant)'],\
 ['n','region|a',None,'(c=region|a) & ((bIc) x^ (dINEb))'],\
 ['n','region|n',None,'(c=region|n) & ((bIc) x^ (dINMb))'],\
@@ -773,9 +791,11 @@ def large_dict(str1):
 ['r','satisfy',None,'(((bSTSc) & (cId) & (c=Re)) x^ (bRe)) & (d=predicate)'],\
 ['r','seem','SM','(seem=SM) & (z=reality) & ((bSM TOc) x^ ((zIc) & (zBp) & (p~IRz)))'],\
 ['rs','sense ',None,'(sense=EXP)'],\
+['n','sensorium',None,'(c=sensorium) & ((bIc) x^ ((bWd) x^ (eOd)))'],\
 ['ns','sentence|r',None,'(sentence|r=relationship)'],\
 ['n','sentient being',None,'(sentient being = living being)'],\
 ['d','seventy five percent',None,'((75% b R c) x^ (k=3*j)) & ((eWg) x^ (gRc)) & ((hWm) x^ (m~Rc)) & (gIb) & (mIb) & (hNj) & (eNk))'],\
+['aa','sexless',None,'postponed'],\
 ['r','share','SHR','(share=SHR) & ((b and|c cSHRd) x^ (((bHd) & (cHd)) ed^ ((bOWNd) & (cOWNd)) ed^ ((bWd) & (cWd))))'],\
 ['a','significant',None,'(b=significant) & (c=grammatical) & ((pJb) x^ ((pJta^) & (pJc)))'],\
 ['r','similar to','SML','(similar to=SML) & (d=essence) & ((bSMLc) x^ ((bHz) & (zId) & (cH mn y) & (yIz)))'],\
@@ -786,14 +806,15 @@ def large_dict(str1):
 ['nub','space',None,'(b=space) x^ ((cSd) x^ (bWd))'],\
 ['ns','space|r ',None,'(space|r=region)'],\
 ['ns','species ',None,'(species=kind)'],\
-['ns','state',None,'(state=property)'],\
 ['r','state','STT','(state|s=STT) & ((bSTTc) x^ ((bCAUz) & (zRFc)))'],\
+['ns','state',None,'(state=property)'],\
 ['n','state of affairs',None,'(c=state of affairs) & ((bIc) x^ ((bWd) x^ ((dJe) & (dIf)))) & (f=fact)'],\
 ['ns','statement',None,'(statement=relationship)'],\
 ['rs','states',None,'(states = STT)'],\
 ['r','stronger than','STR','(stronger than=STR) & (f=reality) & (zb^(eIRf) u+ (dCAb)) & (yb^(eIRf) u+ (dCAc)) & (((bSTRc GVe) & (dDb) & (dDc)) x^ ((zPx) & (yPw) & (wNv) & (xNu) & (uGv)))'],\
 ['ns','subgroup',None,'(subgroup=type)'],\
 ['n','subject',None,'(c=subject) & (d=relation) & (e=noun) & ((bIc) x^ ((zId) & (bIe) & (zAWb)))'],\
+['n','subset',None,'(c=subset) & (((bIc) & (bOFd)) x^ ((bWe) t^ (dWe)) & ((dWf) t^ ((gPh) & (nt+gPj))) & (gb^bWf)'],\
 ['a','succeeding',None,'(c=succeeding) & ((bJc * d) x^ (bAd))'],\
 ['a','succeeding|n',None,'(c=succeeding|n) & ((bJc * d) x^ (bGd))'],\
 ['r','succeeds','SC','(succeeds=SC) & ((bSCc) x^ ((dNe) t^ ~((dGc) & (bGe))))'],\
@@ -810,6 +831,7 @@ def large_dict(str1):
 ['a','teleologically necessary',None,'(b=teleologicallynecessary) & (((cDd) & (pJb c)) x^ (((c~CAUp Tx) t^ (d~Po Tw)) & ((cCAUp Tx) t^ ((dPz Tw) & (d~Py Tw)))))'],\
 ['a','teleologically possible',None,'(b=teleologically possible) & (c=teleologically necessary) & (d=teleologically contingent) & ((pJb) x^ ((pJc) ed^ (pJd)))'],\
 ['r','tend toward','TD','postponed'],\
+['r','think|d','TKD','(bTKDc) x^ (cIRd)'],\
 ['rs','think|t','TKT','(TKT = B)'],\
 ['r','think|w','TKW','((bTKWc) x^ ((bWd) & (dTKc)))'],\
 ['nu','time',None,'(b=time) x^ ((eTd) x^ (bWd))'],\
@@ -826,15 +848,15 @@ def large_dict(str1):
 ['a','upper class',None,'(d=upper) & (c=class) & (f=abstract essence) & (((bIc) & (bJd) & (eIb)) x^ (((zIe) x^ (zHy)) & (yIf) & (((xIe) & (o~Ix)) t^ (xSw))))'],\
 ['ra','utters','UT','postponed'],\
 ['a','vague',None,'(b=vague) & (((cJb) & (cTOd Tg)) x^ ((dTKe Tg) & (kAg) & (dTKm))) & (f=reality) & (g=now) & (eb^cIRf) & (hb^d~TKe Tk) & (mb^hPj)'],\
+['na','vague pairs',None,'postponed'],\
 ['a','vague|o (of a physical object)',None,'(b=vague|o) & (((cJb) & (cTOd)) x^ ((d~KNe) & (fJg))) & (e b^ fIc) & (g=natural)'],\
 ['a','vague|s (of a statement)',None,'(b=vague) & (((cJb) & (cTOd)) x^ ((cJe) & (d~KNc))) & (e=natural|s)'],\
-['na','vague pairs',None,'postponed'],\
-['r','variable space relation','D','(bDc) x^ ((bLc) ed^ (bRTc) ed^ (bABc) ed^ (bBLc) ed^ (bFc) ed^ (bBHc))'],\
+['ra','variable space relation','D','(bDc) x^ ((bLc) ed^ (bRTc) ed^ (bABc) ed^ (bBLc) ed^ (bFc) ed^ (bBHc))'],\
 ['r','violate','VIO','(violate=VIO) & (b=action) & ((pVIOq) x^ ((zDy) & (yb^q~Po) & (pCRRq) & (pIRb) & (pIb)))'],\
 ['n','void',None,'((b=void) x^ ((cIz) t^ (c~Sb))) & (z=thing)'],\
 ['ra','went','GO','(GO = MOV)'],\
-['rs','were|e',None,'(were|e = EX)'],\
 ['r','were/would',None,'(((p were) t^ (q would)) x^ ((p~IRb) & (q~IRb) & ((pPc) t^ (qPc)))) & (b=reality)'],\
+['rs','were|e',None,'(were|e = EX)'],\
 ['rs','while',None,'(while=DUR)'],\
 ['ns','while|n ',None,'(while|n=period)'],\
 ['aa','white',None,'postponed'],\
@@ -901,8 +923,8 @@ def large_dict(str1):
 ['a','kennedy|a',None,'(b=kennedy|a) & (c=kennedy) & (((eJb) & (fIe)) x^ (fIc))'],\
 ['ra','kiss','KS','postponed'],\
 ['ra','kissed','KS','postponed'],\
-['na','male',None,'(b=male) & (c=female) & ((dJb) t^ (d~Jc))'],\
 ['ra','love','LOV','postponed'],\
+['na','male',None,'(b=male) & (c=female) & ((dJb) t^ (d~Jc))'],\
 ['na','mammal',None,'postponed'],\
 ['n','man',None,'(b=man) & ((cIb) x^ ((cId) & (cJe))) & (d=person) & (e=male)'],\
 ['na','mars',None,'natural'],\
@@ -942,8 +964,8 @@ def large_dict(str1):
 ['ra','spoke','SPK','postponed'],\
 ['na','sprite',None,'(c=sprite) & (d=artificial) & ((bJc) t^ (bJd))'],\
 ['ra','standing','STD','postponed'],\
-['ra','study','STD','postponed'],\
 ['ra','studied','STD','postponed'],\
+['ra','study','STD','postponed'],\
 ['n','table',None,'artificial'],\
 ['na','table',None,'(c=table) & (d=artificial) & ((bJc) t^ (bJd))'],\
 ['ra','talked','TLK','postponed'],\
@@ -1007,41 +1029,28 @@ def large_dict(str1):
 ['ra','are|e','EX','(are|g=EX)'],\
 ['ra','be|a','J','(be|a=J)'],\
 ['r','belongs to','BLN','(bBLNc) x^ (cWb)'],\
-['rbi','desires','D','(desires=D)'],\
+['rai','desires','D','(desires=D)'],\
 ['ra','has','H','(has=H)'],\
-['rbi','have|w','W','(have|w=W)'],\
-['rbi','is|a ','J','(is|a=J)'],\
-['rbi','is|g ','I','(is|g=I)'],\
+['rai','have|w','W','(have|w=W)'],\
+['rai','is|a ','J','(is|a=J)'],\
+['rai','is|g ','I','(is|g=I)'],\
 ['r','participated','PRTC','(bPRTCc) x^ ((dCAUSc) x^ (dWb))'],\
 ['r','participates','PRTC','(bPRTCc) x^ ((dCAUSc) x^ (dWb))'],\
 ['rai','think','TK','(think=TK)'],\
 ['rai','thinks','TK','(thinks=TK)'],\
 ['ra','was','=','(was = =)'],\
 ['ra','was|a','J','(was|a=J)'],\
-['ra','was|g','I','(was|g=I)'],\
 ['ra','was|e','EX','(was|e = EX)'],\
+['ra','was|g','I','(was|g=I)'],\
 ['ns','whole|c (fallacious)',None,'(whole|c = concept|n)'],\
-['','',None,''],\
-['','',None,''],\
-['','',None,''],\
-['r','absorb|g','ADS','(bADSc) x^ ((b.eId) & (fINHh) & (bWh) & (cCRCf) & (fIg))) & (d=body|c) & (g=body|m)'],\
-['r','correspond','CRA','(bCRAc) x^ (((bEMh Td) & (eADc Tf) & (bSg Td)) t^ ((cOj Tf) & (fSUTd))))'],\
-['r','correspond|b','CRB','(bCRBc) x^ (((dEMe Tf) & (gADe Th) & (dSb Tf)) t^ ((jOc Tf) & (hSUTf))))'],\
-['r','correspond|c','CRC','(bCRCc) x^ (((bWd) x^ (dINMe)) & ((cWf) x^ (fINHg)) & ((bWh) t^ ((hCRAj) & (cWj))) & ((cWk) t^ ((mCRAk) & (bWm))))) '],\
-['r','experience','EXP','(bEXPc Tg) x^ ((bADSd Th) t^ ((bTKc Tg) & (cIRf) & (gSUTh))) & (cb^dRe)'],\
-['r','in|h','INH','(bINHc) x^ ((bWd) x^ ((dOe) & (cWe)))'],\
-['r','misinterpret','MSI','(bMSIc Tg) x^ ((bADSd Th) t^ ((bTKc Tg) & (c~IRf) & (gSUTh))) & (cb^dRe)'],\
-['r','think|d','TKD','(bTKDc) x^ (cIRd)'],\
-['n','body|m',None,'(c=body|m) & ((bIc) x^ ((bWd) t^ (dIe))) & (e=particle|m)'],\
-['n','boson',None,'(c=boson) & ((bIc) x^ (dEMb)) & ((bIc) x^ (eADb)) & ((bIc) t^ (bIg)) & (g=particle)'],\
-['n','fermion',None,'(c=fermion) & ((bIc) x^ (bEMd)) & ((bIc) x^ (bADe)) & ((bIc) t^ (bIg)) & (g=particle)'],\
-['rs','perceive',None,'(perceive = absorb|g)'],\
-['r','hallucinate','HLC','(bHLCc Td) x^ ((bEMSe Tf) t^ ((bTKk Tg) & (gSUTf) & (cJj) & (c~IRh))) & (j=natural|s) & (kb^cIRh)'],\
-['r','emit|s','EMS','(bEMSc) x^ ((cWd) x^ ((eEMd) & (bWe)))'],\
-['rb','absorb','AD','(c=boson) & ((bIc) x^ (eADb)) & ((eId) x^ (eADf)) & (d=fermion)'],\
-['rb','emit','EM','(c=fermion) & ((bIc) x^ (bEMd)) & (e=boson) & ((dIe) x^ (bEMd))'],\
-['n','subset',None,'(c=subset) & (((bIc) & (bOFd)) x^ ((bWe) t^ (dWe)) & ((dWf) t^ ((gPh) & (nt+gPj))) & (gb^bWf)'],\
+['','involuntary',None,'(b=involuntary) & (((pJb) & (pTOc Tf)) x^ (((cEXPd Te) & (fAe) & (gBTWf e) & (gJh)) t^ (cBp Tf))) & (h=short|j)'],\
+['','short|j',None,'(c=short|j) & ((bJc) x^ (((bWd) x^ (dTe)) & (bNf) & (fJg))) & (g=few|n)'],\
 ['n','superset',None,'(c=superset) & (((bIc) & (bOFd)) x^ ((dWe) t^ (bWe)) & ((bWf) t^ ((gPh) & (nt+gPj))) & (gb^dWf)'],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
+['','',None,''],\
 ['','',None,''],\
 ['','',None,''],\
 ['','',None,''],\
