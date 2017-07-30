@@ -1,11 +1,10 @@
-def pop_sent(str1):
-    sent = [[[ 1,"no mind thinks something",None,'co']],\
-[[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
+def pop_sent():
+    sent = [[[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
 [[ 1,"I saw everyone who drank something in the van",None,'co'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I did not see Leibniz",None,'j']],\
 [[ 1,"I love nothing which is|r about murder",None,'co'],[ 2,"Hamlet is|r about murder",None,'j'],[ 3,"I love Hamlet",None,'j']],\
 [[ 1,"I love anything which is|r about logic",None,'co'],[ 2,"Set Theory is|r about logic",None,'j'],[ 3,"I do not love set theory",None,'j']],\
-[[ 1,"no green man from|b cold mars, lives on|r Earth",None,'co'],[ 2,"Jim is|g a|r green man born on|r Mars",None,'j'],[ 3,"Jim lives on|r Earth",None,'j']],\
-[[ 1,"Every green man from|b Mars drinks",None,'co'],[ 2,"Jim is|g a|r green man born on|r Mars",None,'j'],[ 3,"Jim does not drink",None,'j']],\
+[[ 1,"no green man from|b cold mars, lives on|r Earth",None,'co'],[ 2,"Jim is|g a|r green man born|p on|r Mars",None,'j'],[ 3,"Jim lives on|r Earth",None,'j']],\
+[[ 1,"Every green man from|b Mars drinks",None,'co'],[ 2,"Jim is|g a|r green man born|p on|r Mars",None,'j'],[ 3,"Jim does not drink",None,'j']],\
 [[ 1,"Everyone who spies on Leibniz, will|r be|a rewarded",None,'co'],[ 2,"Russell spied on Leibniz",None,'j'],[ 3,"Russell was|a not rewarded",None,'j']],\
 [[ 1,"Everyone who spies on a nazi in Munich, will|r be|a rewarded",None,'co'],[ 2,"Russell spied on a nazi in Munich",None,'j'],[ 3,"Russell was|a not rewarded",None,'j']],\
 [[ 1,"Anyone who breaks the speed limit, will|r be|a caught",None,'co'],[ 2,"Marilyn broke the speed limit",None,'j'],[ 3,"Marilyn was|a not caught",None,'j']],\
@@ -42,7 +41,6 @@ def pop_sent(str1):
 [[ 1,"JFK is|g a|r kennedy",None,'co'],[ 2,"JFK is|g not part|f of the kennedy|a family",None,'j']],\
 [[ 1,"Something is|g a|r b",None,'co'],[ 2,"b is|g not a|r class",None,'j']],\
 [[ 1,"There is|e a point which thinks some|p thoughts",None,'co']],\
-[[ 1,"I saw the man who drank some|p beers at|p the party",None,'co'],[ 2,"no one|p drank some|p beers at|p the party",None,'j']],\
 [[ 1,"Some|p minds smell",None,'co']],\
 [[ 1,"Some|p points smell",None,'co']],\
 [[ 1,"Some|p numbers|i are|a physical",None,'co']],\
@@ -68,7 +66,6 @@ def pop_sent(str1):
 [[ 1,"There is|e a thought which is|a not mental|b",None,'co']],\
 [[ 1,"There is|e a thought which is|g a|r moment",None,'co']],\
 [[ 1,"There is|e a thought which thinks something",None,'co']],\
-[[ 1,"There is|e a mind which does not think anything|a",None,'co']],\
 [[ 1,"I have a point",None,'co']],\
 [[ 1,"Plato has|t the same teacher as Xenothon",None,'co'],[ 2,"That|d teacher is Socrates",None,'j'],[ 3,"Socrates does not teach Xenothon",None,'j']],\
 [[ 1,"I saw the same movie as you",None,'co'],[ 2,"That|d movie was Casablanca",None,'j'],[ 3,"I did not see Casablanca",None,'j']],\
@@ -78,6 +75,11 @@ def pop_sent(str1):
 [[ 1,"Russell is|g not a|r man",None,'co']],\
 [[ 1,"Russell has the|r property courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
-# [[ 1,"I think that|c it is|a true that|c you are|a smart",None,'co'],[ 2,"I do not believe that|c you are|a smart",None,'j']],\
+[[ 1,"This cat is|g not a|r cat",None,'co']],\
 [[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']]]
+
     return sent
+
+
+
+
