@@ -42,10 +42,16 @@ total_time = time.time()
 ######### himanshu begin
 
 
-mysql = 0
+mysql = 1
 excel = 0
 if mysql == 0:
     print_to_doc, get_words_used, order = info()
+    if print_to_doc == 1:
+        wb4 = load_workbook('/Users/kylefoley/Desktop/inference engine/temp_proof.xlsx')
+        w4 = wb4.worksheets[0]
+    if get_words_used == 1:
+        wb5 = load_workbook('/Users/kylefoley/Desktop/inference engine/dictionary4.xlsx')
+        ws = wb5.worksheets[0]
 else:
     print_to_doc = 0
     get_words_used = 0
@@ -53,12 +59,9 @@ else:
 
 
 
-wb4 = load_workbook('/Users/kylefoley/Desktop/inference engine/temp_proof.xlsx')
-w4 = wb4.worksheets[0]
 
-if get_words_used == 1:
-    wb5 = load_workbook('/Users/kylefoley/Desktop/inference engine/dictionary4.xlsx')
-    ws = wb5.worksheets[0]
+
+
 
 if mysql == 1:
     from inference2.models import Define3, Archives, Input
@@ -4271,7 +4274,7 @@ def determine_words_used():
 
 def build_dict():
     global dictionary
-
+    # himanshu dictionary is built here
     ex_dict = large_dict() if get_words_used == 0 else ""
 
     parts_of_speech = {}

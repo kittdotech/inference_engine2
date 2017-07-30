@@ -196,7 +196,7 @@ beta = chr(946)
 # @ 8855
 # if^ 8660
 
-
+# himanshu
 def tran_str(str1, type3):
     str2 = ""
     if 'co^' in str1:
@@ -5095,7 +5095,7 @@ def infer_from_lemmas(concept_thing, second_obj, int_thing, first_sent, second_s
 
     rename_sent = "(" + int_thing + mini_c + second_obj + ")"
     sn += 1
-    add_to_total_sent(sn, rename_sent, "", "", "RN", sn - 1)
+    add_to_total_sent(sn, rename_sent, "", "", "RN", sn - 1, sn - 2)
 
     sec_antec = "(" + second_obj + " I " + concept_thing + ")"
     sec_antecp = name_sent(sec_antec)
@@ -5381,6 +5381,9 @@ def print_instantiations(instantiations):
     global sn
 
     if instantiations != []:
+        if total_sent[-1][4] == 'AX ENT':
+            total_sent.insert(-1, ["","","","","","","",""])
+            total_sent.insert(-1, ["", "INSTANTIATIONS", "", "", "", "", "", ""])
         add_to_total_sent("","")
         add_to_total_sent("", "INSTANTIATIONS")
 
@@ -7125,7 +7128,10 @@ def get_result(post_data, archive_id=None, request=None):
             row = (x.col1, x.col2, x.col3)
             w4.append(row)
         w4 = tuple(w4)
-        test_sent, row_number = populate_sentences()
+        # himanshu we need to figure out what the row number
+        row_number = 245
+        test_sent = get_sent()
+        #test_sent, row_number = populate_sentences()
     else:
         row_number = 2
         test_sent = get_sent()
