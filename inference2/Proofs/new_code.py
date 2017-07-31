@@ -9,6 +9,11 @@ from claims_new import pop_sent
 from pprint import pprint
 import collections
 from start_and_stop import info
+import os
+
+import os
+
+print(os.environ.get("PYDEVD_USE_FRAME_EVAL"))
 
 #hey
 # checked coverage up to line 5575
@@ -45,15 +50,15 @@ total_time = time.time()
 mysql = 0
 excel = 0
 if mysql == 0:
-    print_to_doc, get_words_used, order = info()
-    if print_to_doc == 1:
+    proof_type, get_words_used, order = info()
+    if proof_type == 1:
         wb4 = load_workbook('/Users/kylefoley/Desktop/inference engine/temp_proof.xlsx')
         w4 = wb4.worksheets[0]
     if get_words_used == 1:
         wb5 = load_workbook('/Users/kylefoley/Desktop/inference engine/dictionary4.xlsx')
         ws = wb5.worksheets[0]
 else:
-    print_to_doc = 0
+    proof_type = 0
     get_words_used = 0
     order = [0,0,1]
 
@@ -754,7 +759,6 @@ def remove_duplicates(list1, i):
         if list1[j][i] in list2:
             del list1[j]
             j -= 1
-            print ("remove duplicates used")
         else:
             list2.append(list1[j][i])
 
@@ -1553,7 +1557,7 @@ def change_variables(sentence, def_loc, type=""):
     if definiendum == None or definiendum in dictionary[6]:
         return
 
-    if definiendum == 'mental':
+    if definiendum == 'i':
         bb = 8
 
     definition = dictionary[1].get(definiendum)
@@ -1621,15 +1625,16 @@ def change_variables(sentence, def_loc, type=""):
 
 # bbb
 def get_rule(definiendum, r_sent_loc, def_info, rename):
-    if r_sent_loc != [] or rename == "":
+    if r_sent_loc != []:
         rule = "DE "
     else:
-        rule = "DF "
-    if def_info[4][0][1] == "":
-        if def_info[4][1][1] == conditional:
-            rule = "NC "
-    elif def_info[4][0][1] == conditional:
-        rule = "NC "
+        connective = def_info[4][1][1] if def_info[4][0][1] == "&" else def_info[4][0][1]
+        assert connective in [conditional, iff]
+
+        if connective == conditional:
+            rule = "NE " if rename == "" else "NC "
+        elif connective == iff:
+            rule = "DE " if rename == "" else "DF "
 
     rule += definiendum
 
@@ -1650,7 +1655,7 @@ def remove_starred_general_variables():
 
 def do_not_define(new_sentences, definiendum):
 
-    if definiendum == 'many' + un:
+    if definiendum == 'many' + un or definiendum == 'many' + ud:
         for sent in new_sentences:
             if sent[68] in ['122', '121', '221', '222']:
                 sent[54] = 'do not define'
@@ -1680,6 +1685,8 @@ def replace_propositional_constants(temp_prop_const, prop_unfill, new_sentences,
     for k, v in temp_prop_const.items():
         old_key = k
         v = build_sent2(v)
+        abbreviations[0][v[1]] = v[0]
+        variable_type[2].append(v[1])
         old_prop_to_new_prop.update({old_key: v[1]})
 
     for num in prop_unfill:
@@ -1828,7 +1835,7 @@ def replace_r_sent(total_dict, r_sent_location, new_sentences, list1, definiendu
             if list1[i] != None:
                 if i != new_var_loc and i != def_loc:
                     r_sent[i] = list1[i]
-        if definiendum == 'many' + un:
+        if definiendum == 'many' + un or definiendum == 'many' + ud:
             r_sent[8] = new_sentences[location][8]
         # elif j == 0:
         #
@@ -2195,7 +2202,6 @@ def get_propositional_constants(list3, temp_propositional_constants):
 def add_necessary_conditions_for_concept():
     # if we're talking about concepts in our proof then we need to add their necesssary
     # conditiona to our proof
-
     global sn
     list2 = []
     con_sent_parts = [None] * 80
@@ -2221,7 +2227,7 @@ def add_necessary_conditions_for_concept():
                         b = 0
                         for k in range(len(all_sent)):
                             if all_sent[k][9] == str4 and all_sent[k][14] == str2 and \
-                                            str1 != str2 and str2 not in list2:
+                                str1 != str2 and str2 not in list2 and all_sent[k][8] == None:
                                 str6 = all_sent[k][5]
                                 list2.append(str2)
                                 b += 1
@@ -2230,14 +2236,14 @@ def add_necessary_conditions_for_concept():
                         olda = "(" + "b" + ' = ' + concept + ")"
                         oldc = "(" + "c " + str4 + " b" + ")"
                         if str2 != "b":
-                            rn1 = "(" + "b" + idd + str2 + ") & (" + "c" + idd + str6 + ")"
+                            rn1 = "(" + "b" + idd + str2 + ") & (" + "c" + idd + str6 + ")" + l1
                         else:
-                            rn1 = "(" + "c" + idd + str6 + ")"
+                            rn1 = "(" + "c" + idd + str6 + ")" + l1
                         nat_sent_b4_sub = olda + " " + conditional + " " + oldc
                         sn += 1
                         add_to_total_sent(sn, nat_sent_b4_sub, "", "", "NC concept " + concept)
                         sn += 1
-                        add_to_total_sent(sn, rn1, "", "", "RN")
+                        add_to_total_sent(sn, rn1, "", "concept " + concept, "RN")
                         ant_sent_parts = build_sent1(str2, "", "=", concept)
                         con_sent_parts[5] = str6
                         con_sent_parts[9] = str4
@@ -2549,6 +2555,28 @@ def is_standard(list1):
     return True
 
 
+def check_mispellings(test_sent):
+    if proof_type != 3:
+        return
+    global prop_name, total_sent, all_sent, attach_sent, detach_sent, prop_var, sn, abbreviations
+    for k in order:
+        print (k)
+        prop_name = []
+        total_sent = []
+        all_sent = []
+        attach_sent = []
+        detach_sent = []
+        abbreviations = [{}, {}, {}]
+        prop_var = copy.deepcopy(prop_var4)
+        sn = test_sent[k][-1][0] + 1
+
+        divide_sent(test_sent[k])
+
+        eliminate_redundant_words()
+    sys.exit()
+
+
+
 
 def step_one(sent):
 
@@ -2559,6 +2587,8 @@ def step_one(sent):
     replace_determinative_nouns()
 
     replace_synonyms()
+
+    replace_special_synonyms()
 
     word_sub()
 
@@ -2716,6 +2746,30 @@ def recategorize_word(synonym, m, i):
         all_sent[m][45][b].append(i)
         all_sent[m][46].append(b)
 
+def replace_special_synonyms():
+    global sn
+    m = -1
+    while m < len(all_sent) - 1:
+        m += 1
+        replacement_made = False
+        while all_sent[m][45][20] != []:
+            ant_sent_parts = copy.deepcopy(all_sent[m])
+            i = all_sent[m][45][20][0]
+            rule = 'DE ' + all_sent[m][i]
+            replace_special_synonyms2(m, i)
+            replacement_made = True
+            all_sent[m][45][20].remove(i)
+        if replacement_made:
+            all_sent[m] = build_sent2(all_sent[m])
+            con_parts = copy.deepcopy(all_sent[m])
+            prepare_att_sent_1_sent(ant_sent_parts, rule, iff, [con_parts], "")
+
+def replace_special_synonyms2(m, i):
+    dict1 = {9: 8, 15: 49, 50: 19, 51: 23, 52: 27}
+    if all_sent[m][i] == 'distinct from':
+        all_sent[m][i] = "is"
+        all_sent[m][dict1.get(i)] = "~"
+
 def word_sub():
     global sn
     relational_positions = [9,15,19,23,27,31]
@@ -2782,7 +2836,7 @@ def eliminate_negative_determiners():
     # modify this if the category number of the universals change
     # modify this if we allow for two negative determiners in a sentence
 
-    special_determinatives = ['a', 'every', 'many' + un, 'any' + un]
+    special_determinatives = ['a', 'every', 'many' + un, 'any' + un, "many" + ud]
     for sent in all_sent:
         if sent[45] != None:
             for j in sent[45][17]:
@@ -2814,7 +2868,10 @@ def eliminate_negative_determiners():
                         rule = "DE ~ every"
                     else:
                         rule = "DE ~ " + sent[position]
-                        if sent[position] != 'any' + un:
+                        if sent[position] == 'many' + ud:
+                            sent[46].remove(16)
+                            sent[45][16].remove(position)
+                        elif sent[position] != 'any' + un:
                             sent[46].remove(1)
                             sent[45][1].remove(position)
                         sent[position] = 'no'
@@ -3728,13 +3785,12 @@ def prepare_categorize_words(str2):
 
 def get_empty_slots():
 
-    return [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
+    return [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
 
 
 def categorize_words(list1):
     sentence_slots = [None] * 80
     relation_type = 0
-    # up to 19
     slots_used = get_empty_slots()
     places_used = []
     noun_list = ['n', 'p']
@@ -3749,7 +3805,7 @@ def categorize_words(list1):
         k = 0
         word = list1[i]
 
-        if word == 'class':
+        if word == 'distinct':
             bb = 8
 
         i, word, has_comma = determine_if_compound_word(i, list1, word)
@@ -3919,10 +3975,9 @@ def categorize_words(list1):
                     relation_type = 6
 
             if has_comma: sentence_slots[39] = k
-            if k == 0:
+            if k == 0 and proof_type != 3:
                 print (word)
                 assert k != 0
-
 
             sentence_slots[k] = word
             if insert_special_location:
@@ -3967,6 +4022,8 @@ def get_used_slots(k, part_of_speech, sub_part, sub_sub_part, rest):
         b = 19
     elif sub_part == 's':
         b = 18
+    elif sub_part == 'z':
+        b = 20
     elif (part_of_speech == 'd' or part_of_speech == 'p') \
         and sub_part != 'b' and sub_part != "i" and sub_part != 'e':  # determinative, pronouns, possessive pronouns
         b = 1
@@ -4034,7 +4091,10 @@ def get_part_of_speech(word, str5):
             posp = dictionary[0].get(word)
             if posp == None:
                 print ("you misspelled " + word)
-                g = 4 / 0
+                if proof_type != 3:
+                    g = 4 / 0
+                else:
+                    posp = "n"
             pos = posp[0]
             sub_part_of_speech = posp[1] if len(posp) > 1 else ""
             sub_sub_part = posp[2] if len(posp) > 2 else ""
@@ -4180,7 +4240,7 @@ def space_sentences(str1, str2):
 ###### himanshu
 def print_sent_full(test_sent, tot_prop_name, row_number):
     global result_data
-    if print_to_doc == 0 and mysql == 0:
+    if proof_type == 0 and mysql == 0:
         return
     determine_words_used()
     o = -1
@@ -4203,7 +4263,7 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
                 test_sent[i][j][4] = i
             else:
                 test_sent[i][j][4] = str1
-            if print_to_doc == 2:
+            if proof_type == 2:
                 len_sp = 5 - len(str(test_sent[i][j][0]))
                 space = " " * len_sp
                 list3 = space_sentences(str(test_sent[i][j][0]) + space + test_sent[i][j][3] + \
@@ -4212,7 +4272,7 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
                     if str1 != "":
                         print (str1)
 
-            elif print_to_doc == 1:
+            elif proof_type == 1:
                 w4.cell(row=row_number, column=2).value = test_sent[i][j][0]
                 w4.cell(row=row_number, column=3).value = test_sent[i][j][3] + test_sent[i][j][1]
                 w4.cell(row=row_number, column=4).value = test_sent[i][j][4]
@@ -4224,21 +4284,21 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
             row_number += 1
 
         row_number += 1
-        if print_to_doc == 2:
+        if proof_type == 2:
             print (" ")
         o += 1
         list1 = build_sent_name(tot_prop_name[o])
         for j in range(len(list1)):
 
-            if print_to_doc == 2:
+            if proof_type == 2:
                 print (list1[j])
-            elif print_to_doc == 1:
+            elif proof_type == 1:
                 w4.cell(row=row_number, column=3).value = list1[j]
             elif mysql == 1:
                 result_data['text_' + str(row_number) + '_2'] = list1[j]
             row_number += 1
         row_number += 1
-        if print_to_doc == 2:
+        if proof_type == 2:
             print (" ")
         do_not_print = False
         for j in range(len(test_sent[i])):
@@ -4251,7 +4311,7 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
             if not do_not_print and test_sent[i][j][2] != "":
                 if j == 0:
                     test_sent[i][j][4] == ""
-                if print_to_doc == 2:
+                if proof_type == 2:
                     len_sp = 5 - len(str(test_sent[i][j][0]))
                     space = " " * len_sp
                     list3 = space_sentences(str(test_sent[i][j][0]) + space + test_sent[i][j][3] + \
@@ -4261,7 +4321,7 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
                         print (list3[1])
                     else:
                         print (list3[0])
-                elif print_to_doc == 1:
+                elif proof_type == 1:
                     w4.cell(row=row_number, column=2).value = test_sent[i][j][0]
                     w4.cell(row=row_number, column=3).value = test_sent[i][j][3] + test_sent[i][j][2]
                     w4.cell(row=row_number, column=4).value = test_sent[i][j][4]
@@ -4469,7 +4529,7 @@ def use_identity(negated_conjunction, consistent):
         return False
     identities = []
     for sent in detach_sent:
-        if sent[9] == '=' and isvariable(sent[14], "i") and isvariable(sent[5]):
+        if sent[9] == '=' and isvariable(sent[14], "i") and isvariable(sent[5]) and sent[8] != "~":
             identities.append([sent[5], sent[14], sent[58]])
 
     if identities != []:
@@ -4592,9 +4652,9 @@ def build_list_of_abbreviations():
             add_to_total_sent(sn, sent[0], sent[1], "", "&E", position_of_identities + 1)
 
 
-    total_sent.insert(position_of_identities, [position_of_identities + 1, str1,
+    total_sent.insert(position_of_identities, [position_of_identities, str1,
                                                str1p, "", 'ID', "", "", "", ""])
-    total_sent.insert(position_of_identities, ["", "DEFINITIONS", "", "", "", "", ""])
+    total_sent.insert(position_of_identities, ["", "UNTRANSLATED DEFINITIONS", "", "", "", "", ""])
     total_sent.insert(position_of_identities, ["", "", "", "", "", "", "", "", ""])
 
 
@@ -4649,6 +4709,77 @@ def eliminate_attached_conjuncts():
             sent[2] = sn
             add_to_total_sent(sn, sent[37], sent[4], "", "&E", anc1)
 
+
+def rearrange_total_sent2():
+    premises = []
+    rn_sent = {}
+    infer_sent = []
+    inferences = False
+    stan_attach_found = False
+    for i, lst in enumerate(total_sent):
+        if lst[1] == 'INFERENCES':
+            premise_loc = i - 1
+        if lst[1].startswith("NONST"):
+            infer_loc = i - 1
+
+        if lst[1].startswith('STANDARD') or stan_attach_found:
+            stan_attach_found = True
+            if stan_attach_found:
+                if inferences == False:
+                    if lst[4] == 'AX DEF' or lst[4] == 'SUB':
+                        premises.append(lst)
+                    elif lst[4] == "RN":
+                        rn_sent.setdefault(lst[3], []).append(lst)
+                        lst[3] = ""
+                    elif lst[4] == iff + "E" or lst[4] == "MP" or lst[4] == "&I":
+                        inferences = True
+                        infer_sent.append(lst)
+                else:
+                    infer_sent.append(lst)
+                    if lst[4] == "":
+                        break
+
+    for j, sent in enumerate(premises):
+        total_sent.insert(premise_loc + j, sent)
+    infer_loc = infer_loc + j + 1
+    for j, sent in enumerate(infer_sent):
+        total_sent.insert(infer_loc + j, sent)
+
+    match_rn_sent_to_definition2(rn_sent)
+
+    bool1 = False
+    for i, lst in enumerate(total_sent):
+        if lst[1].startswith('STANDARD ATT'):
+            bool1 = True
+        if lst[4] == 'AX DEF' and bool1:
+            ax_def_loc = i
+            break
+    while len(total_sent) != ax_def_loc:
+        del total_sent[len(total_sent) -1]
+
+    dict1 = build_new_num_dict()
+    renumber_attach_sent(dict1)
+
+
+def match_rn_sent_to_definition2(rn_sent):
+    bool1 = False
+    definitions = {}
+    for i, lst in enumerate(total_sent):
+        if lst[1] == 'UNTRANSLATED DEFINITIONS':
+            bool1 = True
+        if bool1:
+            definitions[lst[4][3:]] = i
+            if lst[1] == '':
+                break
+    j = 0
+    for definiendum, v in rn_sent.items():
+        i = definitions.get(definiendum)
+        for substitution in v:
+            j += 1
+            total_sent.insert(i + 1 + j, substitution)
+            break
+
+
 def put_nc_id_ax_df_into_list():
     # this function takes out sentences proved by NC, AX, RN etc and
     # prepares to put them into new locations
@@ -4680,6 +4811,8 @@ def put_nc_id_ax_df_into_list():
         elif bool1:
             if str1 == 'DE':
                 total_sent[i][4] = "DF " + total_sent[i][4][3:]
+            elif str1 == "NE":
+                total_sent[i][4] = "NC " + total_sent[i][4][3:]
             elif str1 == 'AY':
                 total_sent[i][4] = "AX ENT"
             list3 = copy.deepcopy(total_sent[i])
@@ -4689,7 +4822,6 @@ def put_nc_id_ax_df_into_list():
         match_rn_sent_to_definition(definitions, rn_sent)
         dict1 = rearrange_total_sent(list5, definitions, list2)
         renumber_attach_sent(dict1)
-
 
 def match_rn_sent_to_definition(definitions, rn_sent):
     for definiendum, v in rn_sent.items():
@@ -4720,18 +4852,17 @@ def rearrange_total_sent(list5, list1, list2):
     for j in range(len(list2)):
         total_sent.append(list2[j])
 
+    return build_new_num_dict()
+
+
+def build_new_num_dict():
     dict1 = {}
     j = 0
-    space_found = False
     for i in range(len(total_sent)):
-        j += 1
-        if total_sent[i][0] == "" and not space_found:
-            space_found = True
-            k = j - 1
-        if total_sent[i][0] != "" and space_found:
-            k += 1
-            dict1.update({total_sent[i][0]: k})
-            total_sent[i][0] = k
+        if total_sent[i][0] != "" :
+            j += 1
+            dict1.update({total_sent[i][0]: j})
+            total_sent[i][0] = j
 
     for i in range(len(total_sent)):
         for j in range(5, 9):
@@ -4753,9 +4884,8 @@ def renumber_attach_sent(new_numbers):
     if new_numbers != {}:
         for i in range(len(attach_sent)):
             old_num = attach_sent[i][2]
-            if old_num < 400:
-                attach_sent[i][2] = new_numbers.get(old_num)
-                assert attach_sent[i][2] != None
+            attach_sent[i][2] = new_numbers.get(old_num)
+            assert attach_sent[i][2] != None
 
 
 def use_axiom_of_definition2(consistent, negated_conjunction):
@@ -4782,12 +4912,14 @@ def use_axiom_of_definition2(consistent, negated_conjunction):
                                 variable_type[1].append(variables[0])
                                 del variables[0]
                                 new_sent = build_sent2(new_sent)
-                                detach_sent.append(new_sent)
                                 sn += 1
+                                new_sent[58] = sn
+                                detach_sent.append(new_sent)
                                 add_to_total_sent(sn, new_sent[72], new_sent[1], new_sent[2], "AX DEF")
 
         define_regular_terms(detach_sent)
         consistent = detach1("do not use modus tollens", negated_conjunction)
+        rearrange_total_sent2()
 
     return consistent
 
@@ -4921,7 +5053,7 @@ def step_four(negated_conjunction, consistent):
 
         consistent = detach1("use modus tollens", negated_conjunction)
 
-        consistent = reuse_axiom_of_definition(consistent, ax_def_used, negated_conjunction)
+        # consistent = reuse_axiom_of_definition(consistent, ax_def_used, negated_conjunction)
 
     return consistent
 
@@ -6060,14 +6192,15 @@ def add_stan_sent(consistent):
     for sent in attach_sent:
         add_to_total_sent(sent[2], sent[37])
 
-    add_to_total_sent("", "")
-    add_to_total_sent("", "STANDARD DETACHED SENTENCES")
+    if detach_sent != []:
+        add_to_total_sent("", "")
+        add_to_total_sent("", "STANDARD DETACHED SENTENCES")
 
-    for sent in detach_sent:
-        add_to_total_sent(sent[58], sent[2] + sent[72])
-        consistent = check_reflexivity(sent)
-        if not consistent:
-            return consistent
+        for sent in detach_sent:
+            add_to_total_sent(sent[58], sent[2] + sent[72])
+            consistent = check_reflexivity(sent)
+            if not consistent:
+                return consistent
 
     return True
 
@@ -7178,6 +7311,7 @@ def get_result(post_data, archive_id=None, request=None):
     not_oft_def = copy.deepcopy(dictionary[6])
     nonlinear = order[2]
     order = get_number_of_sent_to_prove(len(test_sent))
+    check_mispellings(test_sent)
     time_used_proving_sent = time.time()
 
     if mysql == 1:
@@ -7237,7 +7371,7 @@ def get_result(post_data, archive_id=None, request=None):
 
 get_result('hey')
 
-if print_to_doc == 1:
+if proof_type == 1:
     wb4.save('/Users/kylefoley/Desktop/inference engine/temp_proof.xlsx')
 if get_words_used == 1:
     wb5.save('/Users/kylefoley/Desktop/inference engine/dictionary4.xlsx')

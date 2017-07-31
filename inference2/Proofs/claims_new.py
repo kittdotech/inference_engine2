@@ -1,5 +1,65 @@
 def pop_sent():
-    sent = [[[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
+    sent = [[[ 1,"Every part|p of the large house is|a white",None,'ta'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a white",None,'j']],\
+[[ 1,"I saw everyone who drank something in the van",None,'ta'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I saw Leibniz",None,'j']],\
+[[ 1,"I love nothing which is|r about murder",None,'ta'],[ 2,"Hamlet is|r about murder",None,'j'],[ 3,"I do not love Hamlet",None,'j']],\
+[[ 1,"I love anything which is|r about logic",None,'ta'],[ 2,"Set Theory is|r about logic",None,'j'],[ 3,"I love set theory",None,'j']],\
+[[ 1,"no green man from|b cold mars, lives on|r Earth",None,'ta'],[ 2,"Jim is|g a|r green man born|p on|r Mars",None,'j'],[ 3,"Jim does not live on|r Earth",None,'j']],\
+[[ 1,"Every green man from|b Mars drinks",None,'ta'],[ 2,"Jim is|g a|r green man born|p on|r Mars",None,'j'],[ 3,"Jim drinks",None,'j']],\
+[[ 1,"Everyone who spies on Leibniz, will|r be|a rewarded",None,'ta'],[ 2,"Russell spied on Leibniz",None,'j'],[ 3,"Russell was|a rewarded",None,'j']],\
+[[ 1,"Everyone who spies on a nazi in Munich, will|r be|a rewarded",None,'ta'],[ 2,"Russell spied on a nazi in Munich",None,'j'],[ 3,"Russell was|a rewarded",None,'j']],\
+[[ 1,"Anyone who breaks the speed limit, will|r be|a caught",None,'ta'],[ 2,"Marilyn broke the speed limit",None,'j'],[ 3,"Marilyn was|a caught",None,'j']],\
+[[ 1,"I did not shed a tear",None,'ta'],[ 2,"I did not shed some|p tears",None,'j']],\
+[[ 1,"Every woman at|p the party drank",None,'ta'],[ 2,"Jessica was|r at|p the party",None,'j'],[ 3,"Jessica is|g a|r woman",None,'j'],[ 4,"Jessica drank",None,'j']],\
+[[ 1,"Every woman at|p the party drank",None,'ta'],[ 2,"Jessica was|g a|r woman at|p the party",None,'j'],[ 3,"Jessica drank",None,'j']],\
+[[ 1,"no part|p of the large house is|a white",None,'ta'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
+[[ 1,"I love everyone who reads Leibniz",None,'ta'],[ 2,"Russell reads Leibniz",None,'j'],[ 3,"I love Russell",None,'j']],\
+[[ 1,"There is|e a moment which exists in|b time",None,'ta']],\
+[[ 1,"No whole|c is|g an|r individual",None,'ta']],\
+[[ 1,"There is|e a whole which is|g not an|r individual",None,'ta']],\
+[[ 1,"my dog drank some water",None,'ta'],[ 2,"I own a dog",None,'j']],\
+[[ 1,"I saw my dog",None,'ta'],[ 2,"I own a dog",None,'j']],\
+[[ 1,"I saw your dog",None,'ta'],[ 2,"you do own a dog",None,'j']],\
+[[ 1,"your dog drank some water",None,'ta'],[ 2,"you do own a dog",None,'j']],\
+[[ 1,"I saw his dog",None,'ta'],[ 2,"he owns a dog",None,'j']],\
+[[ 1,"his dog drank some water",None,'ta'],[ 2,"he owns a dog",None,'j']],\
+[[ 1,"I took the dog's ball",None,'ta'],[ 2,"the dog owns a ball",None,'j']],\
+[[ 1,"the dog's ball is|a red",None,'ta'],[ 2,"the dog owns a ball",None,'j']],\
+[[ 1,"Ada's ball is|a red",None,'ta'],[ 2,"Ada owns a ball",None,'j']],\
+[[ 1,"I took Ada's ball",None,'ta'],[ 2,"Ada owns a ball",None,'j']],\
+[[ 1,"The|r property|n redness is|a not red",None,'ta']],\
+[[ 1,"Plato has|t the same teacher as Xenothon",None,'ta'],[ 2,"Xenothon has|t a teacher",None,'j']],\
+[[ 1,"I did not shed any|n tears",None,'ta'],[ 2,"I shed no tears",None,'j']],\
+[[ 1,"No thought smells",None,'ta']],\
+[[ 1,"No thought desires something",None,'ta']],\
+[[ 1,"There is|e a mind which is|a mental",None,'ta']],\
+[[ 1,"No thought is|g a|r group",None,'co']],\
+[[ 1,"No mind smells",None,'ta']],\
+[[ 1,"JFK is|g a|r kennedy",None,'ta'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']],\
+[[ 1,"Something is|g a|r b",None,'ta'],[ 2,"b is|g a|r class",None,'j']],\
+[[ 1,"b has|c|r causal role c",None,'ta'],[ 2,"Causal role c is|g a|r property|n",None,'j']],\
+[[ 1,"A universal is|r distinct from its|a instance",None,'ta']],\
+[[ 1,"There is|e a universal which is|r distinct from its|a instances",None,'ta']],\
+[[ 1,"The|r concept|n cat is|g not a|r cat",None,'ta']],\
+[[ 1,"Dog is|g a|r concept|n",None,'ta']],\
+[[ 1,"Point is|g not a|r partially material|a concept|n",None,'ta']],\
+[[ 1,"This dog is|g not a|r concept|n",None,'ta']],\
+[[ 1,"Thought is|g not a|r partially material|a concept|n",None,'ta']],\
+[[ 1,"Every number|i does not smells",None,'ta']],\
+[[ 1,"Every thought is|a mental|b",None,'ta']],\
+[[ 1,"No thought is|g a|r moment",None,'ta']],\
+[[ 1,"No thought thinks something",None,'ta']],\
+[[ 1,"I do not have a point",None,'ta']],\
+[[ 1,"Plato has|t the same teacher as Xenothon",None,'ta'],[ 2,"That|d teacher is Socrates",None,'j'],[ 3,"Socrates teaches Xenothon",None,'j']],\
+[[ 1,"I saw the same movie as you",None,'ta'],[ 2,"That|d movie was Casablanca",None,'j'],[ 3,"I saw Casablanca",None,'j']],\
+[[ 1,"Leibniz and|c Aristotle ate from the same cake",None,'ta'],[ 2,"This|n was that|d cake",None,'j'],[ 3,"Leibniz ate from this|n",None,'j']],\
+[[ 1,"The door is|a not large",None,'ta'],[ 2,"The door which is|a green is|a not large",None,'j']],\
+[[ 1,"Leibniz and|c Aristotle studied logic ",None,'ta'],[ 2,"Leibniz studied logic",None,'j']],\
+[[ 1,"Russell is|g a|r man",None,'ta']],\
+[[ 1,"Russell has the|r property|n courage ",None,'ta'],[ 2,"Russell is|a courageous",None,'j']],\
+[[ 1,"Russell has courage ",None,'ta'],[ 2,"Russell is|a courageous",None,'j']],\
+[[ 1,"This cat is|g a|r cat",None,'ta']],\
+[[ 1,"JFK is|g a|r kennedy",None,'ta'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']],\
+[[ 1,"Every part|p of the large house is|a white",None,'co'],[ 2,"The door is|g a|r part|p of the large house",None,'j'],[ 3,"The door is|a not white",None,'j']],\
 [[ 1,"I saw everyone who drank something in the van",None,'co'],[ 2,"Leibniz drank something in the van",None,'j'],[ 3,"I did not see Leibniz",None,'j']],\
 [[ 1,"I love nothing which is|r about murder",None,'co'],[ 2,"Hamlet is|r about murder",None,'j'],[ 3,"I love Hamlet",None,'j']],\
 [[ 1,"I love anything which is|r about logic",None,'co'],[ 2,"Set Theory is|r about logic",None,'j'],[ 3,"I do not love set theory",None,'j']],\
@@ -69,17 +129,12 @@ def pop_sent():
 [[ 1,"I have a point",None,'co']],\
 [[ 1,"Plato has|t the same teacher as Xenothon",None,'co'],[ 2,"That|d teacher is Socrates",None,'j'],[ 3,"Socrates does not teach Xenothon",None,'j']],\
 [[ 1,"I saw the same movie as you",None,'co'],[ 2,"That|d movie was Casablanca",None,'j'],[ 3,"I did not see Casablanca",None,'j']],\
-[[ 1,"Leibniz and|c aristotle ate from the same cake",None,'co'],[ 2,"This|n was that|d cake",None,'j'],[ 3,"Leibniz did not eat from this|n",None,'j']],\
+[[ 1,"Leibniz and|c Aristotle ate from the same cake",None,'co'],[ 2,"This|n was that|d cake",None,'j'],[ 3,"Leibniz did not eat from this|n",None,'j']],\
 [[ 1,"The door is|a not large",None,'co'],[ 2,"The door which is|a green is|a large",None,'j']],\
 [[ 1,"Leibniz and|c Aristotle studied logic ",None,'co'],[ 2,"Leibniz did not study logic",None,'j']],\
 [[ 1,"Russell is|g not a|r man",None,'co']],\
-[[ 1,"Russell has the|r property courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
+[[ 1,"Russell has the|r property|n courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"This cat is|g not a|r cat",None,'co']],\
 [[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']]]
-
     return sent
-
-
-
-
