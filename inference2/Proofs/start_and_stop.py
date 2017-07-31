@@ -1,7 +1,7 @@
 
 def info():
 
-    order = [3, 4, 2]
+    order = [57, 58, 2]
     print_to_doc = 2 # 1 is for printing all sentences to excel, 2 is for one sentence to terminal
     # 0 is for testing the whole code without printing
     get_words_used = 0
@@ -9,7 +9,5 @@ def info():
     return print_to_doc, get_words_used, order
 
 
-# u I y BRNP w is not a standard sentence
-# fix no | after object with no properties
-# order definitions
 
+# 57 does not order the definitions properly and the c map to y in sentence 5 needs sub 1

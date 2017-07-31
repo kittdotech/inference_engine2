@@ -4,7 +4,7 @@ import copy
 import time
 import operator
 import sys
-from ex_dict_new import large_dict
+from dictionary_new import large_dict
 from claims_new import pop_sent
 from pprint import pprint
 import collections
@@ -42,7 +42,7 @@ total_time = time.time()
 ######### himanshu begin
 
 
-mysql = 1
+mysql = 0
 excel = 0
 if mysql == 0:
     print_to_doc, get_words_used, order = info()
@@ -1601,7 +1601,7 @@ def change_variables(sentence, def_loc, type=""):
 
     rule = get_rule(definiendum, r_sent_loc, def_info[0], rename)
 
-    add_to_attach_sent(def_info, new_sentences, definition, r_sent_loc, rename, rule)
+    add_to_attach_sent(def_info, new_sentences, definition, r_sent_loc, rename, definiendum, rule)
 
     new_sentences = do_not_define(new_sentences, definiendum)
 
@@ -1690,18 +1690,18 @@ def replace_propositional_constants(temp_prop_const, prop_unfill, new_sentences,
     return new_sentences, old_prop_to_new_prop
 
 
-def add_to_attach_sent(def_info, new_sentences, definition, r_sent_loc, rename, rule):
+def add_to_attach_sent(def_info, new_sentences, definition, r_sent_loc, rename, definiendum, rule):
     for i in range(len(def_info)):
         list1 = prepare_attach_sent(def_info[i], new_sentences, r_sent_loc)
         if list1[45] == "append to attach_sent list":
             attach_sent.append(list1)
         if i == 0:
-            add_definitions_to_total_sent(list1, rule, rename, r_sent_loc, definition)
+            add_definitions_to_total_sent(list1, rule, rename, r_sent_loc, definiendum, definition)
         if def_info[i][2] == 'eliminate as conjunct':
             list1[46] = 'eliminate as conjunct'
 
 
-def add_definitions_to_total_sent(temp_attach_sent, rule, rename, r_sent_loc, definition):
+def add_definitions_to_total_sent(temp_attach_sent, rule, rename, r_sent_loc, definiendum, definition):
     if r_sent_loc != [] or rename == "":
         add_to_total_sent(temp_attach_sent[2], temp_attach_sent[37], temp_attach_sent[4], "", rule)
     else:
@@ -1709,10 +1709,10 @@ def add_definitions_to_total_sent(temp_attach_sent, rule, rename, r_sent_loc, de
         g = findinlist(rule, total_sent, 4, 0)
         if g == None:
             add_to_total_sent(num - 2, definition, "", "", rule)
-            add_to_total_sent(num - 1, rename, "", "", "RN")
+            add_to_total_sent(num - 1, rename, "", definiendum, "RN")
             add_to_total_sent(num, temp_attach_sent[37], temp_attach_sent[4], "", "SUB", num-2, num-1)
         else:
-            add_to_total_sent(num - 1, rename, "", "", "RN")
+            add_to_total_sent(num - 1, rename, "", definiendum, "RN")
             add_to_total_sent(num, temp_attach_sent[37], temp_attach_sent[4], "", "SUB", g, num - 1)
 
 def build_rename_sent2(constant_map, def_abbrev_dict, old_prop_to_new_prop,
@@ -2528,14 +2528,23 @@ def isdefineable(list1):
 def is_standard(list1):
     must_be_blank = [3, 4, 6, 7, 10, 11, 13, 16, 17, 20, 21, 23, 24, 25, 27, 28, 29, 31, 32, 33,
                      35, 36, 49, 50, 51, 52, 55]
-    must_be_variable = [5, 14, 18, 22]
+
+    prepositional_relation = ['INB', "ATC", 'IN']
+
+    for i in [15, 19, 23, 27, 31]:
+        if list1[i] != None:
+            assert list1[i] != ""
+            if list1[i] not in prepositional_relation:
+                return False
+        else:
+            break
 
     for i in must_be_blank:
         if list1[i] != None and list1[i] != '':
             return False
-    for i in must_be_variable:
+    for i in [5, 14, 18, 22, 26, 30, 34]:
         if list1[i] != None and list1[i] != "":
-            if not isvariable(list1[i], "i"):
+            if not isvariable(list1[i], "i") and not list1[9] == "=" and not i == 14:
                 return False
     return True
 
@@ -2636,7 +2645,7 @@ def replace_determinative_nouns():
             does_not_affect_decision_procedure = False
             ant_sent_parts = copy.deepcopy(all_sent[m])
             i = all_sent[m][45][19][0]
-            rule = "DE " + all_sent[m][1]
+            rule = "DF " + all_sent[m][i]
             synonym = dictionary[2].get(all_sent[m][i])
             determinative = synonym[:synonym.find(" ")]
             definition = dictionary[1].get(all_sent[m][i])
@@ -2661,8 +2670,10 @@ def replace_determinative_nouns():
         if replacement_made:
             all_sent[m] = build_sent_slots_known(all_sent[m])
             con_sent_parts = copy.deepcopy(all_sent[m])
-            sn += 1
-            add_to_total_sent(sn, definition, "", "", rule)
+            g = findinlist(rule, total_sent, 4, 0)
+            if g == None:
+                sn += 1
+                add_to_total_sent(sn, definition, "", "", rule)
             prepare_att_sent_1_sent(ant_sent_parts, "SUB", iff, [con_sent_parts], "")
 
 
@@ -4458,7 +4469,7 @@ def use_identity(negated_conjunction, consistent):
         return False
     identities = []
     for sent in detach_sent:
-        if sent[9] == '=':
+        if sent[9] == '=' and isvariable(sent[14], "i") and isvariable(sent[5]):
             identities.append([sent[5], sent[14], sent[58]])
 
     if identities != []:
@@ -4641,7 +4652,8 @@ def eliminate_attached_conjuncts():
 def put_nc_id_ax_df_into_list():
     # this function takes out sentences proved by NC, AX, RN etc and
     # prepares to put them into new locations
-    list1 = []
+    definitions = []
+    rn_sent = {}
     list2 = []
     list5 = []
     rn_used = False
@@ -4659,10 +4671,11 @@ def put_nc_id_ax_df_into_list():
             list6 = copy.deepcopy(total_sent[i])
             list5.append(list6)
             bool1 = True
-        elif 'DF' == str1 or 'NC' == str1 or 'AX' == str1 \
-                or 'RN' == str2:
+        elif total_sent[i][4] == 'RN':
+            rn_sent.setdefault(total_sent[i][3], []).append(total_sent[i])
+        elif 'DF' == str1 or 'NC' == str1 or 'AX' == str1:
             list4 = copy.deepcopy(total_sent[i])
-            list1.append(list4)
+            definitions.append(list4)
             rn_used = True
         elif bool1:
             if str1 == 'DE':
@@ -4673,9 +4686,23 @@ def put_nc_id_ax_df_into_list():
             list2.append(list3)
 
     if rn_used:
-        dict1 = rearrange_total_sent(list5, list1, list2)
+        match_rn_sent_to_definition(definitions, rn_sent)
+        dict1 = rearrange_total_sent(list5, definitions, list2)
         renumber_attach_sent(dict1)
 
+
+def match_rn_sent_to_definition(definitions, rn_sent):
+    for definiendum, v in rn_sent.items():
+        for i, definition in enumerate(definitions):
+            definiendum2 = definition[4][3:]
+            if definiendum == definiendum2:
+                substitutions = v
+                for substitution in substitutions:
+                    substitution[3] = ""
+                    definitions.insert(i + 1, substitution)
+                break
+        else:
+            g = 4 / 0
 
 def rearrange_total_sent(list5, list1, list2):
     # this function puts the total_sent into a better order
@@ -5383,13 +5410,15 @@ def print_general_object_properties(object_properties):
 def print_instantiations(instantiations):
     # this adds the instantiations to the total_sent list
     global sn
-
+    rearrange = False
     if instantiations != []:
         if total_sent[-1][4] == 'AX ENT':
+            rearrange = True
             total_sent.insert(-1, ["","","","","","","",""])
             total_sent.insert(-1, ["", "INSTANTIATIONS", "", "", "", "", "", ""])
-        add_to_total_sent("","")
-        add_to_total_sent("", "INSTANTIATIONS")
+        else:
+            add_to_total_sent("","")
+            add_to_total_sent("", "INSTANTIATIONS")
 
         for instantiation in instantiations:
             str1 = "(" + instantiation[0] + mini_c + instantiation[1] + ")"
@@ -5398,7 +5427,11 @@ def print_instantiations(instantiations):
                 for number in instantiation[3]:
                     str2 += " " + str(number)
                 str1 += " in " + str2
-            add_to_total_sent(instantiation[5], str1, "", "", "IN")
+            if rearrange:
+                total_sent.insert(-1, [instantiation[5], str1, "", "", "IN", "", "", ""])
+                rearrange = False
+            else:
+                add_to_total_sent(instantiation[5], str1, "", "", "IN")
 
         for cond in attach_sent:
             g = findposinmd(cond[4], total_sent, 2)
@@ -5423,8 +5456,9 @@ def print_object_properties(object_properties):
         str1 = i[0] + "  "
         for j in range(len(i[2])):
             str1 += "  " + i[2][j]
-        str1 += " |"
-        str1 += "  " + i[4]
+        if i[4] != "":
+            str1 += " |"
+            str1 += "  " + i[4]
         add_to_total_sent("", str1)
 
 
