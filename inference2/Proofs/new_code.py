@@ -1200,7 +1200,7 @@ def part_of_ante(i, j, boundary):
 
 
 def has_scope_over_past_participle(list1, i):
-    indefinite_determinatives = ['a', 'a' + ud, 'many' + un, 'any' + un, 'some' + up]
+    indefinite_determinatives = ['a', 'a' + ud, 'many' + un, 'any' + un, 'some' + up, 'few']
     type = ""
     if list1[15] == None:
         return ""
@@ -1640,7 +1640,7 @@ def remove_starred_general_variables():
 
 def do_not_define(new_sentences, definiendum):
 
-    if definiendum == 'many' + un or definiendum == 'many' + ud:
+    if definiendum in ['many' + un, 'many' + ud, "few"]:
         for sent in new_sentences:
             if sent[68] in ['122', '121', '221', '222']:
                 sent[54] = 'do not define'
@@ -1820,7 +1820,7 @@ def replace_r_sent(total_dict, r_sent_location, new_sentences, list1, definiendu
             if list1[i] != None:
                 if i != new_var_loc and i != def_loc:
                     r_sent[i] = list1[i]
-        if definiendum == 'many' + un or definiendum == 'many' + ud:
+        if definiendum in ['many' + ud, 'many' + un, 'few']:
             r_sent[8] = new_sentences[location][8]
         # elif j == 0:
         #
@@ -1874,9 +1874,12 @@ def replace_indefinite_variables(new_sentences, unfill_positions, defining_abbre
 
 def meets_cond_4_indef_replace(new_sentence, m, j, defining_abbreviations, total_dict,
                                general_thing, sent):
-
     if general_thing and sent[9] == "I" and abbreviations[0].get(sent[14]) == 'thing' and \
-        new_sentence[5] != defining_abbreviations[0] and sent[5] == defining_abbreviations[0]:
+        (new_sentence[5] == defining_abbreviations[0] or sent[5] == defining_abbreviations[0]):
+        return False
+
+    elif general_thing and sent[9] == "I" and abbreviations[0].get(sent[14]) == 'thing' and \
+        new_sentence[5] != defining_abbreviations[0] and sent[5] != defining_abbreviations[0]:
         return True
     elif (sent[m] == new_sentence[m] and sent[j] in defining_abbreviations):
         # the only sentence that uses this is 'the concept cat is itself a cat' and it makes
@@ -2841,7 +2844,7 @@ def eliminate_negative_determiners():
     # modify this if the category number of the universals change
     # modify this if we allow for two negative determiners in a sentence
 
-    special_determinatives = ['a', 'every', 'many' + un, 'any' + un, "many" + ud]
+    special_determinatives = ['a', 'every', 'many' + un, 'any' + un, 'many' + ud, 'few']
     for sent in all_sent:
         if sent[45] != None:
             for j in sent[45][17]:
@@ -2876,12 +2879,15 @@ def eliminate_negative_determiners():
                         if sent[position] == 'many' + ud:
                             sent[46].remove(16)
                             sent[45][16].remove(position)
-                        elif sent[position] != 'any' + un:
+                        elif sent[position] not in ['any' + un, 'many' + un]:
                             sent[46].remove(1)
                             sent[45][1].remove(position)
-                        sent[position] = 'no'
-                        sent[45][15].append(position)
-                        sent[46].append(15)
+                        if sent[position] == 'many' + un:
+                            sent[position] = 'few'
+                        else:
+                            sent[position] = 'no'
+                            sent[45][15].append(position)
+                            sent[46].append(15)
 
                     sent = build_sent_slots_known(sent)
                     con_parts = copy.deepcopy(sent)
@@ -2977,7 +2983,7 @@ def adjective_lies_wi_scope_of_univ(list1, i, current_universal, word_pos, univ_
 
 def determ_lies_wi_scope_of_univ(list1, i, current_universal, word_pos, univ_pos):
     # modify this if we increase the number of indefinite determinatives
-    indefinite_determinatives = ['a', 'many' + un, "any" + un, "a" + ud]
+    indefinite_determinatives = ['a', 'many' + un, "any" + un, "a" + ud, 'few']
     bool1 = False
     univ_pos = allowable_slots().index(univ_pos)
     univ_in_sub_clause = lies_wi_subclause(univ_pos, list1[57])
@@ -2993,7 +2999,7 @@ def determ_lies_wi_scope_of_univ(list1, i, current_universal, word_pos, univ_pos
 
 def determ_lies_wi_scope_of_univ2(list1, i):
     # modify this if we increase the number of indefinite determinatives
-    indefinite_determinatives = ['a', 'many' + un, "any" + un, "a" + ud]
+    indefinite_determinatives = ['a', 'many' + un, "any" + un, "a" + ud, 'few']
     bool1 = False
     for j in [3, 10, 16, 20, 24, 28, 32]:
         if list1[j] in indefinite_determinatives:
@@ -4283,6 +4289,8 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
     global result_data
     if proof_type == 0 and mysql == 0:
         return
+    elif proof_type == 1:
+        row_number = 1
     determine_words_used()
     o = -1
 
@@ -4714,8 +4722,6 @@ def step_three(truth_value):
     consistent = detach1("do not use modus tollens", negated_conjunction)
 
     consistent = add_stan_sent(consistent)
-
-    return True
 
     consistent = use_identity(negated_conjunction, consistent)
 
@@ -5327,7 +5333,7 @@ def infer_from_lemmas(concept_thing, second_obj, int_thing, first_sent, second_s
     sn += 1
     consistent = add_to_total_sent_consist(sn, second_sent[72],
                                 second_sent[1], second_sent[2], "MP", sn - 1, sn - 3, [])
-    assert not consistent
+    # assert not consistent
     return consistent
 
 
@@ -5666,6 +5672,8 @@ def determine_if_same_class(object_properties):
                     for group in object_property[2]:
                         if group in general_groups:
                             partic_var = object_property[0]
+                            if gen_var == 'r' and partic_var == 'v':
+                                bb = 8
                             predicates = object_property[3]
                             b = len(instantiations)
                             instantiations = instantiate2(predicates,
@@ -5788,6 +5796,7 @@ def remove_prime(con_list):
     return "".join(con_list[4])
 
 
+
 def instantiate2(predicates, general_properties, instantiations, general_numbers, gen_var, partic_var,
                  object_properties):
     # this determines if a particular object has all the predicates of the
@@ -5830,7 +5839,10 @@ def instantiate2(predicates, general_properties, instantiations, general_numbers
                             if gen_prop == predicate:
                                 if indef_instant_used:
                                     gen_prop = old_gen_prop
-                                temp_list.remove(gen_prop)
+                                try:
+                                    temp_list.remove(gen_prop)
+                                except ValueError:
+                                    bb = 8
                                 if temp_list == []:
                                     sentences.append(properties[j][1])
                                     numbers.remove(properties[j][1])
@@ -7360,13 +7372,13 @@ def calculate_time_statistics(proof_time, nonlinear):
     print ("")
 
 def get_sent():
-    list1 = pop_sent()
+    list1, row_number = pop_sent()
     for i in range(len(list1)):
         for j in range(len(list1[i])):
             list2 = tran_str(list1[i][j][1], 2)
             list1[i][j][1] = list2[0]
 
-    return list1
+    return list1, row_number
 
 
 def get_result(post_data, archive_id=None, request=None):
