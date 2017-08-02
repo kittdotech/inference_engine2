@@ -746,6 +746,7 @@ def large_dict():
 ['r','plural counterpart','PCP','(plural counterpart=PCP) & (d=plural) & (e=singular) & (f=root word) & (((bId) & (bOFc)) x^ ((cIe) & (bIz) & (cIz) & (zIf) & (mny bEXV)) x^ (bPCPc))'],
 ['n','plural counterpart of',None,'(e=plural counterpart) & ((bPCPc) x^ ((bIe) & (bOFc)))'],
 ['n','point|s',None,'(c=point|s) & (((bIc)) t^ ((dLb) & (bLe) & (((zLd) & (eLz)) t^ (z=b))))'],
+['na','can hit',None,'postponed'],
 ['a','positively infinite|g',None,'(c=positively infinite|g) & (((bJc) & (bPCPd)) x^ (((zId) & (zNy)) t^ ((xId) & (xNw) & (wGy))))'],
 ['a','potentially|o vague (of a physical object)',None,'(b=potentially|o) & ((cJb) x^ (cJd)) & (d=natural|o)'],
 ['a','potentially|p vague (of a property)',None,'(b=potentially|p) & (((cJb) & (dJc)) x^ (dJe)) & (e=natural|o)'],
