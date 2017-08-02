@@ -1,7 +1,7 @@
 
 def info():
 
-    order = [0, 0, 2]
+    order = [0, 1, 42, 44, 99] # 149
     get_words_used = 0
     proof_type = 0
     # 0 is for testing the whole code without printing
@@ -17,7 +17,11 @@ def info():
 # 65 is reprinting a duplicate attached sentence
 # in sentence 35 the instantiation of things only occurs if it obtains a contradiction
 # major printing errors in 35
-# 36, 37, 49 cannot be proven until we have relevance coded for
 # bind conjunctions in consistent statement
+# define 2 such that 1 and 3 are not also defined
 
+# in 140 we get the needed attached sentence but we need to infer the antecedent as a conjunct
+# in 2 is not a number we have to use indefinite instantiation
+# 33 substitutes incorrectly type 1
 
+# himanshu always place the order to [0, 0, 2] and proof_type to 1

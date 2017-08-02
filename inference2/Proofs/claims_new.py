@@ -136,5 +136,31 @@ def pop_sent():
 [[ 1,"Russell has the|r property|n courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"Russell has courage ",None,'co'],[ 2,"Russell is|a not courageous",None,'j']],\
 [[ 1,"This cat is|g not a|r cat",None,'co']],\
-[[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']]]
-    return sent
+[[ 1,"JFK is|g not a|r kennedy",None,'co'],[ 2,"JFK is|g part|f of the kennedy|a family",None,'j']],\
+[[ 1,"Julius Caesar is|g a|r number|i",None,'co']],\
+[[ 1,"Julius Caesar is|g not a|r number|i",None,'ta']],\
+[[ 1,"I took a dog's ball",None,'ta'],[ 2,"There is|e a dog which owns a ball",None,'j']],\
+[[ 1,"I took a dog's ball",None,'co'],[ 2,"No dog owns a ball",None,'j']],\
+[[ 1,"Every mind is|a mental",None,'ta']],\
+[[ 1,"no mind is|a mental",None,'co']],\
+[[ 1,"A moment is|r greater than a number|i",None,'co']],\
+[[ 1,"I desire a concept|n",None,'co']],\
+[[ 1,"The|r concept|n mind is|r in|r this house",None,'co']],\
+[[ 1,"There is|e a property which is|g an individual",None,'co']],\
+[[ 1,"The property|n redness is|r composed of some|p particles",None,'co']],\
+[[ 1,"There is|e a concept|n which is|g an|r individual|a thing",None,'co']],\
+[[ 1,"This|n is|g a|r particular dog ",None,'co'],[ 2,"this|n is the|r concept|n dog",None,'j']],\
+[[ 1,"Redness is|g not a|r particular concept|b",None,'co']],\
+[[ 1,"This particular man has|m some|p instances",None,'co']],\
+[[ 1,"This particular woman is|g not an|r instance|i of the|r concept|n woman",None,'co']],\
+[[ 1,"A moment is|r not greater than a number|i",None,'ta']],\
+[[ 1,"I do not desire a concept|n",None,'ta']],\
+[[ 1,"The|r concept|n mind is|r not in|r this house",None,'ta']],\
+[[ 1,"No property|n is|g an individual",None,'ta']],\
+[[ 1,"The property|n redness is|r not composed of some|p particles",None,'ta']],\
+[[ 1,"No concept|n is|g an|r individual|a thing",None,'ta']],\
+[[ 1,"This|n is|g a|r particular dog",None,'ta'],[ 2,"this|n is not the|r concept|n dog",None,'j']],\
+[[ 1,"Redness is|g a|r particular concept|b",None,'ta']],\
+[[ 1,"This particular man does not have|m some|p instances",None,'ta']],\
+[[ 1,"This particular woman is|g not an|r instance|i of the|r concept|n woman",None,'ta']]]
+    return sent,  503
