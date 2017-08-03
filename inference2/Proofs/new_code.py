@@ -2627,6 +2627,8 @@ def divide_sent(list2):
     for str2 in list2:
         sn += 1
         str2 = str2.lower()
+        if "'s" not in str2:
+            str2 = str2.replace("'","")
         str3 = name_sent(str2)
         str2 = str2.strip()
         words_in_sent = str2.split()
@@ -4311,39 +4313,40 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
         # if i == 2:
         #     break
         for j in range(len(test_sent[i])):
-            
-            if test_sent[i][j][6] != "":
-                str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5]) + ',' + str(test_sent[i][j][6])
-            elif test_sent[i][j][5] != "":
-                str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5])
-            elif test_sent[i][j][4] != "":
-                str1 = test_sent[i][j][4]
-            else:
-                str1 = ""
-            if j == 0:
-                test_sent[i][j][1] = test_sent[i][j][1] + " " + str(i)
-                test_sent[i][j][4] = i
-            else:
-                test_sent[i][j][4] = str1
-            if proof_type == 2:
-                len_sp = 5 - len(str(test_sent[i][j][0]))
-                space = " " * len_sp
-                list3 = space_sentences(str(test_sent[i][j][0]) + space + test_sent[i][j][3] + \
-                                        test_sent[i][j][1], str(test_sent[i][j][4]))
-                for str1 in list3:
-                    if str1 != "":
-                        print (str1)
+            if test_sent[i][j][0] == "" or test_sent[i][j][1] != "":
 
-            elif proof_type == 1:
-                w4.cell(row=row_number, column=2).value = test_sent[i][j][0]
-                w4.cell(row=row_number, column=3).value = test_sent[i][j][3] + test_sent[i][j][1]
-                w4.cell(row=row_number, column=4).value = test_sent[i][j][4]
-            elif mysql == 1:
-                result_data['text_' + str(row_number - 1) + '_1'] = test_sent[i][j][0]
-                result_data['text_' + str(row_number - 1) + '_2'] = test_sent[i][j][1]
-                result_data['text_' + str(row_number - 1) + '_3'] = test_sent[i][j][4]
+                if test_sent[i][j][6] != "":
+                    str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5]) + ',' + str(test_sent[i][j][6])
+                elif test_sent[i][j][5] != "":
+                    str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5])
+                elif test_sent[i][j][4] != "":
+                    str1 = test_sent[i][j][4]
+                else:
+                    str1 = ""
+                if j == 0:
+                    test_sent[i][j][1] = test_sent[i][j][1] + " " + str(i)
+                    test_sent[i][j][4] = i
+                else:
+                    test_sent[i][j][4] = str1
+                if proof_type == 2:
+                    len_sp = 5 - len(str(test_sent[i][j][0]))
+                    space = " " * len_sp
+                    list3 = space_sentences(str(test_sent[i][j][0]) + space + test_sent[i][j][3] + \
+                                            test_sent[i][j][1], str(test_sent[i][j][4]))
+                    for str1 in list3:
+                        if str1 != "":
+                            print (str1)
 
-            row_number += 1
+                elif proof_type == 1:
+                    w4.cell(row=row_number, column=2).value = test_sent[i][j][0]
+                    w4.cell(row=row_number, column=3).value = test_sent[i][j][3] + test_sent[i][j][1]
+                    w4.cell(row=row_number, column=4).value = test_sent[i][j][4]
+                elif mysql == 1:
+                    result_data['text_' + str(row_number - 1) + '_1'] = test_sent[i][j][0]
+                    result_data['text_' + str(row_number - 1) + '_2'] = test_sent[i][j][1]
+                    result_data['text_' + str(row_number - 1) + '_3'] = test_sent[i][j][4]
+
+                row_number += 1
 
         row_number += 1
         if proof_type == 2:
