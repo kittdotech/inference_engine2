@@ -119,7 +119,7 @@ start = 0
 stop = 0
 
 cond_r = chr(8835)
-const = "\u2102"  # consistency
+consist = "\u2102"  # consistency
 top = chr(8868)
 bottom = chr(8869)
 neg = chr(172)
@@ -208,12 +208,9 @@ beta = chr(946)
 # if^ 8660
 
 # himanshu
-def tran_str(str1, type3):
-    str2 = ""
-    if 'co^' in str1:
-        str1 = str1.replace('co^ ', "")
-        str2 = 'co'
-
+def tran_str(str1, has_sentence_connectives = False):
+    if str1 == "":
+        return str1
     if "|" in str1:
         for i in range(len(str1)):
             if str1[i:i + 1] == "|":
@@ -221,7 +218,7 @@ def tran_str(str1, type3):
                 str4 = get_super(str3)
                 str1 = str1[:i] + str4 + str1[i + 2:]
 
-    if type3 == 3:
+    if has_sentence_connectives:
 
         if "t^" in str1:
             str1 = str1.replace("t^", conditional)
@@ -239,12 +236,8 @@ def tran_str(str1, type3):
             str1 = str1.replace("ed^", xorr)
         if "v+" in str1:
             str1 = str1.replace("v+", idisj)
-    if type3 == 1:
-        list2 = str1.split(" % ")
-    else:
-        list2 = str1
 
-    return [list2, str2]
+    return str1
 
 
 def get_super(str1):
@@ -2573,11 +2566,29 @@ def check_mispellings(test_sent):
     sys.exit()
 
 
+def obtain_truth_value(sent):
+    sentence = tran_str(sent[1])
+    add_to_total_sent("", "CLAIM " + str(sent[0]) + ": " + sentence)
+    add_to_total_sent("","")
+
+    if sentence[7:12] == 'consi':
+        return True, sentence[len("It isa consistent that "):]
+    elif sentence[7:12] == 'contr':
+        return False, sentence[len("It isa contradictory that "):]
+    else:
+        g = 4 / 0
+
+def eliminate_logical_connectives(sentence):
+
+    return sentence.split(" and ")
 
 
 def step_one(sent):
+    truth_value, sentence = obtain_truth_value(sent)
 
-    divide_sent(sent)
+    set_of_sentences = eliminate_logical_connectives(sentence)
+
+    divide_sent(set_of_sentences)
 
     eliminate_redundant_words()
 
@@ -2592,6 +2603,10 @@ def step_one(sent):
     eliminate_negative_determiners()
 
     transfer_negation_signs()
+
+    return truth_value
+
+
 
 def is_linked_to_rare_word(word):
     global dictionary
@@ -2608,11 +2623,9 @@ def is_linked_to_rare_word(word):
 
 def divide_sent(list2):
     global sn
-
-    add_to_total_sent("", 'CLAIM', "", "", "")
-
-    for i in range(len(list2)):
-        str2 = list2[i][1]
+    sn = 1
+    for str2 in list2:
+        sn += 1
         str2 = str2.lower()
         str3 = name_sent(str2)
         str2 = str2.strip()
@@ -2623,13 +2636,13 @@ def divide_sent(list2):
         sent_parts[72] = str2
         sent_parts[1] = str3
         sent_parts[2] = ""
-        sent_parts[58] = list2[i][0]
+        sent_parts[58] = sn
         for j in range(len(words_in_sent)):
             sent_parts[j + 3] = words_in_sent[j]
             is_linked_to_rare_word(words_in_sent[j])
         list4 = copy.deepcopy(sent_parts)
         detach_sent.append(sent_parts)
-        add_to_total_sent(list2[i][0], str2, str3, "", "")
+        add_to_total_sent(sn, str2, str3, "", "")
         all_sent.append(list4)
 
 
@@ -4298,7 +4311,7 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
         # if i == 2:
         #     break
         for j in range(len(test_sent[i])):
-
+            
             if test_sent[i][j][6] != "":
                 str1 = test_sent[i][j][4] + ' ' + str(test_sent[i][j][5]) + ',' + str(test_sent[i][j][6])
             elif test_sent[i][j][5] != "":
@@ -4436,8 +4449,7 @@ def build_dict():
             pos = ex_dict[i][0]
             word = ex_dict[i][1]
             if word != None:
-                word = tran_str(word, 2)
-                word = word[0]
+                word = tran_str(word)
 
         if word == None and almost_done:
             break
@@ -4464,8 +4476,7 @@ def build_dict():
             else:
                 abbrev_relat = ex_dict[i][2]
                 defin = ex_dict[i][3]
-                defin = tran_str(defin, 3)
-                defin = defin[0]
+                defin = tran_str(defin, True)
             words_to_row.update({word: s})
             if abbrev_relat != "": words_to_row.update({abbrev_relat: s})
 
@@ -4739,15 +4750,10 @@ def step_three(truth_value):
 
 
 def final_truth_value(consistent, truth_value):
-    if truth_value == 'co':
-        truth_value = False
-    else:
-        truth_value = True
-    if consistent == truth_value:
+    if truth_value == consistent:
         return True
     else:
         return False
-
 
 def eliminate_attached_conjuncts():
     global sn
@@ -5102,13 +5108,38 @@ def step_four(negated_conjunction, consistent):
 
         consistent = detach1("use modus tollens", negated_conjunction)
 
+        add_consistency_sign(consistent)
+
         # consistent = reuse_axiom_of_definition(consistent, ax_def_used, negated_conjunction)
 
     return consistent
 
 
-# object, exclusive classes, variable_type, class:sent, inclusive class, accidental properties
-# rrr
+
+def add_consistency_sign(consistent):
+    if not consistent:
+        return
+    global sn
+    sn += 1
+    list1 = []
+    bool1 = False
+    conjunction = ""
+    for sent in total_sent:
+        if sent[2].startswith("_____"):
+            bool1 = True
+        if bool1 and os(sent[2]) and not sent[2].startswith("_____"):
+            if [sent[3], sent[2]] not in list1:
+                list1.append([sent[3], sent[2]])
+                conjunction += sent[3] + sent[2] + " "
+    add_to_total_sent(sn, "", conjunction)
+    list1 = sorted(list1, key=operator.itemgetter(1))
+    conjunction = ""
+    for j in list1:
+        conjunction += j[0] + j[1] + " "
+    sn += 1
+    add_to_total_sent(sn, "", conjunction)
+    sn += 1
+    add_to_total_sent(sn, "", consist)
 
 def reuse_axiom_of_definition(consistent, ax_def_used, negated_conjunction):
     if consistent and ax_def_used:
@@ -7371,15 +7402,6 @@ def calculate_time_statistics(proof_time, nonlinear):
     print("total " + str("{0:.3f}".format(total)))
     print ("")
 
-def get_sent():
-    list1, row_number = pop_sent()
-    for i in range(len(list1)):
-        for j in range(len(list1[i])):
-            list2 = tran_str(list1[i][j][1], 2)
-            list1[i][j][1] = list2[0]
-
-    return list1, row_number
-
 
 def get_result(post_data, archive_id=None, request=None):
     global ws, w4, result_data, order, propositional_constants
@@ -7421,7 +7443,7 @@ def get_result(post_data, archive_id=None, request=None):
         w4 = tuple(w4)
         # himanshu we need to figure out what the row number
 
-    test_sent, row_number = get_sent()
+    test_sent, row_number = pop_sent()
     build_dict()
     not_oft_def = copy.deepcopy(dictionary[6])
     nonlinear = order[2]
@@ -7449,13 +7471,12 @@ def get_result(post_data, archive_id=None, request=None):
         propositional_constants = {}
         prop_var = copy.deepcopy(prop_var4)
         variables = copy.deepcopy(variables2)
-        sn = test_sent[k][-1][0] + 1
 
-        step_one(test_sent[k])
+        truth_value = step_one(test_sent[k])
 
         step_two()
 
-        consistent = step_three(test_sent[k][0][3])
+        consistent = step_three(truth_value)
 
         test_sent[k] = copy.deepcopy(total_sent)
         tot_prop_name.append(prop_name)
