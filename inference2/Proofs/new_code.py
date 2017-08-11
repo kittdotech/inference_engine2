@@ -7350,91 +7350,30 @@ def add_outer_paren(str1):
     return "(" + str1 + ")"
 
 ##### himanshu begin
-def populate_sentences(row_number):
+def populate_sentences():
     global result_data
-    bool1 = False
-    bool2 = False
-    bool3 = True
-    first_sent = False
-    sent = []
+
     test_sent = []
-    g = 0
+    last_row_blank = False
+    row_number = 1
 
     if mysql == 1:
-
         for row in w4:
             row_number += 1
-            if row[1] == "" and bool2 == True and not bool3:
+            if row[0] != "":
+                test_sent.append([row[0], row[1]])
+                last_row_blank = False
+            elif row[1] == "" and not last_row_blank:
+                last_row_blank = True
+            elif row[1] != "":
+                last_row_blank = False
+            elif row[1] == "" and last_row_blank:
                 break
-            # himanshu make it break if two rows in a row are blank
-            elif row[1] == 'stop':
-                break
-            elif row[1] == "" and not bool3:
-                test_sent.append(sent)
-                sent = []
-                g = 0
-                bool1 = False
-                bool2 = True
-                first_sent = False
-            elif row[1] == "":
-                pass
-            elif row[1][0] == "*":
-                bool3 = True
-            elif row[1] != "" and bool1 == False:
-                bool3 = False
-                str2 = row[1]
-                g += 1
-                if len(sent) == 0:
-                    if str2.find(bottom) > -1:
-                        tv = 'co'
-                        str2 = str2[2:]
-                    else:
-                        tv = 'ta'
-                else:
-                    tv = ""
-                str2.strip()
-                sent.append([g, str2, '', tv])
-                if not first_sent:
-                    result_data['text_' + str(row_number - 2) + '_1'] = len(test_sent)
-                first_sent = True
-                bool2 = False
-    # himanshu end
-    elif excel == 1:
-        for row in w4.rows:
-            row_number += 1
-            if row[2].value == None and bool2 == True and not bool3:
-                break
-            elif row[2].value == 'stop':
-                break
-            elif row[2].value == None and not bool3:
-                test_sent.append(sent)
-                sent = []
-                g = 0
-                bool1 = False
-                bool2 = True
-                first_sent = False
-            elif row[2].value == None:
-                pass
-            elif row[2].value[0] == "*":
-                bool3 = True
-            elif row[2].value != None and bool1 == False:
-                bool3 = False
-                str2 = row[2].value
-                g += 1
-                if len(sent) == 0:
-                    if str2.find(bottom) > -1:
-                        tv = 'co'
-                        str2 = str2[2:]
-                    else:
-                        tv = 'ta'
-                else:
-                    tv = ""
-                str2.strip()
-                sent.append([g, str2, row[0].value, tv])
-                if not first_sent:
-                    w4.cell(row=row_number - 1, column=2).value = len(test_sent)
-                first_sent = True
-                bool2 = False
+
+            # himanshu I'm not really sure what this does:
+
+            # if not first_sent:
+            #     result_data['text_' + str(row_number - 2) + '_1'] = len(test_sent)
 
     return test_sent, row_number
 
@@ -7516,9 +7455,9 @@ def get_result(post_data, archive_id=None, request=None):
             row = (x.col1, x.col2, x.col3)
             w4.append(row)
         w4 = tuple(w4)
-        # himanshu we need to figure out what the row number
-
-    test_sent, row_number = pop_sent()
+        test_sent, row_number = populate_sentences()
+    else:
+        test_sent, row_number = pop_sent()
     build_dict()
     not_oft_def = copy.deepcopy(dictionary[6])
     nonlinear = order[2]
