@@ -40,7 +40,7 @@ import os
 
 #7/26 average .0317, change_var = .0206, reduction .0056
 
-
+# 8/2 average .0397, change_var = .239, reduction .0059
 
 
 total_time = time.time()
@@ -4306,7 +4306,6 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
         return
     elif proof_type == 1:
         row_number = 1
-    determine_words_used()
     o = -1
 
     for i in order:
@@ -4341,6 +4340,13 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
                     w4.cell(row=row_number, column=2).value = test_sent[i][j][0]
                     w4.cell(row=row_number, column=3).value = test_sent[i][j][3] + test_sent[i][j][1]
                     w4.cell(row=row_number, column=4).value = test_sent[i][j][4]
+                    if len(test_sent[i][j]) >8:
+                        if test_sent[i][j][8] == "*":
+                            xls_cell = w4.cell(row=row_number, column=3)
+                            xls_cell.font = xls_cell.font.copy(color='FFFF0000')
+
+
+
                 elif mysql == 1:
                     result_data['text_' + str(row_number - 1) + '_1'] = test_sent[i][j][0]
                     result_data['text_' + str(row_number - 1) + '_2'] = test_sent[i][j][1]
@@ -4404,8 +4410,20 @@ def determine_words_used():
         for i in range(len(words_used)):
             j = dictionary[7].get(words_used[i], 28)
             if j == 28:
-                bb = 8
+                print (words_used[i])
             ws.cell(row=j, column=2).value = 1
+
+
+def progress(count, total, suffix=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', suffix))
+    sys.stdout.flush()
+
 
 
 def build_dict():
@@ -4518,7 +4536,7 @@ def build_dict():
                     if fir_let == "n":
                         essential_properties.update({word: ""})
 
-    dictionary = [parts_of_speech, definitions,synonyms, relations,
+    dictionary = [parts_of_speech, definitions, synonyms, relations,
                   doubles, triples, only_def_if_input, words_to_row, essential_properties]
 
 
@@ -4716,9 +4734,12 @@ def build_list_of_abbreviations():
 
 
     total_sent.insert(position_of_identities, [position_of_identities, str1,
-                                               str1p, "", 'ID', "", "", "", ""])
-    total_sent.insert(position_of_identities, ["", "UNTRANSLATED DEFINITIONS", "", "", "", "", ""])
-    total_sent.insert(position_of_identities, ["", "", "", "", "", "", "", "", ""])
+                                               str1p, "", 'ID', "", "", "", "",""])
+    list2 = [""] * 9
+    list2[1] = "UNTRANSLATED DEFINITIONS"
+    total_sent.insert(position_of_identities, list2)
+    list2 = [""] * 9
+    total_sent.insert(position_of_identities, list2)
 
 
 
@@ -4747,6 +4768,8 @@ def step_three(truth_value):
 
     consistent = step_four(negated_conjunction, consistent)
 
+    obtain_relevant_sentences(consistent)
+
     consistent = final_truth_value(consistent, truth_value)
 
     return consistent
@@ -4757,6 +4780,39 @@ def final_truth_value(consistent, truth_value):
         return True
     else:
         return False
+
+def obtain_relevant_sentences(consistent):
+    # write = 18min, debug 9 min
+    # 20:35-21:10 code, 21:11-21:26 debug
+    # 35, 15
+    relevant_sentences = []
+    if not consistent:
+        relevant_sentences = [total_sent[-2][5], total_sent[-2][6]]
+        i = -1
+        while i < len(relevant_sentences) - 1:
+            i += 1
+            k = findposinmdlistint(relevant_sentences[i], total_sent, 0)
+            try:
+                total_sent[k][8] = "*"
+            except:
+                bb = 8
+            for j in [5, 6]:
+                if total_sent[k][j] != "":
+                    if isinstance(total_sent[k][j], str):
+                        list1 = total_sent[k][j].split(",")
+                        list1 = [int(m) for m in list1]
+                        for m in list1:
+                            if m not in relevant_sentences:
+                                relevant_sentences.append(m)
+                    else:
+                        if total_sent[k][j] not in relevant_sentences:
+                            relevant_sentences.append(total_sent[k][j])
+        relevant_sentences.sort()
+        rel_sent_str = [str(m) for m in relevant_sentences]
+        rel_sent = " ".join(rel_sent_str)
+        add_to_total_sent("", "RELEVANT SENTENCES: " + rel_sent)
+
+
 
 def eliminate_attached_conjuncts():
     global sn
@@ -4986,7 +5042,10 @@ def get_id_sent():
     # this function gets the list of identities
     for i in range(len(total_sent)):
         if total_sent[i][4] == "ID":
-            return [total_sent[i][0], total_sent[i][1], "", "", "", "", ""]
+            list1 = [""] * 9
+            list1[0] = total_sent[i][0]
+            list1[1] = total_sent[i][1]
+            return list1
 
 
 def print_variables(list1):
@@ -5021,19 +5080,28 @@ def print_variables(list1):
         if len(total_sent[i][1]) > 15:
             if total_sent[i][1].startswith('STANDARD ATTA'):
                 total_sent.insert(i, identities)
-                total_sent.insert(i, ["","ABBREVIATIONS",  "", "", "", "", "", ""])
+                list2 = [""] * 9
+                list2[1] = "ABBREVIATIONS"
+                total_sent.insert(i, list2)
                 i += 1
                 if gen_str != "":
                     j += 1
-                    total_sent.insert(i + j, ["", gen_str, "", "", "", "", "", ""])
+                    list2 = [""] * 9
+                    list2[1] = gen_str
+                    total_sent.insert(i + j, list2)
                 if ind_str != "":
-                    total_sent.insert(i + j, ["", ind_str, "", "", "", "", "", ""])
+                    list2 = [""] * 9
+                    list2[1] = ind_str
+                    total_sent.insert(i + j, list2)
                     j += 1
                 if def_str != "":
-                    total_sent.insert(i + j, ["", def_str, "", "", "", "", "", ""])
+                    list2 = [""] * 9
+                    list2[1] = def_str
+                    total_sent.insert(i + j, list2)
                     j += 1
                 j += 1
-                total_sent.insert(i + j, ["", "", "", "", "", "", "", ""])
+                list2 = [""] * 9
+                total_sent.insert(i + j, list2)
                 return
 
 
@@ -5634,8 +5702,11 @@ def print_instantiations(instantiations):
     if instantiations != []:
         if total_sent[-1][4] == 'AX ENT':
             rearrange = True
-            total_sent.insert(-1, ["","","","","","","",""])
-            total_sent.insert(-1, ["", "INSTANTIATIONS", "", "", "", "", "", ""])
+            list2 = [""] * 9
+            total_sent.insert(-1, list2)
+            list2 = [""] * 9
+            list2[1] = "INSTANTIATIONS"
+            total_sent.insert(-1, list2)
         else:
             add_to_total_sent("","")
             add_to_total_sent("", "INSTANTIATIONS")
@@ -5648,7 +5719,7 @@ def print_instantiations(instantiations):
                     str2 += " " + str(number)
                 str1 += " in " + str2
             if rearrange:
-                total_sent.insert(-1, [instantiation[5], str1, "", "", "IN", "", "", ""])
+                total_sent.insert(-1, [instantiation[5], str1, "", "", "IN", "", "", "",""])
                 rearrange = False
             else:
                 add_to_total_sent(instantiation[5], str1, "", "", "IN")
@@ -7395,6 +7466,7 @@ def calculate_time_statistics(proof_time, nonlinear):
         ee = instan_time / instan_used
     else:
         ee = 0
+    print ("")
     print("average " + str("{0:.4f}".format((time.time() - proof_time) / num_of_sent)))
     print("time used in statement logic " + str("{0:.4f}".format(st_log_time / num_of_sent)))
     print("time spent reducing " + str("{0:.4f}".format(time_spent_reducing / (num_of_sent))))
@@ -7456,7 +7528,7 @@ def get_result(post_data, archive_id=None, request=None):
 
     if mysql == 1:
         views.progressbar_send(request, 0, 100, 0, 1)
-    for k in order:
+    for j, k in enumerate(order):
         if mysql == 1:
             views.progressbar_send(request, start, stop, k, 1)
         if k == 17:
@@ -7483,7 +7555,7 @@ def get_result(post_data, archive_id=None, request=None):
 
         test_sent[k] = copy.deepcopy(total_sent)
         tot_prop_name.append(prop_name)
-
+        # progress(j+1, len(order))
         if not consistent:
             print(str(k) + " - " + str("{0:.3f}".format(time.time() - st1) + " False"))
         else:
@@ -7492,6 +7564,8 @@ def get_result(post_data, archive_id=None, request=None):
 
 
     calculate_time_statistics(time_used_proving_sent, nonlinear)
+
+    determine_words_used()
 
     print_sent_full(test_sent, tot_prop_name, row_number)
 

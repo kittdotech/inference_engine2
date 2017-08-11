@@ -172,8 +172,8 @@ def pop_sent():
 [ 169,"It is|a contradictory that many|n points think something"],
 [ 170,"It is|a contradictory that many|n points are|a mental"],
 [ 171,"It is|a contradictory that many|n points are|a physical"],
-[ 172,"It is|a contradictory that many|n numbers|i smell"],
-[ 173,"It is|a contradictory that many|n thoughts are|a not mental"],
-[ 174,"It is|a contradictory that I have many|n points"],
+[ 172,"It is|a contradictory that few numbers|i smell"],
+[ 173,"It is|a contradictory that few thoughts are|a not mental"],
+[ 174,"It is|a contradictory that I have few points"],
 [ 175,"It is|a contradictory that I do not have many|n points"]]
-    return sent, 383
+    return sent, 401
