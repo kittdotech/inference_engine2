@@ -1,9 +1,9 @@
 
 def info():
 
-    order = [21, 22, 36, 37, 114, 100] # 149
+    order = [2, 3, 36, 37, 114, 100] # 149
     get_words_used = 0
-    proof_type = 0
+    proof_type = 1
     # 0 is for testing the whole code without printing
     # 1 is for printing all sentences to excel,
     # 2 is for one sentence to terminal

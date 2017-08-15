@@ -10,8 +10,9 @@ from pprint import pprint
 import collections
 from start_and_stop import info
 import os
+# import pdb
 
-import os
+
 
 #what's up
 
@@ -216,8 +217,10 @@ def tran_str(str1, has_sentence_connectives = False):
             if str1[i:i + 1] == "|":
                 str3 = str1[i + 1:i + 2]
                 str4 = get_super(str3)
-                str1 = str1[:i] + str4 + str1[i + 2:]
-
+                try:
+                    str1 = str1[:i] + str4 + str1[i + 2:]
+                except:
+                    bb = 8
     if has_sentence_connectives:
 
         if "t^" in str1:
@@ -1000,7 +1003,7 @@ def eliminate_relative_pronouns(con_parts1, i):
             if j != i:
                 con_parts2[k] = con_parts1[j]
                 con_parts1[j] = None
-
+    # pdb.set_trace()
     con_parts2 = categorize_words(con_parts2)
     con_parts1 = restore_original_sent(con_parts1)
     consequent = [con_parts1, con_parts2]
@@ -1535,7 +1538,7 @@ def change_variables(sentence, def_loc, type=""):
     if definiendum == None or definiendum in dictionary[6]:
         return
 
-    if definiendum == 'individual':
+    if definiendum == 'a':
         bb = 8
 
     definition = dictionary[1].get(definiendum)
@@ -1677,7 +1680,7 @@ def replace_propositional_constants(temp_prop_const, prop_unfill, new_sentences,
 
 def add_to_attach_sent(def_info, new_sentences, definition, r_sent_loc, rename, definiendum, rule):
     for i in range(len(def_info)):
-        list1 = prepare_attach_sent(def_info[i], new_sentences, r_sent_loc)
+        list1 = prepare_attach_sent(def_info[i], new_sentences, rule, r_sent_loc)
         if list1[45] == "append to attach_sent list":
             attach_sent.append(list1)
         if i == 0:
@@ -1929,6 +1932,7 @@ def replace_constants(total_dict, temp_prop_const, new_sentences):
     unfill_positions = []
     prop_unfill = []
     j = -1
+
     for sent in new_sentences:
         j += 1
         if (sent[68][1:] != "11" or len(sent[68]) != 3) and \
@@ -1942,6 +1946,7 @@ def replace_constants(total_dict, temp_prop_const, new_sentences):
                         prop_unfill.append([j, i])
                     else:
                         unfill_positions.append([j, i])
+
 
     return new_sentences, unfill_positions, prop_unfill
 
@@ -2623,7 +2628,7 @@ def is_linked_to_rare_word(word):
 
 def divide_sent(list2):
     global sn
-    sn = 1
+    sn = 0
     for str2 in list2:
         sn += 1
         str2 = str2.lower()
@@ -2646,6 +2651,7 @@ def divide_sent(list2):
         detach_sent.append(sent_parts)
         add_to_total_sent(sn, str2, str3, "", "")
         all_sent.append(list4)
+    sn += 1
 
 
 def eliminate_redundant_words():
@@ -3507,7 +3513,7 @@ def determine_what_is_conjunct(def_info):
             return ant_conj, con_conj
 
 
-def prepare_attach_sent(def_info, defin_sent, r_sent_loc):
+def prepare_attach_sent(def_info, defin_sent, rule, r_sent_loc):
     # this populates the attach sent list
 
     global sn
@@ -3515,8 +3521,11 @@ def prepare_attach_sent(def_info, defin_sent, r_sent_loc):
         sn += 1
     elif def_info[2] == 'eliminate as conjunct':
         pass
+    elif findinlist(rule, total_sent, 4, 0) != None:
+        sn += 2
     else:
         sn += 3
+
     list1 = [""] * 50
     list1[2] = sn
     greek_sent = def_info[5]
@@ -3587,9 +3596,9 @@ def prepare_attach_sent(def_info, defin_sent, r_sent_loc):
             if def_info[4][i][1] in spec_conn:
                 embed_att_sent.append(i)
 
-        list1 = prepare_attach_sent2(ant_conjunction, con_conjunction, ant_variables, \
-                                     con_variables, def_info, defin_sent,
-                                     embed_att_sent, list1)
+        list1 = prepare_attach_sent2(ant_conjunction, con_conjunction,
+                                     ant_variables, con_variables, def_info,
+                                     defin_sent, embed_att_sent, rule, list1)
 
         list1[34] = ant_parts
         list1[35] = con_parts
@@ -3600,7 +3609,7 @@ def prepare_attach_sent(def_info, defin_sent, r_sent_loc):
 
 def prepare_attach_sent2(ant_conjunction, con_conjunction, ant_variables,
                          con_variables, def_info, defin_sent,
-                         embed_att_sent, list1):
+                         embed_att_sent, rule, list1):
     global sn
     embed_info = []
     list2 = translate_list_of_sentences(ant_variables, defin_sent)
@@ -3629,7 +3638,7 @@ def prepare_attach_sent2(ant_conjunction, con_conjunction, ant_variables,
 
     if embed_att_sent != []:
         for num in embed_att_sent:
-            list4 = prepare_embed_att_sent(def_info, defin_sent, num)
+            list4 = prepare_embed_att_sent(def_info, defin_sent, rule, num)
             embed_info.append(list4)
             sn -= 1
 
@@ -3638,7 +3647,7 @@ def prepare_attach_sent2(ant_conjunction, con_conjunction, ant_variables,
     return list1
 
 
-def prepare_embed_att_sent(def_info, defin_sent, num):
+def prepare_embed_att_sent(def_info, defin_sent, rule, num):
     # this takes those attached sentences within attached sentences and
     # prepares them to be manipulated
 
@@ -3650,7 +3659,7 @@ def prepare_embed_att_sent(def_info, defin_sent, num):
     main_conn_loc = def_info2[3][0].find(def_info2[4][0][1])
     def_info2[4][0][2] = main_conn_loc
     def_info2 = renumber_embed_sent(def_info2, pos_of_new_num)
-    list1 = prepare_attach_sent(def_info2, defin_sent, "EMBED")
+    list1 = prepare_attach_sent(def_info2, defin_sent, rule, "EMBED")
     get_general_variables(list1)
     # note that general variables are also added in the map double definienda
 
@@ -4448,8 +4457,12 @@ def build_dict():
     else:
         mm = len(ex_dict)
 
+    aa = time.time()
     while i < mm - 1:
         i += 1
+        # if i % 50 == 0:
+        #     print(str(i) + " " + str("{0:.7f}".format((time.time() - aa))))
+        #     aa = time.time()
         if get_words_used == 1:
             if i == 0:
                 i = 5
@@ -4733,7 +4746,7 @@ def build_list_of_abbreviations():
             add_to_total_sent(sn, sent[0], sent[1], "", "&E", position_of_identities + 1)
 
 
-    total_sent.insert(position_of_identities, [position_of_identities, str1,
+    total_sent.insert(position_of_identities, [position_of_identities-1, str1,
                                                str1p, "", 'ID', "", "", "", "",""])
     list2 = [""] * 9
     list2[1] = "UNTRANSLATED DEFINITIONS"
@@ -4835,6 +4848,8 @@ def rearrange_total_sent2():
             premise_loc = i - 1
         if lst[1].startswith("NONST"):
             infer_loc = i - 1
+        if i == 66:
+            bb = 8
 
         if lst[1].startswith('STANDARD') or stan_attach_found:
             stan_attach_found = True
@@ -4891,7 +4906,7 @@ def match_rn_sent_to_definition2(rn_sent):
         for substitution in v:
             j += 1
             total_sent.insert(i + 1 + j, substitution)
-            break
+
 
 
 def put_nc_id_ax_df_into_list():
@@ -6159,13 +6174,11 @@ def get_class(relat, sent, p):
 
     if relat == "A" or (relat == 'T' and p == 14):
         kind = 'moment'
-    elif relat == "IR" and p == 5:
-        kind = 'relationship'
     elif relat == 'AB' or relat == "L" or relat == 'AB' or (relat == 'S' and p == 14):
         kind = 'point'
     elif relat == "G" or (relat == 'N' and p == 14):
         kind = 'number'
-    elif relat == "M" and p == 5 or (relat == 'TK' and p == 14):
+    elif relat == "M" and p == 5 or (relat == 'B' and p == 14):
         kind = 'relationship'
     elif relat == "M" and p == 14:
         kind = 'imagination'
@@ -6188,7 +6201,7 @@ def get_class(relat, sent, p):
         kind = 'relationship'
     elif relat == 'AL':
         kind = 'letter'
-    elif (relat == 'TK' or relat == "D") and p == 5:
+    elif (relat == 'B' or relat == "D") and p == 5:
         kind = 'mind'
     elif relat == "S" and p == 5:
         kind = 'matter'
@@ -7487,6 +7500,8 @@ def get_result(post_data, archive_id=None, request=None):
         variables = copy.deepcopy(variables2)
 
         truth_value = step_one(test_sent[k])
+
+        #print (test_sent[k])
 
         step_two()
 
