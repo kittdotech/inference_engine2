@@ -1,5 +1,5 @@
-from dictionary_new import large_dict
-from claims_new import pop_sent
+from .dictionary_new import large_dict
+from .claims_new import pop_sent
 from openpyxl import load_workbook
 from collections import Counter
 import copy
@@ -8,7 +8,7 @@ import operator
 import sys
 from pprint import pprint
 import collections
-from start_and_stop import info
+from .start_and_stop import info
 import os
 # import pdb
 
@@ -62,19 +62,14 @@ if mysql == 0:
 else:
     proof_type = 0
     get_words_used = 0
-    order = [0,0,1]
-
-
+    order = [0, 0, 1]
 
 
 
 
 
 if mysql == 1:
-    from inference2.models import Define3, Archives, Input
-    from inference2 import views
     import os
-
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     print(BASE_DIR)
     sys.path.append(BASE_DIR)
@@ -908,6 +903,7 @@ def eliminate_common_name_possessives(list1, i):
     return [con_parts1, con_parts2, con_parts3], "CPE"
 
 
+
 def eliminate_and_coordinator(list1, i):
     # this seperates a sentence with an 'and' coordinator into two
 
@@ -1558,7 +1554,8 @@ def change_variables(sentence, def_loc, type=""):
 
     def_abbrev_dict, r_sent_loc, new_sentences, defining_abbreviations = _
 
-    total_dict = {**def_abbrev_dict, **constant_map}
+    # total_dict = {**def_abbrev_dict, **constant_map}
+    total_dict = dict(def_abbrev_dict, **constant_map)
 
     _ = replace_constants(total_dict, temp_prop_const, new_sentences)
 
@@ -1568,7 +1565,8 @@ def change_variables(sentence, def_loc, type=""):
 
     new_sentences, indefinite_dict, rn_type = _
 
-    total_dict = {**total_dict, **indefinite_dict}
+    # total_dict = {**total_dict, **indefinite_dict}
+    total_dict = dict(total_dict, **indefinite_dict)
 
     _ = replace_propositional_constants(temp_prop_const, prop_unfill, new_sentences, total_dict)
 
@@ -1990,7 +1988,7 @@ def get_new_sent(def_info, defining_abbreviations, def_loc, list1, definiendum):
                         temp1 = {sent[k]: defining_abbreviations[0]}
                     else:
                         temp1 = {sent[k]: instance}
-                    def_abbrev_dict = {**temp1, **def_abbrev_dict}
+                    def_abbrev_dict = dict(temp1, **def_abbrev_dict)
                 elif definiendum in pronouns:
                     new_var = abbreviations[1].get(definiendum)
                     if new_var == None:
@@ -2002,7 +2000,7 @@ def get_new_sent(def_info, defining_abbreviations, def_loc, list1, definiendum):
                         def_abbrev_dict.update({sent[k]: new_var})
                 elif o == 1:
                     temp1 = {sent[k]: defining_abbreviations[0]}
-                    def_abbrev_dict = {**temp1, **def_abbrev_dict}
+                    def_abbrev_dict = dict(temp1, **def_abbrev_dict)
                 elif o == 2:
                     # for those definitions which have two r sentences
                     # the second r sentence needs another variable
@@ -7439,30 +7437,29 @@ def get_result(post_data, archive_id=None, request=None):
     ########## himanshu begin
     if mysql == 1:
         if archive_id:
-            ws = Define3.object_properties.filter(archives_id=archive_id)
+            ws = Define3.objects.filter(archives_id=archive_id)
         else:
-            archive = Archives.object_properties.latest('archives_date')
-            ws = Define3.object_properties.filter(archives_id=archive.id)
-
-        result_data = dict(post_data.iterlists())
+            archive = Archives.objects.latest('archives_date')
+            ws = Define3.objects.filter(archives_id=archive.id)
+        result_data = dict(post_data.lists())
         w4 = []
-        index = 0
-        while True:
-            row = (post_data["text_" + str(index) + "_1"], post_data["text_" + str(index) + "_2"],
-                   post_data["text_" + str(index) + "_3"])
-            w4.append(row)
-            # himanshu, eliminate stop, make it so that it breaks if it encounters two
-            # empty spaces
-            if row[1] == "stop":
-                break
-            index += 1
-        w4 = tuple(w4)
+        # index = 0
+        # while True:
+        #     row = (post_data["text_" + str(index) + "_1"], post_data["text_" + str(index) + "_2"],
+        #            post_data["text_" + str(index) + "_3"])
+        #     w4.append(row)
+        #     # himanshu, eliminate stop, make it so that it breaks if it encounters two
+        #     # empty spaces
+        #     if row[1] == "stop":
+        #         break
+        #     index += 1
+        # w4 = tuple(w4)
 
         if archive_id:
-            tw4 = Input.object_properties.filter(archives_id=archive_id)
+            tw4 = Input.objects.filter(archives_id=archive_id)
         else:
-            archive = Archives.object_properties.latest('archives_date')
-            tw4 = Input.object_properties.filter(archives_id=archive.id)
+            archive = Archives.objects.latest('archives_date')
+            tw4 = Input.objects.filter(archives_id=archive.id)
         w4 = []
         for x in tw4:
             row = (x.col1, x.col2, x.col3)
@@ -7536,9 +7533,10 @@ def get_result(post_data, archive_id=None, request=None):
 ########## THE CODE BEGINS HERE
 
 
-get_result('hey')
+if mysql == 0:
+    get_result('hey')
 
-if proof_type == 1:
-    wb4.save('/Users/kylefoley/Desktop/inference engine/temp_proof.xlsx')
-if get_words_used == 1:
-    wb5.save('/Users/kylefoley/Desktop/inference engine/dictionary4.xlsx')
+    if proof_type == 1:
+        wb4.save('/Users/kylefoley/Desktop/inference engine/temp_proof.xlsx')
+    if get_words_used == 1:
+        wb5.save('/Users/kylefoley/Desktop/inference engine/dictionary4.xlsx')

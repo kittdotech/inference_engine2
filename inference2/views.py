@@ -71,10 +71,11 @@ def index(request, archive=None):
     # output = Output.objects.all()
     if request.method == 'POST':
         post_data = request.POST.copy()
-        prove_algorithm = importlib.import_module(
-            '.' + archive.algorithm, package='inference2.Proofs')
+        prove_algorithm = importlib.import_module('.' + archive.algorithm.split('.py')[0], package='inference2.Proofs')
+        # my_function = getattr(__import__('inference2.Proofs'+archive.algorithm.split('.py')[0]), 'get_result')
         post_data = prove_algorithm.get_result(
             request.POST.copy(), archive.id, request)
+        print(post_data)
         if post_data:
             post_data["type"] = "prove"
             result = json.dumps(post_data, cls=DjangoJSONEncoder)

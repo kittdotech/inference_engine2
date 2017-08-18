@@ -1,3 +1,4 @@
+import json
 from django.contrib import admin
 from django.core import serializers
 from django.http import HttpResponse
@@ -13,7 +14,6 @@ def serialize_queryset(queryset, format):
 def export(queryset, format):
     if format == "csv":
         # TODO: Less hacky
-        import json
 
         data = serialize_queryset(queryset, "json")
         data = json.loads(data)
@@ -38,28 +38,23 @@ def export(queryset, format):
 
 @transaction.atomic
 def changesymbol(queryset, mode):
-    import json
-    # data = serialize_queryset(queryset, "json")
-    # data = json.loads(data)
-    # for item in data:
-    #   print
     symbol_map = (
-        ('u+', unichr(8835)),
-        ('ta^', unichr(8868)),
-        ('co^', unichr(8869)),
-        ('nt+', unichr(172)),
-        ('x^', unichr(8801)),
-        ('c^', unichr(8658)),
-        ('b^', unichr(8703)),
-        # ('#', unichr(8703)),
-        ('i^', unichr(8866)),
-        ('t^', unichr(8594)),
-        ('nf^', unichr(8876)),
-        ('ed^', unichr(8891)),
-        ('v+', unichr(8744)),
-        ('&&', unichr(8896)),
-        ('@', unichr(8855)),
-        ('if^', unichr(8660)),
+        ('u+', chr(8835)),
+        ('ta^', chr(8868)),
+        ('co^', chr(8869)),
+        ('nt+', chr(172)),
+        ('x^', chr(8801)),
+        ('c^', chr(8658)),
+        ('b^', chr(8703)),
+        # ('#', chr(8703)),
+        ('i^', chr(8866)),
+        ('t^', chr(8594)),
+        ('nf^', chr(8876)),
+        ('ed^', chr(8891)),
+        ('v+', chr(8744)),
+        ('&&', chr(8896)),
+        ('@', chr(8855)),
+        ('if^', chr(8660)),
 
         ('|a', u"\u1d43"),
         ('|b', u"\u1d47"),
@@ -131,7 +126,6 @@ def changesymbol(queryset, mode):
                 x.definition = original_text_definition
                 x.word = original_text_word
                 x.rel = original_text_rel
-
                 x.save()
         if mode == 'StoT':
             for x in queryset:
