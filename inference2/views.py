@@ -20,7 +20,7 @@ def save_result(archive_id, post_data):
     archive = Archives.objects.get(pk=archive_id)
     Rows = []
     data_found = False
-    for idx in xrange(15000 - 1):
+    for idx in range(15000 - 1):
         if post_data.get("text_" + str(idx) + "_2", '') or post_data.get("text_" + str(idx) + "_3", ''):
             data_found = True
         if not data_found:
@@ -110,7 +110,7 @@ def export_xlsx(request, archives_id=None):
         (u"Description", 70),
     ]
 
-    for col_num in xrange(len(columns)):
+    for col_num in range(len(columns)):
         c = ws.cell(row=row_num + 1, column=col_num + 1)
         c.value = columns[col_num][0]
         c.style.font.bold = True
@@ -125,7 +125,7 @@ def export_xlsx(request, archives_id=None):
                 obj.col2,
                 obj.col3,
             ]
-            for col_num in xrange(len(row)):
+            for col_num in range(len(row)):
                 c = ws.cell(row=row_num + 1, column=col_num + 1)
                 c.value = row[col_num]
                 c.style.alignment.wrap_text = True
@@ -138,7 +138,7 @@ def export_xlsx(request, archives_id=None):
                 obj.col2,
                 obj.col3,
             ]
-            for col_num in xrange(len(row)):
+            for col_num in range(len(row)):
                 c = ws.cell(row=row_num + 1, column=col_num + 1)
                 c.value = row[col_num]
                 c.style.alignment.wrap_text = True
