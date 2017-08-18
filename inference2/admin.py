@@ -25,7 +25,7 @@ from .actions import export_as_json_action
 from .actions import export_as_xml_action
 from .actions import export_as_yaml_action
 
-from admincsv import ImportCSVModelAdmin
+from .admincsv import ImportCSVModelAdmin
 admin.site.add_action(export_as_csv_action)
 admin.site.add_action(change_text_to_symbol_action)
 admin.site.add_action(change_symbol_to_text_action)

@@ -6,11 +6,11 @@ from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
 from django.conf import settings
 import time
-from models import Output, InstructionFile
+from .models import Output, InstructionFile
 import importlib
 from inference2.models import Input
 
-from models import Define3, Archives
+from .models import Define3, Archives
 import openpyxl
 from openpyxl.cell import get_column_letter
 

@@ -45,14 +45,15 @@ class ImportCSVForm(forms.Form):
         self.fields['csv_file'].help_text = "Expected fields: {}".format(
             self.expected_fields)
 
-    def clean_csv_file(self):
-        if six.PY3:
-            # DictReader expects a str, not bytes in Python 3.
-            csv_text = self.cleaned_data['csv_file'].read()
-            csv_decoded = six.StringIO(csv_text.decode('utf-8'))
-            return csv_decoded
-        else:
-            return self.cleaned_data['csv_file']
+    # def clean_csv_file(self):
+    #     if six.PY3:
+    #         # DictReader expects a str, not bytes in Python 3.
+    #         csv_text = self.cleaned_data['csv_file'].read()
+    #         csv_decoded = six.StringIO(csv_text.decode('utf-8'))
+    #         print(csv_decoded)
+    #         return csv_decoded
+    #     else:
+    #         return self.cleaned_data['csv_file']
 
     @property
     def expected_fields(self):
@@ -62,12 +63,30 @@ class ImportCSVForm(forms.Form):
     @transaction.atomic
     def import_csv(self):
         try:
-            reader = csv.DictReader(
-                self.cleaned_data['csv_file'],
-                fieldnames=self.importer_class.Meta.fields,
-                dialect=self.dialect,
-            )
+            # print(self.cleaned_data['csv_file'])
+            data = str(self.cleaned_data['csv_file'].read())
+            import pdb
+            pdb.set_trace()
+            lines = data.split('\\n')
+            reader = []
+            fieldnames = self.importer_class.Meta.fields
+            for line in lines:
+                words = line.split(',')
+                temp = {}
+                for index, value in enumerate(fieldnames):
+                    try:
+                        temp[value] = words[index]
+                    except IndexError:
+                        pass
 
+                reader.append(temp)
+            # reader =
+            # reader = csv.DictReader(
+            #     self.cleaned_data['csv_file'],
+            #     fieldnames=self.importer_class.Meta.fields,
+            #     dialect=self.dialect,
+            # )
+            print(reader)
             reader_iter = enumerate(reader, 1)
             archives_id = -1  # No Archives
             if self.cleaned_data['has_headers']:
@@ -92,9 +111,9 @@ class ImportCSVForm(forms.Form):
     def process_csv(self, reader, archives_id=-1):
         list_obj = []
         for i, row in reader:
-            if not row.get('definition'):
-                # SKIP empty rows
-                continue
+            # if not row.get('definition'):
+            #     # SKIP empty rows
+            #     continue
             if archives_id != -1:
                 row['archives'] = archives_id
             row_result = self.process_row(i, row)

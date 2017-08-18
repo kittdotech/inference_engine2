@@ -7,29 +7,30 @@ import unicodecsv
 
 
 try:
-	import cStringIO as StringIO
+    from StringIO import StringIO
 except ImportError:
-	import StringIO
+    from io import StringIO
 
 
 def json_to_csv(jsonData, fieldnames=None):
-	"""
-	Returns a CSV string from the given JSON data string.
-	"""
-	d = json.loads(jsonData)
-	fieldnames = fieldnames or d[0].keys()
-	return dict_to_csv(d, fieldnames)
+    """
+    Returns a CSV string from the given JSON data string.
+    """
+    d = json.loads(jsonData)
+    fieldnames = fieldnames or d[0].keys()
+    return dict_to_csv(d, fieldnames)
+
 
 def dict_to_csv(d, fieldnames):
-	"""
-	Returns a CSV string from the given list of dictionaries.
-	"""
-	buf = None
-	with closing(StringIO.StringIO()) as f:
-		dictWriter = unicodecsv.DictWriter(f, fieldnames)
-		dictWriter.writeheader()
-		dictWriter.writerows(d)
+    """
+    Returns a CSV string from the given list of dictionaries.
+    """
+    buf = None
+    with closing(StringIO.StringIO()) as f:
+        dictWriter = unicodecsv.DictWriter(f, fieldnames)
+        dictWriter.writeheader()
+        dictWriter.writerows(d)
 
-		buf = f.getvalue()
+        buf = f.getvalue()
 
-	return buf
+    return buf
