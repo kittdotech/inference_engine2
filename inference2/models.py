@@ -34,6 +34,9 @@ class Archives(models.Model):
     def __unicode__(self):
         return u'{0}, {1}'.format(self.archives_date, self.algorithm)
 
+    def __str__(self):
+        return u'{0}, {1}'.format(self.archives_date, self.algorithm)
+
     class Meta:
         managed = True
         db_table = 'archives'
