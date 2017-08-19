@@ -7436,36 +7436,40 @@ def get_result(post_data, archive_id=None, request=None):
 
     ########## himanshu begin
     if mysql == 1:
+        # if archive_id:
+        #     ws = Define3.objects.filter(archives_id=archive_id)
+        # else:
+        #     archive = Archives.objects.latest('archives_date')
+        #     ws = Define3.objects.filter(archives_id=archive.id)
+        # result_data = dict(post_data.lists())
+        # w4 = []
+        # # index = 0
+        # # while True:
+        # #     row = (post_data["text_" + str(index) + "_1"], post_data["text_" + str(index) + "_2"],
+        # #            post_data["text_" + str(index) + "_3"])
+        # #     w4.append(row)
+        # #     # himanshu, eliminate stop, make it so that it breaks if it encounters two
+        # #     # empty spaces
+        # #     if row[1] == "stop":
+        # #         break
+        # #     index += 1
+        # # w4 = tuple(w4)
+        #
         if archive_id:
-            ws = Define3.objects.filter(archives_id=archive_id)
+            pass
+            # tw4 = Input.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
-            ws = Define3.objects.filter(archives_id=archive.id)
-        result_data = dict(post_data.lists())
-        w4 = []
-        # index = 0
-        # while True:
-        #     row = (post_data["text_" + str(index) + "_1"], post_data["text_" + str(index) + "_2"],
-        #            post_data["text_" + str(index) + "_3"])
+            # tw4 = Input.objects.filter(archives_id=archive.id)
+        # w4 = []
+        # for x in tw4:
+        #     row = (x.col1, x.col2, x.col3)
         #     w4.append(row)
-        #     # himanshu, eliminate stop, make it so that it breaks if it encounters two
-        #     # empty spaces
-        #     if row[1] == "stop":
-        #         break
-        #     index += 1
         # w4 = tuple(w4)
-
-        if archive_id:
-            tw4 = Input.objects.filter(archives_id=archive_id)
-        else:
-            archive = Archives.objects.latest('archives_date')
-            tw4 = Input.objects.filter(archives_id=archive.id)
-        w4 = []
-        for x in tw4:
-            row = (x.col1, x.col2, x.col3)
-            w4.append(row)
-        w4 = tuple(w4)
-        test_sent, row_number = populate_sentences()
+        # test_sent, row_number = populate_sentences()
+        # import pdb
+        # pdb.set_trace()
+        test_sent, row_number = pop_sent()
     else:
         test_sent, row_number = pop_sent()
     build_dict()
@@ -7522,7 +7526,9 @@ def get_result(post_data, archive_id=None, request=None):
 
     if mysql == 1:
         views.progressbar_send(request, 0, 100, 100, 2)
-        views.save_result(result_data)
+        import pdb
+        pdb.set_trace()
+        views.save_result(archive_id, result_data)
         return result_data
 
 

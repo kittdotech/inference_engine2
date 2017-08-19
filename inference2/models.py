@@ -78,6 +78,8 @@ class Output(models.Model):
         db_table = 'output'
         verbose_name = "Argument"
         verbose_name_plural = "Arguments"
+    def __str__(self):
+        return u'{0}'.format(self.id)
 
 
 class Algorithm(models.Model):

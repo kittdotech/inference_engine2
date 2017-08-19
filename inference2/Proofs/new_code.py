@@ -10,14 +10,15 @@ from pprint import pprint
 import collections
 from .start_and_stop import info
 import os
+
 # import pdb
 
 
 
-#what's up
+# what's up
 
 
-#hey
+# hey
 # checked coverage up to line 5575
 
 # averaged .076 on 5.22 (proof type 'n'), .039 definitions, .004 statement logic
@@ -35,11 +36,11 @@ import os
 
 # 7/2 average .050, definitions .029, statement .0015, instantiation .010
 
-#7/19 average .0275 3 trials using old dictionary
+# 7/19 average .0275 3 trials using old dictionary
 
-#7/20 average .0226 using new dictionary, .022, 0.216
+# 7/20 average .0226 using new dictionary, .022, 0.216
 
-#7/26 average .0317, change_var = .0206, reduction .0056
+# 7/26 average .0317, change_var = .0206, reduction .0056
 
 # 8/2 average .0397, change_var = .239, reduction .0059
 
@@ -64,12 +65,9 @@ else:
     get_words_used = 0
     order = [0, 0, 1]
 
-
-
-
-
 if mysql == 1:
     import os
+
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     print(BASE_DIR)
     sys.path.append(BASE_DIR)
@@ -204,7 +202,7 @@ beta = chr(946)
 # if^ 8660
 
 # himanshu
-def tran_str(str1, has_sentence_connectives = False):
+def tran_str(str1, has_sentence_connectives=False):
     if str1 == "":
         return str1
     if "|" in str1:
@@ -438,7 +436,6 @@ def isvariable(str3, kind=""):
             bool2 = True
         else:
             bool2 = False
-
 
     return bool2
 
@@ -742,8 +739,6 @@ def translate_to_greek(skel_nam, wneg, id_num):
     return skel_nam
 
 
-
-
 def remove_duplicates(list1, i):
     list2 = []
     j = -1
@@ -773,7 +768,6 @@ def step_two():
     add_necessary_conditions_for_concept()
 
 
-
 def sort_decisions(list1):
     for lists in list1:
         lists[46].sort()
@@ -795,9 +789,8 @@ def define_irregular_terms(list1, type=""):
             del list1[m][45][category][0]
             if list1[m][i] == 'i': i_defined += 1
             if not lies_wi_scope_of_univ_quant(list1[m], i) and \
-                list1[m][42] not in do_not_define_again and \
-                (i_defined < 2 or list1[m][i] != 'i'):
-
+                            list1[m][42] not in do_not_define_again and \
+                    (i_defined < 2 or list1[m][i] != 'i'):
                 antecedent = copy.deepcopy(list1[m])
                 consequent = copy.deepcopy(list1[m])
                 consequent, rule = determine_which_function_to_use(consequent, i, category, type)
@@ -807,7 +800,6 @@ def define_irregular_terms(list1, type=""):
                 break
 
     return list1
-
 
 
 def prepare_irregular_att_sent(antecedent, consequent, rule, list1, type=""):
@@ -861,8 +853,6 @@ def determine_which_function_to_use(list1, i, j, type=""):
     return consequent, rule
 
 
-
-
 def eliminate_proper_name_possessives3(list1, i):
     if i == 69:
         concept_position = 5
@@ -883,6 +873,7 @@ def eliminate_proper_name_possessives3(list1, i):
 
     return [con_parts1, con_parts2, con_parts3], "PPE"
 
+
 def eliminate_common_name_possessives(list1, i):
     if i == 69:
         concept_position = 5
@@ -901,7 +892,6 @@ def eliminate_common_name_possessives(list1, i):
     con_parts3 = build_sent1(new_possessor, "", "I", possessor_concept)
 
     return [con_parts1, con_parts2, con_parts3], "CPE"
-
 
 
 def eliminate_and_coordinator(list1, i):
@@ -943,7 +933,7 @@ def eliminate_adjectives(list1, i):
 
 
 def eliminate_concept_instance_apposition(list1, i):
-    dict1 = {35: 5, 36: 14, 37: 18, 38:22}
+    dict1 = {35: 5, 36: 14, 37: 18, 38: 22}
     j = dict1.get(i)
     con_parts = copy.deepcopy(build_sent1(list1[i], "", "I", list1[j]))
     list1[j] = list1[i]
@@ -1004,7 +994,6 @@ def eliminate_relative_pronouns(con_parts1, i):
     con_parts1 = restore_original_sent(con_parts1)
     consequent = [con_parts1, con_parts2]
     return consequent, rule
-
 
 
 def eliminate_as(list1, i):
@@ -1098,13 +1087,14 @@ def has_scope_over_parenthetical_phrase(list1, i):
         return True
     else:
         if list1[39] != None:
-            dict1 = {10: 60, 16:61, 20:62}
+            dict1 = {10: 60, 16: 61, 20: 62}
             j = dict1.get(i)
             if j == None:
                 return False
             elif list1[j] != None:
                 return True
     return False
+
 
 def extract_words_from_parenthetical_phrase(list1, i, new_var):
     concept_pos = 14 if i == 10 else i + 2
@@ -1116,6 +1106,7 @@ def extract_words_from_parenthetical_phrase(list1, i, new_var):
 
     return list2[1], list2[0]
 
+
 def has_scope_over_prepositional_relation(list1, i):
     prepositional_relations = ['IN', "INB", "OF", "ATC"]
     dict1 = {3: 9, 10: 15, 16: 19}
@@ -1124,6 +1115,7 @@ def has_scope_over_prepositional_relation(list1, i):
         return True
     else:
         return False
+
 
 def eliminate_prepositional_relation_in_universal(list1, i, new_var):
     prepositional_relations = ['IN', "INB", "OF", "ATC"]
@@ -1180,7 +1172,6 @@ def divide_antecedent_from_consequent(list1, var_pos, quant, i, new_var, boundar
 
 
 def part_of_ante(i, j, boundary):
-
     if i == 3 and j < boundary:
         return True
     elif i == 3:
@@ -1216,10 +1207,10 @@ def has_scope_over_past_participle(list1, i):
         elif i == 10 and list1[15][-1] == 'P':
             # i HLP no b BLD c <> ((e I b) & (e BLD c)) -> (i ~ HLP e)
             type = "cons first"
-            #boundary = 14
-
+            # boundary = 14
 
     return type
+
 
 def eliminate_past_participle_in_universal(list1, i, new_var, type):
     quant = list1[i]
@@ -1228,6 +1219,7 @@ def eliminate_past_participle_in_universal(list1, i, new_var, type):
     list1[var_pos] = new_var
 
     return divide_antecedent_from_consequent2(list1, var_pos, quant, 15, new_var, type)
+
 
 def divide_antecedent_from_consequent2(list1, var_pos, quant, boundary, new_var, type):
     k = 2
@@ -1272,6 +1264,7 @@ def divide_antecedent_from_consequent2(list1, var_pos, quant, boundary, new_var,
         consequent = add_to_antecedent(original_cons_relat, consequent, new_var, antecedent)
 
     return antecedent, consequent
+
 
 def add_to_antecedent(original_cons_relat, consequent, new_var, antecedent):
     i = -1
@@ -1410,7 +1403,6 @@ def get_class_sent(list1, i):
 
 
 def has_scope_over_subclause(list1, i):
-
     if i == 3 and list1[59] != None:
         bool1 = True
     elif i == 10 and list1[60] != None:
@@ -1429,6 +1421,7 @@ def get_last_relation(list1):
     for pos in relational_positions:
         if list1[pos] != None:
             return pos
+
 
 def extract_words_from_subclause(consequent, i, new_var):
     # this is the sentence that will be inserted into the antecedent in the
@@ -1468,7 +1461,6 @@ def extract_words_from_subclause(consequent, i, new_var):
     return antecedent, consequent
 
 
-
 def restore_original_sent(list1):
     k = 2
     list2 = [None] * 80
@@ -1481,11 +1473,10 @@ def restore_original_sent(list1):
     return list2
 
 
-
 def insert_into_dict(_dict, obj, pos):
-
     insert_in_dict = lambda _dict, obj, pos: {k: v for k, v in
-                            (list(_dict.items())[:pos] + list(obj.items()) + list(_dict.items())[pos:])}
+                                              (list(_dict.items())[:pos] + list(obj.items()) + list(_dict.items())[
+                                                                                               pos:])}
     _dict = insert_in_dict(_dict, obj, pos)
 
     return _dict
@@ -1498,7 +1489,7 @@ def define_regular_terms(list1):
     while m < len(list1) - 1:
         m += 1
         if isdefineable(list1[m]) and list1[m][42] not in do_not_define_again \
-            and not list1[m][54] == 'do not define':
+                and not list1[m][54] == 'do not define':
             do_not_define_again.append(list1[m][42])
             change_variables(list1[m], 0)
 
@@ -1619,12 +1610,13 @@ def get_rule(definiendum, r_sent_loc, def_info, rename):
 
     return rule
 
-def delete_is_indefinite(new_sentences):
 
+def delete_is_indefinite(new_sentences):
     for i, sent in enumerate(new_sentences):
         if sent[9] == 'J' and abbreviations[0].get(sent[14]) == 'indefinite':
             del new_sentences[i]
             return
+
 
 def remove_starred_general_variables():
     for i, var in enumerate(variable_type[0]):
@@ -1632,14 +1624,15 @@ def remove_starred_general_variables():
             del variable_type[0][i]
             return
 
-def do_not_define(new_sentences, definiendum):
 
+def do_not_define(new_sentences, definiendum):
     if definiendum in ['many' + un, 'many' + ud, "few"]:
         for sent in new_sentences:
             if sent[68] in ['122', '121', '221', '222']:
                 sent[54] = 'do not define'
 
     return new_sentences
+
 
 def replace_propositional_constants(temp_prop_const, prop_unfill, new_sentences, total_dict):
     if prop_unfill == []:
@@ -1696,10 +1689,11 @@ def add_definitions_to_total_sent(temp_attach_sent, rule, rename, r_sent_loc, de
         if g == None:
             add_to_total_sent(num - 2, definition, "", "", rule)
             add_to_total_sent(num - 1, rename, "", definiendum, "RN")
-            add_to_total_sent(num, temp_attach_sent[37], temp_attach_sent[4], "", "SUB", num-2, num-1)
+            add_to_total_sent(num, temp_attach_sent[37], temp_attach_sent[4], "", "SUB", num - 2, num - 1)
         else:
             add_to_total_sent(num - 1, rename, "", definiendum, "RN")
             add_to_total_sent(num, temp_attach_sent[37], temp_attach_sent[4], "", "SUB", g, num - 1)
+
 
 def build_rename_sent2(constant_map, def_abbrev_dict, old_prop_to_new_prop,
                        indefinite_dict, definiendum, rn_type):
@@ -1824,9 +1818,7 @@ def replace_r_sent(total_dict, r_sent_location, new_sentences, list1, definiendu
 
         new_sentences[location] = r_sent
 
-
     return new_sentences
-
 
 
 def replace_indefinite_variables(new_sentences, unfill_positions, defining_abbreviations,
@@ -1862,18 +1854,17 @@ def replace_indefinite_variables(new_sentences, unfill_positions, defining_abbre
                             k -= 1
                             break
 
-
     return replace_indefinite_variables2(indefinite_dict, new_sentences, unfill_positions, rn_type)
 
 
 def meets_cond_4_indef_replace(new_sentence, m, j, defining_abbreviations, total_dict,
                                general_thing, sent):
     if general_thing and sent[9] == "I" and abbreviations[0].get(sent[14]) == 'thing' and \
-        (new_sentence[5] == defining_abbreviations[0] or sent[5] == defining_abbreviations[0]):
+            (new_sentence[5] == defining_abbreviations[0] or sent[5] == defining_abbreviations[0]):
         return False
 
     elif general_thing and sent[9] == "I" and abbreviations[0].get(sent[14]) == 'thing' and \
-        new_sentence[5] != defining_abbreviations[0] and sent[5] != defining_abbreviations[0]:
+                    new_sentence[5] != defining_abbreviations[0] and sent[5] != defining_abbreviations[0]:
         return True
     elif (sent[m] == new_sentence[m] and sent[j] in defining_abbreviations):
         # the only sentence that uses this is 'the concept cat is itself a cat' and it makes
@@ -1887,18 +1878,14 @@ def meets_cond_4_indef_replace(new_sentence, m, j, defining_abbreviations, total
         return False
 
 
-
-
-
-
 def is_a_general_thing(j, sent, instance_of_thing):
-
     if j == 5 and sent[9] == "I" and abbreviations[0].get(sent[14]) == 'thing':
         return True, sent[5]
     elif sent[j] == instance_of_thing:
         return True, instance_of_thing
     else:
         return False, instance_of_thing
+
 
 def replace_indefinite_variables2(indefinite_dict, new_sentences, unfill_positions, rn_type):
     global variable_type
@@ -1935,7 +1922,7 @@ def replace_constants(total_dict, temp_prop_const, new_sentences):
         j += 1
         if (sent[68][1:] != "11" or len(sent[68]) != 3) and \
                 (sent[68][1:] != "1" or len(sent[68]) != 2) and sent[9] != "R":
-            for i in [5,14,18,22]:
+            for i in [5, 14, 18, 22]:
                 if sent[i] != None:
                     new_var = total_dict.get(sent[i])
                     if new_var != None:
@@ -1944,7 +1931,6 @@ def replace_constants(total_dict, temp_prop_const, new_sentences):
                         prop_unfill.append([j, i])
                     else:
                         unfill_positions.append([j, i])
-
 
     return new_sentences, unfill_positions, prop_unfill
 
@@ -2014,12 +2000,10 @@ def get_new_sent(def_info, defining_abbreviations, def_loc, list1, definiendum):
                     def_abbrev_dict = insert_into_dict(def_abbrev_dict, {sent[k]: variables[0]}, 3)
                     del variables[0]
 
-
     if need_more_definite_abbreviations:
         def_abbrev_dict = map_double_definienda(new_sentences, definiendum, def_abbrev_dict)
 
     return def_abbrev_dict, r_sent_location, new_sentences, defining_abbreviations
-
 
 
 def map_double_definienda(new_sentences, definiendum, def_abbrev_dict):
@@ -2031,7 +2015,7 @@ def map_double_definienda(new_sentences, definiendum, def_abbrev_dict):
     consequent_variables = set()
 
     for j, sent in enumerate(new_sentences):
-        for i in [5,14,18,22]:
+        for i in [5, 14, 18, 22]:
             if isvariable(sent[i], "i") and sent[68][1] == "1":
                 antecedent_variables.add(sent[i])
                 if sent[68][1:] == "12":
@@ -2067,7 +2051,6 @@ def map_double_definienda(new_sentences, definiendum, def_abbrev_dict):
         # what this means is that if a corresponding variable is not found for this in the
         # replace_r_sent function then the variable that it is replaced with will be a general variable
         variable_type[0].append(new_var[0] + "*")
-
 
     return def_abbrev_dict
 
@@ -2118,7 +2101,7 @@ def get_non_variable_location(list1, definiendum):
     for i in list1[56]:
         if list1[i] == definiendum:
             return i
-    print ('you failed to find location of a the definining variable')
+    print('you failed to find location of a the definining variable')
     g = 4 / 0
 
 
@@ -2128,7 +2111,7 @@ def get_non_variable_det_loc(list1, definiendum):
         if list1[i] == definiendum:
             break
     else:
-        print ('you failed to find location of a the definining variable')
+        print('you failed to find location of a the definining variable')
         g = 4 / 0
     j = determinative_positions.get(i)
     return j
@@ -2220,7 +2203,7 @@ def add_necessary_conditions_for_concept():
                         b = 0
                         for k in range(len(all_sent)):
                             if all_sent[k][9] == str4 and all_sent[k][14] == str2 and \
-                                str1 != str2 and str2 not in list2 and all_sent[k][8] == None:
+                                            str1 != str2 and str2 not in list2 and all_sent[k][8] == None:
                                 str6 = all_sent[k][5]
                                 list2.append(str2)
                                 b += 1
@@ -2244,7 +2227,6 @@ def add_necessary_conditions_for_concept():
                         prepare_att_sent_1_sent(ant_sent_parts, "SUB", conditional,
                                                 [build_sent2(con_sent_parts)], sn, sn - 1)
                         break
-
 
 
 def build_sent1(subj, tvalue, relat, obj, relat2="", obj2=""):
@@ -2279,7 +2261,7 @@ def build_sent1(subj, tvalue, relat, obj, relat2="", obj2=""):
     return list1
 
 
-def build_sent2(list1, type = 0):
+def build_sent2(list1, type=0):
     # if you revise this list then then you must also revise it in
     # the eliminate_univ_quant_subclause, extract_words_from_subclause, as well as the function 'that', as well as new_categories
     # g=1 means that it is a sentence that identifies a propositional constant, in some cases
@@ -2437,8 +2419,6 @@ def use_rarely_defined_word():
     return rarely_defined
 
 
-
-
 def name_sent(str1, bool2=False, str4=""):
     no_space = copy.copy(str1)
     if str1.find('~') > -1:
@@ -2553,7 +2533,7 @@ def check_mispellings(test_sent):
         return
     global prop_name, total_sent, all_sent, attach_sent, detach_sent, prop_var, sn, abbreviations
     for k in order:
-        print (k)
+        print(k)
         prop_name = []
         total_sent = []
         all_sent = []
@@ -2572,7 +2552,7 @@ def check_mispellings(test_sent):
 def obtain_truth_value(sent):
     sentence = tran_str(sent[1])
     add_to_total_sent("", "CLAIM " + str(sent[0]) + ": " + sentence)
-    add_to_total_sent("","")
+    add_to_total_sent("", "")
 
     if sentence[7:12] == 'consi':
         return True, sentence[len("It isa consistent that "):]
@@ -2581,8 +2561,8 @@ def obtain_truth_value(sent):
     else:
         g = 4 / 0
 
-def eliminate_logical_connectives(sentence):
 
+def eliminate_logical_connectives(sentence):
     return sentence.split(" and ")
 
 
@@ -2610,7 +2590,6 @@ def step_one(sent):
     return truth_value
 
 
-
 def is_linked_to_rare_word(word):
     global dictionary
     dict1 = {"individual" + ua: "individual"}
@@ -2624,6 +2603,7 @@ def is_linked_to_rare_word(word):
         temp.remove(linked_word)
         dictionary[6] = temp
 
+
 def divide_sent(list2):
     global sn
     sn = 0
@@ -2631,7 +2611,7 @@ def divide_sent(list2):
         sn += 1
         str2 = str2.lower()
         if "'s" not in str2:
-            str2 = str2.replace("'","")
+            str2 = str2.replace("'", "")
         str3 = name_sent(str2)
         str2 = str2.strip()
         words_in_sent = str2.split()
@@ -2653,7 +2633,7 @@ def divide_sent(list2):
 
 
 def eliminate_redundant_words():
-    #modify this if we start dealing with sentences longer than 41 words
+    # modify this if we start dealing with sentences longer than 41 words
     global all_sent
     bool1 = False
     for i in range(len(all_sent)):
@@ -2695,7 +2675,7 @@ def eliminate_redundant_words():
 def replace_determinative_nouns():
     global sn
     m = -1
-    while m < len(all_sent)-1:
+    while m < len(all_sent) - 1:
         m += 1
         replacement_made = False
         while all_sent[m][45][19] != []:
@@ -2706,7 +2686,7 @@ def replace_determinative_nouns():
             synonym = dictionary[2].get(all_sent[m][i])
             determinative = synonym[:synonym.find(" ")]
             definition = dictionary[1].get(all_sent[m][i])
-            noun = synonym[synonym.find(" ")+1:]
+            noun = synonym[synonym.find(" ") + 1:]
             determinative.strip()
             noun.strip()
             replacement_made = True
@@ -2734,12 +2714,11 @@ def replace_determinative_nouns():
             prepare_att_sent_1_sent(ant_sent_parts, "SUB", iff, [con_sent_parts], "")
 
 
-
 def replace_synonyms():
     global sn
     definitions_added = []
     m = -1
-    while m < len(all_sent)-1:
+    while m < len(all_sent) - 1:
         m += 1
         replacement_made = False
         while all_sent[m][45][18] != []:
@@ -2752,7 +2731,7 @@ def replace_synonyms():
             if definition not in definitions_added:
                 definitions_added.append(definition)
                 sn += 1
-                add_to_total_sent(sn,definition,"","","DF " + all_sent[m][i])
+                add_to_total_sent(sn, definition, "", "", "DF " + all_sent[m][i])
             replacement_made = True
             all_sent[m][i] = synonym
             all_sent[m][45][18].remove(i)
@@ -2760,6 +2739,7 @@ def replace_synonyms():
             all_sent[m] = build_sent_slots_known(all_sent[m])
             con_parts = copy.deepcopy(all_sent[m])
             prepare_att_sent_1_sent(ant_sent_parts, "SUB", iff, [con_parts], "")
+
 
 def recategorize_word(synonym, m, i):
     # because we replace a word with a synonym we need to know it decision procedure
@@ -2772,6 +2752,7 @@ def recategorize_word(synonym, m, i):
     if b != 0:
         all_sent[m][45][b].append(i)
         all_sent[m][46].append(b)
+
 
 def replace_special_synonyms():
     global sn
@@ -2791,15 +2772,17 @@ def replace_special_synonyms():
             con_parts = copy.deepcopy(all_sent[m])
             prepare_att_sent_1_sent(ant_sent_parts, rule, iff, [con_parts], "")
 
+
 def replace_special_synonyms2(m, i):
     dict1 = {9: 8, 15: 49, 50: 19, 51: 23, 52: 27}
     if all_sent[m][i] == 'distinct from':
         all_sent[m][i] = "is"
         all_sent[m][dict1.get(i)] = "~"
 
+
 def word_sub():
     global sn
-    relational_positions = [9,15,19,23,27,31]
+    relational_positions = [9, 15, 19, 23, 27, 31]
     m = -1
     n = len(all_sent)
     while m < n - 1:
@@ -2820,7 +2803,7 @@ def word_sub():
                 relat = dictionary[3].get(str2)
                 assert relat != None
                 replacement_made = True
-                abbreviations[0].update({str2:relat})
+                abbreviations[0].update({str2: relat})
                 all_sent[m][k] = relat
             else:
                 replacement_made = True
@@ -2926,7 +2909,6 @@ def transfer_negation_signs():
             prepare_att_sent_1_sent(ant_sent_parts, "SNR", iff, [con_parts])
 
 
-
 def is_adj_definite(list1, i):
     # modify this if more indefinite determinatives are added
     indefinite_determinatives = ['a']
@@ -3016,6 +2998,7 @@ def determ_lies_wi_scope_of_univ(list1, i, current_universal, word_pos, univ_pos
 
     return bool1
 
+
 def determ_lies_wi_scope_of_univ2(list1, i):
     # modify this if we increase the number of indefinite determinatives
     indefinite_determinatives = ['a', 'many' + un, "any" + un, "a" + ud, 'few']
@@ -3031,8 +3014,8 @@ def determ_lies_wi_scope_of_univ2(list1, i):
                     if univ_pos < determ_position:
                         bool1 = True
                 elif not univ_in_sub_clause and not determ_in_sub_clause and \
-                    univ_pos < determ_position:
-                        bool1 = True
+                                univ_pos < determ_position:
+                    bool1 = True
                 elif not univ_in_sub_clause and determ_in_sub_clause:
                     dict1 = {3: 59, 10: 60, 16: 61, 20: 62}
                     k = dict1.get(i)
@@ -3040,7 +3023,6 @@ def determ_lies_wi_scope_of_univ2(list1, i):
                         bool1 = True
 
     return bool1
-
 
 
 def lies_wi_scope_of_univ_quant(list1, i):
@@ -3262,7 +3244,7 @@ def prepare_att_sent_2_sent(ant_sent_parts, connective, consequent, rule):
     attach_sent.append(list4)
 
 
-def prepare_att_sent_1_sent(ant_sent_parts, rule, connective, consequent, anc1="", anc2 = ""):
+def prepare_att_sent_1_sent(ant_sent_parts, rule, connective, consequent, anc1="", anc2=""):
     # this populates the attach_sent list provided a sentence is equivalent to one other sentence
 
     global sn
@@ -3318,7 +3300,7 @@ def allowable_slots2():
     return num2
 
 
-def allowable_slots(type = 0):
+def allowable_slots(type=0):
     if type == 0:
         num2 = [11, 47, 3, 69, 4, 55, 5, 66, 67, 35, 48, 59, 6, 8, 9, 7, 48, 12, 10, 70,
                 13, 14, 36, 60, 63, 49, 15,
@@ -3333,9 +3315,6 @@ def allowable_slots(type = 0):
                 16, 17, 18, 19, 20, 22]
 
     return num2
-
-
-
 
 
 def is_set_of_bic_wo_id(def_info):
@@ -3815,7 +3794,6 @@ def translate_complex_sent(to_be_translated, defin_sent):
     return [to_be_translated, to_translate_abbrev]
 
 
-
 def prepare_categorize_words(str2):
     # when we prepare to categorize a word, the first three slots
     # are reserved for the sentence, the sentence letter and the tvalue
@@ -3830,8 +3808,8 @@ def prepare_categorize_words(str2):
 
     return list2
 
-def get_empty_slots():
 
+def get_empty_slots():
     return [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
 
 
@@ -3970,7 +3948,7 @@ def categorize_words(list1):
                     else:
                         k = 37
 
-                elif relation_type == 3 :
+                elif relation_type == 3:
                     if sentence_slots[22] == None:
                         k = 22
                     else:
@@ -4031,14 +4009,15 @@ def categorize_words(list1):
 
             if has_comma: sentence_slots[39] = k
             if k == 0 and proof_type != 3:
-                print (word)
+                print(word)
                 assert k != 0
 
             k, sentence_slots, sub_part, part_of_speech = exceptional_parts_of_speech(word,
-                                                k, sentence_slots, sub_part, part_of_speech)
+                                                                                      k, sentence_slots, sub_part,
+                                                                                      part_of_speech)
             sentence_slots[k] = word
             if insert_special_location:
-                places_used.insert(-1,k)
+                places_used.insert(-1, k)
             else:
                 places_used.append(k)
             b = get_used_slots(k, part_of_speech, sub_part, rest)
@@ -4084,7 +4063,7 @@ def get_used_slots(k, part_of_speech, sub_part, rest):
     elif sub_part == 'z':
         b = 20
     elif (part_of_speech == 'd' or part_of_speech == 'p') \
-        and sub_part != 'b' and sub_part != "i" and sub_part != 'e':  # determinative, pronouns, possessive pronouns
+            and sub_part != 'b' and sub_part != "i" and sub_part != 'e':  # determinative, pronouns, possessive pronouns
         b = 1
     elif part_of_speech == 'o':
         b = 3  # common name possessives
@@ -4105,7 +4084,7 @@ def get_used_slots(k, part_of_speech, sub_part, rest):
     elif part_of_speech == 'r' and sub_part == 'd':  # AS
         b = 11
     elif part_of_speech == 'r' and k in [15, 19, 23, 27, 31] and fifth_letter != 'b':  # RDA
-    # modify this if you change this then you must also change the eliminate relative pronouns function
+        # modify this if you change this then you must also change the eliminate relative pronouns function
         b = 13
     elif part_of_speech == 'n' and sub_part == 't':  # there
         b = 14
@@ -4149,7 +4128,7 @@ def get_part_of_speech(word, str5):
         else:
             posp = dictionary[0].get(word)
             if posp == None:
-                print ("you misspelled " + word)
+                print("you misspelled " + word)
                 if proof_type != 3:
                     g = 4 / 0
                 else:
@@ -4163,7 +4142,6 @@ def get_part_of_speech(word, str5):
                 pos = 'r'
             elif word == 'not':
                 pos = 'm'
-
 
     return pos, sub_part_of_speech, sub_sub_part, posp
 
@@ -4210,6 +4188,7 @@ def determine_if_compound_word(i, list1, word):
 
     return i, word, has_comma
 
+
 def exceptional_parts_of_speech(word, k, sentence_slots, sub_part, part_of_speech):
     if word == 'doglike':
         bb = 8
@@ -4220,6 +4199,7 @@ def exceptional_parts_of_speech(word, k, sentence_slots, sub_part, part_of_speec
         part_of_speech = 'n'
 
     return k, sentence_slots, sub_part, part_of_speech
+
 
 def divide_the_i_relation(k, b, sentence_slots, the_is_of_group):
     if k in [15, 19, 23, 27, 31]:
@@ -4278,7 +4258,6 @@ def get_right_most_connective(str1):
 
 
 def space_sentences(str1, str2):
-
     b = len(str1)
     c = len(str2)
     j = 0
@@ -4305,6 +4284,7 @@ def space_sentences(str1, str2):
         first = str1 + space + str2
 
     return [first, second, third]
+
 
 ###### himanshu
 def print_sent_full(test_sent, tot_prop_name, row_number):
@@ -4341,13 +4321,13 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
                                             test_sent[i][j][1], str(test_sent[i][j][4]))
                     for str1 in list3:
                         if str1 != "":
-                            print (str1)
+                            print(str1)
 
                 elif proof_type == 1:
                     w4.cell(row=row_number, column=2).value = test_sent[i][j][0]
                     w4.cell(row=row_number, column=3).value = test_sent[i][j][3] + test_sent[i][j][1]
                     w4.cell(row=row_number, column=4).value = test_sent[i][j][4]
-                    if len(test_sent[i][j]) >8:
+                    if len(test_sent[i][j]) > 8:
                         if test_sent[i][j][8] == "*":
                             xls_cell = w4.cell(row=row_number, column=3)
                             xls_cell.font = xls_cell.font.copy(color='FFFF0000')
@@ -4363,13 +4343,13 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
 
         row_number += 1
         if proof_type == 2:
-            print (" ")
+            print(" ")
         o += 1
         list1 = build_sent_name(tot_prop_name[o])
         for j in range(len(list1)):
 
             if proof_type == 2:
-                print (list1[j])
+                print(list1[j])
             elif proof_type == 1:
                 w4.cell(row=row_number, column=3).value = list1[j]
             elif mysql == 1:
@@ -4377,7 +4357,7 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
             row_number += 1
         row_number += 1
         if proof_type == 2:
-            print (" ")
+            print(" ")
         do_not_print = False
         for j in range(len(test_sent[i])):
             if j == 8:
@@ -4395,10 +4375,10 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
                     list3 = space_sentences(str(test_sent[i][j][0]) + space + test_sent[i][j][3] + \
                                             test_sent[i][j][2], str(test_sent[i][j][4]))
                     if list3[1] != "":
-                        print (list3[0])
-                        print (list3[1])
+                        print(list3[0])
+                        print(list3[1])
                     else:
-                        print (list3[0])
+                        print(list3[0])
                 elif proof_type == 1:
                     w4.cell(row=row_number, column=2).value = test_sent[i][j][0]
                     w4.cell(row=row_number, column=3).value = test_sent[i][j][3] + test_sent[i][j][2]
@@ -4417,7 +4397,7 @@ def determine_words_used():
         for i in range(len(words_used)):
             j = dictionary[7].get(words_used[i], 28)
             if j == 28:
-                print (words_used[i])
+                print(words_used[i])
             ws.cell(row=j, column=2).value = 1
 
 
@@ -4430,7 +4410,6 @@ def progress(count, total, suffix=''):
 
     sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', suffix))
     sys.stdout.flush()
-
 
 
 def build_dict():
@@ -4562,13 +4541,14 @@ def update_synonyms(defin, synonyms, definitions, sec_let):
 
     return synonyms
 
-def get_key(dict1, val):
 
-    for k,v in dict1.items():
+def get_key(dict1, val):
+    for k, v in dict1.items():
         if v == val:
             return k
     else:
         return ""
+
 
 def findinlist(str1, list1, i, j):
     # this function takes a string, matches it to an element in the first dimension
@@ -4579,7 +4559,6 @@ def findinlist(str1, list1, i, j):
             str2 = list1[d][j]
             return str2
     return None
-
 
 
 def findposinmdlistint(i, list1, p):
@@ -4613,7 +4592,6 @@ def isinmdlist(str1, list1, p):
             return True
 
     return False
-
 
 
 def use_identity(negated_conjunction, consistent):
@@ -4651,7 +4629,6 @@ def use_identity(negated_conjunction, consistent):
         consistent = detach1("do not use modus tollens", negated_conjunction)
 
     return consistent
-
 
 
 def check_reflexivity(sent):
@@ -4743,15 +4720,13 @@ def build_list_of_abbreviations():
             detach_sent.append(sent)
             add_to_total_sent(sn, sent[0], sent[1], "", "&E", position_of_identities + 1)
 
-
-    total_sent.insert(position_of_identities, [position_of_identities-1, str1,
-                                               str1p, "", 'ID', "", "", "", "",""])
+    total_sent.insert(position_of_identities, [position_of_identities - 1, str1,
+                                               str1p, "", 'ID', "", "", "", "", ""])
     list2 = [""] * 9
     list2[1] = "UNTRANSLATED DEFINITIONS"
     total_sent.insert(position_of_identities, list2)
     list2 = [""] * 9
     total_sent.insert(position_of_identities, list2)
-
 
 
 def step_three(truth_value):
@@ -4792,6 +4767,7 @@ def final_truth_value(consistent, truth_value):
     else:
         return False
 
+
 def obtain_relevant_sentences(consistent):
     # write = 18min, debug 9 min
     # 20:35-21:10 code, 21:11-21:26 debug
@@ -4822,7 +4798,6 @@ def obtain_relevant_sentences(consistent):
         rel_sent_str = [str(m) for m in relevant_sentences]
         rel_sent = " ".join(rel_sent_str)
         add_to_total_sent("", "RELEVANT SENTENCES: " + rel_sent)
-
 
 
 def eliminate_attached_conjuncts():
@@ -4882,7 +4857,7 @@ def rearrange_total_sent2():
             ax_def_loc = i
             break
     while len(total_sent) != ax_def_loc:
-        del total_sent[len(total_sent) -1]
+        del total_sent[len(total_sent) - 1]
 
     dict1 = build_new_num_dict()
     renumber_attach_sent(dict1)
@@ -4904,7 +4879,6 @@ def match_rn_sent_to_definition2(rn_sent):
         for substitution in v:
             j += 1
             total_sent.insert(i + 1 + j, substitution)
-
 
 
 def put_nc_id_ax_df_into_list():
@@ -4950,6 +4924,7 @@ def put_nc_id_ax_df_into_list():
         dict1 = rearrange_total_sent(list5, definitions, list2)
         renumber_attach_sent(dict1)
 
+
 def match_rn_sent_to_definition(definitions, rn_sent):
     for definiendum, v in rn_sent.items():
         for i, definition in enumerate(definitions):
@@ -4962,6 +4937,7 @@ def match_rn_sent_to_definition(definitions, rn_sent):
                 break
         else:
             g = 4 / 0
+
 
 def rearrange_total_sent(list5, list1, list2):
     # this function puts the total_sent into a better order
@@ -4986,7 +4962,7 @@ def build_new_num_dict():
     dict1 = {}
     j = 0
     for i in range(len(total_sent)):
-        if total_sent[i][0] != "" :
+        if total_sent[i][0] != "":
             j += 1
             dict1.update({total_sent[i][0]: j})
             total_sent[i][0] = j
@@ -5001,7 +4977,6 @@ def build_new_num_dict():
                 break
 
     return dict1
-
 
 
 def renumber_attach_sent(new_numbers):
@@ -5118,8 +5093,6 @@ def print_variables(list1):
                 return
 
 
-
-
 # object_properties, abbrev, general, class, accidental properties, parts of properties
 # if object is a thing then it is stated whether or not it is consequential
 
@@ -5199,7 +5172,6 @@ def step_four(negated_conjunction, consistent):
     return consistent
 
 
-
 def add_consistency_sign(consistent):
     if not consistent:
         return
@@ -5225,17 +5197,18 @@ def add_consistency_sign(consistent):
     sn += 1
     add_to_total_sent(sn, "", consist)
 
+
 def reuse_axiom_of_definition(consistent, ax_def_used, negated_conjunction):
     if consistent and ax_def_used:
         consistent = step_four(negated_conjunction, consistent)
 
     return consistent
 
-def exclusive_classes():
 
+def exclusive_classes():
     return ['moment', 'relationship', 'point', 'number',
-                         'imagination', 'concept' + un, "property" + un, 'property',
-                         'possible world', 'letter', 'mind', 'matter', 'sensorium']
+            'imagination', 'concept' + un, "property" + un, 'property',
+            'possible world', 'letter', 'mind', 'matter', 'sensorium']
 
 
 def use_basic_lemmas(consistent):
@@ -5447,7 +5420,7 @@ def infer_from_lemmas(concept_thing, second_obj, int_thing, first_sent, second_s
     add_to_total_sent(sn, conjunction, conjunctionp, "", "&I", first_sent[58], sn - 1)
     sn += 1
     consistent = add_to_total_sent_consist(sn, second_sent[72],
-                                second_sent[1], second_sent[2], "MP", sn - 1, sn - 3, [])
+                                           second_sent[1], second_sent[2], "MP", sn - 1, sn - 3, [])
     # assert not consistent
     return consistent
 
@@ -5519,7 +5492,7 @@ def get_detached_predicates(variable_type):
                                                       "",
                                                       "",
                                                       obj_sent_parts)
-        if isvariable(obj2,"i"):
+        if isvariable(obj2, "i"):
             object_properties = get_object_properties(obj2,
                                                       object_properties,
                                                       o2_variable_kind,
@@ -5586,9 +5559,10 @@ def substitute_in_attach_sent(instantiations):
                         break
                     else:
                         sent[25].update({instantiation[0]: instantiation[1]})
-                        if sent[48] == "":  sent[48] = instantiation[5]
-                        else: sent[49] = instantiation[5]
-
+                        if sent[48] == "":
+                            sent[48] = instantiation[5]
+                        else:
+                            sent[49] = instantiation[5]
 
     i = -1
     while i < len(attach_sent2) - 1:
@@ -5599,7 +5573,8 @@ def substitute_in_attach_sent(instantiations):
 
     for sent in attach_sent2:
         for j in [34, 35, 32, 31, 30, 29]:
-            if sent[j] == []: break
+            if sent[j] == []:
+                break
             else:
                 for sub_sent in sent[j]:
                     for k in [5, 14, 18, 22]:
@@ -5652,7 +5627,6 @@ def make_new_attach_sent(cond_sent):
     cond_sent[37] = prop_var_greek
 
     return cond_sent
-
 
 
 def build_conjunction(list1, q):
@@ -5721,7 +5695,7 @@ def print_instantiations(instantiations):
             list2[1] = "INSTANTIATIONS"
             total_sent.insert(-1, list2)
         else:
-            add_to_total_sent("","")
+            add_to_total_sent("", "")
             add_to_total_sent("", "INSTANTIATIONS")
 
         for instantiation in instantiations:
@@ -5732,7 +5706,7 @@ def print_instantiations(instantiations):
                     str2 += " " + str(number)
                 str1 += " in " + str2
             if rearrange:
-                total_sent.insert(-1, [instantiation[5], str1, "", "", "IN", "", "", "",""])
+                total_sent.insert(-1, [instantiation[5], str1, "", "", "IN", "", "", "", ""])
                 rearrange = False
             else:
                 add_to_total_sent(instantiation[5], str1, "", "", "IN")
@@ -5751,7 +5725,6 @@ def print_instantiations(instantiations):
         add_to_total_sent("", "INFERENCES FROM INSTANTIATION")
 
 
-
 def print_object_properties(object_properties):
     add_to_total_sent("", "")
     add_to_total_sent("", "OBJECT PROPERTIES")
@@ -5764,7 +5737,6 @@ def print_object_properties(object_properties):
             str1 += " |"
             str1 += "  " + i[4]
         add_to_total_sent("", str1)
-
 
 
 def determine_if_same_class(object_properties):
@@ -5898,8 +5870,6 @@ def instantiate_things(object_properties, instantiations, i):
     return False, instantiations
 
 
-
-
 def remove_prime(con_list):
     # this remove the prime sign from an indefinite variable
 
@@ -5912,7 +5882,6 @@ def remove_prime(con_list):
             con_list[4][i] = word
 
     return "".join(con_list[4])
-
 
 
 def instantiate2(predicates, general_properties, instantiations, general_numbers, gen_var, partic_var,
@@ -6274,7 +6243,7 @@ def get_attached_predicates(variable_type, object_properties):
                                                               cond_num,
                                                               sent_parts)
 
-                    if isvariable(obj,"i"):
+                    if isvariable(obj, "i"):
                         okind = get_class(relat, sent, 14)
                         object_properties = get_object_properties(obj,
                                                                   object_properties,
@@ -6286,7 +6255,7 @@ def get_attached_predicates(variable_type, object_properties):
                                                                   cond_num,
                                                                   sent_parts)
 
-                    if isvariable(obj2,"i"):
+                    if isvariable(obj2, "i"):
                         object_properties = get_object_properties(obj2,
                                                                   object_properties,
                                                                   o2_variable_kind,
@@ -6397,8 +6366,6 @@ def is_in_md(list1, i, str1, bool1=False, k=0):
         return False
 
 
-
-
 def determine_if_all_cond_4_detach_met(g, k):
     # this loops through all the sentences in the antecedent or the consequent
     # and determines if they all have been detached
@@ -6493,7 +6460,7 @@ def detach1(str1, negated_conjunction):
                                     # then p & r & (q <> (p & r))
 
                                     consistent, g, k, r = detach2(k, r, g, rule,
-                                                               set_of_det_sent, negated_conjunction)
+                                                                  set_of_det_sent, negated_conjunction)
                                     if g > len(attach_sent) - 1 or g == -1:
                                         break
                                 else:
@@ -6544,7 +6511,7 @@ def detach2(k, r, g, rule, set_of_det_sent, negated_conjunction):
         m, h, t, s, n = 41, 43, 8, 1, 35
     else:
         m, h, t, s, n = 40, 42, 7, 0, 34
-        
+
     introduce_conjunction(set_of_det_sent)
 
     if attach_sent[g][t][0] == 't':
@@ -6580,7 +6547,7 @@ def build_negated_conjunction(anc1, anc2, g, h, m, negated_conjunction, rule, s,
             attach_sent[g][m][1] = "~"
             attach_sent[g][t][1] = "~"
         else:
-            print ('you need to add double negative eventuaully')
+            print('you need to add double negative eventuaully')
             attach_sent[g][m][1] = ""
             attach_sent[g][t][1] = ""
 
@@ -6642,6 +6609,7 @@ def introduce_conjunction(set_of_det_sent):
         add_to_total_sent(sn, full_sent, abbrev_sent, "", "&I", anc)
         sn += 1
 
+
 def eliminate_conjuncts(g, r, h, negated_conjunction):
     # if the detached sentences are a conjunction then this function
     # places each individual conjunct into the total_sent and detach_sent list
@@ -6662,7 +6630,7 @@ def eliminate_conjuncts(g, r, h, negated_conjunction):
     for i in range(len(conjunct_list)):
         sn += 1
         consistent = add_to_total_sent_consist(sn, attach_sent[g][h][i][0], attach_sent[g][k][i][0],
-                                        attach_sent[g][h][i][1], "&E", num, "", negated_conjunction)
+                                               attach_sent[g][h][i][1], "&E", num, "", negated_conjunction)
         if consistent:
             if os(conjunct_list[i][0]):
                 d = findposinmd_alert_error(conjunct_list[i][0], attach_sent[g][n], 1)
@@ -6697,6 +6665,7 @@ def add_to_total_sent_consist(num, str1, str2, tvalue, rule, anc1, anc2, negated
 
     return consistent
 
+
 def add_to_total_sent(num, str1, str2="", tvalue="", rule="", anc1="", anc2="", anc3=""):
     list2 = [""] * 9
     list2[0] = num
@@ -6708,6 +6677,7 @@ def add_to_total_sent(num, str1, str2="", tvalue="", rule="", anc1="", anc2="", 
     list2[6] = anc2
     list2[7] = anc3
     total_sent.append(list2)
+
 
 def check_consistency(negated_conjunction):
     new_sent_abbr = total_sent[-1][2]
@@ -6728,12 +6698,13 @@ def check_consistency(negated_conjunction):
 
     return True
 
+
 def check_consistency_w_neg_conj(neg_conj, rule, anc1, anc2):
     global sn
     i = -1
     while neg_conj[0] != [] or i < len(neg_conj[0]) - 1:
         i += 1
-        for j in range(len(total_sent) -1, 0, -1):
+        for j in range(len(total_sent) - 1, 0, -1):
             if total_sent[j][1].startswith("INFE"):
                 return
             if total_sent[j][2] == neg_conj[0][i][0] and total_sent[j][3] == neg_conj[0][i][1]:
@@ -6747,6 +6718,7 @@ def check_consistency_w_neg_conj(neg_conj, rule, anc1, anc2):
         build_contradictory_conjunction(neg_conj[3])
         return False
 
+
 def build_contradictory_conjunction(list1):
     global sn
     sn += 1
@@ -6758,6 +6730,7 @@ def build_contradictory_conjunction(list1):
     conjunctionp = "(" + " & ".join(list2p) + ")"
     add_to_total_sent(sn, conjunction, conjunctionp, "", "&I", anc1)
     build_contradiction(-2)
+
 
 def build_contradiction(i):
     global sn
@@ -7360,6 +7333,7 @@ def add_outer_paren(str1):
     str1 = remove_outer_paren(str1)
     return "(" + str1 + ")"
 
+
 ##### himanshu begin
 def populate_sentences():
     global result_data
@@ -7381,10 +7355,10 @@ def populate_sentences():
             elif row[1] == "" and last_row_blank:
                 break
 
-            # himanshu I'm not really sure what this does:
+                # himanshu I'm not really sure what this does:
 
-            # if not first_sent:
-            #     result_data['text_' + str(row_number - 2) + '_1'] = len(test_sent)
+                # if not first_sent:
+                #     result_data['text_' + str(row_number - 2) + '_1'] = len(test_sent)
 
     return test_sent, row_number
 
@@ -7399,6 +7373,7 @@ def get_number_of_sent_to_prove(len_test_sent):
         stop = order[1]
         if stop == 0: stop = len_test_sent
         return [x for x in range(start, stop)]
+
 
 def calculate_time_statistics(proof_time, nonlinear):
     global instan_used, instan_time, lemmas_used
@@ -7416,7 +7391,7 @@ def calculate_time_statistics(proof_time, nonlinear):
         ee = instan_time / instan_used
     else:
         ee = 0
-    print ("")
+    print("")
     print("average " + str("{0:.4f}".format((time.time() - proof_time) / num_of_sent)))
     print("time used in statement logic " + str("{0:.4f}".format(st_log_time / num_of_sent)))
     print("time spent reducing " + str("{0:.4f}".format(time_spent_reducing / (num_of_sent))))
@@ -7425,7 +7400,7 @@ def calculate_time_statistics(proof_time, nonlinear):
     print("time used in instantiation " + str("{0:.4f}".format(ee)))
     print("time used in change variables function " + str("{0:.4f}".format(time_spent_defining / num_of_sent)))
     print("total " + str("{0:.3f}".format(total)))
-    print ("")
+    print("")
 
 
 def get_result(post_data, archive_id=None, request=None):
@@ -7436,37 +7411,40 @@ def get_result(post_data, archive_id=None, request=None):
 
     ########## himanshu begin
     if mysql == 1:
+        # if archive_id:
+        #     ws = Define3.objects.filter(archives_id=archive_id)
+        # else:
+        #     archive = Archives.objects.latest('archives_date')
+        #     ws = Define3.objects.filter(archives_id=archive.id)
+        # result_data = dict(post_data.lists())
+        # w4 = []
+        # # index = 0
+        # # while True:
+        # #     row = (post_data["text_" + str(index) + "_1"], post_data["text_" + str(index) + "_2"],
+        # #            post_data["text_" + str(index) + "_3"])
+        # #     w4.append(row)
+        # #     # himanshu, eliminate stop, make it so that it breaks if it encounters two
+        # #     # empty spaces
+        # #     if row[1] == "stop":
+        # #         break
+        # #     index += 1
+        # # w4 = tuple(w4)
+        #
         if archive_id:
-            ws = Define3.objects.filter(archives_id=archive_id)
+            pass
+            # tw4 = Input.objects.filter(archives_id=archive_id)
         else:
             archive = Archives.objects.latest('archives_date')
-            ws = Define3.objects.filter(archives_id=archive.id)
-
-        result_data = dict(post_data.iterlists())
-        w4 = []
-        index = 0
-        while True:
-            row = (post_data["text_" + str(index) + "_1"], post_data["text_" + str(index) + "_2"],
-                   post_data["text_" + str(index) + "_3"])
-            w4.append(row)
-            # himanshu, eliminate stop, make it so that it breaks if it encounters two
-            # empty spaces
-            if row[1] == "stop":
-                break
-            index += 1
-        w4 = tuple(w4)
-
-        if archive_id:
-            tw4 = Input.objects.filter(archives_id=archive_id)
-        else:
-            archive = Archives.objects.latest('archives_date')
-            tw4 = Input.objects.filter(archives_id=archive.id)
-        w4 = []
-        for x in tw4:
-            row = (x.col1, x.col2, x.col3)
-            w4.append(row)
-        w4 = tuple(w4)
-        test_sent, row_number = populate_sentences()
+            # tw4 = Input.objects.filter(archives_id=archive.id)
+        # w4 = []
+        # for x in tw4:
+        #     row = (x.col1, x.col2, x.col3)
+        #     w4.append(row)
+        # w4 = tuple(w4)
+        # test_sent, row_number = populate_sentences()
+        # import pdb
+        # pdb.set_trace()
+        test_sent, row_number = pop_sent()
     else:
         test_sent, row_number = pop_sent()
     build_dict()
@@ -7499,7 +7477,7 @@ def get_result(post_data, archive_id=None, request=None):
 
         truth_value = step_one(test_sent[k])
 
-        #print (test_sent[k])
+        # print (test_sent[k])
 
         step_two()
 
@@ -7513,8 +7491,6 @@ def get_result(post_data, archive_id=None, request=None):
         else:
             print(str(k) + " - " + str("{0:.3f}".format(time.time() - st1)))
 
-
-
     calculate_time_statistics(time_used_proving_sent, nonlinear)
 
     determine_words_used()
@@ -7523,10 +7499,10 @@ def get_result(post_data, archive_id=None, request=None):
 
     if mysql == 1:
         views.progressbar_send(request, 0, 100, 100, 2)
-        views.save_result(result_data)
+        import pdb
+        pdb.set_trace()
+        views.save_result(archive_id, result_data)
         return result_data
-
-
 
 
 ##############################################
