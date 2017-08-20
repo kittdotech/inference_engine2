@@ -70,6 +70,7 @@ def index(request, archive=None):
     output = []
     # output = Output.objects.all()
     if request.method == 'POST':
+        Output.objects.all().delete()
         post_data = request.POST.copy()
         prove_algorithm = importlib.import_module('.' + archive.algorithm.split('.py')[0], package='inference2.Proofs')
         # my_function = getattr(__import__('inference2.Proofs'+archive.algorithm.split('.py')[0]), 'get_result')
@@ -175,20 +176,30 @@ def prove(request, archive=None):
 
 
 def dictionary(request, archive=None):
-    url_path = '/archives/'
-    if not archive:
-        archive = current_archive()
-        url_path = '/'
-    else:
-        url_path = '/archives/{}/'.format(archive.id)
-    dict = Define3.objects.filter(archives_id=archive.id)
-    return render(request, "inference2/dict.html", {'result': dict, 'url_path': url_path})
+    # url_path = '/archives/'
+    # if not archive:
+    #     archive = current_archive()
+    #     url_path = '/'
+    # else:
+    #     url_path = '/archives/{}/'.format(archive.id)
+    # dict = Define3.objects.filter(archives_id=archive.id)
+    from inference2.Proofs.dictionary_new import large_dict
+    return render(request, "inference2/dict.html", {'result': large_dict, 'url_path': '/'})
 
+def tested_dictionary(request, archive=None):
+
+    from inference2.Proofs.dictionary_tested import large_test_dict
+    return render(request, "inference2/tested_dict.html", {'result': large_test_dict, 'url_path': '/'})
 
 def download_files(request):
     ins_files = InstructionFile.objects.filter(
         file_type='1').order_by('-id')
     return render(request, "inference2/files.html", {'ins_files': ins_files})
+
+# def download_files_in_brief(request):
+#     ins_files = InstructionFile.objects.filter(
+#         file_type='2').order_by('-id')
+#     return render(request, "inference2/files_in_brief.html", {'ins_files': ins_files})
 
 
 def archives(request):
@@ -249,3 +260,6 @@ def progressbar_send(request, strt, stp, k, status=0):
         request.session['status'] = status
         request.session.modified = True
         request.session.save()
+
+def author(request):
+    return render(request, "inference2/author.html")

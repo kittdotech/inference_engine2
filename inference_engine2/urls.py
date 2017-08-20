@@ -33,5 +33,8 @@ urlpatterns = [
         views.assign_archives, name='assign_archives_type'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^getdict$', views.getdict, name='getdict'),
+    url(r'^author', views.author, name='author'),
+    url(r'^tested_dict', views.tested_dictionary, name='tested_dictionary'),
+
 
 ]

@@ -7499,8 +7499,6 @@ def get_result(post_data, archive_id=None, request=None):
 
     if mysql == 1:
         views.progressbar_send(request, 0, 100, 100, 2)
-        import pdb
-        pdb.set_trace()
         views.save_result(archive_id, result_data)
         return result_data
 

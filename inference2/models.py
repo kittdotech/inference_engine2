@@ -8,8 +8,9 @@ class InstructionFile(models.Model):
         max_length=100, default='name')
     data = models.FileField(upload_to='./static/inference2/')
     FILE_TYPE_CHOICES = (
-        ('0', 'instruction'),
+        ('0', 'rules_in_depth'),
         ('1', 'downloadable_file'),
+        ('2', 'rules_in_brief'),
     )
     COLOR_CHOICES = (
         ('red', 'red'),
