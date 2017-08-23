@@ -10,9 +10,6 @@
     <list default="true" id="cdc8a4ef-2ff4-4331-8402-26fd1da4d091" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/claims_new.py" afterPath="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/dictionary_new.py" afterPath="$PROJECT_DIR$/inference2/Proofs/dictionary_new.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/new_code.py" afterPath="$PROJECT_DIR$/inference2/Proofs/new_code.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" afterPath="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" />
     </list>
     <ignored path="inference_engine2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -38,7 +35,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="new_code.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="new_code.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/new_code.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
@@ -80,11 +77,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="claims_new.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="claims_new.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims_new.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1876">
-              <caret line="197" column="51" lean-forward="false" selection-start-line="197" selection-start-column="51" selection-end-line="197" selection-end-column="51" />
+            <state relative-caret-position="480">
+              <caret line="178" column="20" lean-forward="true" selection-start-line="178" selection-start-column="20" selection-end-line="178" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -270,11 +267,11 @@
         <option value="$PROJECT_DIR$/inference2/Proofs/change_variables.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/z_change_variables.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/z_instantiate.py" />
-        <option value="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/new_code.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/start_and_stop.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/dictionary_new.py" />
         <option value="$PROJECT_DIR$/inference2/Proofs/old_code.py" />
+        <option value="$PROJECT_DIR$/inference2/Proofs/claims_new.py" />
       </list>
     </option>
   </component>
@@ -563,13 +560,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1454034293054</updated>
-    </task>
-    <task id="LOCAL-00029" summary="minor glitches in previous committ">
-      <created>1495911610433</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1495911610433</updated>
     </task>
     <task id="LOCAL-00030" summary="unenclose function is only called from find_sentences function now">
       <created>1496085999153</created>
@@ -907,7 +897,14 @@
       <option name="project" value="LOCAL" />
       <updated>1502780538856</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="small changes made to dictionary 2">
+      <created>1503482736226</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1503482736226</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TodoView">
@@ -987,7 +984,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="only 3 types of variables now" />
     <MESSAGE value="refactored object properties list" />
     <MESSAGE value="removed two try except lines" />
     <MESSAGE value="built prepare_attach_embed_sent function" />
@@ -1012,7 +1008,8 @@
     <MESSAGE value="put in get relevant sentences" />
     <MESSAGE value="fixed populate sentence function" />
     <MESSAGE value="small changes made to dictionary" />
-    <option name="LAST_COMMIT_MESSAGE" value="small changes made to dictionary" />
+    <MESSAGE value="small changes made to dictionary 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="small changes made to dictionary 2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1292,14 +1289,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1876">
-          <caret line="197" column="51" lean-forward="false" selection-start-line="197" selection-start-column="51" selection-end-line="197" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/inference2/Proofs/start_and_stop.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -1331,6 +1320,14 @@
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/inference2/Proofs/claims_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="178" column="20" lean-forward="true" selection-start-line="178" selection-start-column="20" selection-end-line="178" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>
