@@ -178,12 +178,23 @@ prop_var6 = [chr(97 + t) + "\u2084" for t in range(26)]
 prop_var7 = [chr(97 + t) + "\u2085" for t in range(26)]
 prop_var8 = [chr(97 + t) + "\u2086" for t in range(26)]
 prop_var9 = [chr(97 + t) + "\u2087" for t in range(26)]
+prop_var4.remove("l")
+prop_var2.remove("l" + l1)
+prop_var3.remove("l" + l2)
+prop_var5.remove("l" + l3)
+prop_var6.remove("l" + l4)
+prop_var7.remove("l" + l5)
+prop_var8.remove("l" + l6)
+prop_var9.remove("l" + l7)
+
 prop_var4 = prop_var4 + prop_var2 + prop_var3 + prop_var5 + prop_var6 + prop_var7 + prop_var8 + prop_var9
 variables2 = [chr(122 - t) for t in range(25)]
 variables2.remove("i")
 variables2.remove("l")
 variables3 = [chr(122 - t) + l1 for t in range(25)]
 variables4 = [chr(122 - t) + l2 for t in range(25)]
+variables3.remove("l" + l1)
+variables4.remove("l" + l2)
 variables2 = variables2 + variables3 + variables4
 
 subscripts = [l1, l2, l3, l4]
@@ -217,10 +228,8 @@ def tran_str(str1, has_sentence_connectives = False):
             if str1[i:i + 1] == "|":
                 str3 = str1[i + 1:i + 2]
                 str4 = get_super(str3)
-                try:
-                    str1 = str1[:i] + str4 + str1[i + 2:]
-                except:
-                    bb = 8
+                str1 = str1[:i] + str4 + str1[i + 2:]
+
     if has_sentence_connectives:
 
         if "t^" in str1:
@@ -728,13 +737,18 @@ def find_sentences(sentence):
     output[2] = sent_type2
     output[3] = wneg
     output[4] = id_num
-    output[6] = translate_to_greek(skel_nam, wneg, id_num)
+    output[6], output[7] = translate_to_greek(skel_nam, wneg, id_num)
     output[5] = skel_nam[0]
+
 
     return output
 
 
+
+
+
 def translate_to_greek(skel_nam, wneg, id_num):
+    dict1 = {}
     for i in range(len(skel_nam)):
         if skel_nam[i] == None:
             to_be_translated = wneg[i]
@@ -742,9 +756,12 @@ def translate_to_greek(skel_nam, wneg, id_num):
                 if skel_nam[j] != None:
                     if wneg[j] in to_be_translated and id_num[j][1] == "":
                         to_be_translated = to_be_translated.replace(wneg[j], skel_nam[j])
+                        dict1.update({wneg[j]: skel_nam[j]})
             skel_nam[i] = to_be_translated
 
-    return skel_nam
+
+
+    return skel_nam, dict1
 
 
 
@@ -1538,7 +1555,7 @@ def change_variables(sentence, def_loc, type=""):
     if definiendum == None or definiendum in dictionary[6]:
         return
 
-    if definiendum == 'a':
+    if definiendum == 'HM':
         bb = 8
 
     definition = dictionary[1].get(definiendum)
@@ -2108,7 +2125,7 @@ def map_defining_abbreviations(sent, defining_abbreviations, def_loc, list1, def
             del variables[0]
             del variables[1]
         def_abbrev_dict.update({sent[5]: defining_abbreviations[0],
-                                sent[14]: defining_abbreviations[1]})
+                            sent[14]: defining_abbreviations[1]})
 
     return def_abbrev_dict, var_loc
 
@@ -2510,7 +2527,7 @@ def space_words(str1):
 
 
 def isdefineable(list1):
-    must_be_blank = [3, 4, 6, 7, 10, 11, 13, 16, 17, 18, 20, 21, 23, 24, 25, 27, 28, 29, 31, 32, 33,
+    must_be_blank = [3, 4, 6, 7, 10, 11, 13, 16, 17, 20, 21, 23, 24, 25, 27, 28, 29, 31, 32, 33,
                      35, 36, 49, 50, 51, 52, 55]
     must_be_variable = [5, 14, 18, 22]
 
@@ -3580,12 +3597,10 @@ def prepare_attach_sent(def_info, defin_sent, rule, r_sent_loc):
                 total_sent_in_attach_sent.append(defin_sent[d][1])
                 t_value = defin_sent[d][2]
                 defin_sent[d][68] = def_info[4][i][0]
-
             if def_info[4][i][0][1] == '1' and len(def_info[4][i][0]) == ant_conj:
                 ant_variables.append([def_info[6][i], t_value])
             elif def_info[4][i][0][1] == '2' and len(def_info[4][i][0]) == con_conj:
                 con_variables.append([def_info[6][i], t_value])
-
             if def_info[4][i][1] != "" and len(def_info[4][i][0]) == 2:
                 if def_info[4][i][0][1] == '1' and ant_conjunction == "":
                     ant_conjunction = def_info[6][i]
@@ -3854,18 +3869,19 @@ def categorize_words(list1):
         k = 0
         word = list1[i]
 
-        if word == 'woman':
+        if word == '':
             bb = 8
 
-        i, word, has_comma = determine_if_compound_word(i, list1, word)
-
-        if get_words_used == 1:
-            if word not in words_used and not isvariable(word):
-                words_used.append(word)
-
-        part_of_speech, sub_part, sub_sub_part, rest = get_part_of_speech(word, list1[79])
-
         if word != ' ' and word != "":
+
+            i, word, has_comma = determine_if_compound_word(i, list1, word)
+
+            if get_words_used == 1:
+                if word not in words_used and not isvariable(word):
+                    words_used.append(word)
+
+            part_of_speech, sub_part, sub_sub_part, rest = get_part_of_speech(word, list1[79])
+
             insert_special_location = False
             if part_of_speech == "d":  # q are possessive pronouns
                 if relation_type == 0:
@@ -7469,64 +7485,68 @@ def get_result(post_data, archive_id=None, request=None):
             w4.append(row)
         w4 = tuple(w4)
         test_sent, row_number = populate_sentences()
-    else:
+
+
+    elif proof_type != 4:
         test_sent, row_number = pop_sent()
-    build_dict()
-    not_oft_def = copy.deepcopy(dictionary[6])
-    nonlinear = order[2]
-    order = get_number_of_sent_to_prove(len(test_sent))
-    check_mispellings(test_sent)
-    time_used_proving_sent = time.time()
 
-    if mysql == 1:
-        views.progressbar_send(request, 0, 100, 0, 1)
-    for j, k in enumerate(order):
+    if proof_type != 4:
+        build_dict()
+        not_oft_def = copy.deepcopy(dictionary[6])
+        nonlinear = order[2]
+        order = get_number_of_sent_to_prove(len(test_sent))
+        check_mispellings(test_sent)
+        time_used_proving_sent = time.time()
+
         if mysql == 1:
-            views.progressbar_send(request, start, stop, k, 1)
-        if k == 17:
-            bb = 7
-        st1 = time.time()
-        prop_name = []
-        total_sent = []
-        all_sent = []
-        attach_sent = []
-        detach_sent = []
-        definite_assignments = {}
-        dictionary[6] = not_oft_def
-        variable_type = [[], [], []]
-        abbreviations = [{}, {}, {}]
-        propositional_constants = {}
-        prop_var = copy.deepcopy(prop_var4)
-        variables = copy.deepcopy(variables2)
+            views.progressbar_send(request, 0, 100, 0, 1)
+        for j, k in enumerate(order):
+            if mysql == 1:
+                views.progressbar_send(request, start, stop, k, 1)
+            if k == 17:
+                bb = 7
+            st1 = time.time()
+            prop_name = []
+            total_sent = []
+            all_sent = []
+            attach_sent = []
+            detach_sent = []
+            definite_assignments = {}
+            dictionary[6] = not_oft_def
+            variable_type = [[], [], []]
+            abbreviations = [{}, {}, {}]
+            propositional_constants = {}
+            prop_var = copy.deepcopy(prop_var4)
+            variables = copy.deepcopy(variables2)
 
-        truth_value = step_one(test_sent[k])
+            truth_value = step_one(test_sent[k])
 
-        #print (test_sent[k])
+            #print (test_sent[k])
 
-        step_two()
+            step_two()
 
-        consistent = step_three(truth_value)
+            consistent = step_three(truth_value)
 
-        test_sent[k] = copy.deepcopy(total_sent)
-        tot_prop_name.append(prop_name)
-        # progress(j+1, len(order))
-        if not consistent:
-            print(str(k) + " - " + str("{0:.3f}".format(time.time() - st1) + " False"))
-        else:
-            print(str(k) + " - " + str("{0:.3f}".format(time.time() - st1)))
+            test_sent[k] = copy.deepcopy(total_sent)
+            tot_prop_name.append(prop_name)
+            # progress(j+1, len(order))
+            if not consistent:
+                print(str(k) + " - " + str("{0:.3f}".format(time.time() - st1) + " False"))
+            else:
+                print(str(k) + " - " + str("{0:.3f}".format(time.time() - st1)))
 
 
 
-    calculate_time_statistics(time_used_proving_sent, nonlinear)
+        calculate_time_statistics(time_used_proving_sent, nonlinear)
 
-    determine_words_used()
+        determine_words_used()
 
-    print_sent_full(test_sent, tot_prop_name, row_number)
+        print_sent_full(test_sent, tot_prop_name, row_number)
 
-    if mysql == 1:
-        views.progressbar_send(request, 0, 100, 100, 2)
-        views.save_result(result_data)
-        return result_data
+        if mysql == 1:
+            views.progressbar_send(request, 0, 100, 100, 2)
+            views.save_result(result_data)
+            return result_data
 
 
 

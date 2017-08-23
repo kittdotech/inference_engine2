@@ -1,13 +1,14 @@
 
 def info():
 
-    order = [2, 3, 36, 37, 114, 100] # 149
+    order = [90, 175, 36, 37, 114, 100] # 149
     get_words_used = 0
-    proof_type = 1
+    proof_type = 0
     # 0 is for testing the whole code without printing
     # 1 is for printing all sentences to excel,
     # 2 is for one sentence to terminal
     # 3 is for testing spelling errors
+    # 4 is for using the functions of the code
     return proof_type, get_words_used, order
 
 
@@ -17,3 +18,5 @@ def info():
 
 #0 does not have C sign, ax def in detached sent
 #15.2 printing error
+
+# when we do &E on the abbreviations its not printing the right number
