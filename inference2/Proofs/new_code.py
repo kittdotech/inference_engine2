@@ -7415,6 +7415,7 @@ def get_result(post_data, archive_id=None, request=None):
     elif mysql == 2:
         test_sent = [[0, "It is|a contradictory that I do not have many|n points"]]
         row_number = 1
+        order = [0,1,0]
     else:
         test_sent, row_number = pop_sent()
     build_dict()
