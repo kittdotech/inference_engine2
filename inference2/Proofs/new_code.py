@@ -1,5 +1,5 @@
-from .dictionary_new import large_dict
-from .claims_new import pop_sent
+from dictionary_new import large_dict
+from claims_new import pop_sent
 from openpyxl import load_workbook
 from collections import Counter
 import copy
@@ -8,7 +8,7 @@ import operator
 import sys
 from pprint import pprint
 import collections
-from .start_and_stop import info
+from start_and_stop import info
 import os
 
 # import pdb
@@ -50,8 +50,8 @@ total_time = time.time()
 ######### himanshu begin
 
 
-mysql = 1
-excel = 0
+mysql = 0
+excel = 1
 if mysql == 0:
     proof_type, get_words_used, order = info()
     if proof_type == 1:
@@ -7411,40 +7411,10 @@ def get_result(post_data, archive_id=None, request=None):
 
     ########## himanshu begin
     if mysql == 1:
-        # if archive_id:
-        #     ws = Define3.objects.filter(archives_id=archive_id)
-        # else:
-        #     archive = Archives.objects.latest('archives_date')
-        #     ws = Define3.objects.filter(archives_id=archive.id)
-        # result_data = dict(post_data.lists())
-        # w4 = []
-        # # index = 0
-        # # while True:
-        # #     row = (post_data["text_" + str(index) + "_1"], post_data["text_" + str(index) + "_2"],
-        # #            post_data["text_" + str(index) + "_3"])
-        # #     w4.append(row)
-        # #     # himanshu, eliminate stop, make it so that it breaks if it encounters two
-        # #     # empty spaces
-        # #     if row[1] == "stop":
-        # #         break
-        # #     index += 1
-        # # w4 = tuple(w4)
-        #
-        if archive_id:
-            pass
-            # tw4 = Input.objects.filter(archives_id=archive_id)
-        else:
-            archive = Archives.objects.latest('archives_date')
-            # tw4 = Input.objects.filter(archives_id=archive.id)
-        # w4 = []
-        # for x in tw4:
-        #     row = (x.col1, x.col2, x.col3)
-        #     w4.append(row)
-        # w4 = tuple(w4)
-        # test_sent, row_number = populate_sentences()
-        # import pdb
-        # pdb.set_trace()
-        test_sent, row_number = pop_sent()
+        archive = Archives.objects.latest('archives_date')
+    elif mysql == 2:
+        test_sent = [[0, "It is|a contradictory that I do not have many|n points"]]
+        row_number = 1
     else:
         test_sent, row_number = pop_sent()
     build_dict()
