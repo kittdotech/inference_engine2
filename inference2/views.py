@@ -91,6 +91,35 @@ def index(request, archive=None):
                      }
     return render(request, "inference2/index.html", template_args)
 
+def try_input(request,archive=None):
+
+    output = []
+    if not archive:
+        archive = current_archive()
+        url_path = '/'
+    if request.method == 'POST':
+        # input = "It is|a contradictory that I do not have many|n points"
+        input = request.POST.get('try_input')
+        Output.objects.all().delete()
+        prove_algorithm = importlib.import_module('.' + archive.algorithm.split('.py')[0], package='inference2.Proofs')
+        # my_function = getattr(__import__('inference2.Proofs'+archive.algorithm.split('.py')[0]), 'get_result')
+        post_data = prove_algorithm.get_result(
+            request.POST.copy(), archive.id, request,input)
+        print(post_data)
+        if post_data:
+            post_data["type"] = "prove"
+            result = json.dumps(post_data, cls=DjangoJSONEncoder)
+
+            save_result(archive.id, post_data)
+        output = Output.objects.all()
+
+    template_args = {
+                     'url_path': url_path,
+                     'output': output,
+                     'archive': archive,
+                     }
+    return render(request, "inference2/try_input.html", template_args)
+
 
 def export_xlsx(request, archives_id=None):
     response = HttpResponse(
