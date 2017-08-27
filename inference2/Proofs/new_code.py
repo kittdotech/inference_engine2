@@ -2559,6 +2559,8 @@ def obtain_truth_value(sent):
     elif sentence[7:12] == 'contr':
         return False, sentence[len("It isa contradictory that "):]
     else:
+        #himanshu system exit
+        print ("Each sentence must begin with either 'it is|a consistent that or it is|a contradictory that")
         g = 4 / 0
 
 
@@ -4008,6 +4010,10 @@ def categorize_words(list1):
                     relation_type = 6
 
             if has_comma: sentence_slots[39] = k
+            if mysql == 2 and k == 0:
+                # himanshu system exit
+                print ("our system does not have this grammatical syntax yet")
+
             if k == 0 and proof_type != 3:
                 print(word)
                 assert k != 0
@@ -4129,7 +4135,8 @@ def get_part_of_speech(word, str5):
             posp = dictionary[0].get(word)
             if posp == None:
                 print("you misspelled " + word)
-                if proof_type != 3:
+                if proof_type != 3 or mysql == 2:
+                    # himanshu system exit
                     g = 4 / 0
                 else:
                     posp = "n"
@@ -7415,13 +7422,16 @@ def get_result(post_data, archive_id=None, request=None):
     elif mysql == 2:
         test_sent = [[0, "It is|a contradictory that I do not have many|n points"]]
         row_number = 1
-        order = [0,1,0]
+
     else:
         test_sent, row_number = pop_sent()
     build_dict()
     not_oft_def = copy.deepcopy(dictionary[6])
     nonlinear = order[2]
-    order = get_number_of_sent_to_prove(len(test_sent))
+    if mysql == 2:
+        order = [0]
+    else:
+        order = get_number_of_sent_to_prove(len(test_sent))
     check_mispellings(test_sent)
     time_used_proving_sent = time.time()
 
