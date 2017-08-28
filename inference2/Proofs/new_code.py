@@ -1,5 +1,5 @@
-from inference2.Proofs.dictionary_new import large_dict
-from inference2.Proofs.claims_new import pop_sent
+from dictionary_new import large_dict
+from claims_new import pop_sent
 from openpyxl import load_workbook
 from collections import Counter
 import copy
@@ -8,7 +8,7 @@ import operator
 import sys
 from pprint import pprint
 import collections
-from inference2.Proofs.start_and_stop import info
+from start_and_stop import info
 import os
 
 # import pdb
@@ -50,7 +50,7 @@ total_time = time.time()
 ######### himanshu begin
 
 
-mysql = 1
+mysql = 0
 excel = 0
 if mysql == 0:
     proof_type, get_words_used, order = info()
@@ -1525,7 +1525,7 @@ def change_variables(sentence, def_loc, type=""):
     if definiendum == None or definiendum in dictionary[6]:
         return
 
-    if definiendum == 'a':
+    if definiendum == 'W':
         bb = 8
 
     definition = dictionary[1].get(definiendum)
@@ -1545,8 +1545,8 @@ def change_variables(sentence, def_loc, type=""):
 
     def_abbrev_dict, r_sent_loc, new_sentences, defining_abbreviations = _
 
-    # total_dict = {**def_abbrev_dict, **constant_map}
-    total_dict = dict(def_abbrev_dict, **constant_map)
+    total_dict = {**def_abbrev_dict, **constant_map}
+    #total_dict = dict(def_abbrev_dict, **constant_map)
 
     _ = replace_constants(total_dict, temp_prop_const, new_sentences)
 
@@ -1556,8 +1556,8 @@ def change_variables(sentence, def_loc, type=""):
 
     new_sentences, indefinite_dict, rn_type = _
 
-    # total_dict = {**total_dict, **indefinite_dict}
-    total_dict = dict(total_dict, **indefinite_dict)
+    total_dict = {**total_dict, **indefinite_dict}
+    #total_dict = dict(total_dict, **indefinite_dict)
 
     _ = replace_propositional_constants(temp_prop_const, prop_unfill, new_sentences, total_dict)
 
@@ -2189,11 +2189,11 @@ def add_necessary_conditions_for_concept():
                 if all_sent[j][9] == "I" and all_sent[j][14] == str1:
                     str2 = all_sent[j][5]
                     concept = abbreviations[0].get(str2)
-                    pos = dictionary[0].get(concept)
-                    pos = pos[0]
-                    if pos == None:
-                        bb = 7
                     if concept != None:
+                        pos = dictionary[0].get(concept)
+                        pos = pos[0]
+
+
                         if concept == "dog":
                             bb = 8
                         if pos == 'a':
@@ -2560,8 +2560,8 @@ def obtain_truth_value(sent):
         return False, sentence[len("It isa contradictory that "):]
     else:
         #himanshu system exit
-        print ("Each sentence must begin with either 'it is|a consistent that or it is|a contradictory that")
-        g = 4 / 0
+        print ("Each sentence must begin with either 'it is|a consistent that' or 'it is|a contradictory that'")
+
 
 
 def eliminate_logical_connectives(sentence):
@@ -7414,7 +7414,7 @@ def get_result(post_data, archive_id=None, request=None,input=None):
     global ws, w4, result_data, order, propositional_constants
     global sn, total_sent, prop_name, variable_type
     global all_sent, attach_sent, detach_sent, definite_assignments
-    global prop_var, variables, stop, abbreviations
+    global prop_var, variables, stop, abbreviations, dictionary
 
     ########## himanshu begin
     if mysql == 1 and not input:
@@ -7427,7 +7427,10 @@ def get_result(post_data, archive_id=None, request=None,input=None):
 
     else:
         test_sent, row_number = pop_sent()
-    build_dict()
+    #aa = time.time()
+    #build_dict() #.04 second
+    dictionary = large_dict()
+    #aa = time.time() - aa
     not_oft_def = copy.deepcopy(dictionary[6])
     nonlinear = order[2]
     if mysql == 2:
