@@ -179,7 +179,7 @@ def pop_sent():
 [ 176,"It is|a contradictory that I have few points"],
 [ 177,"It is|a contradictory that I do not have many|n points"],
 [ 178,"It is|a contradictory that I ate an apple and apple is|g not a|r general|t term"],
-[ 179,"It is|a consistent that I ate an apple and apple is|g not a|r general|t term"]]
+[ 179,"It is|a consistent that I ate an apple and apple is|g a|r general|t term"]]
 # [ 180,"It is|a contradictory that this wrinkle in that|d carpet is|g not an|r individual|a thing"],
 # [ 181,"It is|a consistent that this wrinkle in that|d carpet is|g an|r individual|a thing"],
 # [ 182,"It is|a consistent that a number|i is|a a|r universal"],

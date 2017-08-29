@@ -3,7 +3,7 @@ def info():
 
     order = [0, 0, 0, 50, 56, 58, 73, 69, 196] # 149
     get_words_used = 0
-    proof_type = 0
+    proof_type = 1
     # 0 is for testing the whole code without printing
     # 1 is for printing all sentences to excel,
     # 2 is for one sentence to terminal
@@ -20,3 +20,5 @@ def info():
 #15.2 printing error
 
 # when we do &E on the abbreviations its not printing the right number
+
+#2 object properties wrong
