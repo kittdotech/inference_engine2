@@ -1,5 +1,5 @@
-from inference2.Proofs.dictionary_new import large_dict
-from inference2.Proofs.claims_new import pop_sent
+from dictionary_new import large_dict
+from claims_new import pop_sent
 from openpyxl import load_workbook
 from collections import Counter
 import copy
@@ -8,7 +8,7 @@ import operator
 import sys
 from pprint import pprint
 import collections
-from inference2.Proofs.start_and_stop import info
+from start_and_stop import info
 import os
 
 # import pdb
@@ -50,7 +50,7 @@ total_time = time.time()
 ######### himanshu begin
 
 
-mysql = 1
+mysql = 0
 excel = 0
 if mysql == 0:
     proof_type, get_words_used, order = info()
@@ -1481,15 +1481,36 @@ def insert_into_dict(_dict, obj, pos):
 
     return _dict
 
+def get_relevant_variables(list1):
+    relevant_variables = []
+    for lst in list1:
+        if lst[54] != 'do not define again':
+            for i in noun_slots():
+                if i > 17 and lst[i] == None:
+                    break
+                if lst[i] not in relevant_variables:
+                    relevant_variables.append(lst[i])
+    return relevant_variables
+
+def is_irrel_var(list1, relevant_variables):
+    if list1[5] not in relevant_variables and list1[9] == "I":
+        return True
+    elif list1[5] not in relevant_variables and (list1[14] == None or
+        list1[14] not in relevant_variables):
+        return True
+    else:
+        return False
 
 def define_regular_terms(list1):
     dictionary[6] = use_rarely_defined_word()
     do_not_define_again = []
+    relevant_variables = get_relevant_variables(list1)
+
     m = -1
     while m < len(list1) - 1:
         m += 1
         if isdefineable(list1[m]) and list1[m][42] not in do_not_define_again \
-                and not list1[m][54] == 'do not define':
+                and not list1[m][54] == 'do not define' and not is_irrel_var(list1[m], relevant_variables):
             do_not_define_again.append(list1[m][42])
             change_variables(list1[m], 0)
 
@@ -1525,7 +1546,7 @@ def change_variables(sentence, def_loc, type=""):
     if definiendum == None or definiendum in dictionary[6]:
         return
 
-    if definiendum == 'a':
+    if definiendum == 'W':
         bb = 8
 
     definition = dictionary[1].get(definiendum)
@@ -1545,8 +1566,8 @@ def change_variables(sentence, def_loc, type=""):
 
     def_abbrev_dict, r_sent_loc, new_sentences, defining_abbreviations = _
 
-    # total_dict = {**def_abbrev_dict, **constant_map}
-    total_dict = dict(def_abbrev_dict, **constant_map)
+    total_dict = {**def_abbrev_dict, **constant_map}
+    #total_dict = dict(def_abbrev_dict, **constant_map)
 
     _ = replace_constants(total_dict, temp_prop_const, new_sentences)
 
@@ -1556,8 +1577,8 @@ def change_variables(sentence, def_loc, type=""):
 
     new_sentences, indefinite_dict, rn_type = _
 
-    # total_dict = {**total_dict, **indefinite_dict}
-    total_dict = dict(total_dict, **indefinite_dict)
+    total_dict = {**total_dict, **indefinite_dict}
+    #total_dict = dict(total_dict, **indefinite_dict)
 
     _ = replace_propositional_constants(temp_prop_const, prop_unfill, new_sentences, total_dict)
 
@@ -1704,40 +1725,23 @@ def build_rename_sent2(constant_map, def_abbrev_dict, old_prop_to_new_prop,
             var = abbreviations[2].get(definiendum)
             j += 1
             var = var[0] if j == 1 else var[1]
-            if rename_sent == "":
-                rename_sent += "(" + k + idd + var + ")"
-                rename_sent += " & (" + var + mini_c + v + ")"
-            else:
-                rename_sent += " & (" + k + idd + var + ")"
-                rename_sent += " & (" + var + mini_c + v + ")"
+            rename_sent += "(" + k + idd + var + ") "
+            rename_sent += "(" + var + mini_c + v + ") "
         elif k != v:
-            if rename_sent == "":
-                rename_sent += "(" + k + mini_c + v + ")"
-            else:
-                rename_sent += " & (" + k + mini_c + v + ")"
+            rename_sent += "(" + k + mini_c + v + ") "
 
     for k, v in constant_map.items():
         if k != v:
-            if rename_sent == "":
-                rename_sent += "(" + k + idd + v + ")"
-            else:
-                rename_sent += " & (" + k + idd + v + ")"
+            rename_sent += "(" + k + idd + v + ") "
 
     for k, v in indefinite_dict.items():
-
         if k != v:
             rn = rn_type.get(v)
-            if rename_sent == "":
-                rename_sent += "(" + k + idd + v + ")" + rn
-            else:
-                rename_sent += " & (" + k + idd + v + ")" + rn
+            rename_sent += "(" + k + idd + v + ")" + rn + " "
 
     for k, v in old_prop_to_new_prop.items():
         if k != v:
-            if rename_sent == "":
-                rename_sent += "(" + k + idd + v + ")"
-            else:
-                rename_sent += " & (" + k + idd + v + ")"
+            rename_sent += "(" + k + idd + v + ") "
 
     return rename_sent
 
@@ -2189,11 +2193,11 @@ def add_necessary_conditions_for_concept():
                 if all_sent[j][9] == "I" and all_sent[j][14] == str1:
                     str2 = all_sent[j][5]
                     concept = abbreviations[0].get(str2)
-                    pos = dictionary[0].get(concept)
-                    pos = pos[0]
-                    if pos == None:
-                        bb = 7
                     if concept != None:
+                        pos = dictionary[0].get(concept)
+                        pos = pos[0]
+
+
                         if concept == "dog":
                             bb = 8
                         if pos == 'a':
@@ -2212,9 +2216,9 @@ def add_necessary_conditions_for_concept():
                         olda = "(" + "b" + ' = ' + concept + ")"
                         oldc = "(" + "c " + str4 + " b" + ")"
                         if str2 != "b":
-                            rn1 = "(" + "b" + idd + str2 + ") & (" + "c" + idd + str6 + ")" + l1
+                            rn1 = "(" + "b" + idd + str2 + ") (" + "c" + idd + str6 + ")" + l1
                         else:
-                            rn1 = "(" + "c" + idd + str6 + ")" + l1
+                            rn1 = "(" + "c" + idd + str6 + ")" + l1 + " "
                         nat_sent_b4_sub = olda + " " + conditional + " " + oldc
                         sn += 1
                         add_to_total_sent(sn, nat_sent_b4_sub, "", "", "NC concept " + concept)
@@ -2560,8 +2564,8 @@ def obtain_truth_value(sent):
         return False, sentence[len("It isa contradictory that "):]
     else:
         #himanshu system exit
-        print ("Each sentence must begin with either 'it is|a consistent that or it is|a contradictory that")
-        g = 4 / 0
+        print ("Each sentence must begin with either 'it is|a consistent that' or 'it is|a contradictory that'")
+
 
 
 def eliminate_logical_connectives(sentence):
@@ -3288,6 +3292,8 @@ def prepare_att_sent_1_sent(ant_sent_parts, rule, connective, consequent, anc1="
     add_to_total_sent(sn, new_equivalence, new_eq_abbrev, "", rule, anc1, anc2)
     attach_sent.append(list4)
 
+def noun_slots():
+    return [5,14,18,22,26,30,34]
 
 def allowable_slots2():
     num2 = [11, 47, 3, 69, 4, 55, 5, 66, 67, 35,
@@ -4243,7 +4249,7 @@ def build_sent_name(prop_name):
             if len(str2) == 0:
                 str2 = str1
             else:
-                str2 = str2 + ' & ' + str1
+                str2 = str2 + ' ' + str1
             if i + 1 == len(prop_name):
                 list1.append(str2)
     return list1
@@ -4397,7 +4403,7 @@ def print_sent_full(test_sent, tot_prop_name, row_number):
 
                 row_number += 1
         row_number += 3
-
+    
 
 def determine_words_used():
     if get_words_used == 1:
@@ -5356,7 +5362,7 @@ def build_rename_sent(key, first_obj, concept_thing):
     del variables[0]
     thing_sent = "(e" + idd + concept_thing + ")"
     list1 = [sent1, sent1a, sent2, sent2a, sent3, sent3a, thing_sent]
-    rename_sent = " & ".join(list1)
+    rename_sent = " ".join(list1)
     sn += 1
     add_to_total_sent(sn, rename_sent, "", "", "RN")
 
@@ -7414,7 +7420,7 @@ def get_result(post_data, archive_id=None, request=None,input=None):
     global ws, w4, result_data, order, propositional_constants
     global sn, total_sent, prop_name, variable_type
     global all_sent, attach_sent, detach_sent, definite_assignments
-    global prop_var, variables, stop, abbreviations
+    global prop_var, variables, stop, abbreviations, dictionary
 
     ########## himanshu begin
     if mysql == 1 and not input:
@@ -7427,7 +7433,10 @@ def get_result(post_data, archive_id=None, request=None,input=None):
 
     else:
         test_sent, row_number = pop_sent()
-    build_dict()
+    #aa = time.time()
+    #build_dict() #.04 second
+    dictionary = large_dict()
+    #aa = time.time() - aa
     not_oft_def = copy.deepcopy(dictionary[6])
     nonlinear = order[2]
     if mysql == 2:
