@@ -1,5 +1,3 @@
-from dictionary_new import large_dict
-from claims_new import pop_sent
 from openpyxl import load_workbook
 from collections import Counter
 import copy
@@ -8,8 +6,16 @@ import operator
 import sys
 from pprint import pprint
 import collections
-from start_and_stop import info
 import os
+
+try:
+    from dictionary_new import large_dict
+    from claims_new import pop_sent
+    from start_and_stop import info
+except  ImportError:
+    from .dictionary_new import large_dict
+    from .claims_new import pop_sent
+    from .start_and_stop import info
 
 # import pdb
 
