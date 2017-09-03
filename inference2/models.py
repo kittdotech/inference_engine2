@@ -31,6 +31,7 @@ class InstructionFile(models.Model):
 class Archives(models.Model):
     archives_date = models.DateField()
     algorithm = models.CharField(max_length=300, blank=False, null=False)
+    name = models.CharField(max_length=300, default = 'September 2017')
 
     def __unicode__(self):
         return u'{0}, {1}'.format(self.archives_date, self.algorithm)
