@@ -50,7 +50,7 @@ total_time = time.time()
 ######### himanshu begin
 
 
-mysql = 0
+mysql = 1
 excel = 0
 if mysql == 0:
     proof_type, get_words_used, order = info()
