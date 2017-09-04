@@ -45,16 +45,35 @@ class Archives(models.Model):
 
 
 class Define3(models.Model):
-    extra = models.CharField(max_length=5, blank=True, null=True)
-    type = models.CharField(max_length=5, blank=True, null=True)
-    word = models.CharField(max_length=66, blank=True, null=True)
-    rel = models.CharField(max_length=4, blank=True, null=True)
-    definition = models.CharField(max_length=1000, blank=True, null=True)
+    extra = models.TextField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
+    word = models.TextField(blank=True, null=True)
+    rel = models.TextField(blank=True, null=True)
+    definition = models.TextField(blank=True, null=True)
+    superscript = models.TextField(blank=True, null=True)
+    subject = models.TextField(blank=True, null=True)
+    object_col = models.TextField(blank=True, null=True)
+    col1 = models.TextField(blank=True, null=True)
     archives = models.ForeignKey(Archives, on_delete=models.CASCADE)
 
     class Meta:
         managed = True
         db_table = 'define3'
+
+# class Define3(models.Model):
+#     number = models.TextField(blank=True,name=True)
+#     part_of_speech = models.TextField(blank=True,name=True)
+#     word = models.TextField( blank=True, null=True)
+#     rel = models.TextField( blank=True, null=True)
+#     definition = models.TextField(blank=True, null=True)
+#     superscript = models.TextField(blank=True, null=True)
+#     subject = models.TextField(blank=True, null=True)
+#     object_col = models.TextField(blank=True, null=True)
+#     archives = models.ForeignKey(Archives, on_delete=models.CASCADE)
+#
+#     class Meta:
+#         managed = True
+#         db_table = 'app_define3'
 
 
 class Input(models.Model):
