@@ -6,18 +6,30 @@
 
 <table border="1">
     <tr>
-        <th>Type</th>
-        <th>Word</th>
+        <th>Number</th>
+        <th>Part of speech</th>
+        <th>Words</th>
         <th>Relation</th>
         <th>Definition</th>
+        <th>Superscripts</th>
+        <th>Subject</th>
+        <th>Object</th>
+
 
     </tr>
 {% for row in result %}
     <tr>
-        <td>{{ row.0 }}</td>
-        <td>{{ row.1 }}</td>
-        <td>{{ row.2 }}</td>
-        <td>{{ row.3 }}</td>
+        <td>{{ row.id }}</td>
+
+    <td>{{ row.type }}</td>
+        <td>{{ row.extra }}</td>
+    <td>{{ row.rel }}</td>
+    <td>{{ row.definition }}</td>
+    <td>{{ row.superscript }}</td>
+    <td>{{ row.subject }}</td>
+    <td>{{ row.object_col }}</td>
+
+
 
     </tr>
 {% endfor %}

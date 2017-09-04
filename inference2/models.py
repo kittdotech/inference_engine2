@@ -45,8 +45,9 @@ class Archives(models.Model):
 
 
 class Define3(models.Model):
-    extra = models.TextField(blank=True, null=True)
+
     type = models.TextField(blank=True, null=True)
+    extra = models.TextField(blank=True, null=True)
     word = models.TextField(blank=True, null=True)
     rel = models.TextField(blank=True, null=True)
     definition = models.TextField(blank=True, null=True)
